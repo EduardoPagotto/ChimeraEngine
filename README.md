@@ -1,15 +1,19 @@
 # ChimeraEngine
 
-Just another simple game engine using SDL3, OpenGL and Collada(XML)<p>
+Just another simple game engine using SDL3, Vulkan/OpenGL<p>
+<b>Changing to Vulkan API</b>
 OBS: Code with comments in Portuguese mostly
 
 ## Features of project:
-- Editor: VSCode
+- Editor: VSCodium (clangd, Clang-Format, CMake Tools, CodeLLDB)
 - Build tool: CMAKE
-- Compiler: Clang (mostly C++20)
-- Debug: lldb
+- Compiler: Clang (C++20)
+- Debug: lldb-dap
 - Ident: clang-format (file: .clang-format)
-- SDL3; SDL3_Image; SDL3_TTF
+- LIBS an API's:
+  - Vulkan 1.1
+  - OpenGL 4
+  - SDL3, SDL3_Image, SDL3_TTF
 
 ## Fedora 42 Dependencies:
 ```bash
@@ -25,18 +29,25 @@ sudo dnf install cmake cmake-data cmake-rpm-macros libstdc++-static llvm-static 
 sudo dnf install lld lldb lldb-devel lld-devel lld-libs.x86_64
 sudo dnf install compiler-rt
 
-# Lobs and other tools
+# Libs and other tools
 sudo dnf install htop git gitk meld gcc g++ python3-pip vim tree curl openssh-server tinyxml2 tinyxml2-devel libyaml libyaml-devel yaml-cpp yaml-cpp-devel pugixml-devel jsoncpp
+
+# Lib vulkan
+sudo dnf install vulkan-loader-devel vulkan-tools vulkan-utility-libraries-devel glslang glslc VulkanMemoryAllocator-devel vulkan-validation-layers libshaderc-devel
 
 # OpenGL
 sudo dnf install mesa-dri-drivers mesa-libGL freeglut-devel glm-devel glew glew-devel libGLEW
-sudo dnf install bullet bullet-devel bullet-extras bullet-extras-devel
+sudo dnf install bullet bullet-devel bullet-extras bullet-extras-devel glfw-devel
 
 # SDL3
-sudo dnf copr enable ngompa/SDL2onSDL3
-sudo dnf swap SDL2 sdl2-compat
-sudo dnf install SDL3-static SDL3-devel SDL3_image-devel
-sudo dnf install SDL3_ttf SDL3_ttf-devel (fedora testing update)
+sudo dnf install SDL3-static SDL3-devel SDL3_image-devel SDL3_ttf SDL3_ttf-devel
+
+# ASSIMP (Model load)
+sudo dnf install assimp assimp-devel
+
+# fastgltf (for now)
+sudo dnf install simdjson
+sudo clone https://github.com/spnda/fastgltf
 ```
 
 ## Switch Link and toolchain to Clang
@@ -63,7 +74,11 @@ make -C build -j 4
 SDL_VIDEODRIVER=x11 ./bin/terrain
 ```
 
-
+# compile spirv
+```bash
+glslangValidator  -V ./assets/shaders/shader.vert -o ./bin/vert.spv
+glslangValidator  -V ./assets/shaders/shader.frag -o ./bin/frag.spv
+```
 
 
 ## Refs

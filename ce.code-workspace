@@ -16,10 +16,11 @@
 		},
 		// Remove editor distractions
 		"editor.cursorBlinking": "blink",
+		"editor.inlayHints.enabled": "offUnlessPressed",
 		"editor.cursorSmoothCaretAnimation": "on",
 		"editor.cursorStyle": "line",
 		"editor.hover.enabled": "off", // hover manual crt+k, crt+i
-		"editor.occurrencesHighlight": "off", // off disable highligh
+		"editor.occurrencesHighlight": "singleFile", // off disable highligh
 		"editor.selectionHighlight": false, // True show similar selectec
 		"editor.suggestOnTriggerCharacters": false,
 		"editor.acceptSuggestionOnEnter": "smart",
@@ -45,12 +46,15 @@
 		"editor.lineHeight": 1.5,
 		// misc
 		"editor.rulers": [
+			//80,
 			120
 		],
-		"editor.formatOnSave": true,
 		"editor.tabSize": 4,
 		"editor.smoothScrolling": true,
+		"editor.stickyScroll.enabled": false, // Desabilita o stick chato!
+		"workbench.tree.enableStickyScroll": false, // Desabilita o stick chato!
 		// Terminal
+		"terminal.integrated.stickyScroll.enabled": false, // Desabilita o stick chato!
 		"terminal.integrated.letterSpacing": 0.8,
 		"terminal.integrated.fontWeight": "normal",
 		"terminal.integrated.defaultProfile.windows": "Command Prompt",
@@ -60,7 +64,7 @@
 		"terminal.integrated.fontSize": 15,
 		"terminal.integrated.cursorStyle": "line",
 		"terminal.integrated.cursorBlinking": true,
-		"terminal.integrated.cursorStyleInactive": "block",
+		"terminal.integrated.cursorStyleInactive": "line",
 		// Explorer
 		"explorer.compactFolders": false,
 		"explorer.confirmDragAndDrop": true,
@@ -105,23 +109,20 @@
 				"textDecoration": ";box-shadow:0 0 5px 3px #2faf6470;border-radius:0.25em"
 			}
 		},
-		// LLDB
-		"lldb.showDisassembly": "auto",
-		"lldb.dereferencePointers": true,
-		"lldb.consoleMode": "commands",
-		//"lldb-dap.executable-path": "/usr/bin/lldb-dap",
-		// CPP
-		"C_Cpp.intelliSenseCachePath": "${workspaceFolder}/build/vscode_cache",
-		//"C_Cpp.default.browse.path": [],
-		//"C_Cpp.loggingLevel": "Debug",
-		//"C_Cpp.intelliSenseEngineFallback": "enabled",
-		"C_Cpp.configurationWarnings": "enabled",
-		"C_Cpp.intelliSenseEngine": "Tag Parser",
-		"C_Cpp.clang_format_path": "/usr/bin/clang-format",
 		// CMAKE
 		"cmake.configureOnOpen": true,
 		"cmake.options.statusBarVisibility": "visible",
 		"cmake.useCMakePresets": "never",
+		"cmake.buildDirectory": "${workspaceFolder}/build",
+		"clangd.arguments": [
+			"--background-index",
+			"--compile-commands-dir=${workspaceFolder}/build", // Aponta para a pasta onde o CMake gera o compile_commands.json
+			"--clang-tidy",
+			"--header-insertion=iwyu"
+		],
+		"editor.formatOnSave": true, // Formata automaticamente ao salvar
+		"editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+		"clangd.onConfigChanged": "restart",
 		"files.associations": {
 			"any": "cpp",
 			"array": "cpp",
@@ -222,6 +223,9 @@
 			"queue": "cpp",
 			"stack": "cpp"
 		},
+		"glsllint.glslangValidatorArgs": [
+			"-V"
+		]
 		// OTHERS
 	},
 	"launch": {
@@ -229,52 +233,93 @@
 		"configurations": [
 			{
 				"name": "Models3",
-				"type": "lldb",
+				"type": "lldb-dap",
 				"request": "launch",
 				"program": "${workspaceFolder}/bin/models3",
 				"args": [],
+				"env": {
+					"SDL_VIDEODRIVER": "x11"
+				},
 				"cwd": "${workspaceFolder}"
 			},
 			{
 				"name": "HelloWorld",
-				"type": "lldb",
+				"type": "lldb-dap",
 				"request": "launch",
 				"program": "${workspaceFolder}/bin/helloworld",
 				"args": [],
+				"env": {
+					"SDL_VIDEODRIVER": "x11"
+				},
 				"cwd": "${workspaceFolder}"
 			},
 			{
 				"name": "Simples",
-				"type": "lldb",
+				"type": "lldb-dap",
 				"request": "launch",
 				"program": "${workspaceFolder}/bin/simples_cubo",
 				"args": [],
+				"env": {
+					"SDL_VIDEODRIVER": "x11"
+				},
 				"cwd": "${workspaceFolder}"
 			},
 			{
 				"name": "BSPTree",
-				"type": "lldb",
+				"type": "lldb-dap",
 				"request": "launch",
 				"program": "${workspaceFolder}/bin/bsptree",
 				"args": [],
+				"env": {
+					"SDL_VIDEODRIVER": "x11"
+				},
 				"cwd": "${workspaceFolder}"
 			},
 			{
 				"name": "Raycasting",
-				"type": "lldb",
+				"type": "lldb-dap",
 				"request": "launch",
 				"program": "${workspaceFolder}/bin/raycasting",
 				"args": [],
+				"env": {
+					"SDL_VIDEODRIVER": "x11"
+				},
 				"cwd": "${workspaceFolder}"
 			},
 			{
 				"name": "Terrain",
-				"type": "lldb",
+				"type": "lldb-dap",
 				"request": "launch",
 				"program": "${workspaceFolder}/bin/terrain",
 				"args": [],
+				"env": {
+					"SDL_VIDEODRIVER": "x11"
+				},
 				"cwd": "${workspaceFolder}"
-			}
+			},
+			{
+				"name": "SDL_test",
+				"type": "lldb-dap",
+				"request": "launch",
+				"program": "${workspaceFolder}/bin/sdl_test",
+				"args": [],
+				"env": {
+					//"SDL_VIDEODRIVER": "x11"
+				},
+				"cwd": "${workspaceFolder}"
+			},
+			{
+				"name": "loader",
+				"type": "lldb-dap",
+				"request": "launch",
+				"program": "${workspaceFolder}/bin/loader",
+				"args": [],
+				"cwd": "${workspaceFolder}",
+				"env": {
+					//"DEBUG_MODE": "true"
+				}
+				// "preLaunchTask": "CMake: build"
+			},
 		],
 		"compounds": []
 	},

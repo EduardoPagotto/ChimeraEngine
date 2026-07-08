@@ -12,7 +12,7 @@ namespace ce {
     /// @brief Engine
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
-    /// @date 20250401
+    /// @date 20260708
     class Engine {
 
       private:
@@ -36,9 +36,11 @@ namespace ce {
         void run() {
 
             SDL_Event event;
-            bool kill{false}, pause{true};
-            uint32_t beginCount{0}, countDelta{7};
-            double ts{0.0f};
+            bool kill{false};
+            bool pause{true};
+            uint32_t beginCount{0};
+            uint32_t countDelta{7};
+            double ts{0.0F};
 
             while (!kill) {
                 beginCount = SDL_GetTicks();

@@ -33,7 +33,7 @@ add_subdirectory(configured)
 # FetchContent_Declare(
 #   fastgltf
 #   GIT_REPOSITORY https://github.com/spnda/fastgltf
-#   GIT_TAG        main  # Verifique a release mais recente no GitHub
+#   GIT_TAG        v0.9.0  # Verifique a release mais recente no GitHub
 # )
 # FetchContent_MakeAvailable(fastgltf)
 
@@ -41,7 +41,7 @@ add_subdirectory(configured)
 # FetchContent_Declare(
 #   EnTT
 #   GIT_REPOSITORY https://github.com/skypjack/entt
-#   GIT_TAG        main # Substitua pela versão desejada
+#   GIT_TAG        v3.13.2 # Substitua pela versão desejada
 # )
 # FetchContent_MakeAvailable(EnTT)
 
@@ -50,14 +50,14 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 # Engine
-#add_subdirectory(src/cevk)
+add_subdirectory(chimera/cevk)
 add_subdirectory(chimera/src/core)
 add_subdirectory(chimera/src/collada)
 add_subdirectory(chimera/src/render)
 
 # Simple testes app
-#add_subdirectory(apps/sdl3)
-#add_subdirectory(apps/loader)
+add_subdirectory(samples/sdl3)
+add_subdirectory(samples/loader)
 add_subdirectory(samples/raycasting)
 add_subdirectory(samples/helloworld)
 add_subdirectory(samples/simples)

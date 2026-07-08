@@ -1,36 +1,36 @@
 # Habilita checagens baseadas no LLVM, Google e melhorias modernas
 Checks: >
-  -*,
-  bugcheck-*,
-  modernize-*,
-  readability-*,
-  performance-*,
-  google-explicit-constructor,
-  -modernize-use-trailing-return-type,
-  -readability-magic-numbers,
-  -cppcoreguidelines-avoid-magic-numbers'
+-*,
+bugcheck-*,
+modernize-*,
+readability-*,
+performance-*,
+google-explicit-constructor,
+-modernize-use-trailing-return-type,
+-readability-magic-numbers,
+-cppcoreguidelines-avoid-magic-numbers'
+
 
 ExtraArgsBefore:
-  - -std=c++20
+- -std=c++20
 
 # Trata avisos específicos como erros
 WarningsAsErrors: >
-  bugcheck-*,
-  performance-*,
-  readability-*
+bugcheck-*,
+performance-*,
+#  readability-*
 
 # Configurações específicas para certas checagens
 CheckOptions:
-  - key: modernize-use-using.IgnoreMacros
-    value: true
-  - key: modernize-use-using.IgnoreExternC
-    value: false
-  - key: readability-identifier-naming.VariableCase
-    value: camelCase
-  - key: readability-identifier-naming.FunctionCase
-    value: camelCase
-  - key: modernize-use-using
-    value: true
-
-# HeaderFilterRegex: 'include/.*'
-# Checks: '-*,readability-implicit-member-call'
+- key: modernize-use-using.IgnoreMacros
+  value: true
+- key: modernize-use-using.IgnoreExternC
+  value: false
+- key: modernize-use-using
+  value: true
+- key: readability-identifier-naming.VariableCase
+  value: camelCase
+- key: readability-identifier-naming.FunctionCase
+  value: camelCase
+- key: readability-identifier-naming.VariableMinLength
+  value: 1

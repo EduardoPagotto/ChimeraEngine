@@ -27,6 +27,24 @@ struct MaterialData {
     TextureDef baseColorTexture;
 };
 
+struct ImageData {
+    std::string name;
+    std::string source;
+};
+
+struct SamplerData {
+    std::optional<std::string> name{std::nullopt};
+    std::optional<uint16_t> magFilter{std::nullopt};
+    std::optional<uint16_t> minFilter{std::nullopt};
+    uint16_t wraps{0};
+    uint16_t wrapt{0};
+};
+
+struct TextureData {
+    std::string name;
+    std::string source;
+};
+
 struct MeshData {
     std::vector<Vertex> vertices;
     std::vector<uint32_t> indices;
@@ -62,6 +80,9 @@ namespace ce {
 
         void traverseNode(size_t nodeIndex, const glm::mat4& parentMatrix, std::vector<SceneNode>& outNodes);
 
+        void getImages();
+        void getTextures();
+
         void getScene();
         void getMaterials();
         void getMeshs();
@@ -70,5 +91,8 @@ namespace ce {
         std::vector<SceneNode> sceneHierarchy;
         std::vector<MeshData> vMeshs;
         std::vector<MaterialData> vMaterial;
+        std::vector<TextureData> vTexture;
+        std::vector<ImageData> vImages;
+        std::vector<SamplerData> vSampler;
     };
 } // namespace ce

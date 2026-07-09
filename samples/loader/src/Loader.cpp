@@ -6,6 +6,7 @@
 #include <fastgltf/tools.hpp>
 #include <fastgltf/types.hpp>
 #include <glm/glm.hpp>
+#include <iostream>
 
 namespace ce {
     Loader::Loader(const std::filesystem::path& filePath) {
@@ -30,12 +31,65 @@ namespace ce {
         // fastgltf::Asset asset = std::move(expectedAsset.get());
         this->asset = std::move(expectedAsset.get());
 
-        this->getScene();
+        this->getImages();
+        this->getTextures();
+
         this->getMaterials();
         this->getMeshs();
+
+        this->getScene();
     }
 
     Loader::~Loader() {}
+
+    void Loader::getImages() {
+        for (const auto& image : asset.images) {
+            this->vImages.push_back(ImageData{.name = image.name.c_str(),
+                                              .source = std::get<fastgltf::sources::URI>(image.data).uri.c_str()});
+        }
+    }
+
+    void Loader::getTextures() {
+        for (const auto& texture : asset.textures) {
+            //
+
+            if (texture.samplerIndex.has_value()) {
+                const auto& sampler = asset.samplers[texture.samplerIndex.value()];
+
+                SamplerData samplerData = {};
+
+                if (!sampler.name.empty()) {
+                    samplerData.name = sampler.name;
+                }
+
+                if (sampler.magFilter.has_value()) {
+                    samplerData.magFilter = static_cast<uint16_t>(sampler.magFilter.value());
+                }
+
+                if (sampler.minFilter.has_value()) {
+                    samplerData.minFilter = static_cast<uint16_t>(sampler.minFilter.value());
+                }
+
+                samplerData.wraps = static_cast<uint16_t>(sampler.wrapS);
+                samplerData.wrapt = static_cast<uint16_t>(sampler.wrapT);
+
+                this->vSampler.push_back(samplerData);
+            }
+
+            TextureData textureData{};
+
+            if (texture.imageIndex.has_value()) {
+                const auto& image = asset.images[texture.imageIndex.value()];
+                textureData.name = texture.name;
+                // Caminho da imagem em disco ou arquivo embutido
+                if (std::holds_alternative<fastgltf::sources::URI>(image.data)) {
+                    textureData.source = std::get<fastgltf::sources::URI>(image.data).uri.c_str();
+                }
+            }
+
+            this->vTexture.push_back(textureData);
+        }
+    }
 
     void Loader::getScene() {
         //
@@ -61,11 +115,13 @@ namespace ce {
         } else if (const auto* transform = std::get_if<fastgltf::TRS>(&node.transform)) {
             // O nó usa os componentes translation, rotation e scale individualmente
             glm::vec3 translation(transform->translation[0], transform->translation[1], transform->translation[2]);
-            glm::quat rotation(transform->rotation[3], transform->rotation[0], transform->rotation[1], transform->rotation[2]);
+            glm::quat rotation(transform->rotation[3], transform->rotation[0], transform->rotation[1],
+                               transform->rotation[2]);
             glm::vec3 scale(transform->scale[0], transform->scale[1], transform->scale[2]);
 
             // Constrói a matriz final
-            nodeMatrix = glm::translate(glm::mat4(1.0F), translation) * glm::mat4_cast(rotation) * glm::scale(glm::mat4(1.0F), scale);
+            nodeMatrix = glm::translate(glm::mat4(1.0F), translation) * glm::mat4_cast(rotation) *
+                         glm::scale(glm::mat4(1.0F), scale);
         }
 
         return nodeMatrix;
@@ -116,8 +172,8 @@ namespace ce {
                     auto& indexAccessor = asset.accessors[primitive.indicesAccessor.value()];
                     meshData.indices.resize(indexAccessor.count);
 
-                    fastgltf::iterateAccessorWithIndex<uint32_t>(asset, indexAccessor,
-                                                                 [&](uint32_t idx, size_t size) { meshData.indices[size] = idx; });
+                    fastgltf::iterateAccessorWithIndex<uint32_t>(
+                        asset, indexAccessor, [&](uint32_t idx, size_t size) { meshData.indices[size] = idx; });
                 }
 
                 // --- VERTEX BUFFER ---
@@ -130,9 +186,10 @@ namespace ce {
                     meshData.vertices.resize(posAccessor.count);
 
                     // Carrega as posições
-                    fastgltf::iterateAccessorWithIndex<glm::vec3>(asset, posAccessor, [&](glm::vec3 vertexPosition, size_t index) {
-                        meshData.vertices[index].position = vertexPosition;
-                    });
+                    fastgltf::iterateAccessorWithIndex<glm::vec3>(
+                        asset, posAccessor, [&](glm::vec3 vertexPosition, size_t index) {
+                            meshData.vertices[index].position = vertexPosition;
+                        });
                 }
 
                 if (normalAttr != primitive.attributes.end()) {
@@ -140,15 +197,16 @@ namespace ce {
 
                     // Carrega normal
                     fastgltf::iterateAccessorWithIndex<glm::vec3>(
-                        asset, normalAccessor, [&](glm::vec3 nor, size_t index) { meshData.vertices[index].normal = nor; });
+                        asset, normalAccessor,
+                        [&](glm::vec3 nor, size_t index) { meshData.vertices[index].normal = nor; });
                 }
 
                 if (uvAttr != primitive.attributes.end()) {
                     auto& uvAccessor = asset.accessors[uvAttr->accessorIndex];
 
                     // Carrega as UVs
-                    fastgltf::iterateAccessorWithIndex<glm::vec2>(asset, uvAccessor,
-                                                                  [&](glm::vec2 uvd, size_t index) { meshData.vertices[index].uv = uvd; });
+                    fastgltf::iterateAccessorWithIndex<glm::vec2>(
+                        asset, uvAccessor, [&](glm::vec2 uvd, size_t index) { meshData.vertices[index].uv = uvd; });
                 }
 
                 // --- TEXTURAS ---
@@ -188,7 +246,8 @@ namespace ce {
 
                     // Caminho da imagem em disco ou arquivo embutido
                     if (std::holds_alternative<fastgltf::sources::URI>(image.data)) {
-                        materialData.metallicRoughnessTexture.source = std::get<fastgltf::sources::URI>(image.data).uri.c_str();
+                        materialData.metallicRoughnessTexture.source =
+                            std::get<fastgltf::sources::URI>(image.data).uri.c_str();
                     }
                 }
             }

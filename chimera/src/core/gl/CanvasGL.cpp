@@ -1,14 +1,19 @@
 #include "chimera/core/gl/CanvasGL.hpp"
 #include "chimera/core/gl/OpenGLDefs.hpp"
 #include <glm/gtc/matrix_transform.hpp>
+#include <stdexcept>
 
 namespace ce {
 
     CanvasGL::CanvasGL(const std::string& title, int width, int height, bool fullScreen)
         : title(title), width(width), height(height), fullScreen(fullScreen), window(nullptr) {
 
+        if (!SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11")) {
+            throw std::runtime_error("SDL X11 Failed:" + std::string(SDL_GetError()));
+        }
+
         if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS)) {
-            throw std::string("Falha SDL_Init:" + std::string(SDL_GetError()));
+            throw std::runtime_error("Falha SDL_Init:" + std::string(SDL_GetError()));
         }
 
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -19,19 +24,21 @@ namespace ce {
 
         window = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_OPENGL);
         if (!window)
-            throw std::string("create Window:" + std::string(SDL_GetError()));
+            throw std::runtime_error("create Window:" + std::string(SDL_GetError()));
 
         context = SDL_GL_CreateContext(window);
-        if (!context)
-            throw std::string("create context:" + std::string(SDL_GetError()));
+        if (!context) {
+            throw std::runtime_error("create context:" + std::string(SDL_GetError()));
+        }
 
         if (not SDL_GL_MakeCurrent(window, context)) {
-            throw std::string("MakeCurrent:" + std::string(SDL_GetError()));
+            throw std::runtime_error("MakeCurrent:" + std::string(SDL_GetError()));
         }
 
         // Swap buffer interval // FIXME: PRECISO ??
-        if (int interval = SDL_GL_SetSwapInterval(1); interval < 0)
-            throw std::string("SetSwapInterval:" + std::string(SDL_GetError()));
+        if (int interval = SDL_GL_SetSwapInterval(1); interval < 0) {
+            throw std::runtime_error("SetSwapInterval:" + std::string(SDL_GetError()));
+        }
 
         // SDL_GetWindowSize(window, &width, &height);
         SDL_GetWindowPosition(window, &posX, &posY);
@@ -45,7 +52,7 @@ namespace ce {
                 SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, "GLEW init fail maybe wayland");
             } else {
                 SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "GLEW init: %s", glewGetErrorString(err));
-                throw std::string("GLEW Init fail");
+                throw std::runtime_error("GLEW Init fail");
             }
         }
 
@@ -66,14 +73,15 @@ namespace ce {
     }
 
     CanvasGL::~CanvasGL() {
-        if (context)
+        if (context) {
             SDL_GL_DestroyContext(context);
+            context = nullptr;
+        }
 
-        if (window)
+        if (window) {
             SDL_DestroyWindow(window);
-
-        context = nullptr;
-        window = nullptr;
+            window = nullptr;
+        }
     }
 
     void CanvasGL::before() {

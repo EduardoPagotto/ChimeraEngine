@@ -47,12 +47,12 @@ int main(int argn, char** argv) {
         return 0;
 
     } catch (const std::string& ex) {
-        // fail 3
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha grave: %s", ex.c_str());
-    } catch (...) {
-        // Fail 4
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha Desconhecida");
-    }
+
+    } catch (const std::runtime_error& e) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "runtime error: %s", e.what());
+
+    } catch (...) { SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha Desconhecida"); }
 
     return -1;
 }

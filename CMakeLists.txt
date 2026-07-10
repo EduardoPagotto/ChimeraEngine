@@ -50,20 +50,23 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 # Engine
+
 add_subdirectory(chimera/cevk)
-# add_subdirectory(chimera/src/core)
-# add_subdirectory(chimera/src/collada)
-# add_subdirectory(chimera/src/render)
+
+add_subdirectory(chimera/src/core)
+add_subdirectory(chimera/src/collada)
+add_subdirectory(chimera/src/render)
 
 # Simple testes app
-#add_subdirectory(samples/sdl3)
+
+add_subdirectory(samples/sdl3)
 add_subdirectory(samples/loader)
-# add_subdirectory(samples/raycasting)
-# add_subdirectory(samples/helloworld)
-# add_subdirectory(samples/simples)
-# add_subdirectory(samples/bsptree)
-# add_subdirectory(samples/terrain)
-# add_subdirectory(samples/models3)
+add_subdirectory(samples/raycasting)
+add_subdirectory(samples/helloworld)
+add_subdirectory(samples/simples)
+add_subdirectory(samples/bsptree)
+add_subdirectory(samples/terrain)
+add_subdirectory(samples/models3)
 
 # clean
 add_custom_target (clean-all COMMAND rm -rf ${CMAKE_BINARY_DIR}/*

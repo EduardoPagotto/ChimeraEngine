@@ -1,7 +1,8 @@
-#pragma once
+#ifndef __VBO_CLASS_HPP
+#define __VBO_CLASS_HPP
 
-#include "DevVK.hpp"
 #include "buffers/BufferObject.hpp"
+#include "cevk.hpp"
 #include <memory>
 
 namespace ce {
@@ -29,3 +30,4 @@ namespace ce {
         std::shared_ptr<ce::BufferObject> vbo;
     };
 } // namespace ce
+#endif

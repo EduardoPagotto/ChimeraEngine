@@ -1,8 +1,8 @@
-#pragma once
+#ifndef __SWAPCHAIN_CLASS_HPP
+#define __SWAPCHAIN_CLASS_HPP
 
 #include "buffers/ImageObject.hpp"
-#include "subsystem.hpp"
-#include <array>
+#include "cevk.hpp"
 #include <memory>
 #include <vector>
 
@@ -39,3 +39,4 @@ namespace ce {
         static VkPresentModeKHR ChooseBestPresentationMode(const std::vector<VkPresentModeKHR>& presentationModes);
     };
 } // namespace ce
+#endif

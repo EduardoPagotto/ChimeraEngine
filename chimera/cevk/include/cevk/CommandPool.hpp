@@ -1,6 +1,7 @@
-#pragma once
+#ifndef __COMMANDPOOL_CLASS_HPP
+#define __COMMANDPOOL_CLASS_HPP
 
-#include "subsystem.hpp"
+#include "cevk.hpp"
 #include <memory>
 #include <vulkan/vulkan_core.h>
 
@@ -18,3 +19,4 @@ namespace ce {
         VkCommandPool commandPool;
     };
 } // namespace ce
+#endif

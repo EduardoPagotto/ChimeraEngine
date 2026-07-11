@@ -1,5 +1,6 @@
 #include "DevVK.hpp"
 #include "debug.hpp"
+#include <SDL3/SDL_vulkan.h>
 #include <cstring>
 #include <fstream>
 #include <iostream>
@@ -109,8 +110,9 @@ namespace ce {
 
         const VkDebugReportCallbackCreateInfoEXT callbackCreateInfo{
             .sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT,
-            .flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT, // Which validation reports should initiate callback
-            .pfnCallback = DebugCallback                                              // Pointer to callback function itself
+            .flags = VK_DEBUG_REPORT_ERROR_BIT_EXT |
+                     VK_DEBUG_REPORT_WARNING_BIT_EXT, // Which validation reports should initiate callback
+            .pfnCallback = DebugCallback              // Pointer to callback function itself
         };
 
         // Create debug callback with custom create function
@@ -179,7 +181,8 @@ namespace ce {
                 .sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
                 .queueFamilyIndex = static_cast<uint32_t>(queueFamiyIndex), // The index of the family to create a from
                 .queueCount = 1,                                            // Numbers of queues to create
-                .pQueuePriorities = &priority, // Vulkan needs to know how to handle multiple queues, so decide priority (1 is hight)
+                .pQueuePriorities =
+                    &priority, // Vulkan needs to know how to handle multiple queues, so decide priority (1 is hight)
             };
 
             queueCreateInfos.push_back(queueCreateInfo);
@@ -194,10 +197,12 @@ namespace ce {
         const VkDeviceCreateInfo deviceCreateInfo{
             .sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
             .queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size()), // Number queueCreateInfos
-            .pQueueCreateInfos = queueCreateInfos.data(), // List of queueCreateInfos so device can create required queues
-            .enabledExtensionCount = static_cast<uint32_t>(DevVk::deviceExtensions.size()), // Number of enable logical device extentions
-            .ppEnabledExtensionNames = DevVk::deviceExtensions.data(),                      // List of enable logical device extentions
-            .pEnabledFeatures = &deviceFeatures // Physica device features logica device will use
+            .pQueueCreateInfos =
+                queueCreateInfos.data(), // List of queueCreateInfos so device can create required queues
+            .enabledExtensionCount =
+                static_cast<uint32_t>(DevVk::deviceExtensions.size()), // Number of enable logical device extentions
+            .ppEnabledExtensionNames = DevVk::deviceExtensions.data(), // List of enable logical device extentions
+            .pEnabledFeatures = &deviceFeatures                        // Physica device features logica device will use
         };
 
         // Create the Logical device for the givem physical device
@@ -267,7 +272,8 @@ namespace ce {
             swapChainValid = !swapChainDetails.presentationModes.empty() && !swapChainDetails.formats.empty();
         }
 
-        return indices.isValid() && extensionsSupported && swapChainValid && (deviceFeatures.samplerAnisotropy == VK_TRUE);
+        return indices.isValid() && extensionsSupported && swapChainValid &&
+               (deviceFeatures.samplerAnisotropy == VK_TRUE);
     }
 
     bool DevVk::CheckInstanceExtensionSupport(std::vector<const char*>* checkExtentions) {
@@ -364,14 +370,15 @@ namespace ce {
             // If presentation modes returned, get list of presentation modes
             if (presentationCount != 0) {
                 swapChainDetails.presentationModes.resize(presentationCount);
-                vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentationCount, swapChainDetails.presentationModes.data());
+                vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentationCount,
+                                                          swapChainDetails.presentationModes.data());
             }
 
             return swapChainDetails;
         }
 
-        VkFormat ChooseSupportedFormat(VkPhysicalDevice device, const std::vector<VkFormat>& formats, VkImageTiling tilling,
-                                       VkFormatFeatureFlags featureFlags) {
+        VkFormat ChooseSupportedFormat(VkPhysicalDevice device, const std::vector<VkFormat>& formats,
+                                       VkImageTiling tilling, VkFormatFeatureFlags featureFlags) {
 
             // Loop through options and find compatible one
             for (VkFormat format : formats) {
@@ -381,11 +388,13 @@ namespace ce {
                 vkGetPhysicalDeviceFormatProperties(device, format, &properties);
 
                 // Depending on tiling choice, nned to check for difference bit flag
-                if (tilling == VK_IMAGE_TILING_LINEAR && (properties.linearTilingFeatures & featureFlags) == featureFlags) {
+                if (tilling == VK_IMAGE_TILING_LINEAR &&
+                    (properties.linearTilingFeatures & featureFlags) == featureFlags) {
                     //
                     return format;
                 }
-                if (tilling == VK_IMAGE_TILING_OPTIMAL && (properties.optimalTilingFeatures & featureFlags) == featureFlags) {
+                if (tilling == VK_IMAGE_TILING_OPTIMAL &&
+                    (properties.optimalTilingFeatures & featureFlags) == featureFlags) {
                     //
                     return format;
                 }
@@ -410,8 +419,8 @@ namespace ce {
             for (const auto& queueFamily : queueFamilyList) {
 
                 // First check if queue has at least 1 queue in that family (could have no queue)
-                // Queue cam be multiple types defined through bitfield. Need to bitwise AND with VK_QUEUE_*_BIT to check if
-                // has requered type
+                // Queue cam be multiple types defined through bitfield. Need to bitwise AND with VK_QUEUE_*_BIT to
+                // check if has requered type
                 if ((queueFamily.queueCount > 0) && ((queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) != 0)) {
                     indices.graphicsFamily = idx; // if queue family is valid then get index
                 }
@@ -438,16 +447,18 @@ namespace ce {
 
         // --swapchain
 
-        uint32_t FindMemoryTypeIndex(VkPhysicalDevice physicalDevice, uint32_t allowedTypes, VkMemoryPropertyFlags properties) {
+        uint32_t FindMemoryTypeIndex(VkPhysicalDevice physicalDevice, uint32_t allowedTypes,
+                                     VkMemoryPropertyFlags properties) {
             // get properties of physical device memory
             VkPhysicalDeviceMemoryProperties memoryProperties;
             vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memoryProperties);
 
             for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; i++) {
 
-                // Index of memory type must match corresponding bit in allowedTypes and desired property bit flag are part of memory type's
-                // property flags
-                if ((allowedTypes & (1 << i)) && (memoryProperties.memoryTypes[i].propertyFlags & properties) == properties) { // NOLINT
+                // Index of memory type must match corresponding bit in allowedTypes and desired property bit flag are
+                // part of memory type's property flags
+                if ((allowedTypes & (1 << i)) &&
+                    (memoryProperties.memoryTypes[i].propertyFlags & properties) == properties) { // NOLINT
                     // this memory type is valid, so return its index
                     return i;
                 }

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __BUFFEROBJECT_CLASS_HPP
+#define __BUFFEROBJECT_CLASS_HPP
 
 #include <vulkan/vulkan_core.h>
 
@@ -15,7 +16,8 @@ namespace ce {
         // BufferObject(BufferObject&& other) noexcept;
         // BufferObject& operator=(BufferObject&& other) noexcept;
 
-        void create(const VkDeviceSize& bufferSize, const VkBufferUsageFlags& bufferUsage, const VkMemoryPropertyFlags& bufferProperties);
+        void create(const VkDeviceSize& bufferSize, const VkBufferUsageFlags& bufferUsage,
+                    const VkMemoryPropertyFlags& bufferProperties);
 
         [[nodiscard]] VkBuffer getBuffer() const { return buffer; }
         [[nodiscard]] VkDeviceMemory getMemory() const { return memory; }
@@ -35,3 +37,4 @@ namespace ce {
         // void* mappedData{nullptr};
     };
 } // namespace ce
+#endif

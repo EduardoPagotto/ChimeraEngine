@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __COMMANDBUFFER_CLASS_HPP
+#define __COMMANDBUFFER_CLASS_HPP
 
 #include <vector>
 #include <vulkan/vulkan_core.h>
@@ -37,4 +38,16 @@ namespace ce {
         std::vector<VkCommandBuffer> commandBuffers;
     };
 
+    void SubmitQueue(VkQueue queue, VkCommandBuffer commandBuffer);
+
+    void CopyBuffer(VkDevice device, VkQueue transferQueue, VkCommandPool transferCommandPool, VkBuffer srcBuffer,
+                    VkBuffer dstBuffer, VkDeviceSize bufferSize);
+
+    void CopyImageBuffer(VkDevice device, VkQueue transferQueue, VkCommandPool transferCommandPool, VkBuffer srcBuffer,
+                         VkImage image, uint32_t width, uint32_t height);
+
+    void TransitionImageLayout(VkDevice device, VkQueue queue, VkCommandPool commandPool, VkImage image,
+                               VkImageLayout oldLayout, VkImageLayout newLayout);
+
 } // namespace ce
+#endif

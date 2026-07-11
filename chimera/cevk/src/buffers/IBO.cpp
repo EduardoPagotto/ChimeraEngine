@@ -1,5 +1,5 @@
 #include "buffers/IBO.hpp"
-#include "buffers/utils.hpp"
+#include "buffers/CommandBuffer.hpp"
 
 namespace ce {
 
@@ -32,7 +32,7 @@ namespace ce {
                           VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
         // Copy from staging buffer to GPU access buffer
-        copyBuffer(this->logical, queue, commandBuffer, stagingBuffer.getBuffer(), this->ibo->getBuffer(), bufferSize);
+        CopyBuffer(this->logical, queue, commandBuffer, stagingBuffer.getBuffer(), this->ibo->getBuffer(), bufferSize);
     }
 
 } // namespace ce

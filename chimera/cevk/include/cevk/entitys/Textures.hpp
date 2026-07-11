@@ -1,8 +1,9 @@
-#pragma once
+#ifndef __TEXTURES_CLASS_HPP
+#define __TEXTURES_CLASS_HPP
 
+#include "Descriptors.hpp"
 #include "buffers/ImageObject.hpp"
 #include "buffers/UBO.hpp"
-#include "descriptors/DescriptorPool.hpp"
 #include "stb_image.h"
 
 namespace ce {
@@ -37,3 +38,4 @@ namespace ce {
         std::shared_ptr<DescriptorPool> samplerDescriptorPool;
     };
 } // namespace ce
+#endif

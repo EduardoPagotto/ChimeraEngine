@@ -1,5 +1,7 @@
-#pragma once
-#include "subsystem.hpp"
+#ifndef __RENDERER_CLASS_HPP
+#define __RENDERER_CLASS_HPP
+
+#include "cevk.hpp"
 #include <memory>
 
 namespace ce {
@@ -19,3 +21,4 @@ namespace ce {
         void createRenderPass(const VkFormat& format);
     };
 } // namespace ce
+#endif

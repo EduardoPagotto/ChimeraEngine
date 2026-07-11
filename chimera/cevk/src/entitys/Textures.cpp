@@ -1,7 +1,7 @@
 #include "entitys/Textures.hpp"
-#include "DevVK.hpp"
 #include "buffers/BufferObject.hpp"
-#include "buffers/utils.hpp"
+#include "buffers/CommandBuffer.hpp"
+#include "cevk.hpp"
 
 namespace ce {
 
@@ -101,19 +101,21 @@ namespace ce {
         std::shared_ptr<ce::ImageObject> texImageObj = std::make_shared<ce::ImageObject>(this->physical, this->logical);
 
         texImageObj->createImage(width, height, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_TILING_OPTIMAL,
-                                 VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+                                 VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+                                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
         // COPY DATA TO IMAGE
         // Transition image to be DST for copy operation
-        transitionImageLayout(this->logical, queue, commandPool, texImageObj->getImage(), VK_IMAGE_LAYOUT_UNDEFINED,
+        TransitionImageLayout(this->logical, queue, commandPool, texImageObj->getImage(), VK_IMAGE_LAYOUT_UNDEFINED,
                               VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
         // Copy image data
-        copyImageBuffer(this->logical, queue, commandPool, imageStagingBuffer.getBuffer(), texImageObj->getImage(), width, height);
+        CopyImageBuffer(this->logical, queue, commandPool, imageStagingBuffer.getBuffer(), texImageObj->getImage(),
+                        width, height);
 
         // Transition image to be shader readable for shader
-        transitionImageLayout(this->logical, queue, commandPool, texImageObj->getImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                              VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        TransitionImageLayout(this->logical, queue, commandPool, texImageObj->getImage(),
+                              VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
         // add texture data to vector for reference
         this->uboSampler->getUBO().push_back(texImageObj);

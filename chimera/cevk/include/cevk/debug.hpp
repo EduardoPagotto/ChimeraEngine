@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __DEBUG_BASE_HPP
+#define __DEBUG_BASE_HPP
 
 #include <vulkan/vulkan_core.h>
 
@@ -7,7 +8,8 @@ namespace ce {
     VkResult CreateDebugReportCallbackEXT(VkInstance instance, const VkDebugReportCallbackCreateInfoEXT* pCreateInfo,
                                           const VkAllocationCallbacks* pAllocator, VkDebugReportCallbackEXT* pCallback);
 
-    void DestroyDebugReportCallbackEXT(VkInstance instance, VkDebugReportCallbackEXT callback, const VkAllocationCallbacks* pAllocator);
+    void DestroyDebugReportCallbackEXT(VkInstance instance, VkDebugReportCallbackEXT callback,
+                                       const VkAllocationCallbacks* pAllocator);
 
     VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(VkDebugReportFlagsEXT flags,        // Type of error
                                                  VkDebugReportObjectTypeEXT objType, // Type of object causing error
@@ -16,3 +18,4 @@ namespace ce {
                                                  const char* message, // Validation Information
                                                  void* userData);
 } // namespace ce
+#endif

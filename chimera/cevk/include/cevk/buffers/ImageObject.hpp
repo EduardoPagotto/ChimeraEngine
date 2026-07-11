@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __IMAGEOBJECT_CLASS_HPP
+#define __IMAGEOBJECT_CLASS_HPP
 
 #include <vulkan/vulkan_core.h>
 
@@ -12,8 +13,8 @@ namespace ce {
         ImageObject(const ImageObject&) = delete;
         ImageObject& operator=(const ImageObject&) = delete;
 
-        void createImage(uint32_t with, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags useFlags,
-                         VkMemoryPropertyFlags propFlags);
+        void createImage(uint32_t with, uint32_t height, VkFormat format, VkImageTiling tiling,
+                         VkImageUsageFlags useFlags, VkMemoryPropertyFlags propFlags);
 
         void createImageViewImportedImage(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
 
@@ -33,5 +34,6 @@ namespace ce {
         VkImageView imageView{VK_NULL_HANDLE};
         VkImage image{VK_NULL_HANDLE};
         VkDeviceMemory imageMemory{VK_NULL_HANDLE};
-    }; // namespace ce
+    };
 } // namespace ce
+#endif

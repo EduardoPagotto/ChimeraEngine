@@ -1,7 +1,7 @@
-#pragma once
+#ifndef __UBO_CLASS_HPP
+#define __UBO_CLASS_HPP
 
-#include "descriptors/DescriptorSet.hpp"
-#include "descriptors/DescriptorSetLayout.hpp"
+#include "Descriptors.hpp"
 #include <memory>
 
 namespace ce {
@@ -14,7 +14,8 @@ namespace ce {
             this->descriptorSetLayout = std::make_shared<DescriptorSetLayout>(this->logical);
             this->descriptorSets = std::make_shared<DescriptorSet>(this->logical);
         }
-        explicit UBO(VkPhysicalDevice physical, VkDevice logical, const size_t maxUBO, const size_t sizeDataUBO) : logical(logical) {
+        explicit UBO(VkPhysicalDevice physical, VkDevice logical, const size_t maxUBO, const size_t sizeDataUBO)
+            : logical(logical) {
 
             // ViewProjection Buffer size
             const VkDeviceSize vpBufferSize = sizeDataUBO; // tamanho do struct com os dados
@@ -60,7 +61,8 @@ namespace ce {
 
         void updateDescriptorSets() {
             // Update the descripto sets with new buffer/binding info
-            vkUpdateDescriptorSets(logical, static_cast<uint32_t>(this->setWrites.size()), this->setWrites.data(), 0, nullptr);
+            vkUpdateDescriptorSets(logical, static_cast<uint32_t>(this->setWrites.size()), this->setWrites.data(), 0,
+                                   nullptr);
         }
 
         [[nodiscard]] size_t size() const noexcept { return ubo.size(); }
@@ -78,3 +80,5 @@ namespace ce {
     };
 
 } // namespace ce
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __IBO_CLASS_HPP
+#define __IBO_CLASS_HPP
 
 #include "buffers/BufferObject.hpp"
 #include <memory>
@@ -29,3 +30,5 @@ namespace ce {
         std::shared_ptr<ce::BufferObject> ibo;
     };
 } // namespace ce
+
+#endif

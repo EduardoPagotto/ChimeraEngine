@@ -14,7 +14,7 @@ VulkanRenderer::VulkanRenderer(ce::DevVk& devvk) {
     this->gQueue = devvk.getGraphicsQueue();
     this->pQueue = devvk.getPresentationQueue();
 
-    swapchain = std::make_shared<SwapChain>(bvk);
+    swapchain = std::make_shared<SwapChain>(bvk.get());
     rederer = std::make_shared<Renderer>(bvk, swapchain->getImageFormat());
     uboVP = std::make_shared<UBO<BufferObject>>(bvk->physical, bvk->logical, swapchain->getImages().size(),
                                                 sizeof(UboViewProjection));
@@ -25,8 +25,8 @@ VulkanRenderer::VulkanRenderer(ce::DevVk& devvk) {
     createGraphicsPipeline();
 
     swapchain->createFramebuffers(rederer->getRenderPass());
-    graphicsCommandPool = std::make_shared<CommandPool>(this->bvk);
-    commandBuffers = std::make_shared<CommandBuffer>(bvk->logical, graphicsCommandPool->getPool(),
+    graphicsCommandPool = std::make_shared<CommandPool>(this->bvk.get());
+    commandBuffers = std::make_shared<CommandBuffer>(bvk->logical, graphicsCommandPool->get(),
                                                      swapchain->getSwapChainFrameBuffers().size());
 
     createDescriptorPool();
@@ -49,7 +49,7 @@ VulkanRenderer::VulkanRenderer(ce::DevVk& devvk) {
     uboViewProjection.projection[1][1] *= -1; // vulkan inverted of OpenGL
 
     // Create our default "no texture" texture
-    textureMng->createTexture("plain.png", gQueue, graphicsCommandPool->getPool());
+    textureMng->createTexture("plain.png", gQueue, graphicsCommandPool->get());
 }
 
 VulkanRenderer::~VulkanRenderer() {
@@ -404,14 +404,14 @@ int VulkanRenderer::createMeshModel(const std::string& modelFile) {
 
             // Otherwise, create texture and set value to index of new texture
             matToTex[i] =
-                this->textureMng->createTexture(textureNames[i], this->gQueue, this->graphicsCommandPool->getPool());
+                this->textureMng->createTexture(textureNames[i], this->gQueue, this->graphicsCommandPool->get());
             // matToTex[i] = createTexture("panda.jpg");
         }
     }
 
     // Load in all our meshes
     std::vector<ce::Mesh> modelMeshes = ce::MeshModel::LoadNode(
-        bvk->physical, bvk->logical, gQueue, this->graphicsCommandPool->getPool(), scene->mRootNode, scene, matToTex);
+        bvk->physical, bvk->logical, gQueue, this->graphicsCommandPool->get(), scene->mRootNode, scene, matToTex);
 
     // Create mesh model and add to list
     ce::MeshModel meshModel(modelMeshes);

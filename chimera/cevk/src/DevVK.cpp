@@ -41,16 +41,9 @@ namespace ce {
         // set up extentions will use
         uint32_t hwExtentionCount = 0; // may require multiple extentions
 
-#ifdef SET_GLFW_ENABLE
-        const char** hwExtentions; // Extentions passed as array of cstring,
-        ;                          // so need pointer (the array) to pointer(the string)
-        // Get glfw extentions
-        hwExtentions = glfwGetRequiredInstanceExtensions(&hwExtentionCount);
-#else
         const char* const* hwExtentions; // Extentions passed as array of cstring,
         ;                                // so need pointer (the array) to pointer(the string)
         hwExtentions = SDL_Vulkan_GetInstanceExtensions(&hwExtentionCount);
-#endif
 
         // Add glwf extentions to list of extentions
         for (size_t i = 0; i < hwExtentionCount; i++) {
@@ -123,17 +116,10 @@ namespace ce {
     }
 
     void DevVk::createSurface() {
-
         // Create Surface (creates a surface creste info struct, runs the create surface function, returns result)
-#ifdef SET_GLFW_ENABLE
-        if (glfwCreateWindowSurface(this->instance, this->bvk->window, nullptr, &this->bvk->surface) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create a surface!");
-        }
-#else
         if (!SDL_Vulkan_CreateSurface(this->bvk->window, this->instance, nullptr, &this->bvk->surface)) {
             throw std::runtime_error("Failed to create a surface!");
         }
-#endif
     }
 
     void DevVk::getNewPhysicalDevice() {

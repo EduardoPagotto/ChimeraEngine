@@ -39,11 +39,7 @@ namespace ce {
         VkPhysicalDevice physical{VK_NULL_HANDLE};
         VkDevice logical{VK_NULL_HANDLE};
         VkSurfaceKHR surface{VK_NULL_HANDLE};
-#ifdef SET_GLFW_ENABLE
-        GLFWwindow* window{nullptr};
-#else
         SDL_Window* window{nullptr};
-#endif
     };
 
 } // namespace ce

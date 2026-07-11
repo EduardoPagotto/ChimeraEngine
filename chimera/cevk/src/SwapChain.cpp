@@ -1,14 +1,13 @@
 #include "SwapChain.hpp"
 #include "DevVK.hpp"
 #include <array>
-#include <memory>
 
 namespace ce {
 
-    SwapChain::SwapChain(std::shared_ptr<BaseVK> bvk) : bvk(bvk) { // NOLINT
+    SwapChain::SwapChain(BaseVK* pBVK) : physical(pBVK->physical), logical(pBVK->logical), window(pBVK->window) {
 
         // Get Swap Chain details so we cam pick best setting
-        SwapChainDetails swapchainDetails = aux::GetSwapChainDetails(bvk->physical, bvk->surface);
+        SwapChainDetails swapchainDetails = aux::GetSwapChainDetails(pBVK->physical, pBVK->surface);
 
         // Find optimal surface value for our swap chain
         VkSurfaceFormatKHR surrfaceFormat = SwapChain::ChooseBestSurfaceFormat(swapchainDetails.formats);
@@ -21,12 +20,13 @@ namespace ce {
 
         // If imagecount higher than max the clamp down to max
         // If 0, then limitless
-        if (swapchainDetails.surfaceCapabilities.maxImageCount > 0 && swapchainDetails.surfaceCapabilities.maxImageCount < imageCount) {
+        if (swapchainDetails.surfaceCapabilities.maxImageCount > 0 &&
+            swapchainDetails.surfaceCapabilities.maxImageCount < imageCount) {
             imageCount = swapchainDetails.surfaceCapabilities.maxImageCount;
         }
 
         // Get Queue Family indices
-        ce::QueueFamilyIndices indices = aux::GetQueueFamilies(bvk->physical, bvk->surface);
+        ce::QueueFamilyIndices indices = aux::GetQueueFamilies(pBVK->physical, pBVK->surface);
         // If Graphics and Presentation families are diferent, the swapchain must let images ge shared between families
 
         // indices.graphicsFamily == indices.presentationFamily
@@ -48,25 +48,28 @@ namespace ce {
         // Create information for swap chain
         const VkSwapchainCreateInfoKHR swapchainCreateInfo{
             .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
-            .surface = bvk->surface,                                               // Swapchain surface
-            .minImageCount = imageCount,                                           // Minimum image in swapchain
-            .imageFormat = surrfaceFormat.format,                                  // Swapchain format
-            .imageColorSpace = surrfaceFormat.colorSpace,                          // Swapchain color space
-            .imageExtent = extent,                                                 // Swapchain image extents
-            .imageArrayLayers = 1,                                                 // Number of layers for each image in chain
-            .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,                     // What attachement image will be used as
-            .imageSharingMode = imageSharingMode,                                  // Image share handling
-            .queueFamilyIndexCount = queueFamilyIndexCount,                        // Number of queues to share images between
-            .pQueueFamilyIndices = pQueueFamilyIndices,                            // Array of queues to share between
-            .preTransform = swapchainDetails.surfaceCapabilities.currentTransform, // Transform to perform on swap chain images
-            .compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR, // How to handle blending images with external graphics(e.g. other windows)
-            .presentMode = presentMode,                          // Swapchain presentation mode
-            .clipped = VK_TRUE,              // Whether to clip parts of image not in view (e.g. behind another window, off screen, etc)
-            .oldSwapchain = VK_NULL_HANDLE}; //  If old swap chain been destroyed and this one replaces it, then link old one to quickly
-                                             //  hand over  responsabilities
+            .surface = pBVK->surface,                          // Swapchain surface
+            .minImageCount = imageCount,                       // Minimum image in swapchain
+            .imageFormat = surrfaceFormat.format,              // Swapchain format
+            .imageColorSpace = surrfaceFormat.colorSpace,      // Swapchain color space
+            .imageExtent = extent,                             // Swapchain image extents
+            .imageArrayLayers = 1,                             // Number of layers for each image in chain
+            .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, // What attachement image will be used as
+            .imageSharingMode = imageSharingMode,              // Image share handling
+            .queueFamilyIndexCount = queueFamilyIndexCount,    // Number of queues to share images between
+            .pQueueFamilyIndices = pQueueFamilyIndices,        // Array of queues to share between
+            .preTransform =
+                swapchainDetails.surfaceCapabilities.currentTransform, // Transform to perform on swap chain images
+            .compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,       // How to handle blending images with external
+                                                                       // graphics(e.g. other windows)
+            .presentMode = presentMode,                                // Swapchain presentation mode
+            .clipped =
+                VK_TRUE, // Whether to clip parts of image not in view (e.g. behind another window, off screen, etc)
+            .oldSwapchain = VK_NULL_HANDLE}; //  If old swap chain been destroyed and this one replaces it, then link
+                                             //  old one to quickly hand over  responsabilities
 
         // Create Swapchain
-        if (vkCreateSwapchainKHR(bvk->logical, &swapchainCreateInfo, nullptr, &this->swapchain) != VK_SUCCESS) {
+        if (vkCreateSwapchainKHR(pBVK->logical, &swapchainCreateInfo, nullptr, &this->swapchain) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create a Swapchain");
         }
 
@@ -76,15 +79,16 @@ namespace ce {
 
         // Get swap chain images (first count the values)
         uint32_t swapChainImageCount;
-        vkGetSwapchainImagesKHR(bvk->logical, this->swapchain, &swapChainImageCount, nullptr);
+        vkGetSwapchainImagesKHR(pBVK->logical, this->swapchain, &swapChainImageCount, nullptr);
 
         std::vector<VkImage> lImages(swapChainImageCount);
-        vkGetSwapchainImagesKHR(bvk->logical, this->swapchain, &swapChainImageCount, lImages.data());
+        vkGetSwapchainImagesKHR(pBVK->logical, this->swapchain, &swapChainImageCount, lImages.data());
 
         for (VkImage image : lImages) {
 
-            auto imgObj = std::make_shared<ImageObject>(bvk->physical, bvk->logical);
-            imgObj->createImageViewImportedImage(image, this->imageFormat, VK_IMAGE_ASPECT_COLOR_BIT); // CreateImageView
+            auto imgObj = std::make_shared<ImageObject>(pBVK->physical, pBVK->logical);
+            imgObj->createImageViewImportedImage(image, this->imageFormat,
+                                                 VK_IMAGE_ASPECT_COLOR_BIT); // CreateImageView
             this->images.push_back(imgObj);
         }
     }
@@ -92,7 +96,7 @@ namespace ce {
     SwapChain::~SwapChain() {
 
         for (auto& framebuffer : this->swapChainFrameBuffers) { // ? auto& mesmo ??
-            vkDestroyFramebuffer(this->bvk->logical, framebuffer, nullptr);
+            vkDestroyFramebuffer(this->logical, framebuffer, nullptr);
         }
 
         for (auto& image : this->images) {
@@ -102,7 +106,7 @@ namespace ce {
         // TODO: e aqui?
         this->depthBufferObject.reset();
 
-        vkDestroySwapchainKHR(this->bvk->logical, this->swapchain, nullptr);
+        vkDestroySwapchainKHR(this->logical, this->swapchain, nullptr);
     }
 
     VkExtent2D SwapChain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities) {
@@ -114,22 +118,19 @@ namespace ce {
 
         int witdh;
         int height;
-#ifdef SET_GLFW_ENABLE
-        glfwGetFramebufferSize(this->bvk->window, &witdh, &height);
-#else
-        SDL_GetWindowSizeInPixels(this->bvk->window, &witdh, &height);
-#endif
+        SDL_GetWindowSizeInPixels(this->window, &witdh, &height);
+
         VkExtent2D newExtent{
             .width = static_cast<uint32_t>(witdh),  //
             .height = static_cast<uint32_t>(height) //
         };
 
         // surface also defie max and min, so make sure within bondaries by clamping value
-        newExtent.width =
-            std::max(surfaceCapabilities.minImageExtent.width, std::min(surfaceCapabilities.maxImageExtent.width, newExtent.width));
+        newExtent.width = std::max(surfaceCapabilities.minImageExtent.width,
+                                   std::min(surfaceCapabilities.maxImageExtent.width, newExtent.width));
 
-        newExtent.height =
-            std::max(surfaceCapabilities.minImageExtent.height, std::min(surfaceCapabilities.maxImageExtent.height, newExtent.height));
+        newExtent.height = std::max(surfaceCapabilities.minImageExtent.height,
+                                    std::min(surfaceCapabilities.maxImageExtent.height, newExtent.height));
 
         return newExtent;
     }
@@ -145,20 +146,21 @@ namespace ce {
         // Create a framebuffer for eache swap chain image
         for (size_t i = 0; i < this->swapChainFrameBuffers.size(); i++) {
 
-            std::array<VkImageView, 2> attachments = {this->images[i]->getImageView(),
-                                                      depthBufferObject->getImageView()}; // order important same as upper
+            std::array<VkImageView, 2> attachments = {
+                this->images[i]->getImageView(), depthBufferObject->getImageView()}; // order important same as upper
 
             const VkFramebufferCreateInfo framebufferCreateInfo = {
                 .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
-                .renderPass = renderPass,                                     // Render Pass layout the framebuffer will be used with
+                .renderPass = renderPass, // Render Pass layout the framebuffer will be used with
                 .attachmentCount = static_cast<uint32_t>(attachments.size()), //
-                .pAttachments = attachments.data(),                           // List of attachments (1:1 with Render Pass)
-                .width = this->extent.width,                                  // Framebuffer width
-                .height = this->extent.height,                                // Framebuffer height
-                .layers = 1                                                   // Framebuffer layers
+                .pAttachments = attachments.data(), // List of attachments (1:1 with Render Pass)
+                .width = this->extent.width,        // Framebuffer width
+                .height = this->extent.height,      // Framebuffer height
+                .layers = 1                         // Framebuffer layers
             };
 
-            if (vkCreateFramebuffer(this->bvk->logical, &framebufferCreateInfo, nullptr, &this->swapChainFrameBuffers[i]) != VK_SUCCESS) {
+            if (vkCreateFramebuffer(this->logical, &framebufferCreateInfo, nullptr, &this->swapChainFrameBuffers[i]) !=
+                VK_SUCCESS) {
                 throw std::runtime_error("Faleid to create a frambuffer");
             }
         }
@@ -168,14 +170,16 @@ namespace ce {
 
         // Get suported format for depth buffer
         VkFormat depthFormat = ce::aux::ChooseSupportedFormat(
-            this->bvk->physical, {VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D32_SFLOAT, VK_FORMAT_D24_UNORM_S8_UINT}, // Formats
-            VK_IMAGE_TILING_OPTIMAL,                                                                                // Tilling
-            VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);                                                        // Depth
+            this->physical,
+            {VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D32_SFLOAT, VK_FORMAT_D24_UNORM_S8_UINT}, // Formats
+            VK_IMAGE_TILING_OPTIMAL,                                                           // Tilling
+            VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);                                   // Depth
 
         // Create Depth Buffer Image
-        this->depthBufferObject = std::make_shared<ce::ImageObject>(this->bvk->physical, this->bvk->logical);
-        this->depthBufferObject->createImage(this->extent.width, this->extent.height, depthFormat, VK_IMAGE_TILING_OPTIMAL,
-                                             VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+        this->depthBufferObject = std::make_shared<ce::ImageObject>(this->physical, this->logical);
+        this->depthBufferObject->createImage(this->extent.width, this->extent.height, depthFormat,
+                                             VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+                                             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
         // Create Depth Buffer Image View
         this->depthBufferObject->createImageView(VK_IMAGE_ASPECT_DEPTH_BIT);
@@ -193,7 +197,7 @@ namespace ce {
             .pWaitSemaphores = signalSemaphores.data(),                           // Semaphores to wait on
             .swapchainCount = static_cast<uint32_t>(swapChains.size()),           // Number of swapchains to present to
             .pSwapchains = swapChains.data(),                                     // Swapchais to present images to
-            .pImageIndices = &imageIndex,                                         // Index of Images in swapchains to present
+            .pImageIndices = &imageIndex, // Index of Images in swapchains to present
         };
 
         // Present Image

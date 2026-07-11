@@ -3,7 +3,6 @@
 
 #include "cevk.hpp"
 #include <memory>
-#include <vulkan/vulkan_core.h>
 
 namespace ce {
 

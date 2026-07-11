@@ -2,7 +2,6 @@
 #define __SWAPCHAIN_CLASS_HPP
 
 #include "Buffers.hpp"
-#include "cevk.hpp"
 #include <memory>
 #include <vector>
 

@@ -5,11 +5,11 @@
 
 namespace ce {
 
-    Renderer::Renderer(std::shared_ptr<BaseVK> bvk, const VkFormat& format) : bvk(bvk) { // NOLINT
+    Renderer::Renderer(BaseVK* pBVK, const VkFormat& format) : physical(pBVK->physical), logical(pBVK->logical) {
         //
         createRenderPass(format);
     }
-    Renderer::~Renderer() { vkDestroyRenderPass(bvk->logical, this->renderPass, nullptr); }
+    Renderer::~Renderer() { vkDestroyRenderPass(this->logical, this->renderPass, nullptr); }
 
     void Renderer::createRenderPass(const VkFormat& format) {
 
@@ -31,7 +31,7 @@ namespace ce {
         // Depth attachemnt of render pass
         const VkAttachmentDescription depthAttachemnt{
             .format = aux::ChooseSupportedFormat(
-                this->bvk->physical,
+                this->physical,
                 {VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D32_SFLOAT, VK_FORMAT_D24_UNORM_S8_UINT}, // Formats
                 VK_IMAGE_TILING_OPTIMAL,                                                           // Tilling
                 VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT),
@@ -104,7 +104,7 @@ namespace ce {
             .dependencyCount = static_cast<uint32_t>(subpassDependencies.size()),
             .pDependencies = subpassDependencies.data()};
 
-        if (vkCreateRenderPass(bvk->logical, &renderPassCreateInfo, nullptr, &this->renderPass) != VK_SUCCESS) {
+        if (vkCreateRenderPass(this->logical, &renderPassCreateInfo, nullptr, &this->renderPass) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create render pass!!!");
         }
     }

@@ -70,7 +70,7 @@ VulkanRenderer::~VulkanRenderer() {
 
     commandBuffers.reset();
     graphicsCommandPool.reset();
-    pipeline.reset();
+    graphicPipeline.reset();
     pipelineLayout.reset();
 }
 
@@ -188,16 +188,16 @@ void VulkanRenderer::createGraphicsPipeline() {
     this->pipelineLayout->create();
 
     // TODO: mudar o nome da classe
-    this->pipeline = std::make_shared<ce::Pipeline>(this->bvk->logical);
-    this->pipeline->addViewport(viewport);
-    this->pipeline->addScissor(scissor);
+    this->graphicPipeline = std::make_shared<ce::Pipeline>(this->bvk->logical);
+    this->graphicPipeline->addViewport(viewport);
+    this->graphicPipeline->addScissor(scissor);
 
     // // -- DYNAMIC STATES --
-    // this->pipeline->addDynamicStateEnables(VK_DYNAMIC_STATE_VIEWPORT); // Dynamic Viewport: Can resize in command
-    // buffer with ;                                                                        //
+    // this->graphicPipeline->addDynamicStateEnables(VK_DYNAMIC_STATE_VIEWPORT); // Dynamic Viewport: Can resize in
+    // command buffer with ;                                                                        //
     // vkCmdSetViewport(commandbuffer, 0, 1, &viewport);
-    // this->pipeline->addDynamicStateEnables(VK_DYNAMIC_STATE_SCISSOR);  // Dynamic Scissor: Can resize in command
-    // buffer with ;                                                                        //
+    // this->graphicPipeline->addDynamicStateEnables(VK_DYNAMIC_STATE_SCISSOR);  // Dynamic Scissor: Can resize in
+    // command buffer with ;                                                                        //
     // vkCmdSetViewport(commandbuffer, 0, 1, &scissor);
 
     // Blend Attachment State (how blending is handled)
@@ -218,10 +218,10 @@ void VulkanRenderer::createGraphicsPipeline() {
                           VK_COLOR_COMPONENT_A_BIT, // Color to apply blending to
     };
 
-    this->pipeline->addColourState(colourState);
+    this->graphicPipeline->addColourState(colourState);
 
     // -- GRAPHICS PIPELINE CREATION
-    this->pipeline->create(shaderModule, this->rederer->getRenderPass(), this->pipelineLayout->getPipelineLayout());
+    this->graphicPipeline->create(shaderModule, this->rederer->getRenderPass(), this->pipelineLayout->get());
 }
 
 void VulkanRenderer::createDescriptorPool() {
@@ -326,7 +326,7 @@ void VulkanRenderer::recordCommands(uint32_t currentImage) {
     {
         // Bind Pipeline to be used  in render pass
         vkCmdBindPipeline(this->commandBuffers->getBuffers()[currentImage], VK_PIPELINE_BIND_POINT_GRAPHICS,
-                          this->pipeline->getGraphicsPipeline());
+                          this->graphicPipeline->get());
 
         for (size_t j = 0; j < this->modelList.size(); j++) { // 1:11:29
 
@@ -334,7 +334,7 @@ void VulkanRenderer::recordCommands(uint32_t currentImage) {
 
             // "Push" constant to given shader stage directly (no buffer)
             vkCmdPushConstants(this->commandBuffers->getBuffers()[currentImage], //
-                               this->pipelineLayout->getPipelineLayout(),        //
+                               this->pipelineLayout->get(),                      //
                                VK_SHADER_STAGE_VERTEX_BIT,                       // Stage to push constant to
                                0,                                                // offset of pushconstant to update
                                sizeof(ce::Model),                                // size of data being pushed
@@ -360,11 +360,11 @@ void VulkanRenderer::recordCommands(uint32_t currentImage) {
                     this->textureMng->getUbo()->getDescriptorSets()[thisModel.getMesh(k)->getTexId()]};
 
                 vkCmdBindDescriptorSets(commandBuffers->getBuffers()[currentImage], VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                        this->pipelineLayout->getPipelineLayout(), 0,
+                                        this->pipelineLayout->get(), 0,
                                         static_cast<uint32_t>(descriptorSetGroup.size()), descriptorSetGroup.data(), 0,
                                         nullptr);
 
-                // Execute pipeline
+                // Execute Graphic pipeline
                 vkCmdDrawIndexed(commandBuffers->getBuffers()[currentImage], thisModel.getMesh(k)->getIndexCount(), 1,
                                  0, 0, 0);
             }

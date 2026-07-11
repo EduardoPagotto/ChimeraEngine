@@ -1,7 +1,7 @@
 #include "Pipeline.hpp"
 namespace ce {
 
-    Pipeline::~Pipeline() { vkDestroyPipeline(device, this->graphicsPipeline, nullptr); }
+    Pipeline::~Pipeline() { vkDestroyPipeline(device, this->handle, nullptr); }
 
     void Pipeline::create(std::shared_ptr<ShaderModule> shaderModule, VkRenderPass renderPass,
                           VkPipelineLayout pipelineLayout) {
@@ -84,8 +84,8 @@ namespace ce {
         };
 
         // Create Graphics Pipeline
-        if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineCreateInfo, nullptr,
-                                      &this->graphicsPipeline) != VK_SUCCESS) {
+        if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineCreateInfo, nullptr, &this->handle) !=
+            VK_SUCCESS) {
             throw std::runtime_error("Failed to create a graphic pipeline");
         }
     }
@@ -101,7 +101,7 @@ namespace ce {
             .pPushConstantRanges = this->pushConstantRanges.data()};
 
         // Create PipelineLayout
-        if (vkCreatePipelineLayout(device, &pipelineLayoutCreateInfo, nullptr, &this->pipelineLayout) != VK_SUCCESS) {
+        if (vkCreatePipelineLayout(device, &pipelineLayoutCreateInfo, nullptr, &this->handle) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create Pipeline Layout!");
         }
     }

@@ -20,11 +20,11 @@ namespace ce {
         void create(std::shared_ptr<ShaderModule> shaderModule, VkRenderPass renderPass,
                     VkPipelineLayout pipelineLayout);
 
-        VkPipeline& getGraphicsPipeline() { return this->graphicsPipeline; }
+        VkPipeline& get() { return this->handle; }
 
       private:
-        VkDevice device;
-        VkPipeline graphicsPipeline;
+        VkDevice device{VK_NULL_HANDLE};
+        VkPipeline handle{VK_NULL_HANDLE};
 
         std::vector<VkViewport> viewports;
         std::vector<VkRect2D> scissors;
@@ -37,7 +37,7 @@ namespace ce {
       public:
         PipelineLayout(VkDevice device) : device(device) {}
 
-        virtual ~PipelineLayout() { vkDestroyPipelineLayout(device, this->pipelineLayout, nullptr); }
+        virtual ~PipelineLayout() { vkDestroyPipelineLayout(device, this->handle, nullptr); }
 
         void addLayout(const VkDescriptorSetLayout& descriptorSetLayout) {
             this->descriptorSetLayouts.push_back(descriptorSetLayout);
@@ -46,13 +46,13 @@ namespace ce {
             this->pushConstantRanges.push_back(pushConstantRange);
         }
 
-        VkPipelineLayout& getPipelineLayout() { return this->pipelineLayout; }
+        VkPipelineLayout& get() { return this->handle; }
 
         void create();
 
       private:
-        VkDevice device;
-        VkPipelineLayout pipelineLayout;
+        VkDevice device{VK_NULL_HANDLE};
+        VkPipelineLayout handle{VK_NULL_HANDLE};
         std::vector<VkDescriptorSetLayout> descriptorSetLayouts;
         std::vector<VkPushConstantRange> pushConstantRanges;
     };

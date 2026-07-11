@@ -42,7 +42,7 @@ class VulkanRenderer {
     std::shared_ptr<ce::UBO<ce::BufferObject>> uboVP;
     std::shared_ptr<ce::Textures> textureMng;
     std::shared_ptr<ce::PipelineLayout> pipelineLayout;
-    std::shared_ptr<ce::Pipeline> pipeline;
+    std::shared_ptr<ce::Pipeline> graphicPipeline;
     std::shared_ptr<ce::CommandPool> graphicsCommandPool;
     std::shared_ptr<ce::Sync> sync;
     // Scene Objects

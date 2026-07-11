@@ -1,12 +1,11 @@
 #pragma once
 
 #include "CommandPool.hpp"
+#include "DevVK.hpp"
 #include "Pipeline.hpp"
 #include "Renderer.hpp"
 #include "SwapChain.hpp"
 #include "Sync.hpp"
-#include "buffers/CommandBuffer.hpp"
-#include "buffers/UBO.hpp"
 #include "entitys/MeshModel.hpp"
 #include "entitys/Textures.hpp"
 #include <assimp/Importer.hpp>
@@ -42,6 +41,7 @@ class VulkanRenderer {
     std::shared_ptr<ce::DescriptorPool> descriptorPool;
     std::shared_ptr<ce::UBO<ce::BufferObject>> uboVP;
     std::shared_ptr<ce::Textures> textureMng;
+    std::shared_ptr<ce::PipelineLayout> pipelineLayout;
     std::shared_ptr<ce::Pipeline> pipeline;
     std::shared_ptr<ce::CommandPool> graphicsCommandPool;
     std::shared_ptr<ce::Sync> sync;

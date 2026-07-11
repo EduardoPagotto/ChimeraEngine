@@ -1,7 +1,6 @@
 #pragma once
 
-#include "buffers/IBO.hpp"
-#include "buffers/VBO.hpp"
+#include "Buffers.hpp"
 
 namespace ce {
 
@@ -12,8 +11,9 @@ namespace ce {
     class Mesh {
       public:
         Mesh() = default;
-        Mesh(VkPhysicalDevice newPhysicalDevice, VkDevice newDevice, VkQueue transferQueue, VkCommandPool transferCommandPool,
-             std::vector<Vertex>* vertices, std::vector<uint32_t>* indices, int newTexId);
+        Mesh(VkPhysicalDevice newPhysicalDevice, VkDevice newDevice, VkQueue transferQueue,
+             VkCommandPool transferCommandPool, std::vector<Vertex>* vertices, std::vector<uint32_t>* indices,
+             int newTexId);
 
         virtual ~Mesh() = default;
 
@@ -43,7 +43,9 @@ namespace ce {
         std::shared_ptr<VBO> vbo;
         std::shared_ptr<IBO> ibo;
 
-        void createVertexBuffer(VkQueue transferQueue, VkCommandPool transferCommandPool, std::vector<Vertex>* vertices);
-        void createIndexBuffer(VkQueue transferQueue, VkCommandPool transferCommandPool, std::vector<uint32_t>* indices);
+        void createVertexBuffer(VkQueue transferQueue, VkCommandPool transferCommandPool,
+                                std::vector<Vertex>* vertices);
+        void createIndexBuffer(VkQueue transferQueue, VkCommandPool transferCommandPool,
+                               std::vector<uint32_t>* indices);
     };
 } // namespace ce

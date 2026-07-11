@@ -1,6 +1,4 @@
 #include "entitys/Textures.hpp"
-#include "buffers/BufferObject.hpp"
-#include "buffers/CommandBuffer.hpp"
 #include "cevk.hpp"
 
 namespace ce {

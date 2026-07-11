@@ -1,7 +1,7 @@
 #ifndef __SWAPCHAIN_CLASS_HPP
 #define __SWAPCHAIN_CLASS_HPP
 
-#include "buffers/ImageObject.hpp"
+#include "Buffers.hpp"
 #include "cevk.hpp"
 #include <memory>
 #include <vector>

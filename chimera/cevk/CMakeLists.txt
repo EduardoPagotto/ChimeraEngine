@@ -29,11 +29,7 @@ set (IncludeDirs ${CMAKE_CURRENT_SOURCE_DIR}/include/cevk)
 set(SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/src/DevVK.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/debug.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/Descriptors.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/buffers/BufferObject.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/buffers/CommandBuffer.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/buffers/ImageObject.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/buffers/VBO.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/buffers/IBO.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/src/Buffers.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/entitys/ShaderModule.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/entitys/Textures.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/entitys/MeshModel.cpp

@@ -1,9 +1,7 @@
 #ifndef __TEXTURES_CLASS_HPP
 #define __TEXTURES_CLASS_HPP
 
-#include "Descriptors.hpp"
-#include "buffers/ImageObject.hpp"
-#include "buffers/UBO.hpp"
+#include "Buffers.hpp"
 #include "stb_image.h"
 
 namespace ce {

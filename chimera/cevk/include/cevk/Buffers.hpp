@@ -44,7 +44,7 @@ namespace ce {
 #pragma endregion
 
 #pragma region VBO
-    // -- VBO
+
     class VBO {
       public:
         explicit VBO(VkPhysicalDevice physical, VkDevice logical);
@@ -72,7 +72,6 @@ namespace ce {
 
 #pragma region ImageObject
 
-    // -- ImageObject
     class ImageObject {
       public:
         explicit ImageObject(VkPhysicalDevice physical, VkDevice device) : physical(physical), device(device) {}
@@ -108,7 +107,6 @@ namespace ce {
 
 #pragma region CommandBuffer
 
-    // -- ComandBuffer
     struct SubmitToRenderInfo {
         VkQueue gQueue;
         VkSemaphore wait;
@@ -141,21 +139,23 @@ namespace ce {
         std::vector<VkCommandBuffer> commandBuffers;
     };
 
-    void SubmitQueue(VkQueue queue, VkCommandBuffer commandBuffer);
+    namespace aux {
 
-    void CopyBuffer(VkDevice device, VkQueue transferQueue, VkCommandPool transferCommandPool, VkBuffer srcBuffer,
-                    VkBuffer dstBuffer, VkDeviceSize bufferSize);
+        void SubmitQueue(VkQueue queue, VkCommandBuffer commandBuffer);
 
-    void CopyImageBuffer(VkDevice device, VkQueue transferQueue, VkCommandPool transferCommandPool, VkBuffer srcBuffer,
-                         VkImage image, uint32_t width, uint32_t height);
+        void CopyBuffer(VkDevice device, VkQueue transferQueue, VkCommandPool transferCommandPool, VkBuffer srcBuffer,
+                        VkBuffer dstBuffer, VkDeviceSize bufferSize);
 
-    void TransitionImageLayout(VkDevice device, VkQueue queue, VkCommandPool commandPool, VkImage image,
-                               VkImageLayout oldLayout, VkImageLayout newLayout);
+        void CopyImageBuffer(VkDevice device, VkQueue transferQueue, VkCommandPool transferCommandPool,
+                             VkBuffer srcBuffer, VkImage image, uint32_t width, uint32_t height);
+
+        void TransitionImageLayout(VkDevice device, VkQueue queue, VkCommandPool commandPool, VkImage image,
+                                   VkImageLayout oldLayout, VkImageLayout newLayout);
+    } // namespace aux
 
 #pragma endregion
 
 #pragma region IBO
-    // -- IBO
 
     class IBO {
       public:
@@ -183,7 +183,6 @@ namespace ce {
 #pragma endregion
 
 #pragma region UBO
-    // -- UBO
 
     template <typename T, template <typename, typename> class Container = std::vector>
     class UBO {
@@ -261,7 +260,6 @@ namespace ce {
 #pragma endregion
 
 #pragma region BufferDynamic
-    // -- BufferDynamic
 
     struct UboModel {
         glm::mat4 model;

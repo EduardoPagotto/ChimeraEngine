@@ -3,7 +3,7 @@
 
 namespace ce {
 
-    // -- DescriptorPool
+#pragma region DescriptorPool
 
     // DescriptorPool::DescriptorPool(DescriptorPool&& other) noexcept
     //     : device{std::exchange(other.device, VK_NULL_HANDLE)}, handle{std::exchange(other.handle, VK_NULL_HANDLE)} {}
@@ -50,7 +50,9 @@ namespace ce {
         }
     }
 
-    // -- DescriptorSet
+#pragma endregion
+
+#pragma region DescriptorSet
 
     std::pair<size_t, size_t> DescriptorSet::allocate(const VkDescriptorPool& descriptorPool,
                                                       std::vector<VkDescriptorSetLayout>& descriptorSetLayouts) {
@@ -81,7 +83,9 @@ namespace ce {
         return {index, size}; // start position, total new allocate
     }
 
-    // -- DescriptorSetLayout
+#pragma endregion
+
+#pragma region DescriptorSetLayout
 
     DescriptorSetLayout::~DescriptorSetLayout() {
         if (handle != VK_NULL_HANDLE && device != VK_NULL_HANDLE) {
@@ -106,4 +110,6 @@ namespace ce {
         layoutBinding.clear();
         layoutBinding.shrink_to_fit();
     }
+#pragma endregion
+
 } // namespace ce

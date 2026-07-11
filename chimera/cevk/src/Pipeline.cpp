@@ -1,6 +1,8 @@
 #include "Pipeline.hpp"
 namespace ce {
 
+#pragma region Pipeline
+
     Pipeline::~Pipeline() { vkDestroyPipeline(device, this->handle, nullptr); }
 
     void Pipeline::create(std::shared_ptr<ShaderModule> shaderModule, VkRenderPass renderPass,
@@ -90,6 +92,9 @@ namespace ce {
         }
     }
 
+#pragma endregion
+
+#pragma region PipelineLayout
     // -- PipelineLayout
 
     void PipelineLayout::create() {
@@ -105,4 +110,5 @@ namespace ce {
             throw std::runtime_error("Failed to create Pipeline Layout!");
         }
     }
+#pragma endregion
 } // namespace ce

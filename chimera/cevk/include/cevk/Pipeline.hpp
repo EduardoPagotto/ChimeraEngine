@@ -1,9 +1,12 @@
-#pragma once
+#ifndef PIPELINE_CLASS_HPP
+#define PIPELINE_CLASS_HPP
 
 #include "entitys/ShaderModule.hpp"
 #include <memory>
 
 namespace ce {
+
+#pragma region Pipeline
 
     class Pipeline {
       public:
@@ -32,6 +35,10 @@ namespace ce {
         std::vector<VkPipelineColorBlendAttachmentState> colourStates;
     };
 
+#pragma endregion
+
+#pragma region PipelineLayout
+
     class PipelineLayout {
 
       public:
@@ -56,5 +63,6 @@ namespace ce {
         std::vector<VkDescriptorSetLayout> descriptorSetLayouts;
         std::vector<VkPushConstantRange> pushConstantRanges;
     };
-
+#pragma endregion
 } // namespace ce
+#endif

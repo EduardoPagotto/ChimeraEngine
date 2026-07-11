@@ -6,7 +6,7 @@
 
 namespace ce {
 
-    // -- DescriptorPool
+#pragma region DescriptorPool
 
     class DescriptorPool {
       public:
@@ -31,7 +31,9 @@ namespace ce {
         std::vector<VkDescriptorPoolSize> poolSize;
     };
 
-    // -- DescriptorSet
+#pragma endregion
+
+#pragma region DescriptorSet
 
     class DescriptorSet {
       public:
@@ -53,7 +55,9 @@ namespace ce {
         std::vector<VkDescriptorSet> descriptorSets;
     };
 
-    // -- DescriptorSetLayout
+#pragma endregion
+
+#pragma region DescriptorSetLayout
 
     class DescriptorSetLayout {
       public:
@@ -77,6 +81,7 @@ namespace ce {
         VkDescriptorSetLayout handle{VK_NULL_HANDLE};
         std::vector<VkDescriptorSetLayoutBinding> layoutBinding;
     };
-} // namespace ce
 
+#pragma endregion
+} // namespace ce
 #endif

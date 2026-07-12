@@ -1,5 +1,4 @@
-#ifndef __CEVK_BASE_HPP
-#define __CEVK_BASE_HPP
+#pragma once
 
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 
@@ -43,5 +42,3 @@ namespace ce {
     };
 
 } // namespace ce
-
-#endif

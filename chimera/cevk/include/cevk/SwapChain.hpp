@@ -1,5 +1,4 @@
-#ifndef __SWAPCHAIN_CLASS_HPP
-#define __SWAPCHAIN_CLASS_HPP
+#pragma once
 
 #include "Buffers.hpp"
 #include <memory>
@@ -42,4 +41,3 @@ namespace ce {
         static VkPresentModeKHR ChooseBestPresentationMode(const std::vector<VkPresentModeKHR>& presentationModes);
     };
 } // namespace ce
-#endif

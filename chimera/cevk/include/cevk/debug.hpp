@@ -1,5 +1,4 @@
-#ifndef __DEBUG_BASE_HPP
-#define __DEBUG_BASE_HPP
+#pragma once
 
 #include <vulkan/vulkan_core.h>
 
@@ -18,4 +17,3 @@ namespace ce {
                                                  const char* message, // Validation Information
                                                  void* userData);
 } // namespace ce
-#endif

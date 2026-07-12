@@ -1,6 +1,4 @@
-#ifndef __DEVVH_CLASS_HPP
-#define __DEVVH_CLASS_HPP
-
+#pragma once
 #include "cevk.hpp"
 #include <filesystem>
 
@@ -62,5 +60,3 @@ namespace ce {
     } // namespace aux
 
 } // namespace ce
-
-#endif

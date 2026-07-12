@@ -1,5 +1,4 @@
-#ifndef __COMMANDPOOL_CLASS_HPP
-#define __COMMANDPOOL_CLASS_HPP
+#pragma once
 
 #include "cevk.hpp"
 
@@ -17,4 +16,3 @@ namespace ce {
         VkCommandPool commandPool;
     };
 } // namespace ce
-#endif

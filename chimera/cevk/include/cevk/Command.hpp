@@ -1,5 +1,4 @@
-#ifndef COMMAND_CLASS_HPP
-#define COMMAND_CLASS_HPP
+#pragma once
 
 #include <vector>
 #include <vulkan/vulkan_core.h>
@@ -46,5 +45,3 @@ namespace ce {
         VkCommandBuffer cmdBuffer{VK_NULL_HANDLE};
     };
 } // namespace ce
-
-#endif

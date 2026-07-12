@@ -1,5 +1,4 @@
-#ifndef __DESCRIPTORS_CLASS_HPP
-#define __DESCRIPTORS_CLASS_HPP
+#pragma once
 
 #include <vector>
 #include <vulkan/vulkan_core.h>
@@ -84,4 +83,3 @@ namespace ce {
 
 #pragma endregion
 } // namespace ce
-#endif

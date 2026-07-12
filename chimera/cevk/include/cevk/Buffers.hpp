@@ -1,5 +1,4 @@
-#ifndef __BUFFERS_CLASS_HPP
-#define __BUFFERS_CLASS_HPP
+#pragma once
 
 #include "Descriptors.hpp"
 #include "cevk.hpp"
@@ -302,5 +301,3 @@ namespace ce {
     // };
 #pragma endregion
 } // namespace ce
-
-#endif

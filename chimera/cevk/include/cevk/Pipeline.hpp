@@ -1,5 +1,4 @@
-#ifndef PIPELINE_CLASS_HPP
-#define PIPELINE_CLASS_HPP
+#pragma once
 
 #include "ShaderModule.hpp"
 #include <memory>
@@ -65,4 +64,3 @@ namespace ce {
     };
 #pragma endregion
 } // namespace ce
-#endif

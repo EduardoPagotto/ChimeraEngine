@@ -1,5 +1,4 @@
-#ifndef __SYNC_CLASS_HPP
-#define __SYNC_CLASS_HPP
+#pragma once
 
 #include <vector>
 #include <vulkan/vulkan_core.h>
@@ -27,4 +26,3 @@ namespace ce {
     };
 
 } // namespace ce
-#endif

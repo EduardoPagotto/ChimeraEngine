@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Mesh.hpp"
 #include <assimp/scene.h>
 
@@ -25,7 +26,8 @@ namespace ce {
                                           std::vector<int>& matToText);
 
         static Mesh LoadMesh(VkPhysicalDevice newPhysicalDevice, VkDevice newDevice, VkQueue transferQueue,
-                             VkCommandPool transferCommandPool, aiMesh* mesh, const aiScene* scene, std::vector<int> matToText);
+                             VkCommandPool transferCommandPool, aiMesh* mesh, const aiScene* scene,
+                             std::vector<int> matToText);
 
       private:
         std::vector<Mesh> meshList;

@@ -1,4 +1,4 @@
-#include "entitys/Textures.hpp"
+#include "Textures.hpp"
 #include "cevk.hpp"
 
 namespace ce {

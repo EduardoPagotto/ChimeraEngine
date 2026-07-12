@@ -1,10 +1,11 @@
-#include "entitys/Mesh.hpp"
+#include "Mesh.hpp"
 #include <glm/ext/matrix_float4x4.hpp>
 
 namespace ce {
 
-    Mesh::Mesh(VkPhysicalDevice newPhysicalDevice, VkDevice newDevice, VkQueue transferQueue, VkCommandPool transferCommandPool,
-               std::vector<Vertex>* vertices, std::vector<uint32_t>* indices, int newTexId) {
+    Mesh::Mesh(VkPhysicalDevice newPhysicalDevice, VkDevice newDevice, VkQueue transferQueue,
+               VkCommandPool transferCommandPool, std::vector<Vertex>* vertices, std::vector<uint32_t>* indices,
+               int newTexId) {
 
         this->physicalDevice = newPhysicalDevice;
         this->device = newDevice;

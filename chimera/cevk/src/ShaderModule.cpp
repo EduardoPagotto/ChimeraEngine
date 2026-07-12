@@ -1,4 +1,4 @@
-#include "entitys/ShaderModule.hpp"
+#include "ShaderModule.hpp"
 #include <stdexcept>
 
 namespace ce {
@@ -65,17 +65,21 @@ namespace ce {
         // -- VERTEX INPUT --
         vertexInputCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
         vertexInputCreateInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(bindingDescriptions.size());
-        vertexInputCreateInfo.pVertexBindingDescriptions = bindingDescriptions.data(); // List of vertex bind Descritions
-        ;                                                                              // (data spacing stride information)
-        vertexInputCreateInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(this->attributeDescriptions.size());
-        vertexInputCreateInfo.pVertexAttributeDescriptions = this->attributeDescriptions.data(); // Listof Vertex Attribute Description
-        ;                                                                                        //  (data format and where
-        ;                                                                                        // to bind to/from)
+        vertexInputCreateInfo.pVertexBindingDescriptions =
+            bindingDescriptions.data(); // List of vertex bind Descritions
+        ;                               // (data spacing stride information)
+        vertexInputCreateInfo.vertexAttributeDescriptionCount =
+            static_cast<uint32_t>(this->attributeDescriptions.size());
+        vertexInputCreateInfo.pVertexAttributeDescriptions =
+            this->attributeDescriptions.data(); // Listof Vertex Attribute Description
+        ;                                       //  (data format and where
+        ;                                       // to bind to/from)
 
         //
         // -- INPUT ASSEMBLY --
         inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-        inputAssembly.topology = topology;                             // Primitive type to assemple vertice as
-        inputAssembly.primitiveRestartEnable = primitiveRestartEnable; // Allow overiding of "strip" topology to start new primitive
+        inputAssembly.topology = topology; // Primitive type to assemple vertice as
+        inputAssembly.primitiveRestartEnable =
+            primitiveRestartEnable; // Allow overiding of "strip" topology to start new primitive
     }
 } // namespace ce

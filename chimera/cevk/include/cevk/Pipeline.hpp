@@ -1,7 +1,7 @@
 #ifndef PIPELINE_CLASS_HPP
 #define PIPELINE_CLASS_HPP
 
-#include "entitys/ShaderModule.hpp"
+#include "ShaderModule.hpp"
 #include <memory>
 
 namespace ce {

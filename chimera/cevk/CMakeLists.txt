@@ -31,10 +31,10 @@ set(SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/src/DevVK.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/Descriptors.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/Buffers.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/Command.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/entitys/ShaderModule.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/entitys/Textures.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/entitys/MeshModel.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/entitys/Mesh.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/src/ShaderModule.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/src/Textures.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/src/MeshModel.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/src/Mesh.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/Sync.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/CommandPool.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/SwapChain.cpp

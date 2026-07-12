@@ -1,4 +1,4 @@
-#include "entitys/MeshModel.hpp"
+#include "MeshModel.hpp"
 #include <assimp/material.h>
 #include <assimp/types.h>
 

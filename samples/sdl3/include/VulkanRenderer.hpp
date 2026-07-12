@@ -2,12 +2,12 @@
 
 #include "CommandPool.hpp"
 #include "DevVK.hpp"
+#include "MeshModel.hpp"
 #include "Pipeline.hpp"
 #include "Renderer.hpp"
 #include "SwapChain.hpp"
 #include "Sync.hpp"
-#include "entitys/MeshModel.hpp"
-#include "entitys/Textures.hpp"
+#include "Textures.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>

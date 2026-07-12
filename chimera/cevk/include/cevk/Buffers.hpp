@@ -107,15 +107,6 @@ namespace ce {
 
 #pragma region CommandBuffer
 
-    struct SubmitToRenderInfo {
-        VkQueue gQueue;
-        VkSemaphore wait;
-        VkSemaphore signal;
-        VkFence fence;
-        VkPipelineStageFlagBits pipelineStageFlags;
-        size_t bufferIndex;
-    };
-
     class CommandBuffer {
       public:
         explicit CommandBuffer(VkDevice device, VkCommandPool commandPool, size_t count);
@@ -130,8 +121,6 @@ namespace ce {
         void end(size_t index);
 
         std::vector<VkCommandBuffer>& getBuffers() { return this->commandBuffers; }
-
-        void submitToRender(const SubmitToRenderInfo& sub);
 
       private:
         VkDevice device;

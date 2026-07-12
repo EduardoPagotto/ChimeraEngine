@@ -5,7 +5,7 @@ namespace ce {
 
     Textures::Textures(VkPhysicalDevice physical, VkDevice logical) : physical(physical), logical(logical) {
         //
-        this->uboSampler = std::make_shared<ce::UBO<ce::ImageObject>>(logical);
+        this->uboSampler = std::make_shared<UBO<ImageObject>>(logical);
         this->createDescriptorSetLayout();
         this->createDescriptorPool();
         this->createTextureSampler();
@@ -96,7 +96,7 @@ namespace ce {
         stbi_image_free(imageData);
 
         // create image to hold final texture
-        std::shared_ptr<ce::ImageObject> texImageObj = std::make_shared<ce::ImageObject>(this->physical, this->logical);
+        std::shared_ptr<ImageObject> texImageObj = std::make_shared<ImageObject>(this->physical, this->logical);
 
         texImageObj->createImage(width, height, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_TILING_OPTIMAL,
                                  VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,

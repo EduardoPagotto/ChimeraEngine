@@ -33,7 +33,7 @@ namespace ce {
         SDL_Window* window{nullptr};
 
         std::vector<std::shared_ptr<ImageObject>> images;
-        std::shared_ptr<ce::ImageObject> depthBufferObject;
+        std::shared_ptr<ImageObject> depthBufferObject;
         std::vector<VkFramebuffer> swapChainFrameBuffers;
 
         VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities);

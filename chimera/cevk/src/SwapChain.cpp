@@ -26,7 +26,7 @@ namespace ce {
         }
 
         // Get Queue Family indices
-        ce::QueueFamilyIndices indices = aux::GetQueueFamilies(pBVK->physical, pBVK->surface);
+        QueueFamilyIndices indices = aux::GetQueueFamilies(pBVK->physical, pBVK->surface);
         // If Graphics and Presentation families are diferent, the swapchain must let images ge shared between families
 
         // indices.graphicsFamily == indices.presentationFamily
@@ -169,14 +169,14 @@ namespace ce {
     void SwapChain::createDepthBufferImage() {
 
         // Get suported format for depth buffer
-        VkFormat depthFormat = ce::aux::ChooseSupportedFormat(
+        VkFormat depthFormat = aux::ChooseSupportedFormat(
             this->physical,
             {VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D32_SFLOAT, VK_FORMAT_D24_UNORM_S8_UINT}, // Formats
             VK_IMAGE_TILING_OPTIMAL,                                                           // Tilling
             VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);                                   // Depth
 
         // Create Depth Buffer Image
-        this->depthBufferObject = std::make_shared<ce::ImageObject>(this->physical, this->logical);
+        this->depthBufferObject = std::make_shared<ImageObject>(this->physical, this->logical);
         this->depthBufferObject->createImage(this->extent.width, this->extent.height, depthFormat,
                                              VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
                                              VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);

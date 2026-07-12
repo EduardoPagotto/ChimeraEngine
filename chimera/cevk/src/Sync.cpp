@@ -4,7 +4,7 @@
 namespace ce {
     Sync::Sync(VkDevice logical, size_t max) : logical(logical), max(max) {
         //
-        this->imageAvailable.resize(max); // ce::MAX_FRAME_DRAWS
+        this->imageAvailable.resize(max); // MAX_FRAME_DRAWS
         this->renderFinished.resize(max);
         this->drawFences.resize(max);
 
@@ -14,7 +14,8 @@ namespace ce {
         };
 
         // Fence creation information
-        const VkFenceCreateInfo fenceCreateInfo{.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO, .flags = VK_FENCE_CREATE_SIGNALED_BIT};
+        const VkFenceCreateInfo fenceCreateInfo{.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
+                                                .flags = VK_FENCE_CREATE_SIGNALED_BIT};
 
         for (size_t i = 0; i < max; i++) {
 

@@ -338,7 +338,7 @@ namespace ce {
         void CopyImageBuffer(VkDevice device, VkQueue transferQueue, VkCommandPool transferCommandPool,
                              VkBuffer srcBuffer, VkImage image, uint32_t width, uint32_t height) {
             // Create Buffer
-            ce::CommandBuffer transferComandBuffer(device, transferCommandPool, 1);
+            CommandBuffer transferComandBuffer(device, transferCommandPool, 1);
             transferComandBuffer.begin(0, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
 
             const VkBufferImageCopy imageRegion{
@@ -367,7 +367,7 @@ namespace ce {
         void TransitionImageLayout(VkDevice device, VkQueue queue, VkCommandPool commandPool, VkImage image,
                                    VkImageLayout oldLayout, VkImageLayout newLayout) {
             // Create buffer
-            ce::CommandBuffer commandBuffer(device, commandPool, 1);
+            CommandBuffer commandBuffer(device, commandPool, 1);
             commandBuffer.begin(0, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
 
             VkPipelineStageFlags srcStage = VK_PIPELINE_STAGE_NONE;
@@ -452,7 +452,7 @@ namespace ce {
         stagingBuffer.mapper(indices->data());
 
         // Create buffer for index data on GPU aceess only area
-        this->ibo = std::make_shared<ce::BufferObject>(physical, logical);
+        this->ibo = std::make_shared<BufferObject>(physical, logical);
         this->ibo->create(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
                           VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 

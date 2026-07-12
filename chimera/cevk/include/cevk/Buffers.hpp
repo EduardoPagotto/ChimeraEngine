@@ -65,7 +65,7 @@ namespace ce {
         size_t count;
         VkPhysicalDevice physical;
         VkDevice logical;
-        std::shared_ptr<ce::BufferObject> vbo;
+        std::shared_ptr<BufferObject> vbo;
     };
 
 #pragma endregion
@@ -166,7 +166,7 @@ namespace ce {
         size_t count;
         VkPhysicalDevice physical;
         VkDevice logical;
-        std::shared_ptr<ce::BufferObject> ibo;
+        std::shared_ptr<BufferObject> ibo;
     };
 
 #pragma endregion

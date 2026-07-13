@@ -309,6 +309,17 @@
 				"cwd": "${workspaceFolder}"
 			},
 			{
+				"name": "SDL31_test",
+				"type": "lldb-dap",
+				"request": "launch",
+				"program": "${workspaceFolder}/bin/sdl3_teste",
+				"args": [],
+				"env": {
+					//"SDL_VIDEODRIVER": "x11"
+				},
+				"cwd": "${workspaceFolder}"
+			},
+			{
 				"name": "loader",
 				"type": "lldb-dap",
 				"request": "launch",

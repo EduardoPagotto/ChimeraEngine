@@ -59,9 +59,9 @@ namespace ce {
             .magFilter = VK_FILTER_LINEAR,                   // How torender when image is magnified on screen
             .minFilter = VK_FILTER_LINEAR,                   // How to render when image is minifield on screen
             .mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR,     // Mipmap interpolation mode
-            .addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT,  // How to handle texture wrap in U(x) direction
-            .addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT,  // How to handle texture wrap in V(y) direction
-            .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,  // How to handle texture wrap in W(z) direction
+            .addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT,  // texture wrap in U(x) direction wrap_s
+            .addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT,  // texture wrap in V(y) direction wrap_t
+            .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,  // texture wrap in W(z) direction wrap_r
             .mipLodBias = 0.0F,                              // Level of detail of bias for mip level
             .anisotropyEnable = VK_TRUE,                     // Enable anisotropy
             .maxAnisotropy = 16,                             // Anisotropy sample level

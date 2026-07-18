@@ -48,6 +48,9 @@ sudo dnf install assimp assimp-devel
 # fastgltf (for now)
 sudo dnf install simdjson
 sudo clone https://github.com/spnda/fastgltf
+
+# HDM
+sudo dnf install monado
 ```
 
 ## Switch Link and toolchain to Clang

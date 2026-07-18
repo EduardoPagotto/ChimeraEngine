@@ -23,7 +23,7 @@ set (LIBRARY_DEPS ${CMAKE_SOURCE_DIR}/bin/libcevk.a
                   assimp::assimp
                   fastgltf::fastgltf)
 
-add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/src/main2.cpp)
+add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 

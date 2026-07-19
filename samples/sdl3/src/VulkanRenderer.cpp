@@ -107,7 +107,7 @@ void VulkanRenderer::draw() {
                                              .fence = this->sync->getDrawFence(this->currentFrame),
                                              .pipelineStageFlags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
 
-    ce::Command::SubmitToRender(subToRender, this->commandBuffers->getBuffers()[imageIndex]);
+    this->commandBuffers->submitToRender(subToRender, imageIndex);
 
     // -- PRESENT RENDERED IMAGE TO SCREEN --
     this->swapchain->sendImageToScreen(pQueue, this->sync->getSignalSemaphore(this->currentFrame), imageIndex);

@@ -1,5 +1,4 @@
 #include "Command.hpp"
-#include <array>
 #include <stdexcept>
 
 namespace ce {
@@ -82,30 +81,5 @@ namespace ce {
         vextexBuffers.clear();
         offsets.clear();
         descriptorSetGroup.clear();
-    }
-
-    void Command::SubmitToRender(const SubmitToRenderInfo& sub, VkCommandBuffer& cmdBuffer) {
-        // -- SUBMIT COMMAND BUFFER TO RENDER
-        // Queue submission information
-        std::array<VkSemaphore, 1> waitSemaphores{sub.wait};
-        std::array<VkSemaphore, 1> signalSemaphores{sub.signal};
-        std::array<VkPipelineStageFlags, 1> waitStages{
-            sub.pipelineStageFlags}; //{VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
-
-        const VkSubmitInfo submitInfo{
-            .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
-            .waitSemaphoreCount = static_cast<uint32_t>(waitSemaphores.size()), // Number of semaphores to wait on
-            .pWaitSemaphores = waitSemaphores.data(),                           //
-            .pWaitDstStageMask = waitStages.data(),                             // Stagegs to check semaphores at
-            .commandBufferCount = 1,       // Number of command buffers to submit FIXME: é isto mesmo?
-            .pCommandBuffers = &cmdBuffer, // Command buffer to submit
-            .signalSemaphoreCount = static_cast<uint32_t>(signalSemaphores.size()), // Number of semaphore to signal
-            .pSignalSemaphores = signalSemaphores.data(), // Semaphore to signal when command buffer finishes
-        };
-
-        // Submit command buffer to queue
-        if (vkQueueSubmit(sub.gQueue, 1, &submitInfo, sub.fence) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to submit Command Buffer to Queue!");
-        }
     }
 } // namespace ce

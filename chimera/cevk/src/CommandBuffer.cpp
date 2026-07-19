@@ -1,4 +1,5 @@
 #include "CommandBuffer.hpp"
+#include <array>
 #include <stdexcept>
 
 namespace ce {
@@ -65,20 +66,45 @@ namespace ce {
         }
     }
 
-    namespace aux {
+    void CommandBuffer::submitToRender(const SubmitToRenderInfo& sub, size_t index) {
+        // -- SUBMIT COMMAND BUFFER TO RENDER
+        // Queue submission information
+        std::array<VkSemaphore, 1> waitSemaphores{sub.wait};
+        std::array<VkSemaphore, 1> signalSemaphores{sub.signal};
+        std::array<VkPipelineStageFlags, 1> waitStages{
+            sub.pipelineStageFlags}; //{VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
 
-        void SubmitQueue(VkQueue queue, VkCommandBuffer commandBuffer) {
-            // Queue submission information
-            const VkSubmitInfo submitInfo{
-                .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO, //
-                .commandBufferCount = 1,                //
-                .pCommandBuffers = &commandBuffer       //
-            };
+        const VkSubmitInfo submitInfo{
+            .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+            .waitSemaphoreCount = static_cast<uint32_t>(waitSemaphores.size()), // Number of semaphores to wait on
+            .pWaitSemaphores = waitSemaphores.data(),                           //
+            .pWaitDstStageMask = waitStages.data(),                             // Stagegs to check semaphores at
+            .commandBufferCount = 1,                         // Number of command buffers to submit FIXME: é isto mesmo?
+            .pCommandBuffers = &this->commandBuffers[index], // cmdBuffer, // Command buffer to submit
+            .signalSemaphoreCount = static_cast<uint32_t>(signalSemaphores.size()), // Number of semaphore to signal
+            .pSignalSemaphores = signalSemaphores.data(), // Semaphore to signal when command buffer finishes
+        };
 
-            // Submit transfer command to transfer queue and wait until it finishes
-            vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE);
-            vkQueueWaitIdle(queue);
+        // Submit command buffer to queue
+        if (vkQueueSubmit(sub.gQueue, 1, &submitInfo, sub.fence) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to submit Command Buffer to Queue!");
         }
+    }
+
+    void CommandBuffer::submitQueue(VkQueue queue, size_t index) {
+        // Queue submission information
+        const VkSubmitInfo submitInfo{
+            .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,         //
+            .commandBufferCount = 1,                        //
+            .pCommandBuffers = &this->commandBuffers[index] //
+        };
+
+        // Submit transfer command to transfer queue and wait until it finishes
+        vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE);
+        vkQueueWaitIdle(queue);
+    }
+
+    namespace aux {
 
         void CopyBuffer(VkDevice device, VkQueue transferQueue, VkCommandPool transferCommandPool, VkBuffer srcBuffer,
                         VkBuffer dstBuffer, VkDeviceSize bufferSize) {
@@ -93,7 +119,7 @@ namespace ce {
             vkCmdCopyBuffer(transferComandBuffer.getBuffers()[0], srcBuffer, dstBuffer, 1, &bufferCopyRegion);
 
             transferComandBuffer.end(0);
-            SubmitQueue(transferQueue, transferComandBuffer.getBuffers()[0]);
+            transferComandBuffer.submitQueue(transferQueue, 0);
         }
 
         void CopyImageBuffer(VkDevice device, VkQueue transferQueue, VkCommandPool transferCommandPool,
@@ -122,7 +148,7 @@ namespace ce {
                                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &imageRegion);
 
             transferComandBuffer.end(0);
-            SubmitQueue(transferQueue, transferComandBuffer.getBuffers()[0]);
+            transferComandBuffer.submitQueue(transferQueue, 0);
         }
 
         void TransitionImageLayout(VkDevice device, VkQueue queue, VkCommandPool commandPool, VkImage image,
@@ -180,7 +206,7 @@ namespace ce {
             );
 
             commandBuffer.end(0);
-            SubmitQueue(queue, commandBuffer.getBuffers()[0]);
+            commandBuffer.submitQueue(queue, 0);
         }
     } // namespace aux
 

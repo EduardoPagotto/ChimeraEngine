@@ -5,14 +5,6 @@
 
 namespace ce {
 
-    struct SubmitToRenderInfo {
-        VkQueue gQueue;
-        VkSemaphore wait;
-        VkSemaphore signal;
-        VkFence fence;
-        VkPipelineStageFlagBits pipelineStageFlags;
-    };
-
     class Command {
       public:
         explicit Command(VkCommandBuffer cmdBuffer, VkCommandBufferUsageFlagBits flag);
@@ -34,8 +26,6 @@ namespace ce {
                          uint32_t firstInstance);
         void end();
         void clearTemps();
-
-        static void SubmitToRender(const SubmitToRenderInfo& sub, VkCommandBuffer& cmdBuffer);
 
       private:
         std::vector<VkBuffer> vextexBuffers;

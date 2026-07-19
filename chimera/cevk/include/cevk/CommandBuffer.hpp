@@ -4,6 +4,15 @@
 #include <vulkan/vulkan_core.h>
 
 namespace ce {
+
+    struct SubmitToRenderInfo {
+        VkQueue gQueue;
+        VkSemaphore wait;
+        VkSemaphore signal;
+        VkFence fence;
+        VkPipelineStageFlagBits pipelineStageFlags;
+    };
+
     class CommandBuffer {
       public:
         explicit CommandBuffer(VkDevice device, VkCommandPool commandPool, size_t count);
@@ -17,6 +26,9 @@ namespace ce {
         void begin(size_t index, VkCommandBufferUsageFlagBits flag);
         void end(size_t index);
 
+        void submitToRender(const SubmitToRenderInfo& sub, size_t index);
+        void submitQueue(VkQueue queue, size_t index);
+
         std::vector<VkCommandBuffer>& getBuffers() { return this->commandBuffers; }
 
       private:
@@ -26,8 +38,6 @@ namespace ce {
     };
 
     namespace aux {
-
-        void SubmitQueue(VkQueue queue, VkCommandBuffer commandBuffer);
 
         void CopyBuffer(VkDevice device, VkQueue transferQueue, VkCommandPool transferCommandPool, VkBuffer srcBuffer,
                         VkBuffer dstBuffer, VkDeviceSize bufferSize);

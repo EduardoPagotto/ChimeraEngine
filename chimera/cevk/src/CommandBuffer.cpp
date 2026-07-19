@@ -106,27 +106,27 @@ namespace ce {
 
     namespace aux {
 
-        void CopyBuffer(VkDevice device, VkQueue transferQueue, VkCommandPool transferCommandPool, VkBuffer srcBuffer,
+        void CopyBuffer(VkDevice device, VkQueue queue, VkCommandPool commandPool, VkBuffer srcBuffer,
                         VkBuffer dstBuffer, VkDeviceSize bufferSize) {
 
-            CommandBuffer transferComandBuffer(device, transferCommandPool, 1);
-            transferComandBuffer.begin(0, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+            CommandBuffer commandBuffer(device, commandPool, 1);
+            commandBuffer.begin(0, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
 
             // Region of data to copy from and to
             const VkBufferCopy bufferCopyRegion{.srcOffset = 0, .dstOffset = 0, .size = bufferSize};
 
             // Command to copy src buffer to dst buffer
-            vkCmdCopyBuffer(transferComandBuffer.getBuffers()[0], srcBuffer, dstBuffer, 1, &bufferCopyRegion);
+            vkCmdCopyBuffer(commandBuffer.getBuffers()[0], srcBuffer, dstBuffer, 1, &bufferCopyRegion);
 
-            transferComandBuffer.end(0);
-            transferComandBuffer.submitQueue(transferQueue, 0);
+            commandBuffer.end(0);
+            commandBuffer.submitQueue(queue, 0);
         }
 
-        void CopyImageBuffer(VkDevice device, VkQueue transferQueue, VkCommandPool transferCommandPool,
-                             VkBuffer srcBuffer, VkImage image, uint32_t width, uint32_t height) {
+        void CopyImageBuffer(VkDevice device, VkQueue queue, VkCommandPool commandPool, VkBuffer srcBuffer,
+                             VkImage image, uint32_t width, uint32_t height) {
             // Create Buffer
-            CommandBuffer transferComandBuffer(device, transferCommandPool, 1);
-            transferComandBuffer.begin(0, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+            CommandBuffer commandBuffer(device, commandPool, 1);
+            commandBuffer.begin(0, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
 
             const VkBufferImageCopy imageRegion{
                 .bufferOffset = 0,      // Offset into data
@@ -144,11 +144,11 @@ namespace ce {
             };
 
             // Copy buffer to given image
-            vkCmdCopyBufferToImage(transferComandBuffer.getBuffers()[0], srcBuffer, image,
+            vkCmdCopyBufferToImage(commandBuffer.getBuffers()[0], srcBuffer, image,
                                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &imageRegion);
 
-            transferComandBuffer.end(0);
-            transferComandBuffer.submitQueue(transferQueue, 0);
+            commandBuffer.end(0);
+            commandBuffer.submitQueue(queue, 0);
         }
 
         void TransitionImageLayout(VkDevice device, VkQueue queue, VkCommandPool commandPool, VkImage image,

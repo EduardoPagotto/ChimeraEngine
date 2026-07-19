@@ -1,27 +1,11 @@
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 
-// Helper padrão para carregar arquivos de shader compilados em disco
-SDL_GPUShader* LoadShader(SDL_GPUDevice* device, const char* filename, Uint32 samplerCount) {
-    size_t size;
-    void* code = SDL_LoadFile(filename, &size);
-    if (!code) {
-        SDL_Log("Erro ao ler arquivo de shader: %s", filename);
-        return NULL;
-    }
+#include "Shader.hpp"
 
-    SDL_GPUShaderCreateInfo shaderInfo = {
-        .code_size = size,
-        .code = static_cast<const Uint8*>(code),
-        .entrypoint = "main",
-        .format = SDL_GPU_SHADERFORMAT_SPIRV, // Modifique conforme seu backend (ex: DXBC, MSL)
-        .stage = (samplerCount > 0) ? SDL_GPU_SHADERSTAGE_FRAGMENT : SDL_GPU_SHADERSTAGE_VERTEX,
-        .num_samplers = samplerCount};
-
-    SDL_GPUShader* shader = SDL_CreateGPUShader(device, &shaderInfo);
-    SDL_free(code);
-    return shader;
-}
+GPU gpu;
+Shader vertShader;
+Shader fragShader;
 
 SDL_GPUTexture* LoadTextureFromFile(SDL_GPUDevice* device, const char* filepath) {
     // 1. Carrega a imagem do disco para uma SDL_Surface na CPU
@@ -110,33 +94,15 @@ SDL_GPUTexture* LoadTextureFromFile(SDL_GPUDevice* device, const char* filepath)
 }
 
 int main(int argc, char* argv[]) {
-    // 1. Inicializa o subsistema SDL e SDL_image
-    if (!SDL_Init(SDL_INIT_VIDEO)) {
-        SDL_Log("Não foi possível inicializar o SDL: %s", SDL_GetError());
-        return -1;
-    }
 
-    // 2. Cria a janela do sistema operacional
-    SDL_Window* window = SDL_CreateWindow("SDL3 GPU - Carregando Imagens", 800, 600, SDL_WINDOW_RESIZABLE);
-    if (!window) {
-        SDL_Log("Erro ao criar janela: %s", SDL_GetError());
-        return -1;
-    }
+    gpu.create("Teste z1", 800, 600);
 
-    // 3. Inicializa o dispositivo de GPU associado à janela
-    SDL_GPUDevice* device =
-        SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_SPIRV, true, NULL); // Adapte o formato se necessário
-    if (!device || !SDL_ClaimWindowForGPUDevice(device, window)) {
-        SDL_Log("Erro ao inicializar GPU/Janela: %s", SDL_GetError());
-        return -1;
-    }
+    // Carrega a textura e os shaders
+    SDL_GPUTexture* myTexture = LoadTextureFromFile(gpu.getDevice(), "./assets/textures/grid2.png");
+    vertShader.create(gpu.getDevice(), "./bin/TexturedQuad.vert.spv", 0);
+    fragShader.create(gpu.getDevice(), "./bin/TexturedQuad.frag.spv", 1);
 
-    // 4. Carrega a textura e os shaders
-    SDL_GPUTexture* myTexture = LoadTextureFromFile(device, "./assets/textures/grid2.png");
-    SDL_GPUShader* vertShader = LoadShader(device, "./bin/TexturedQuad.vert.spv", 0);
-    SDL_GPUShader* fragShader = LoadShader(device, "./bin/TexturedQuad.frag.spv", 1); // 1 Sampler associado
-
-    if (!myTexture || !vertShader || !fragShader) {
+    if (!myTexture) {
         SDL_Log("Falha ao carregar ativos essenciais.");
         return -1;
     }
@@ -148,7 +114,7 @@ int main(int argc, char* argv[]) {
                                             .address_mode_u = SDL_GPU_SAMPLERADDRESSMODE_CLAMP_TO_EDGE,
                                             .address_mode_v = SDL_GPU_SAMPLERADDRESSMODE_CLAMP_TO_EDGE};
 
-    SDL_GPUSampler* sampler = SDL_CreateGPUSampler(device, &samplerInfo);
+    SDL_GPUSampler* sampler = SDL_CreateGPUSampler(gpu.getDevice(), &samplerInfo);
 
     // 6. Define e constrói o Pipeline de Renderização (Graphics Pipeline)
     const SDL_GPUColorTargetBlendState bs = {
@@ -161,22 +127,22 @@ int main(int argc, char* argv[]) {
         .enable_blend = true, // Ativa transparências alfa (PNG)
     };
 
-    const SDL_GPUColorTargetDescription td = {.format = SDL_GetGPUSwapchainTextureFormat(device, window),
-                                              .blend_state = bs};
+    const SDL_GPUColorTargetDescription td = {
+        .format = SDL_GetGPUSwapchainTextureFormat(gpu.getDevice(), gpu.getWindow()), .blend_state = bs};
 
     const SDL_GPUGraphicsPipelineTargetInfo tf{.color_target_descriptions = &td, .num_color_targets = 1};
 
     SDL_GPUGraphicsPipelineCreateInfo pipelineInfo = {
-        .vertex_shader = vertShader,
-        .fragment_shader = fragShader,
+        .vertex_shader = vertShader.get(),
+        .fragment_shader = fragShader.get(),
         .primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLESTRIP, // Desenha o quadrado nativamente sem buffers de índice
         .target_info = tf};
 
-    SDL_GPUGraphicsPipeline* pipeline = SDL_CreateGPUGraphicsPipeline(device, &pipelineInfo);
+    SDL_GPUGraphicsPipeline* pipeline = SDL_CreateGPUGraphicsPipeline(gpu.getDevice(), &pipelineInfo);
 
     // Liberar os shaders imediatamente após construir o pipeline diminui o consumo
-    SDL_ReleaseGPUShader(device, vertShader);
-    SDL_ReleaseGPUShader(device, fragShader);
+    vertShader.destroy();
+    fragShader.destroy();
 
     // 7. Loop de Eventos e Renderização Principal
     bool running = true;
@@ -190,13 +156,14 @@ int main(int argc, char* argv[]) {
         }
 
         // Adquire um buffer de comando livre para este frame
-        SDL_GPUCommandBuffer* cmdBuffer = SDL_AcquireGPUCommandBuffer(device);
+        SDL_GPUCommandBuffer* cmdBuffer = SDL_AcquireGPUCommandBuffer(gpu.getDevice());
         if (cmdBuffer) {
             SDL_GPUTexture* swapchainTexture;
             Uint32 windowWidth, windowHeight;
 
             // Espera a textura de framebuffer disponível na tela
-            if (SDL_AcquireGPUSwapchainTexture(cmdBuffer, window, &swapchainTexture, &windowWidth, &windowHeight)) {
+            if (SDL_AcquireGPUSwapchainTexture(cmdBuffer, gpu.getWindow(), &swapchainTexture, &windowWidth,
+                                               &windowHeight)) {
                 SDL_GPUColorTargetInfo colorTarget = {
                     .texture = swapchainTexture,
                     .clear_color = {0.1f, 0.1f, 0.1f, 1.0f}, // Cor de fundo caso a textura falhe
@@ -224,13 +191,11 @@ int main(int argc, char* argv[]) {
     }
 
     // 8. Limpeza de Memória na Saída
-    SDL_ReleaseGPUGraphicsPipeline(device, pipeline);
-    SDL_ReleaseGPUSampler(device, sampler);
-    SDL_ReleaseGPUTexture(device, myTexture);
+    SDL_ReleaseGPUGraphicsPipeline(gpu.getDevice(), pipeline);
+    SDL_ReleaseGPUSampler(gpu.getDevice(), sampler);
+    SDL_ReleaseGPUTexture(gpu.getDevice(), myTexture);
 
-    SDL_ReleaseWindowFromGPUDevice(device, window);
-    SDL_DestroyGPUDevice(device);
-    SDL_DestroyWindow(window);
+    gpu.destroy();
 
     SDL_Quit();
     return 0;

@@ -71,25 +71,25 @@ void RenderMesh(SDL_GPUDevice* device, SDL_GPUGraphicsPipeline* pipeline) {
     // Posição (glm::vec3)
     vertexAttributes[0].location = 0;
     vertexAttributes[0].buffer_slot = 0;
-    vertexAttributes[0].format = SDL_GPU_VERTEXFORMAT_FLOAT3;
+    vertexAttributes[0].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
     vertexAttributes[0].offset = offsetof(Vertex, pos);
 
     // Cor (glm::vec3)
     vertexAttributes[1].location = 1;
     vertexAttributes[1].buffer_slot = 0;
-    vertexAttributes[1].format = SDL_GPU_VERTEXFORMAT_FLOAT3;
+    vertexAttributes[1].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
     vertexAttributes[1].offset = offsetof(Vertex, color);
 
     // Normal (glm::vec3)
     vertexAttributes[2].location = 2;
     vertexAttributes[2].buffer_slot = 0;
-    vertexAttributes[2].format = SDL_GPU_VERTEXFORMAT_FLOAT3;
+    vertexAttributes[2].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
     vertexAttributes[2].offset = offsetof(Vertex, normal);
 
     // UV (glm::vec2)
     vertexAttributes[3].location = 3;
     vertexAttributes[3].buffer_slot = 0;
-    vertexAttributes[3].format = SDL_GPU_VERTEXFORMAT_FLOAT2;
+    vertexAttributes[3].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT2;
     vertexAttributes[3].offset = offsetof(Vertex, uv);
 
     SDL_GPUVertexBufferDescription bufferDesc{};
@@ -560,19 +560,15 @@ void RenderFrame(SDL_GPUDevice* device, SDL_GPURenderPass* renderPass, SDL_GPUGr
                    : A SDL_GPU possui uma forma altamente eficiente de enviar dados uniformes pequenos que mudam todo
                      frame(como matrizes de transformação)
                          .Em vez de alocar um buffer estático gerenciado manualmente,
-    você faz o "push" dos dados diretamente no passo de renderização(RenderPass)
-        .*Inversão do Eixo Y(proj[1][1] *= -1)
-    : O GLM foi originalmente desenhado para OpenGL(onde o topo da tela é Y = 1)
-        .No Vulkan,
+    você faz o "push" dos dados diretamente no passo de renderização(RenderPass).*Inversão do Eixo Y(proj[1][1] *= -1)
+    : O GLM foi originalmente desenhado para OpenGL(onde o topo da tela é Y = 1).No Vulkan,
 o topo da tela é Y =
     -1. Multiplicar essa posição da matriz de projeção corrige instantaneamente objetos que apareçam de ponta
-    - cabeça na tela.*
-          SDL_GPUTextureSamplerBinding
+    - cabeça na tela.*SDL_GPUTextureSamplerBinding
     : Passamos tanto o ponteiro da textura quanto as regras de
       amostragem(filtros linear / focado) agrupados em uma única chamada que alimenta o sampler2D do GLSL.
 
       Se você precisar de ajuda para carregar texturas do disco via arquivos PNG
-          /
-          JPG usando a biblioteca
+          / JPG usando a biblioteca
           SDL_image(compatível com a SDL3) e fazer o upload desses pixels para o objeto SDL_GPUTexture,
                  me avise para detalharmos essa etapa !

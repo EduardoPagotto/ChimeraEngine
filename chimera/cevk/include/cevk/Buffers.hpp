@@ -1,8 +1,6 @@
 #pragma once
 
-#include "Descriptors.hpp"
-#include "cevk.hpp"
-#include <memory>
+#include <vulkan/vulkan_core.h>
 
 namespace ce {
 
@@ -52,9 +50,9 @@ namespace ce {
 
 #pragma region BufferDynamic
 
-    struct UboModel {
-        glm::mat4 model;
-    };
+    // struct UboModel {
+    //     glm::mat4 model;
+    // };
 
     // class BufferDynamic { // TODO: validar se precisa existir
     //   public:

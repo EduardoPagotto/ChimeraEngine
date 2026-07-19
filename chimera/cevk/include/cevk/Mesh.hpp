@@ -2,6 +2,7 @@
 
 #include "IBO.hpp"
 #include "VBO.hpp"
+#include "cevk.hpp"
 
 namespace ce {
 

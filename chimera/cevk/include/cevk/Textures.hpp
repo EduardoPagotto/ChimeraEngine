@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DescriptorPool.hpp"
 #include "Image.hpp"
 #include "UBO.hpp"
 #include "stb_image.h"

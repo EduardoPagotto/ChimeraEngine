@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Descriptors.hpp"
+#include "DescriptorSet.hpp"
+#include "DescriptorSetLayout.hpp"
 #include <memory>
 
 namespace ce {

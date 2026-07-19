@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Buffers.hpp"
+#include "cevk.hpp"
+#include <memory>
 
 namespace ce {
 

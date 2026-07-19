@@ -5,10 +5,10 @@
 
 namespace ce {
 
-    class ShaderModule {
+    class Shader {
       public:
-        explicit ShaderModule(VkDevice device) : device(device) {}
-        virtual ~ShaderModule();
+        explicit Shader(VkDevice device) : device(device) {}
+        virtual ~Shader();
 
         void addCode(VkShaderStageFlagBits stage, const std::vector<char>& code);
         void addAtribute(uint32_t binding, uint32_t location, VkFormat format, uint32_t offset);

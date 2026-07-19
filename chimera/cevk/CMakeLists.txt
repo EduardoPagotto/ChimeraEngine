@@ -37,7 +37,7 @@ set(SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/src/DevVK.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/Image.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/CommandBuffer.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/Command.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/ShaderModule.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/src/Shader.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/Textures.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/MeshModel.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/Mesh.cpp

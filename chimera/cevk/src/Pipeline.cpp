@@ -5,8 +5,7 @@ namespace ce {
 
     Pipeline::~Pipeline() { vkDestroyPipeline(device, this->handle, nullptr); }
 
-    void Pipeline::create(std::shared_ptr<ShaderModule> shaderModule, VkRenderPass renderPass,
-                          VkPipelineLayout pipelineLayout) {
+    void Pipeline::create(std::shared_ptr<Shader> shader, VkRenderPass renderPass, VkPipelineLayout pipelineLayout) {
 
         // -- VIEWPORT & SCISSOR
         const VkPipelineViewportStateCreateInfo viewportStateCreateInfo{
@@ -66,18 +65,17 @@ namespace ce {
         // -- GRAPHICS PIPELINE CREATION
         const VkGraphicsPipelineCreateInfo pipelineCreateInfo{
             .sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
-            .stageCount =
-                static_cast<uint32_t>(shaderModule->getShaderCreateInfos().size()), // numberr of shader stages
-            .pStages = shaderModule->getShaderCreateInfos().data(),                 // List of shader stages
-            .pVertexInputState = shaderModule->getpVertexInputCreateInfo(), // All the fixed function pipeline states
-            .pInputAssemblyState = shaderModule->getpInputAssembly(),       //
-            .pViewportState = &viewportStateCreateInfo,                     //
-            .pRasterizationState = &rasterizationCreateInfo,                //
-            .pMultisampleState = &multisamplingCreateInfo,                  //
-            .pDepthStencilState = &depthStencilCreateInfo,                  //
-            .pColorBlendState = &colorBlendingCreateInfo,                   //
-            .pDynamicState = &dynamicStateCreateInfo,                       //
-            .layout = pipelineLayout,                                       // Pipeline Layout shoud use
+            .stageCount = static_cast<uint32_t>(shader->getShaderCreateInfos().size()), // numberr of shader stages
+            .pStages = shader->getShaderCreateInfos().data(),                           // List of shader stages
+            .pVertexInputState = shader->getpVertexInputCreateInfo(), // All the fixed function pipeline states
+            .pInputAssemblyState = shader->getpInputAssembly(),       //
+            .pViewportState = &viewportStateCreateInfo,               //
+            .pRasterizationState = &rasterizationCreateInfo,          //
+            .pMultisampleState = &multisamplingCreateInfo,            //
+            .pDepthStencilState = &depthStencilCreateInfo,            //
+            .pColorBlendState = &colorBlendingCreateInfo,             //
+            .pDynamicState = &dynamicStateCreateInfo,                 //
+            .layout = pipelineLayout,                                 // Pipeline Layout shoud use
             .renderPass = renderPass,             // Render pass description the pipelineis compatible with
             .subpass = 0,                         // Subpass of render pass to use with pipeline
             .basePipelineHandle = VK_NULL_HANDLE, // Existing pipeline to derive from...

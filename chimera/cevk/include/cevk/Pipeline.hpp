@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ShaderModule.hpp"
+#include "Shader.hpp"
 #include <memory>
 
 namespace ce {
@@ -19,8 +19,7 @@ namespace ce {
             this->colourStates.push_back(colourState);
         }
 
-        void create(std::shared_ptr<ShaderModule> shaderModule, VkRenderPass renderPass,
-                    VkPipelineLayout pipelineLayout);
+        void create(std::shared_ptr<Shader> shader, VkRenderPass renderPass, VkPipelineLayout pipelineLayout);
 
         VkPipeline& get() { return this->handle; }
 

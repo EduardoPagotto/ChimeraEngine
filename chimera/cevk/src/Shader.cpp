@@ -1,19 +1,19 @@
-#include "ShaderModule.hpp"
+#include "Shader.hpp"
 #include <stdexcept>
 
 namespace ce {
-    ShaderModule::~ShaderModule() {
+    Shader::~Shader() {
         for (size_t i = 0; i < this->shaderModules.size(); i++) {
             vkDestroyShaderModule(device, shaderModules[i], nullptr);
         }
     }
 
-    void ShaderModule::addCode(VkShaderStageFlagBits stage, const std::vector<char>& code) {
+    void Shader::addCode(VkShaderStageFlagBits stage, const std::vector<char>& code) {
 
-        VkShaderModule shaderModule = {};
+        VkShaderModule Shader = {};
         size_t pos = shaderModules.size();
 
-        shaderModules.push_back(shaderModule);
+        shaderModules.push_back(Shader);
 
         const VkShaderModuleCreateInfo shaderModuleCreateInfo{
             .sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
@@ -35,7 +35,7 @@ namespace ce {
         shaderCreateInfos.push_back(shaderCreateInfo);
     }
 
-    void ShaderModule::addAtribute(uint32_t binding, uint32_t location, VkFormat format, uint32_t offset) {
+    void Shader::addAtribute(uint32_t binding, uint32_t location, VkFormat format, uint32_t offset) {
         //
         const VkVertexInputAttributeDescription attribute{
             .location = location, // Location in shader where data will be read from
@@ -47,7 +47,7 @@ namespace ce {
         attributeDescriptions.push_back(attribute);
     }
 
-    void ShaderModule::addBindingDescription(uint32_t binding, uint32_t stride, VkVertexInputRate inputRate) {
+    void Shader::addBindingDescription(uint32_t binding, uint32_t stride, VkVertexInputRate inputRate) {
 
         const VkVertexInputBindingDescription bindingDescription{
             .binding = binding,    // Cam bind multiple streams of data, thos defines which one
@@ -60,7 +60,7 @@ namespace ce {
         bindingDescriptions.push_back(bindingDescription);
     }
 
-    void ShaderModule::setVertexInput(VkPrimitiveTopology topology, VkBool32 primitiveRestartEnable) {
+    void Shader::setVertexInput(VkPrimitiveTopology topology, VkBool32 primitiveRestartEnable) {
         //
         // -- VERTEX INPUT --
         vertexInputCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;

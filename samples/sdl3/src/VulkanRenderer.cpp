@@ -152,21 +152,21 @@ void VulkanRenderer::createPushConstantRange() {
 void VulkanRenderer::createGraphicsPipeline() {
 
     // Read in SPIR-V code shaders, Vertex Stage creation information and Fragment Stage creation information
-    std::shared_ptr<ce::ShaderModule> shaderModule = std::make_shared<ce::ShaderModule>(bvk->logical);
-    shaderModule->addCode(VK_SHADER_STAGE_VERTEX_BIT, ce::aux::readFile("./bin/vert.spv"));
-    shaderModule->addCode(VK_SHADER_STAGE_FRAGMENT_BIT, ce::aux::readFile("./bin/frag.spv"));
+    std::shared_ptr<ce::Shader> shader = std::make_shared<ce::Shader>(bvk->logical);
+    shader->addCode(VK_SHADER_STAGE_VERTEX_BIT, ce::aux::readFile("./bin/vert.spv"));
+    shader->addCode(VK_SHADER_STAGE_FRAGMENT_BIT, ce::aux::readFile("./bin/frag.spv"));
 
     // How the data for a sigle vertex (including info such as position, colour, texture coords, normals, etc..) is as a
     // whole
-    shaderModule->addBindingDescription(0, sizeof(ce::Vertex), VK_VERTEX_INPUT_RATE_VERTEX);
+    shader->addBindingDescription(0, sizeof(ce::Vertex), VK_VERTEX_INPUT_RATE_VERTEX);
 
     // Attributes of shader vertex
-    shaderModule->addAtribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(ce::Vertex, pos)); // Position Attribute
-    shaderModule->addAtribute(0, 1, VK_FORMAT_R32G32B32_SFLOAT, offsetof(ce::Vertex, col)); // Color Attribute
-    shaderModule->addAtribute(0, 2, VK_FORMAT_R32G32_SFLOAT, offsetof(ce::Vertex, tex));    // Texture Atribute
+    shader->addAtribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(ce::Vertex, pos)); // Position Attribute
+    shader->addAtribute(0, 1, VK_FORMAT_R32G32B32_SFLOAT, offsetof(ce::Vertex, col)); // Color Attribute
+    shader->addAtribute(0, 2, VK_FORMAT_R32G32_SFLOAT, offsetof(ce::Vertex, tex));    // Texture Atribute
 
     // -- VERTEX INPUT  ASSEMBLY INPUT --
-    shaderModule->setVertexInput(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_FALSE);
+    shader->setVertexInput(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_FALSE);
 
     // -- VIEWPORT & SCISSOR
     const VkViewport viewport{.x = 0.0F,                                            // x start coordinate
@@ -221,7 +221,7 @@ void VulkanRenderer::createGraphicsPipeline() {
     this->graphicPipeline->addColourState(colourState);
 
     // -- GRAPHICS PIPELINE CREATION
-    this->graphicPipeline->create(shaderModule, this->rederer->getRenderPass(), this->pipelineLayout->get());
+    this->graphicPipeline->create(shader, this->rederer->getRenderPass(), this->pipelineLayout->get());
 }
 
 void VulkanRenderer::createDescriptorPool() {

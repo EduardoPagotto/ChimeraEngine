@@ -17,8 +17,8 @@ VulkanRenderer::VulkanRenderer(ce::DevVk& devvk) {
 
     swapchain = std::make_shared<SwapChain>(bvk.get());
     rederer = std::make_shared<Renderer>(bvk.get(), swapchain->getImageFormat());
-    uboVP = std::make_shared<UBO<BufferObject>>(bvk->physical, bvk->logical, swapchain->getImages().size(),
-                                                sizeof(UboViewProjection));
+    uboVP = std::make_shared<UBO<Buffer>>(bvk->physical, bvk->logical, swapchain->getImages().size(),
+                                          sizeof(UboViewProjection));
     textureMng = std::make_shared<Textures>(bvk->physical, bvk->logical);
 
     createDescriptorSetLayout();

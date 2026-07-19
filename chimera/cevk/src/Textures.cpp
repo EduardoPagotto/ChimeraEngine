@@ -1,11 +1,13 @@
 #include "Textures.hpp"
+#include "Buffers.hpp"
+#include "CommandBuffer.hpp"
 #include "cevk.hpp"
 
 namespace ce {
 
     Textures::Textures(VkPhysicalDevice physical, VkDevice logical) : physical(physical), logical(logical) {
         //
-        this->uboSampler = std::make_shared<UBO<ImageObject>>(logical);
+        this->uboSampler = std::make_shared<UBO<Image>>(logical);
         this->createDescriptorSetLayout();
         this->createDescriptorPool();
         this->createTextureSampler();
@@ -85,7 +87,7 @@ namespace ce {
         stbi_uc* imageData = loadTextureFile(filename, &width, &height, &imageSize);
 
         // Create staging buffer to hold load data, redy to copy device
-        BufferObject imageStagingBuffer(this->physical, this->logical);
+        Buffer imageStagingBuffer(this->physical, this->logical);
         imageStagingBuffer.create(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
                                   VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
@@ -96,7 +98,7 @@ namespace ce {
         stbi_image_free(imageData);
 
         // create image to hold final texture
-        std::shared_ptr<ImageObject> texImageObj = std::make_shared<ImageObject>(this->physical, this->logical);
+        std::shared_ptr<Image> texImageObj = std::make_shared<Image>(this->physical, this->logical);
 
         texImageObj->createImage(width, height, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_TILING_OPTIMAL,
                                  VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,

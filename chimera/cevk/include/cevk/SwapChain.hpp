@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Buffers.hpp"
+#include "Image.hpp"
+#include "cevk.hpp"
 #include <memory>
 #include <vector>
 
@@ -13,7 +14,7 @@ namespace ce {
 
         VkSwapchainKHR& getKHR() { return this->swapchain; }
         VkExtent2D& getExtent() { return this->extent; }
-        std::vector<std::shared_ptr<ImageObject>>& getImages() { return this->images; }
+        std::vector<std::shared_ptr<Image>>& getImages() { return this->images; }
         VkFormat& getImageFormat() { return this->imageFormat; }
         std::vector<VkFramebuffer>& getSwapChainFrameBuffers() { return this->swapChainFrameBuffers; }
 
@@ -31,8 +32,8 @@ namespace ce {
 
         SDL_Window* window{nullptr};
 
-        std::vector<std::shared_ptr<ImageObject>> images;
-        std::shared_ptr<ImageObject> depthBufferObject;
+        std::vector<std::shared_ptr<Image>> images;
+        std::shared_ptr<Image> depthBufferObject;
         std::vector<VkFramebuffer> swapChainFrameBuffers;
 
         VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities);

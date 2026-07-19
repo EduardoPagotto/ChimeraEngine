@@ -105,9 +105,9 @@ glslangValidator  -V ./samples/sdl31/shades/ -o ./bin/T
  - [jbeder](https://github.com/jbeder/yaml-cpp/wiki/How-To-Emit-YAML)
 
 
-BufferObject
+Buffer
 CommandBuffer
 IBO
-ImageObject
+Image
 VBO
 UBO

@@ -86,7 +86,7 @@ namespace ce {
 
         for (VkImage image : lImages) {
 
-            auto imgObj = std::make_shared<ImageObject>(pBVK->physical, pBVK->logical);
+            auto imgObj = std::make_shared<Image>(pBVK->physical, pBVK->logical);
             imgObj->createImageViewImportedImage(image, this->imageFormat,
                                                  VK_IMAGE_ASPECT_COLOR_BIT); // CreateImageView
             this->images.push_back(imgObj);
@@ -176,7 +176,7 @@ namespace ce {
             VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);                                   // Depth
 
         // Create Depth Buffer Image
-        this->depthBufferObject = std::make_shared<ImageObject>(this->physical, this->logical);
+        this->depthBufferObject = std::make_shared<Image>(this->physical, this->logical);
         this->depthBufferObject->createImage(this->extent.width, this->extent.height, depthFormat,
                                              VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
                                              VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);

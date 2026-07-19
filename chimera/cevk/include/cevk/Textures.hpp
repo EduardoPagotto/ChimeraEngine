@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Buffers.hpp"
+#include "Image.hpp"
+#include "UBO.hpp"
 #include "stb_image.h"
 
 namespace ce {
@@ -13,7 +14,7 @@ namespace ce {
         Textures(const Textures&) = delete;
         Textures& operator=(const Textures&) = delete;
 
-        std::shared_ptr<UBO<ImageObject>> getUbo() { return uboSampler; }
+        std::shared_ptr<UBO<Image>> getUbo() { return uboSampler; }
 
         int createTexture(const std::string& filename, VkQueue queue, VkCommandPool commandPool);
 
@@ -31,7 +32,7 @@ namespace ce {
 
         VkSampler textureSampler;
 
-        std::shared_ptr<UBO<ImageObject>> uboSampler;
+        std::shared_ptr<UBO<Image>> uboSampler;
         std::shared_ptr<DescriptorPool> samplerDescriptorPool;
     };
 } // namespace ce

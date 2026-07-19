@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Buffers.hpp"
+#include "IBO.hpp"
+#include "VBO.hpp"
 
 namespace ce {
 

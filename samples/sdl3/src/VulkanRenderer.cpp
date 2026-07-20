@@ -27,8 +27,12 @@ VulkanRenderer::VulkanRenderer(ce::DevVk& devvk) {
 
     swapchain->createFramebuffers(rederer->getRenderPass());
     graphicsCommandPool = std::make_shared<CommandPool>(this->bvk.get());
-    commandBuffers = std::make_shared<CommandBuffer>(bvk->logical, graphicsCommandPool->get(),
-                                                     swapchain->getSwapChainFrameBuffers().size());
+
+    cmdBuffers.resize(swapchain->getSwapChainFrameBuffers().size());
+    for (size_t i = 0; i < swapchain->getSwapChainFrameBuffers().size(); i++) {
+        cmdBuffers[i] = CommandBuffer();
+        cmdBuffers[i].init(bvk->logical, graphicsCommandPool->get());
+    }
 
     createDescriptorPool();
     createDescriptorSets();
@@ -69,7 +73,10 @@ VulkanRenderer::~VulkanRenderer() {
 
     sync.reset();
 
-    commandBuffers.reset();
+    for (size_t i = 0; i < cmdBuffers.size(); i++) {
+        cmdBuffers[i].destroy();
+    }
+
     graphicsCommandPool.reset();
     graphicPipeline.reset();
     pipelineLayout.reset();
@@ -107,7 +114,7 @@ void VulkanRenderer::draw() {
                                              .fence = this->sync->getDrawFence(this->currentFrame),
                                              .pipelineStageFlags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
 
-    this->commandBuffers->submitToRender(subToRender, imageIndex);
+    this->cmdBuffers[imageIndex].submitToRender(subToRender);
 
     // -- PRESENT RENDERED IMAGE TO SCREEN --
     this->swapchain->sendImageToScreen(pQueue, this->sync->getSignalSemaphore(this->currentFrame), imageIndex);
@@ -318,7 +325,7 @@ void VulkanRenderer::recordCommands(uint32_t currentImage) {
 
     // Begin Render Pass
     { //
-        ce::Command cmd(this->commandBuffers->getBuffers()[currentImage], VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
+        ce::Command cmd(this->cmdBuffers[currentImage].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
         cmd.beginAndPipeline(renderPassBeginInfo, this->graphicPipeline->get());
 
         for (size_t j = 0; j < this->modelList.size(); j++) { // 1:11:29

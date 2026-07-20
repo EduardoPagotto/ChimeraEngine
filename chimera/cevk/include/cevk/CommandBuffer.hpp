@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include <vulkan/vulkan_core.h>
 
 namespace ce {
@@ -15,26 +14,28 @@ namespace ce {
 
     class CommandBuffer {
       public:
-        explicit CommandBuffer(VkDevice device, VkCommandPool commandPool, size_t count);
+        explicit CommandBuffer() = default;
+        explicit CommandBuffer(VkDevice device, VkCommandPool commandPool);
         virtual ~CommandBuffer();
 
-        CommandBuffer(const CommandBuffer&) = delete;
-        CommandBuffer& operator=(const CommandBuffer&) = delete;
+        // CommandBuffer(const CommandBuffer&) = delete;
+        // CommandBuffer& operator=(const CommandBuffer&) = delete;
 
-        void clean(size_t index);
-        void cleanAll();
-        void begin(size_t index, VkCommandBufferUsageFlagBits flag);
-        void end(size_t index);
+        void init(VkDevice device, VkCommandPool commandPool);
+        void destroy();
+        void clean();
+        void begin(VkCommandBufferUsageFlagBits flag);
+        void end();
 
-        void submitToRender(const SubmitToRenderInfo& sub, size_t index);
-        void submitQueue(VkQueue queue, size_t index);
+        void submitToRender(const SubmitToRenderInfo& sub);
+        void submitQueue(VkQueue queue);
 
-        std::vector<VkCommandBuffer>& getBuffers() { return this->commandBuffers; }
+        VkCommandBuffer& get() { return this->handle; }
 
       private:
-        VkDevice device;
-        VkCommandPool commandPool;
-        std::vector<VkCommandBuffer> commandBuffers;
+        VkDevice device{VK_NULL_HANDLE};
+        VkCommandPool commandPool{VK_NULL_HANDLE};
+        VkCommandBuffer handle{VK_NULL_HANDLE};
     };
 
     namespace aux {

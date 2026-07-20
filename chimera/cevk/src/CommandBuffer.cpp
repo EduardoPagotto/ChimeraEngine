@@ -1,12 +1,17 @@
 #include "CommandBuffer.hpp"
 #include <array>
 #include <stdexcept>
+#include <vulkan/vulkan_core.h>
 
 namespace ce {
-    CommandBuffer::CommandBuffer(VkDevice device, VkCommandPool commandPool, size_t count)
-        : device(device), commandPool(commandPool) {
+    CommandBuffer::CommandBuffer(VkDevice device, VkCommandPool commandPool) { this->init(device, commandPool); }
 
-        this->commandBuffers.resize(count);
+    CommandBuffer::~CommandBuffer() { this->destroy(); }
+
+    void CommandBuffer::init(VkDevice device, VkCommandPool commandPool) {
+
+        this->device = device;
+        this->commandPool = commandPool;
 
         const VkCommandBufferAllocateInfo cbAllocInfo{
             .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
@@ -16,36 +21,29 @@ namespace ce {
                                                       // VK_COMMAND_BUFFER_LEVEL_SECUNDARY : Buffer can't be called
                                                       // directly. cam be called from other buffe via
                                                       // "VkCmdExecuteCommand" when recording commands in primary buf
-            .commandBufferCount = static_cast<uint32_t>(commandBuffers.size())};
+            .commandBufferCount = static_cast<uint32_t>(1)};
 
         // Allocate command buffers and place handles in array of buffers
-        if (vkAllocateCommandBuffers(device, &cbAllocInfo, this->commandBuffers.data()) != VK_SUCCESS) {
+        if (vkAllocateCommandBuffers(device, &cbAllocInfo, &this->handle) != VK_SUCCESS) {
             throw std::runtime_error("Failed to Allocate Command buffers!");
         }
     }
 
-    CommandBuffer::~CommandBuffer() {
+    void CommandBuffer::destroy() {
         // Free temporary command buffer back to pool
-        vkFreeCommandBuffers(this->device, this->commandPool, static_cast<uint32_t>(this->commandBuffers.size()),
-                             this->commandBuffers.data());
+        if (this->handle != VK_NULL_HANDLE) {
+            vkFreeCommandBuffers(this->device, this->commandPool, static_cast<uint32_t>(1), &this->handle);
+            this->handle = VK_NULL_HANDLE;
+        }
     }
 
-    void CommandBuffer::clean(size_t index) {
-        if (vkResetCommandBuffer(this->commandBuffers[index], VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT) !=
-            VK_SUCCESS) {
+    void CommandBuffer::clean() {
+        if (vkResetCommandBuffer(this->handle, VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT) != VK_SUCCESS) {
             throw std::runtime_error("Failed to reset a Command Buffer!");
         }
     }
 
-    void CommandBuffer::cleanAll() {
-        for (auto& commandBuffer : this->commandBuffers) {
-            if (vkResetCommandBuffer(commandBuffer, VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT) != VK_SUCCESS) {
-                throw std::runtime_error("Failed to reset a Command Buffer!");
-            }
-        }
-    }
-
-    void CommandBuffer::begin(size_t index, VkCommandBufferUsageFlagBits flag) {
+    void CommandBuffer::begin(VkCommandBufferUsageFlagBits flag) {
 
         // Information to begin the command buffer record
         const VkCommandBufferBeginInfo beginInfo{
@@ -54,19 +52,19 @@ namespace ce {
         };
 
         // Begin recording transfer commands
-        if (vkBeginCommandBuffer(commandBuffers[index], &beginInfo) != VK_SUCCESS) {
+        if (vkBeginCommandBuffer(this->handle, &beginInfo) != VK_SUCCESS) {
             throw std::runtime_error("Failed to begin a Command Buffer!");
         }
     }
 
-    void CommandBuffer::end(size_t index) {
+    void CommandBuffer::end() {
         // End commands
-        if (vkEndCommandBuffer(this->commandBuffers[index]) != VK_SUCCESS) {
+        if (vkEndCommandBuffer(this->handle) != VK_SUCCESS) {
             throw std::runtime_error("Failed to end a Command Buffer!");
         }
     }
 
-    void CommandBuffer::submitToRender(const SubmitToRenderInfo& sub, size_t index) {
+    void CommandBuffer::submitToRender(const SubmitToRenderInfo& sub) {
         // -- SUBMIT COMMAND BUFFER TO RENDER
         // Queue submission information
         std::array<VkSemaphore, 1> waitSemaphores{sub.wait};
@@ -79,8 +77,8 @@ namespace ce {
             .waitSemaphoreCount = static_cast<uint32_t>(waitSemaphores.size()), // Number of semaphores to wait on
             .pWaitSemaphores = waitSemaphores.data(),                           //
             .pWaitDstStageMask = waitStages.data(),                             // Stagegs to check semaphores at
-            .commandBufferCount = 1,                         // Number of command buffers to submit FIXME: é isto mesmo?
-            .pCommandBuffers = &this->commandBuffers[index], // cmdBuffer, // Command buffer to submit
+            .commandBufferCount = 1,          // Number of command buffers to submit FIXME: é isto mesmo?
+            .pCommandBuffers = &this->handle, // cmdBuffer, // Command buffer to submit
             .signalSemaphoreCount = static_cast<uint32_t>(signalSemaphores.size()), // Number of semaphore to signal
             .pSignalSemaphores = signalSemaphores.data(), // Semaphore to signal when command buffer finishes
         };
@@ -91,12 +89,12 @@ namespace ce {
         }
     }
 
-    void CommandBuffer::submitQueue(VkQueue queue, size_t index) {
+    void CommandBuffer::submitQueue(VkQueue queue) {
         // Queue submission information
         const VkSubmitInfo submitInfo{
-            .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,         //
-            .commandBufferCount = 1,                        //
-            .pCommandBuffers = &this->commandBuffers[index] //
+            .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO, //
+            .commandBufferCount = 1,                //
+            .pCommandBuffers = &this->handle        //
         };
 
         // Submit transfer command to transfer queue and wait until it finishes
@@ -109,24 +107,24 @@ namespace ce {
         void CopyBuffer(VkDevice device, VkQueue queue, VkCommandPool commandPool, VkBuffer srcBuffer,
                         VkBuffer dstBuffer, VkDeviceSize bufferSize) {
 
-            CommandBuffer commandBuffer(device, commandPool, 1);
-            commandBuffer.begin(0, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+            CommandBuffer commandBuffer(device, commandPool);
+            commandBuffer.begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
 
             // Region of data to copy from and to
             const VkBufferCopy bufferCopyRegion{.srcOffset = 0, .dstOffset = 0, .size = bufferSize};
 
             // Command to copy src buffer to dst buffer
-            vkCmdCopyBuffer(commandBuffer.getBuffers()[0], srcBuffer, dstBuffer, 1, &bufferCopyRegion);
+            vkCmdCopyBuffer(commandBuffer.get(), srcBuffer, dstBuffer, 1, &bufferCopyRegion);
 
-            commandBuffer.end(0);
-            commandBuffer.submitQueue(queue, 0);
+            commandBuffer.end();
+            commandBuffer.submitQueue(queue);
         }
 
         void CopyImageBuffer(VkDevice device, VkQueue queue, VkCommandPool commandPool, VkBuffer srcBuffer,
                              VkImage image, uint32_t width, uint32_t height) {
             // Create Buffer
-            CommandBuffer commandBuffer(device, commandPool, 1);
-            commandBuffer.begin(0, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+            CommandBuffer commandBuffer(device, commandPool);
+            commandBuffer.begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
 
             const VkBufferImageCopy imageRegion{
                 .bufferOffset = 0,      // Offset into data
@@ -144,18 +142,18 @@ namespace ce {
             };
 
             // Copy buffer to given image
-            vkCmdCopyBufferToImage(commandBuffer.getBuffers()[0], srcBuffer, image,
-                                   VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &imageRegion);
+            vkCmdCopyBufferToImage(commandBuffer.get(), srcBuffer, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1,
+                                   &imageRegion);
 
-            commandBuffer.end(0);
-            commandBuffer.submitQueue(queue, 0);
+            commandBuffer.end();
+            commandBuffer.submitQueue(queue);
         }
 
         void TransitionImageLayout(VkDevice device, VkQueue queue, VkCommandPool commandPool, VkImage image,
                                    VkImageLayout oldLayout, VkImageLayout newLayout) {
             // Create buffer
-            CommandBuffer commandBuffer(device, commandPool, 1);
-            commandBuffer.begin(0, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+            CommandBuffer commandBuffer(device, commandPool);
+            commandBuffer.begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
 
             VkPipelineStageFlags srcStage = VK_PIPELINE_STAGE_NONE;
             VkPipelineStageFlags dstStage = VK_PIPELINE_STAGE_NONE;
@@ -197,16 +195,16 @@ namespace ce {
                     .layerCount = 1                          // Number of layers to alter starting from baseArrayLayer
                 }};
 
-            vkCmdPipelineBarrier(commandBuffer.getBuffers()[0], //
-                                 srcStage, dstStage,            // Pipelane stages (match to src and dst AccessMask)
-                                 0,                             // Dependency flags
-                                 0, nullptr,                    // Memory Barrier cont + data
-                                 0, nullptr,                    // Buffer Memory Barrier cont + data
-                                 1, &imageMemoryBarrier         // Image Memory Barrier cont + data
+            vkCmdPipelineBarrier(commandBuffer.get(),   //
+                                 srcStage, dstStage,    // Pipelane stages (match to src and dst AccessMask)
+                                 0,                     // Dependency flags
+                                 0, nullptr,            // Memory Barrier cont + data
+                                 0, nullptr,            // Buffer Memory Barrier cont + data
+                                 1, &imageMemoryBarrier // Image Memory Barrier cont + data
             );
 
-            commandBuffer.end(0);
-            commandBuffer.submitQueue(queue, 0);
+            commandBuffer.end();
+            commandBuffer.submitQueue(queue);
         }
     } // namespace aux
 

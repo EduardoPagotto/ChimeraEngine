@@ -14,17 +14,20 @@ VulkanRenderer::VulkanRenderer(ce::DevVk& devvk) {
     this->gQueue = devvk.getGraphicsQueue();
     this->pQueue = devvk.getPresentationQueue();
 
-    swapchain = std::make_shared<SwapChain>(bvk.get());
-    rederer = std::make_shared<Renderer>(bvk.get(), swapchain->getImageFormat());
-    uboVP = std::make_shared<UBO<Buffer>>(bvk->physical, bvk->logical, swapchain->getImages().size(),
-                                          sizeof(UboViewProjection));
-    textureMng = std::make_shared<Textures>(bvk->physical, bvk->logical);
+    this->swapchain = std::make_shared<SwapChain>(bvk.get());
+    this->rederer = std::make_shared<Renderer>(bvk.get(), swapchain->getImageFormat());
+    this->rederer->setRederArea({.offset = {.x = 0, .y = 0}, .extent = this->swapchain->getExtent()});
+
+    this->uboVP = std::make_shared<UBO<Buffer>>(bvk->physical, bvk->logical, swapchain->getImages().size(),
+                                                sizeof(UboViewProjection));
+    this->textureMng = std::make_shared<Textures>(bvk->physical, bvk->logical);
 
     createDescriptorSetLayout();
     createPushConstantRange();
     createGraphicsPipeline();
 
     swapchain->createFramebuffers(rederer->getRenderPass());
+
     graphicsCommandPool = std::make_shared<CommandPool>(this->bvk.get());
 
     cmdBuffers.resize(swapchain->getSwapChainFrameBuffers().size());
@@ -305,10 +308,7 @@ void VulkanRenderer::createDescriptorSets() {
 void VulkanRenderer::recordCommands(uint32_t currentImage) {
 
     VkRenderPassBeginInfo renderPassBeginInfo{};
-    const VkRect2D renderArea{.offset = {.x = 0, .y = 0}, .extent = this->swapchain->getExtent()};
-
-    this->rederer->passBegin(this->swapchain->getSwapChainFrameBuffers()[currentImage], renderArea,
-                             &renderPassBeginInfo);
+    this->rederer->passBegin(this->swapchain->getSwapChainFrameBuffers()[currentImage], &renderPassBeginInfo);
 
     ce::Command cmd(this->cmdBuffers[currentImage].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
     cmd.beginAndPipeline(renderPassBeginInfo, this->graphicPipeline->get());

@@ -11,15 +11,17 @@ namespace ce {
 
         VkRenderPass& getRenderPass() { return renderPass; }
 
-        void passBegin(VkFramebuffer& framebuffer, const VkRect2D& renderArea, VkRenderPassBeginInfo* r) {
+        void passBegin(VkFramebuffer& framebuffer, VkRenderPassBeginInfo* r) {
 
             r->sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
             r->renderPass = this->renderPass;                               // Render pass to begin
             r->framebuffer = framebuffer;                                   //
-            r->renderArea = renderArea;                                     //
+            r->renderArea = this->renderArea;                               //
             r->clearValueCount = static_cast<uint32_t>(clearValues.size()); //
             r->pClearValues = clearValues.data();                           // List of clear values
         }
+
+        void setRederArea(const VkRect2D& renderArea) { this->renderArea = renderArea; }
 
       private:
         VkPhysicalDevice physical{VK_NULL_HANDLE};
@@ -30,5 +32,6 @@ namespace ce {
         void createRenderPass(const VkFormat& format);
 
         std::vector<VkClearValue> clearValues;
+        VkRect2D renderArea;
     };
 } // namespace ce

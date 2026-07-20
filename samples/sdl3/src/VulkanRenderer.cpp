@@ -15,9 +15,6 @@ VulkanRenderer::VulkanRenderer(ce::DevVk& devvk) {
     this->pQueue = devvk.getPresentationQueue();
 
     this->swapchain = std::make_shared<SwapChain>(bvk.get());
-    this->rederer = std::make_shared<Renderer>(bvk.get(), swapchain->getImageFormat());
-    this->rederer->setRederArea({.offset = {.x = 0, .y = 0}, .extent = this->swapchain->getExtent()});
-
     this->uboVP = std::make_shared<UBO<Buffer>>(bvk->physical, bvk->logical, swapchain->getImages().size(),
                                                 sizeof(UboViewProjection));
     this->textureMng = std::make_shared<Textures>(bvk->physical, bvk->logical);
@@ -25,8 +22,6 @@ VulkanRenderer::VulkanRenderer(ce::DevVk& devvk) {
     createDescriptorSetLayout();
     createPushConstantRange();
     createGraphicsPipeline();
-
-    swapchain->createFramebuffers(rederer->getRenderPass());
 
     graphicsCommandPool = std::make_shared<CommandPool>(this->bvk.get());
 
@@ -228,7 +223,7 @@ void VulkanRenderer::createGraphicsPipeline() {
     this->graphicPipeline->addColourState(colourState);
 
     // -- GRAPHICS PIPELINE CREATION
-    this->graphicPipeline->create(shader, this->rederer->getRenderPass(), this->pipelineLayout->get());
+    this->graphicPipeline->create(shader, this->swapchain->getRenderPass(), this->pipelineLayout->get());
 }
 
 void VulkanRenderer::createDescriptorPool() {
@@ -306,7 +301,7 @@ void VulkanRenderer::createDescriptorSets() {
 void VulkanRenderer::recordCommands(uint32_t currentImage) {
 
     VkRenderPassBeginInfo renderPassBeginInfo{};
-    this->rederer->passBegin(this->swapchain->getSwapChainFrameBuffers()[currentImage], &renderPassBeginInfo);
+    this->swapchain->passBegin(currentImage, &renderPassBeginInfo);
 
     ce::Command cmd(this->cmdBuffers[currentImage].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
     cmd.beginAndPipeline(renderPassBeginInfo, this->graphicPipeline->get());

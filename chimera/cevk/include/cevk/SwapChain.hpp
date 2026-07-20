@@ -17,9 +17,6 @@ namespace ce {
         VkFormat& getImageFormat() { return this->imageFormat; }
         std::vector<VkFramebuffer>& getSwapChainFrameBuffers() { return this->swapChainFrameBuffers; }
 
-        void createFramebuffers(VkRenderPass& renderPass);
-        void createDepthBufferImage();
-
         void sendImageToScreen(VkQueue pQueue, VkSemaphore signal, uint32_t& imageIndex);
 
         uint32_t acquireNextImage(VkSemaphore& waitImage) {
@@ -30,7 +27,30 @@ namespace ce {
             return imageIndex;
         }
 
+        VkRenderPass& getRenderPass() { return renderPass; }
+
+        void passBegin(size_t index, VkRenderPassBeginInfo* r) {
+
+            r->sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+            r->renderPass = this->renderPass;                               // Render pass to begin
+            r->framebuffer = this->swapChainFrameBuffers[index];            //
+            r->renderArea = this->renderArea;                               //
+            r->clearValueCount = static_cast<uint32_t>(clearValues.size()); //
+            r->pClearValues = clearValues.data();                           // List of clear values
+        }
+
+        // void setRederArea(const VkRect2D& renderArea) { this->renderArea = renderArea; }
+
       private:
+        void createDepthBufferImage();
+        void createFramebuffers(VkRenderPass& renderPass);
+        VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities);
+
+        static VkSurfaceFormatKHR ChooseBestSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& formats);
+        static VkPresentModeKHR ChooseBestPresentationMode(const std::vector<VkPresentModeKHR>& presentationModes);
+
+        void createRenderPass(const VkFormat& format);
+
         VkSwapchainKHR swapchain;
         VkFormat imageFormat;
         VkExtent2D extent;
@@ -43,9 +63,8 @@ namespace ce {
         std::shared_ptr<Image> depthBufferObject;
         std::vector<VkFramebuffer> swapChainFrameBuffers;
 
-        VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities);
-
-        static VkSurfaceFormatKHR ChooseBestSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& formats);
-        static VkPresentModeKHR ChooseBestPresentationMode(const std::vector<VkPresentModeKHR>& presentationModes);
+        VkRenderPass renderPass;
+        std::vector<VkClearValue> clearValues;
+        VkRect2D renderArea;
     };
 } // namespace ce

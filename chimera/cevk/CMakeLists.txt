@@ -44,7 +44,6 @@ set(SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/src/DevVK.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/Sync.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/CommandPool.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/SwapChain.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/Renderer.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/Pipeline.cpp)
 
 add_library(${PROJECT_NAME} STATIC ${SourceFiles})

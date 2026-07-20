@@ -5,7 +5,6 @@
 #include "DevVK.hpp"
 #include "MeshModel.hpp"
 #include "Pipeline.hpp"
-#include "Renderer.hpp"
 #include "SwapChain.hpp"
 #include "Sync.hpp"
 #include "Textures.hpp"
@@ -37,7 +36,6 @@ class VulkanRenderer {
 
     std::shared_ptr<ce::BaseVK> bvk;
     std::shared_ptr<ce::SwapChain> swapchain;
-    std::shared_ptr<ce::Renderer> rederer;
     std::vector<ce::CommandBuffer> cmdBuffers;
     std::shared_ptr<ce::DescriptorPool> descriptorPool;
     std::shared_ptr<ce::UBO<ce::Buffer>> uboVP;

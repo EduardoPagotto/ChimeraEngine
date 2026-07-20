@@ -206,6 +206,8 @@ namespace ce {
         }
     }
 
+#pragma region auxiliar
+
     // Best format is subjective, but ours will be:
     // Format     : VK_FORMAT_R8G8B8A8_UNFORM (VK_FORMAT_B8G8R8A8_UNORM as backup)
     // colorSpace : VK_COLOR_SPACE_SRGB_NONLINEAR_KHR
@@ -238,5 +240,7 @@ namespace ce {
 
         return VK_PRESENT_MODE_FIFO_KHR; // allways avaible by vulkan
     }
+
+#pragma endregion auxiliar
 
 } // namespace ce

@@ -107,9 +107,7 @@ void VulkanRenderer::draw() {
     sync.waitAndResetFence();
 
     // Get index of next image to be draw to, and signal semaphore when ready to be draw to
-    uint32_t imageIndex;
-    vkAcquireNextImageKHR(bvk->logical, this->swapchain->getKHR(), std::numeric_limits<uint64_t>::max(), sync.getWait(),
-                          VK_NULL_HANDLE, &imageIndex);
+    uint32_t imageIndex = this->swapchain->acquireNextImage(sync.getWait());
 
     this->recordCommands(imageIndex);
     // Copy View Projection data in UBO

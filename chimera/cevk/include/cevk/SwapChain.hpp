@@ -12,7 +12,6 @@ namespace ce {
         explicit SwapChain(BaseVK* pBVK);
         virtual ~SwapChain();
 
-        VkSwapchainKHR& getKHR() { return this->swapchain; }
         VkExtent2D& getExtent() { return this->extent; }
         std::vector<std::shared_ptr<Image>>& getImages() { return this->images; }
         VkFormat& getImageFormat() { return this->imageFormat; }
@@ -22,6 +21,14 @@ namespace ce {
         void createDepthBufferImage();
 
         void sendImageToScreen(VkQueue pQueue, VkSemaphore signal, uint32_t& imageIndex);
+
+        uint32_t acquireNextImage(VkSemaphore& waitImage) {
+            uint32_t imageIndex;
+            vkAcquireNextImageKHR(logical, this->swapchain, std::numeric_limits<uint64_t>::max(), waitImage,
+                                  VK_NULL_HANDLE, &imageIndex);
+
+            return imageIndex;
+        }
 
       private:
         VkSwapchainKHR swapchain;

@@ -37,7 +37,11 @@ VulkanRenderer::VulkanRenderer(ce::DevVk& devvk) {
     createDescriptorPool();
     createDescriptorSets();
 
-    this->sync = std::make_shared<ce::Sync>(this->bvk->logical, ce::MAX_FRAME_DRAWS);
+    this->syncs.resize(ce::MAX_FRAME_DRAWS);
+    for (size_t i = 0; i < ce::MAX_FRAME_DRAWS; i++) {
+        this->syncs[i] = ce::Sync();
+        this->syncs[i].init(this->bvk->logical);
+    }
 
     // const float radixAngle = 45.0F;
     const float near = 0.1F;
@@ -71,7 +75,9 @@ VulkanRenderer::~VulkanRenderer() {
     descriptorPool.reset();
     uboVP.reset();
 
-    sync.reset();
+    for (size_t i = 0; i < this->syncs.size(); i++) {
+        this->syncs[i].destroy();
+    }
 
     for (size_t i = 0; i < cmdBuffers.size(); i++) {
         cmdBuffers[i].destroy();
@@ -95,12 +101,12 @@ void VulkanRenderer::draw() {
     // // -- GET NEXT IMAGE --
     // // Wait for given fence to signal (open) from last draw before continuing
     // // Manually reset (close) fence
-    this->sync->waitAndResetFence(this->currentFrame);
+    this->syncs[this->currentFrame].waitAndResetFence();
 
     // Get index of next image to be draw to, and signal semaphore when ready to be draw to
     uint32_t imageIndex;
     vkAcquireNextImageKHR(bvk->logical, this->swapchain->getKHR(), std::numeric_limits<uint64_t>::max(),
-                          this->sync->getWaitSemafore(this->currentFrame), VK_NULL_HANDLE, &imageIndex);
+                          this->syncs[this->currentFrame].getWaitSemafore(), VK_NULL_HANDLE, &imageIndex);
 
     this->recordCommands(imageIndex);
     // Copy View Projection data in UBO
@@ -109,15 +115,15 @@ void VulkanRenderer::draw() {
     // -- SUBMIT COMMAND BUFFER TO RENDER
     // Queue submission information
     const ce::SubmitToRenderInfo subToRender{.gQueue = gQueue,
-                                             .wait = this->sync->getWaitSemafore(this->currentFrame),
-                                             .signal = this->sync->getSignalSemaphore(this->currentFrame),
-                                             .fence = this->sync->getDrawFence(this->currentFrame),
+                                             .wait = this->syncs[this->currentFrame].getWaitSemafore(),
+                                             .signal = this->syncs[this->currentFrame].getSignalSemaphore(),
+                                             .fence = this->syncs[this->currentFrame].getDrawFence(),
                                              .pipelineStageFlags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
 
     this->cmdBuffers[imageIndex].submitToRender(subToRender);
 
     // -- PRESENT RENDERED IMAGE TO SCREEN --
-    this->swapchain->sendImageToScreen(pQueue, this->sync->getSignalSemaphore(this->currentFrame), imageIndex);
+    this->swapchain->sendImageToScreen(pQueue, this->syncs[this->currentFrame].getSignalSemaphore(), imageIndex);
     // Get next frame
     this->currentFrame = (this->currentFrame + 1) % ce::MAX_FRAME_DRAWS;
     // AHHHH!!!!!! ugly!!!!! this is complete wrong, find what missmatch sYncs!!!

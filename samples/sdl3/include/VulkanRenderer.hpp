@@ -45,7 +45,7 @@ class VulkanRenderer {
     std::shared_ptr<ce::PipelineLayout> pipelineLayout;
     std::shared_ptr<ce::Pipeline> graphicPipeline;
     std::shared_ptr<ce::CommandPool> graphicsCommandPool;
-    std::shared_ptr<ce::Sync> sync;
+    std::vector<ce::Sync> syncs;
     // Scene Objects
     std::vector<ce::MeshModel> modelList;
 

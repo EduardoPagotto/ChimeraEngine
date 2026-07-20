@@ -1,28 +1,28 @@
 #pragma once
 
-#include <vector>
 #include <vulkan/vulkan_core.h>
 
 namespace ce {
 
     class Sync {
       public:
-        explicit Sync(VkDevice logical, size_t max);
+        explicit Sync() = default;
+        explicit Sync(VkDevice logical);
         virtual ~Sync();
 
-        void waitAndResetFence(size_t index);
+        void init(VkDevice logical);
+        void destroy();
 
-        VkSemaphore& getWaitSemafore(size_t index) { return this->imageAvailable[index]; }
-        VkSemaphore& getSignalSemaphore(size_t index) { return this->renderFinished[index]; }
-        VkFence& getDrawFence(size_t index) { return this->drawFences[index]; }
+        void waitAndResetFence();
+        VkSemaphore& getWaitSemafore() { return this->imageAvailable; }
+        VkSemaphore& getSignalSemaphore() { return this->renderFinished; }
+        VkFence& getDrawFence() { return this->drawFences; }
 
       private:
-        VkDevice logical;
-        size_t max;
-
-        std::vector<VkSemaphore> imageAvailable;
-        std::vector<VkSemaphore> renderFinished;
-        std::vector<VkFence> drawFences;
+        VkDevice logical{VK_NULL_HANDLE};
+        VkSemaphore imageAvailable{VK_NULL_HANDLE};
+        VkSemaphore renderFinished{VK_NULL_HANDLE};
+        VkFence drawFences{VK_NULL_HANDLE};
     };
 
 } // namespace ce

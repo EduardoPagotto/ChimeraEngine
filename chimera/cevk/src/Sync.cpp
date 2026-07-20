@@ -1,6 +1,5 @@
 #include "Sync.hpp"
 #include <stdexcept>
-#include <vulkan/vulkan_core.h>
 
 namespace ce {
     Sync::Sync(VkDevice logical) { this->init(logical); }

@@ -101,29 +101,23 @@ void VulkanRenderer::draw() {
     // // -- GET NEXT IMAGE --
     // // Wait for given fence to signal (open) from last draw before continuing
     // // Manually reset (close) fence
-    this->syncs[this->currentFrame].waitAndResetFence();
+    auto& sync = this->syncs[this->currentFrame];
+    sync.waitAndResetFence();
 
     // Get index of next image to be draw to, and signal semaphore when ready to be draw to
     uint32_t imageIndex;
-    vkAcquireNextImageKHR(bvk->logical, this->swapchain->getKHR(), std::numeric_limits<uint64_t>::max(),
-                          this->syncs[this->currentFrame].getWaitSemafore(), VK_NULL_HANDLE, &imageIndex);
+    vkAcquireNextImageKHR(bvk->logical, this->swapchain->getKHR(), std::numeric_limits<uint64_t>::max(), sync.getWait(),
+                          VK_NULL_HANDLE, &imageIndex);
 
     this->recordCommands(imageIndex);
     // Copy View Projection data in UBO
     this->uboVP->getUBO()[imageIndex]->mapper(&this->uboViewProjection);
 
     // -- SUBMIT COMMAND BUFFER TO RENDER
-    // Queue submission information
-    const ce::SubmitToRenderInfo subToRender{.gQueue = gQueue,
-                                             .wait = this->syncs[this->currentFrame].getWaitSemafore(),
-                                             .signal = this->syncs[this->currentFrame].getSignalSemaphore(),
-                                             .fence = this->syncs[this->currentFrame].getDrawFence(),
-                                             .pipelineStageFlags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
-
-    this->cmdBuffers[imageIndex].submitToRender(subToRender);
+    this->cmdBuffers[imageIndex].submitToRender(gQueue, sync, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 
     // -- PRESENT RENDERED IMAGE TO SCREEN --
-    this->swapchain->sendImageToScreen(pQueue, this->syncs[this->currentFrame].getSignalSemaphore(), imageIndex);
+    this->swapchain->sendImageToScreen(pQueue, sync.getSignal(), imageIndex);
     // Get next frame
     this->currentFrame = (this->currentFrame + 1) % ce::MAX_FRAME_DRAWS;
     // AHHHH!!!!!! ugly!!!!! this is complete wrong, find what missmatch sYncs!!!

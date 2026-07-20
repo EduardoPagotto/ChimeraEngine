@@ -1,16 +1,9 @@
 #pragma once
 
+#include "Sync.hpp"
 #include <vulkan/vulkan_core.h>
 
 namespace ce {
-
-    struct SubmitToRenderInfo {
-        VkQueue gQueue;
-        VkSemaphore wait;
-        VkSemaphore signal;
-        VkFence fence;
-        VkPipelineStageFlagBits pipelineStageFlags;
-    };
 
     class CommandBuffer {
       public:
@@ -18,16 +11,13 @@ namespace ce {
         explicit CommandBuffer(VkDevice device, VkCommandPool commandPool);
         virtual ~CommandBuffer();
 
-        // CommandBuffer(const CommandBuffer&) = delete;
-        // CommandBuffer& operator=(const CommandBuffer&) = delete;
-
         void init(VkDevice device, VkCommandPool commandPool);
         void destroy();
         void clean();
         void begin(VkCommandBufferUsageFlagBits flag);
         void end();
 
-        void submitToRender(const SubmitToRenderInfo& sub);
+        void submitToRender(VkQueue queue, Sync& sync, const VkPipelineStageFlagBits& pipelineStageFlags);
         void submitQueue(VkQueue queue);
 
         VkCommandBuffer& get() { return this->handle; }

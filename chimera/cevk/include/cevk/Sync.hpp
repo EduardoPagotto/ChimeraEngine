@@ -14,9 +14,9 @@ namespace ce {
         void destroy();
 
         void waitAndResetFence();
-        VkSemaphore& getWaitSemafore() { return this->imageAvailable; }
-        VkSemaphore& getSignalSemaphore() { return this->renderFinished; }
-        VkFence& getDrawFence() { return this->drawFences; }
+        VkSemaphore& getWait() { return this->imageAvailable; }
+        VkSemaphore& getSignal() { return this->renderFinished; }
+        VkFence& getFence() { return this->drawFences; }
 
       private:
         VkDevice logical{VK_NULL_HANDLE};

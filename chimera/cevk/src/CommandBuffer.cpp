@@ -1,7 +1,6 @@
 #include "CommandBuffer.hpp"
 #include <array>
 #include <stdexcept>
-#include <vulkan/vulkan_core.h>
 
 namespace ce {
     CommandBuffer::CommandBuffer(VkDevice device, VkCommandPool commandPool) { this->init(device, commandPool); }
@@ -64,13 +63,12 @@ namespace ce {
         }
     }
 
-    void CommandBuffer::submitToRender(const SubmitToRenderInfo& sub) {
+    void CommandBuffer::submitToRender(VkQueue queue, Sync& sync, const VkPipelineStageFlagBits& pipelineStageFlags) {
         // -- SUBMIT COMMAND BUFFER TO RENDER
         // Queue submission information
-        std::array<VkSemaphore, 1> waitSemaphores{sub.wait};
-        std::array<VkSemaphore, 1> signalSemaphores{sub.signal};
-        std::array<VkPipelineStageFlags, 1> waitStages{
-            sub.pipelineStageFlags}; //{VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+        std::array<VkSemaphore, 1> waitSemaphores{sync.getWait()};
+        std::array<VkSemaphore, 1> signalSemaphores{sync.getSignal()};
+        std::array<VkPipelineStageFlags, 1> waitStages{pipelineStageFlags};
 
         const VkSubmitInfo submitInfo{
             .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
@@ -78,13 +76,13 @@ namespace ce {
             .pWaitSemaphores = waitSemaphores.data(),                           //
             .pWaitDstStageMask = waitStages.data(),                             // Stagegs to check semaphores at
             .commandBufferCount = 1,          // Number of command buffers to submit FIXME: é isto mesmo?
-            .pCommandBuffers = &this->handle, // cmdBuffer, // Command buffer to submit
+            .pCommandBuffers = &this->handle, // Command buffer to submit
             .signalSemaphoreCount = static_cast<uint32_t>(signalSemaphores.size()), // Number of semaphore to signal
             .pSignalSemaphores = signalSemaphores.data(), // Semaphore to signal when command buffer finishes
         };
 
         // Submit command buffer to queue
-        if (vkQueueSubmit(sub.gQueue, 1, &submitInfo, sub.fence) != VK_SUCCESS) {
+        if (vkQueueSubmit(queue, 1, &submitInfo, sync.getFence()) != VK_SUCCESS) {
             throw std::runtime_error("Failed to submit Command Buffer to Queue!");
         }
     }

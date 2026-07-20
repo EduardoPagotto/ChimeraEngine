@@ -1,6 +1,5 @@
 #include "VulkanRenderer.hpp"
 #include "Command.hpp"
-#include <array>
 #include <cstddef>
 #include <cstdlib>
 #include <glm/ext/matrix_clip_space.hpp>
@@ -304,52 +303,37 @@ void VulkanRenderer::createDescriptorSets() {
 }
 
 void VulkanRenderer::recordCommands(uint32_t currentImage) {
-    // Information abaout how to begin each command buffer
 
-    // Information about how to begin a render pass (only need for graphical application)
-    std::array<VkClearValue, 2> clearValues = {};
-    clearValues[0].color = {{0.6F, 0.65F, 0.4F, 1.0F}}; // NOLINT(readability-magic-numbers)
-    clearValues[1].depthStencil.depth = 1.0F;
+    VkRenderPassBeginInfo renderPassBeginInfo{};
+    const VkRect2D renderArea{.offset = {.x = 0, .y = 0}, .extent = this->swapchain->getExtent()};
 
-    const VkRenderPassBeginInfo renderPassBeginInfo{
-        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-        .renderPass = this->rederer->getRenderPass(),                             // Render pass to begin
-        .framebuffer = this->swapchain->getSwapChainFrameBuffers()[currentImage], //
-        .renderArea =
-            VkRect2D{.offset = {.x = 0, .y = 0}, // Start point of render pass in pixels
-                     .extent =
-                         this->swapchain->getExtent()}, // Size of region to run render pass on (starting at offset)
-        .clearValueCount = static_cast<uint32_t>(clearValues.size()), //
-        .pClearValues = clearValues.data()                            // List of clear values
-    };
+    this->rederer->passBegin(this->swapchain->getSwapChainFrameBuffers()[currentImage], renderArea,
+                             &renderPassBeginInfo);
 
-    // Begin Render Pass
-    { //
-        ce::Command cmd(this->cmdBuffers[currentImage].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
-        cmd.beginAndPipeline(renderPassBeginInfo, this->graphicPipeline->get());
+    ce::Command cmd(this->cmdBuffers[currentImage].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
+    cmd.beginAndPipeline(renderPassBeginInfo, this->graphicPipeline->get());
 
-        for (size_t j = 0; j < this->modelList.size(); j++) { // 1:11:29
+    for (size_t j = 0; j < this->modelList.size(); j++) {
 
-            ce::MeshModel thisModel = modelList[j];
+        ce::MeshModel thisModel = modelList[j];
 
-            cmd.pushConstants(this->pipelineLayout->get(), VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ce::Model),
-                              &thisModel.getModel2());
+        cmd.pushConstants(this->pipelineLayout->get(), VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ce::Model),
+                          &thisModel.getModel2());
 
-            for (size_t k = 0; k < thisModel.getMeshCount(); k++) {
+        for (size_t k = 0; k < thisModel.getMeshCount(); k++) {
 
-                cmd.addVertexBuffer({0}, thisModel.getMesh(k)->getVertexBuffer());
-                cmd.bindVertexBuffer(0);
-                cmd.bindIndexBuffer(thisModel.getMesh(k)->getIndexBuffer(), {0});
-                cmd.addDescriptorSet(this->uboVP->getDescriptorSets()[currentImage]);
-                cmd.addDescriptorSet(this->textureMng->getUbo()->getDescriptorSets()[thisModel.getMesh(k)->getTexId()]);
-                cmd.bindDescriptorSets(this->pipelineLayout->get());
-                cmd.drawIndexed(thisModel.getMesh(k)->getIndexCount(), 1, 0, 0, 0);
-                cmd.clearTemps();
-            }
+            cmd.addVertexBuffer({0}, thisModel.getMesh(k)->getVertexBuffer());
+            cmd.bindVertexBuffer(0);
+            cmd.bindIndexBuffer(thisModel.getMesh(k)->getIndexBuffer(), {0});
+            cmd.addDescriptorSet(this->uboVP->getDescriptorSets()[currentImage]);
+            cmd.addDescriptorSet(this->textureMng->getUbo()->getDescriptorSets()[thisModel.getMesh(k)->getTexId()]);
+            cmd.bindDescriptorSets(this->pipelineLayout->get());
+            cmd.drawIndexed(thisModel.getMesh(k)->getIndexCount(), 1, 0, 0, 0);
+            cmd.clearTemps();
         }
-
-        cmd.end();
     }
+
+    cmd.end();
 }
 
 int VulkanRenderer::createMeshModel(const std::string& modelFile) {

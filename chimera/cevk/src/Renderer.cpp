@@ -8,6 +8,11 @@ namespace ce {
     Renderer::Renderer(BaseVK* pBVK, const VkFormat& format) : physical(pBVK->physical), logical(pBVK->logical) {
         //
         createRenderPass(format);
+
+        // Information about how to begin a render pass (only need for graphical application)
+        clearValues.resize(2);
+        clearValues[0].color = {{0.6F, 0.65F, 0.4F, 1.0F}};
+        clearValues[1].depthStencil.depth = 1.0F;
     }
     Renderer::~Renderer() { vkDestroyRenderPass(this->logical, this->renderPass, nullptr); }
 

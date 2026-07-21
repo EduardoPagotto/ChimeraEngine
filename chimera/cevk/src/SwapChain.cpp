@@ -13,7 +13,7 @@ namespace ce {
         VkSurfaceFormatKHR surrfaceFormat = SwapChain::ChooseBestSurfaceFormat(swapchainDetails.formats);
 
         VkPresentModeKHR presentMode = SwapChain::ChooseBestPresentationMode(swapchainDetails.presentationModes);
-        VkExtent2D extent = this->chooseSwapExtent(swapchainDetails.surfaceCapabilities);
+        this->extent = this->chooseSwapExtent(swapchainDetails.surfaceCapabilities);
 
         // how many images are in the swap chain? Get 1 more than the minimum to allow triple buffering
         uint32_t imageCount = swapchainDetails.surfaceCapabilities.minImageCount + 1;
@@ -52,7 +52,7 @@ namespace ce {
             .minImageCount = imageCount,                       // Minimum image in swapchain
             .imageFormat = surrfaceFormat.format,              // Swapchain format
             .imageColorSpace = surrfaceFormat.colorSpace,      // Swapchain color space
-            .imageExtent = extent,                             // Swapchain image extents
+            .imageExtent = this->extent,                       // Swapchain image extents
             .imageArrayLayers = 1,                             // Number of layers for each image in chain
             .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, // What attachement image will be used as
             .imageSharingMode = imageSharingMode,              // Image share handling
@@ -75,7 +75,6 @@ namespace ce {
 
         // Store for late reference
         this->imageFormat = surrfaceFormat.format;
-        this->extent = extent;
 
         // Get swap chain images (first count the values)
         uint32_t swapChainImageCount;
@@ -105,7 +104,7 @@ namespace ce {
 
     SwapChain::~SwapChain() {
 
-        for (auto& framebuffer : this->swapChainFrameBuffers) { // ? auto& mesmo ??
+        for (auto& framebuffer : this->frameBuffers) { // ? auto& mesmo ??
             vkDestroyFramebuffer(this->logical, framebuffer, nullptr);
         }
 
@@ -114,7 +113,7 @@ namespace ce {
         }
 
         // TODO: e aqui?
-        this->depthBufferObject.reset();
+        this->depthBufferImg.reset();
 
         vkDestroySwapchainKHR(this->logical, this->swapchain, nullptr);
         vkDestroyRenderPass(this->logical, this->renderPass, nullptr);
@@ -152,13 +151,13 @@ namespace ce {
         this->createDepthBufferImage();
 
         // Resize framebuffer count to equal chain image count
-        this->swapChainFrameBuffers.resize(this->images.size());
+        this->frameBuffers.resize(this->images.size());
 
         // Create a framebuffer for eache swap chain image
-        for (size_t i = 0; i < this->swapChainFrameBuffers.size(); i++) {
+        for (size_t i = 0; i < this->frameBuffers.size(); i++) {
 
-            std::array<VkImageView, 2> attachments = {
-                this->images[i]->getImageView(), depthBufferObject->getImageView()}; // order important same as upper
+            std::array<VkImageView, 2> attachments = {this->images[i]->getImageView(),
+                                                      depthBufferImg->getImageView()}; // order important same as upper
 
             const VkFramebufferCreateInfo framebufferCreateInfo = {
                 .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
@@ -170,7 +169,7 @@ namespace ce {
                 .layers = 1                         // Framebuffer layers
             };
 
-            if (vkCreateFramebuffer(this->logical, &framebufferCreateInfo, nullptr, &this->swapChainFrameBuffers[i]) !=
+            if (vkCreateFramebuffer(this->logical, &framebufferCreateInfo, nullptr, &this->frameBuffers[i]) !=
                 VK_SUCCESS) {
                 throw std::runtime_error("Faleid to create a frambuffer");
             }
@@ -187,19 +186,19 @@ namespace ce {
             VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);                                   // Depth
 
         // Create Depth Buffer Image
-        this->depthBufferObject = std::make_shared<Image>(this->physical, this->logical);
-        this->depthBufferObject->createImage(this->extent.width, this->extent.height, depthFormat,
-                                             VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-                                             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+        this->depthBufferImg = std::make_shared<Image>(this->physical, this->logical);
+        this->depthBufferImg->createImage(this->extent.width, this->extent.height, depthFormat, VK_IMAGE_TILING_OPTIMAL,
+                                          VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+                                          VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
         // Create Depth Buffer Image View
-        this->depthBufferObject->createImageView(VK_IMAGE_ASPECT_DEPTH_BIT);
+        this->depthBufferImg->createImageView(VK_IMAGE_ASPECT_DEPTH_BIT);
     }
 
     void SwapChain::sendImageToScreen(VkQueue pQueue, VkSemaphore signal, uint32_t& imageIndex) {
         //
         // -- PRESENT RENDERED IMAGE TO SCREEN --
-        std::array<VkSemaphore, 1> signalSemaphores{signal}; //{this->sync->getSignalSemaphore(this->currentFrame)};
+        std::array<VkSemaphore, 1> signalSemaphores{signal};
         std::array<VkSwapchainKHR, 1> swapChains{this->swapchain};
 
         const VkPresentInfoKHR presentInfo{

@@ -15,7 +15,7 @@ namespace ce {
         VkExtent2D& getExtent() { return this->extent; }
         std::vector<std::shared_ptr<Image>>& getImages() { return this->images; }
         VkFormat& getImageFormat() { return this->imageFormat; }
-        std::vector<VkFramebuffer>& getSwapChainFrameBuffers() { return this->swapChainFrameBuffers; }
+        std::vector<VkFramebuffer>& getSwapChainFrameBuffers() { return this->frameBuffers; }
 
         void sendImageToScreen(VkQueue pQueue, VkSemaphore signal, uint32_t& imageIndex);
 
@@ -33,7 +33,7 @@ namespace ce {
 
             r->sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
             r->renderPass = this->renderPass;                               // Render pass to begin
-            r->framebuffer = this->swapChainFrameBuffers[index];            //
+            r->framebuffer = this->frameBuffers[index];                     //
             r->renderArea = this->renderArea;                               //
             r->clearValueCount = static_cast<uint32_t>(clearValues.size()); //
             r->pClearValues = clearValues.data();                           // List of clear values
@@ -60,8 +60,8 @@ namespace ce {
         SDL_Window* window{nullptr};
 
         std::vector<std::shared_ptr<Image>> images;
-        std::shared_ptr<Image> depthBufferObject;
-        std::vector<VkFramebuffer> swapChainFrameBuffers;
+        std::shared_ptr<Image> depthBufferImg;
+        std::vector<VkFramebuffer> frameBuffers;
 
         VkRenderPass renderPass;
         std::vector<VkClearValue> clearValues;

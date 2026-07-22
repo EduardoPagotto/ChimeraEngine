@@ -303,7 +303,7 @@ void VulkanRenderer::recordCommands(uint32_t currentImage) {
     VkRenderPassBeginInfo renderPassBeginInfo{};
     this->swapchain->passBegin(currentImage, &renderPassBeginInfo);
 
-    ce::Command cmd(this->cmdBuffers[currentImage].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
+    ce::CommandRender cmd(this->cmdBuffers[currentImage].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
     cmd.beginAndPipeline(renderPassBeginInfo, this->graphicPipeline->get());
 
     for (size_t j = 0; j < this->modelList.size(); j++) {

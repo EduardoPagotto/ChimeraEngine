@@ -5,13 +5,13 @@
 
 namespace ce {
 
-    class Command {
+    class CommandRender {
       public:
-        explicit Command(VkCommandBuffer cmdBuffer, VkCommandBufferUsageFlagBits flag);
-        virtual ~Command();
+        explicit CommandRender(VkCommandBuffer cmdBuffer, VkCommandBufferUsageFlagBits flag);
+        virtual ~CommandRender();
 
-        Command(const Command&) = delete;
-        Command& operator=(const Command&) = delete;
+        CommandRender(const CommandRender&) = delete;
+        CommandRender& operator=(const CommandRender&) = delete;
 
         void init(VkCommandBuffer cmdBuffer, VkCommandBufferUsageFlagBits flag);
         void destroy();

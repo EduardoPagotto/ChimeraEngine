@@ -4,7 +4,8 @@
 
 namespace ce {
 
-    void CmdRender::init(VkCommandBuffer cmdBuffer, VkCommandBufferUsageFlagBits flag) {
+    void CmdRender::begin(VkCommandBuffer cmdBuffer, VkCommandBufferUsageFlagBits flag,
+                          const VkRenderPassBeginInfo& renderPassBeginInfo, VkPipeline& graphicPipeline) {
 
         this->cmdBuffer = cmdBuffer;
         // Information to begin the command buffer record
@@ -17,9 +18,7 @@ namespace ce {
         if (vkBeginCommandBuffer(this->cmdBuffer, &beginInfo) != VK_SUCCESS) {
             throw std::runtime_error("Failed to begin a CmdRender Buffer!");
         }
-    }
 
-    void CmdRender::beginAndPipeline(const VkRenderPassBeginInfo& renderPassBeginInfo, VkPipeline& graphicPipeline) {
         // Begin Render Pass
         vkCmdBeginRenderPass(this->cmdBuffer, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 

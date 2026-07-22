@@ -107,14 +107,15 @@ void VulkanRenderer::draw() {
     sync.waitAndResetFence();
 
     // Get index of next image to be draw to, and signal semaphore when ready to be draw to
-    uint32_t imageIndex = this->swapchain->acquireNextImage(sync.getWait());
-
     VkRenderPassBeginInfo renderPassBeginInfo{};
-    this->swapchain->passBegin(imageIndex, &renderPassBeginInfo);
+    uint32_t imageIndex = this->swapchain->acquireNextImage(sync.getWait(), &renderPassBeginInfo);
+
+    // Copy View Projection data in UBO
+    this->uboVP->getUBO()[imageIndex]->mapper(&this->uboViewProjection);
 
     ce::CmdRender cmd;
-    cmd.init(this->cmdBuffers[imageIndex].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
-    cmd.beginAndPipeline(renderPassBeginInfo, this->graphicPipeline->get());
+    cmd.begin(this->cmdBuffers[imageIndex].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT, renderPassBeginInfo,
+              this->graphicPipeline->get());
 
     for (size_t j = 0; j < this->modelList.size(); j++) {
 
@@ -138,8 +139,8 @@ void VulkanRenderer::draw() {
 
     cmd.end();
 
-    // Copy View Projection data in UBO
-    this->uboVP->getUBO()[imageIndex]->mapper(&this->uboViewProjection);
+    // // Copy View Projection data in UBO
+    // this->uboVP->getUBO()[imageIndex]->mapper(&this->uboViewProjection);
 
     // -- SUBMIT COMMAND BUFFER TO RENDER
     cmd.submitToRender(gQueue, sync, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);

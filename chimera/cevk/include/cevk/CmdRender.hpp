@@ -14,9 +14,9 @@ namespace ce {
         CmdRender(const CmdRender&) = delete;
         CmdRender& operator=(const CmdRender&) = delete;
 
-        void init(VkCommandBuffer cmdBuffer, VkCommandBufferUsageFlagBits flag);
+        void begin(VkCommandBuffer cmdBuffer, VkCommandBufferUsageFlagBits flag,
+                   const VkRenderPassBeginInfo& renderPassBeginInfo, VkPipeline& graphicPipeline);
 
-        void beginAndPipeline(const VkRenderPassBeginInfo& renderPassBeginInfo, VkPipeline& graphicPipeline);
         void pushConstants(VkPipelineLayout pipelineLayout, VkShaderStageFlagBits stage, uint32_t offset, size_t size,
                            const void* src);
         void addVertexBuffer(const VkDeviceSize& offset, const VkBuffer& buffer);

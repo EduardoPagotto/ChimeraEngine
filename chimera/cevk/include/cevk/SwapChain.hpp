@@ -19,27 +19,22 @@ namespace ce {
 
         void sendImageToScreen(VkQueue pQueue, VkSemaphore signal, uint32_t& imageIndex);
 
-        uint32_t acquireNextImage(VkSemaphore& waitImage) {
+        uint32_t acquireNextImage(VkSemaphore& waitImage, VkRenderPassBeginInfo* r) {
             uint32_t imageIndex;
             vkAcquireNextImageKHR(logical, this->swapchain, std::numeric_limits<uint64_t>::max(), waitImage,
                                   VK_NULL_HANDLE, &imageIndex);
+
+            r->sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+            r->renderPass = this->renderPass;                               // Render pass to begin
+            r->framebuffer = this->frameBuffers[imageIndex];                //
+            r->renderArea = this->renderArea;                               //
+            r->clearValueCount = static_cast<uint32_t>(clearValues.size()); //
+            r->pClearValues = clearValues.data();                           // List of clear values
 
             return imageIndex;
         }
 
         VkRenderPass& getRenderPass() { return renderPass; }
-
-        void passBegin(size_t index, VkRenderPassBeginInfo* r) {
-
-            r->sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            r->renderPass = this->renderPass;                               // Render pass to begin
-            r->framebuffer = this->frameBuffers[index];                     //
-            r->renderArea = this->renderArea;                               //
-            r->clearValueCount = static_cast<uint32_t>(clearValues.size()); //
-            r->pClearValues = clearValues.data();                           // List of clear values
-        }
-
-        // void setRederArea(const VkRect2D& renderArea) { this->renderArea = renderArea; }
 
       private:
         void createDepthBufferImage();

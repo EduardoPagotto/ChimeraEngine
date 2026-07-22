@@ -19,12 +19,6 @@ namespace ce {
         }
     }
 
-    void CmdRender::destroy() {
-        if (vkEndCommandBuffer(this->cmdBuffer) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to end a CmdRender!");
-        }
-    }
-
     void CmdRender::beginAndPipeline(const VkRenderPassBeginInfo& renderPassBeginInfo, VkPipeline& graphicPipeline) {
         // Begin Render Pass
         vkCmdBeginRenderPass(this->cmdBuffer, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
@@ -73,7 +67,13 @@ namespace ce {
         vkCmdDrawIndexed(cmdBuffer, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
     }
 
-    void CmdRender::end() { vkCmdEndRenderPass(cmdBuffer); }
+    void CmdRender::end() {
+        vkCmdEndRenderPass(this->cmdBuffer);
+
+        if (vkEndCommandBuffer(this->cmdBuffer) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to end a CmdRender!");
+        }
+    }
 
     void CmdRender::clearTemps() {
         vextexBuffers.clear();

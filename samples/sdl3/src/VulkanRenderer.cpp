@@ -114,7 +114,6 @@ void VulkanRenderer::draw() {
 
     ce::CmdRender cmd;
     cmd.init(this->cmdBuffers[imageIndex].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
-
     cmd.beginAndPipeline(renderPassBeginInfo, this->graphicPipeline->get());
 
     for (size_t j = 0; j < this->modelList.size(); j++) {
@@ -138,7 +137,6 @@ void VulkanRenderer::draw() {
     }
 
     cmd.end();
-    cmd.destroy();
 
     // Copy View Projection data in UBO
     this->uboVP->getUBO()[imageIndex]->mapper(&this->uboViewProjection);

@@ -1,18 +1,18 @@
 #pragma once
 
-#include "cevk.hpp"
+#include <vulkan/vulkan_core.h>
 
 namespace ce {
 
     class CommandPool {
       public:
-        explicit CommandPool(BaseVK* pBVK);
+        explicit CommandPool(VkDevice logical, uint32_t queueGraphicsFamilyIndex);
         virtual ~CommandPool();
         void cleanup();
         VkCommandPool& get() { return this->commandPool; }
 
       private:
         VkDevice logical{VK_NULL_HANDLE};
-        VkCommandPool commandPool;
+        VkCommandPool commandPool{VK_NULL_HANDLE};
     };
 } // namespace ce

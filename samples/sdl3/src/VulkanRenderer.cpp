@@ -1,5 +1,4 @@
 #include "VulkanRenderer.hpp"
-#include "CmdBuffer.hpp"
 #include "CmdRender.hpp"
 #include <cstddef>
 #include <cstdlib>
@@ -15,16 +14,22 @@ VulkanRenderer::VulkanRenderer(ce::DevVk& devvk) {
     this->gQueue = devvk.getGraphicsQueue();
     this->pQueue = devvk.getPresentationQueue();
 
-    this->swapchain = std::make_shared<SwapChain>(bvk.get());
+    // Get inidices of queue families from device
+    QueueFamilyIndices queueFamilyIndices = aux::GetQueueFamilies(bvk->physical, bvk->surface);
+
+    this->swapchain = std::make_shared<SwapChain>(bvk.get(), queueFamilyIndices);
+
     this->uboVP = std::make_shared<UBO<Buffer>>(bvk->physical, bvk->logical, swapchain->getImages().size(),
                                                 sizeof(UboViewProjection));
+
     this->textureMng = std::make_shared<Textures>(bvk->physical, bvk->logical);
 
     createDescriptorSetLayout();
     createPushConstantRange();
     createGraphicsPipeline();
 
-    graphicsCommandPool = std::make_shared<CommandPool>(this->bvk.get());
+    graphicsCommandPool =
+        std::make_shared<CommandPool>(bvk->logical, static_cast<uint32_t>(queueFamilyIndices.graphicsFamily));
 
     cmdBuffers.resize(swapchain->getSwapChainFrameBuffers().size());
     for (size_t i = 0; i < swapchain->getSwapChainFrameBuffers().size(); i++) {

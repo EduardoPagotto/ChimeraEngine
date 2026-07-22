@@ -9,7 +9,7 @@ namespace ce {
 
     class SwapChain {
       public:
-        explicit SwapChain(BaseVK* pBVK);
+        explicit SwapChain(BaseVK* pBVK, QueueFamilyIndices& indices);
         virtual ~SwapChain();
 
         VkExtent2D& getExtent() { return this->extent; }

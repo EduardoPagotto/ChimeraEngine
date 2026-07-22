@@ -4,7 +4,8 @@
 
 namespace ce {
 
-    SwapChain::SwapChain(BaseVK* pBVK) : physical(pBVK->physical), logical(pBVK->logical), window(pBVK->window) {
+    SwapChain::SwapChain(BaseVK* pBVK, QueueFamilyIndices& indices)
+        : physical(pBVK->physical), logical(pBVK->logical), window(pBVK->window) {
 
         // Get Swap Chain details so we cam pick best setting
         SwapChainDetails swapchainDetails = aux::GetSwapChainDetails(pBVK->physical, pBVK->surface);
@@ -25,17 +26,14 @@ namespace ce {
             imageCount = swapchainDetails.surfaceCapabilities.maxImageCount;
         }
 
-        // Get Queue Family indices
-        QueueFamilyIndices indices = aux::GetQueueFamilies(pBVK->physical, pBVK->surface);
         // If Graphics and Presentation families are diferent, the swapchain must let images ge shared between families
-
         // indices.graphicsFamily == indices.presentationFamily
         VkSharingMode imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
         uint32_t queueFamilyIndexCount = 0;
-        const uint32_t* pQueueFamilyIndices = nullptr;
+        const uint32_t* pQueueFamilyIndices = nullptr; // FIXME : nao seria um array de 1 ?
 
         // If Graphics and Presentation families are diferent, the swapchain must let images ge shared between families
-        if (indices.graphicsFamily != indices.presentationFamily) {
+        if (indices.graphicsFamily != indices.presentationFamily) { // FIXME: ESTA ERRADO!!!!!!!
             // Queue to share between
             std::array<uint32_t, 2> queueFamilyIndices = {static_cast<uint32_t>(indices.graphicsFamily),
                                                           static_cast<uint32_t>(indices.presentationFamily)};

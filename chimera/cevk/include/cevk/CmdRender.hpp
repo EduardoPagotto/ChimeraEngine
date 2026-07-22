@@ -7,6 +7,7 @@ namespace ce {
 
     class CmdRender {
       public:
+        explicit CmdRender() = default;
         explicit CmdRender(VkCommandBuffer cmdBuffer, VkCommandBufferUsageFlagBits flag);
         virtual ~CmdRender();
 
@@ -15,6 +16,7 @@ namespace ce {
 
         void init(VkCommandBuffer cmdBuffer, VkCommandBufferUsageFlagBits flag);
         void destroy();
+
         void beginAndPipeline(const VkRenderPassBeginInfo& renderPassBeginInfo, VkPipeline& graphicPipeline);
         void pushConstants(VkPipelineLayout pipelineLayout, VkShaderStageFlagBits stage, uint32_t offset, size_t size,
                            const void* src);

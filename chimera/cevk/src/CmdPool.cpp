@@ -1,16 +1,16 @@
-#include "CommandPool.hpp"
+#include "CmdPool.hpp"
 #include <stdexcept>
 #include <vulkan/vulkan_core.h>
 
 namespace ce {
     //
-    CommandPool::CommandPool(VkDevice logical, uint32_t queueGraphicsFamilyIndex) {
+    CmdPool::CmdPool(VkDevice logical, uint32_t queueGraphicsFamilyIndex) {
         this->init(logical, queueGraphicsFamilyIndex);
     }
 
-    CommandPool::~CommandPool() { this->destroy(); }
+    CmdPool::~CmdPool() { this->destroy(); }
 
-    void CommandPool::init(VkDevice logical, uint32_t queueGraphicsFamilyIndex) {
+    void CmdPool::init(VkDevice logical, uint32_t queueGraphicsFamilyIndex) {
 
         this->logical = logical;
 
@@ -26,14 +26,14 @@ namespace ce {
             throw std::runtime_error("Failed to create Command Pool");
         }
     }
-    void CommandPool::destroy() {
+    void CmdPool::destroy() {
         if (this->commandPool != VK_NULL_HANDLE) {
             vkDestroyCommandPool(this->logical, this->commandPool, nullptr);
             this->commandPool = VK_NULL_HANDLE;
         }
     }
 
-    void CommandPool::cleanup() {
+    void CmdPool::cleanup() {
         //
         if (vkResetCommandPool(this->logical, this->commandPool, VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT) !=
             VK_SUCCESS) {

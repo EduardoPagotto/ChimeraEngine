@@ -28,13 +28,12 @@ VulkanRenderer::VulkanRenderer(ce::DevVk& devvk) {
     createPushConstantRange();
     createGraphicsPipeline();
 
-    graphicsCommandPool =
-        std::make_shared<CommandPool>(bvk->logical, static_cast<uint32_t>(queueFamilyIndices.graphicsFamily));
+    graphicsCmdPool.init(bvk->logical, static_cast<uint32_t>(queueFamilyIndices.graphicsFamily));
 
     cmdBuffers.resize(swapchain->getSwapChainFrameBuffers().size());
     for (size_t i = 0; i < swapchain->getSwapChainFrameBuffers().size(); i++) {
         cmdBuffers[i] = CmdBuffer();
-        cmdBuffers[i].init(bvk->logical, graphicsCommandPool->get());
+        cmdBuffers[i].init(bvk->logical, graphicsCmdPool.get());
     }
 
     createDescriptorPool();
@@ -61,7 +60,7 @@ VulkanRenderer::VulkanRenderer(ce::DevVk& devvk) {
     uboViewProjection.projection[1][1] *= -1; // vulkan inverted of OpenGL
 
     // Create our default "no texture" texture
-    textureMng->createTexture("plain.png", gQueue, graphicsCommandPool->get());
+    textureMng->createTexture("plain.png", gQueue, graphicsCmdPool.get());
 }
 
 VulkanRenderer::~VulkanRenderer() {
@@ -86,7 +85,7 @@ VulkanRenderer::~VulkanRenderer() {
         cmdBuffers[i].destroy();
     }
 
-    graphicsCommandPool.reset();
+    graphicsCmdPool.destroy();
     graphicPipeline.reset();
     pipelineLayout.reset();
 }
@@ -361,15 +360,14 @@ int VulkanRenderer::createMeshModel(const std::string& modelFile) {
         } else {
 
             // Otherwise, create texture and set value to index of new texture
-            matToTex[i] =
-                this->textureMng->createTexture(textureNames[i], this->gQueue, this->graphicsCommandPool->get());
+            matToTex[i] = this->textureMng->createTexture(textureNames[i], this->gQueue, this->graphicsCmdPool.get());
             // matToTex[i] = createTexture("panda.jpg");
         }
     }
 
     // Load in all our meshes
     std::vector<ce::Mesh> modelMeshes = ce::MeshModel::LoadNode(
-        bvk->physical, bvk->logical, gQueue, this->graphicsCommandPool->get(), scene->mRootNode, scene, matToTex);
+        bvk->physical, bvk->logical, gQueue, this->graphicsCmdPool.get(), scene->mRootNode, scene, matToTex);
 
     // Create mesh model and add to list
     ce::MeshModel meshModel(modelMeshes);

@@ -4,15 +4,15 @@
 
 namespace ce {
 
-    class CommandPool {
+    class CmdPool {
       public:
-        explicit CommandPool() = default;
-        explicit CommandPool(VkDevice logical, uint32_t queueGraphicsFamilyIndex);
+        explicit CmdPool() = default;
+        explicit CmdPool(VkDevice logical, uint32_t queueGraphicsFamilyIndex);
 
-        CommandPool(const CommandPool&) = delete;
-        CommandPool& operator=(const CommandPool&) = delete;
+        CmdPool(const CmdPool&) = delete;
+        CmdPool& operator=(const CmdPool&) = delete;
 
-        virtual ~CommandPool();
+        virtual ~CmdPool();
 
         void init(VkDevice logical, uint32_t queueGraphicsFamilyIndex);
         void destroy();

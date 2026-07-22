@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CmdBuffer.hpp"
-#include "CommandPool.hpp"
+#include "CmdPool.hpp"
 #include "DevVK.hpp"
 #include "MeshModel.hpp"
 #include "Pipeline.hpp"
@@ -36,13 +36,15 @@ class VulkanRenderer {
 
     std::shared_ptr<ce::BaseVK> bvk;
     std::shared_ptr<ce::SwapChain> swapchain;
+
     std::vector<ce::CmdBuffer> cmdBuffers;
+    ce::CmdPool graphicsCmdPool;
+
     std::shared_ptr<ce::DescriptorPool> descriptorPool;
     std::shared_ptr<ce::UBO<ce::Buffer>> uboVP;
     std::shared_ptr<ce::Textures> textureMng;
     std::shared_ptr<ce::PipelineLayout> pipelineLayout;
     std::shared_ptr<ce::Pipeline> graphicPipeline;
-    std::shared_ptr<ce::CommandPool> graphicsCommandPool;
     std::vector<ce::Sync> syncs;
     // Scene Objects
     std::vector<ce::MeshModel> modelList;

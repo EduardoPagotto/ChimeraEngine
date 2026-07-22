@@ -1,10 +1,15 @@
 #include "Command.hpp"
 #include <stdexcept>
+#include <vulkan/vulkan_core.h>
 
 namespace ce {
-    //
-    Command::Command(VkCommandBuffer cmdBuffer, VkCommandBufferUsageFlagBits flag) : cmdBuffer(cmdBuffer) {
 
+    Command::Command(VkCommandBuffer cmdBuffer, VkCommandBufferUsageFlagBits flag) { this->init(cmdBuffer, flag); }
+    Command::~Command() { this->destroy(); }
+
+    void Command::init(VkCommandBuffer cmdBuffer, VkCommandBufferUsageFlagBits flag) {
+
+        this->cmdBuffer = cmdBuffer;
         // Information to begin the command buffer record
         const VkCommandBufferBeginInfo beginInfo{
             .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
@@ -12,18 +17,17 @@ namespace ce {
         };
 
         // Begin recording transfer commands
-        if (vkBeginCommandBuffer(cmdBuffer, &beginInfo) != VK_SUCCESS) {
+        if (vkBeginCommandBuffer(this->cmdBuffer, &beginInfo) != VK_SUCCESS) {
             throw std::runtime_error("Failed to begin a Command Buffer!");
         }
     }
 
-    Command::~Command() { this->destroy(); }
-
     void Command::destroy() {
-        if (cmdBuffer != VK_NULL_HANDLE) {
-            if (vkEndCommandBuffer(cmdBuffer) != VK_SUCCESS) {
+        if (this->cmdBuffer != VK_NULL_HANDLE) {
+            if (vkEndCommandBuffer(this->cmdBuffer) != VK_SUCCESS) {
                 throw std::runtime_error("Failed to end a Command Buffer!");
             }
+            this->cmdBuffer = VK_NULL_HANDLE;
         }
     }
 

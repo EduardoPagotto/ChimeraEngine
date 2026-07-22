@@ -5,11 +5,11 @@
 
 namespace ce {
 
-    class CommandBuffer {
+    class CmdBuffer {
       public:
-        explicit CommandBuffer() = default;
-        explicit CommandBuffer(VkDevice device, VkCommandPool commandPool);
-        virtual ~CommandBuffer();
+        explicit CmdBuffer() = default;
+        explicit CmdBuffer(VkDevice device, VkCommandPool commandPool);
+        virtual ~CmdBuffer();
 
         void init(VkDevice device, VkCommandPool commandPool);
         void destroy();

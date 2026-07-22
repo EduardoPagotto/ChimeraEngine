@@ -1,6 +1,6 @@
 #include "Textures.hpp"
 #include "Buffers.hpp"
-#include "CommandBuffer.hpp"
+#include "CmdBuffer.hpp"
 #include "cevk.hpp"
 
 namespace ce {

@@ -1,13 +1,13 @@
-#include "CommandBuffer.hpp"
+#include "CmdBuffer.hpp"
 #include <array>
 #include <stdexcept>
 
 namespace ce {
-    CommandBuffer::CommandBuffer(VkDevice device, VkCommandPool commandPool) { this->init(device, commandPool); }
+    CmdBuffer::CmdBuffer(VkDevice device, VkCommandPool commandPool) { this->init(device, commandPool); }
 
-    CommandBuffer::~CommandBuffer() { this->destroy(); }
+    CmdBuffer::~CmdBuffer() { this->destroy(); }
 
-    void CommandBuffer::init(VkDevice device, VkCommandPool commandPool) {
+    void CmdBuffer::init(VkDevice device, VkCommandPool commandPool) {
 
         this->device = device;
         this->commandPool = commandPool;
@@ -28,7 +28,7 @@ namespace ce {
         }
     }
 
-    void CommandBuffer::destroy() {
+    void CmdBuffer::destroy() {
         // Free temporary command buffer back to pool
         if (this->handle != VK_NULL_HANDLE) {
             vkFreeCommandBuffers(this->device, this->commandPool, static_cast<uint32_t>(1), &this->handle);
@@ -36,13 +36,13 @@ namespace ce {
         }
     }
 
-    void CommandBuffer::clean() {
+    void CmdBuffer::clean() {
         if (vkResetCommandBuffer(this->handle, VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT) != VK_SUCCESS) {
             throw std::runtime_error("Failed to reset a Command Buffer!");
         }
     }
 
-    void CommandBuffer::begin(VkCommandBufferUsageFlagBits flag) {
+    void CmdBuffer::begin(VkCommandBufferUsageFlagBits flag) {
 
         // Information to begin the command buffer record
         const VkCommandBufferBeginInfo beginInfo{
@@ -56,14 +56,14 @@ namespace ce {
         }
     }
 
-    void CommandBuffer::end() {
+    void CmdBuffer::end() {
         // End commands
         if (vkEndCommandBuffer(this->handle) != VK_SUCCESS) {
             throw std::runtime_error("Failed to end a Command Buffer!");
         }
     }
 
-    void CommandBuffer::submitToRender(VkQueue queue, Sync& sync, const VkPipelineStageFlagBits& pipelineStageFlags) {
+    void CmdBuffer::submitToRender(VkQueue queue, Sync& sync, const VkPipelineStageFlagBits& pipelineStageFlags) {
         // -- SUBMIT COMMAND BUFFER TO RENDER
         // Queue submission information
         std::array<VkSemaphore, 1> waitSemaphores{sync.getWait()};
@@ -87,7 +87,7 @@ namespace ce {
         }
     }
 
-    void CommandBuffer::submitQueue(VkQueue queue) {
+    void CmdBuffer::submitQueue(VkQueue queue) {
         // Queue submission information
         const VkSubmitInfo submitInfo{
             .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO, //
@@ -105,7 +105,7 @@ namespace ce {
         void CopyBuffer(VkDevice device, VkQueue queue, VkCommandPool commandPool, VkBuffer srcBuffer,
                         VkBuffer dstBuffer, VkDeviceSize bufferSize) {
 
-            CommandBuffer commandBuffer(device, commandPool);
+            CmdBuffer commandBuffer(device, commandPool);
             commandBuffer.begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
 
             // Region of data to copy from and to
@@ -121,7 +121,7 @@ namespace ce {
         void CopyImageBuffer(VkDevice device, VkQueue queue, VkCommandPool commandPool, VkBuffer srcBuffer,
                              VkImage image, uint32_t width, uint32_t height) {
             // Create Buffer
-            CommandBuffer commandBuffer(device, commandPool);
+            CmdBuffer commandBuffer(device, commandPool);
             commandBuffer.begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
 
             const VkBufferImageCopy imageRegion{
@@ -150,7 +150,7 @@ namespace ce {
         void TransitionImageLayout(VkDevice device, VkQueue queue, VkCommandPool commandPool, VkImage image,
                                    VkImageLayout oldLayout, VkImageLayout newLayout) {
             // Create buffer
-            CommandBuffer commandBuffer(device, commandPool);
+            CmdBuffer commandBuffer(device, commandPool);
             commandBuffer.begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
 
             VkPipelineStageFlags srcStage = VK_PIPELINE_STAGE_NONE;

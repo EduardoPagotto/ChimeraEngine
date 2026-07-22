@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CommandBuffer.hpp"
+#include "CmdBuffer.hpp"
 #include "CommandPool.hpp"
 #include "DevVK.hpp"
 #include "MeshModel.hpp"
@@ -36,7 +36,7 @@ class VulkanRenderer {
 
     std::shared_ptr<ce::BaseVK> bvk;
     std::shared_ptr<ce::SwapChain> swapchain;
-    std::vector<ce::CommandBuffer> cmdBuffers;
+    std::vector<ce::CmdBuffer> cmdBuffers;
     std::shared_ptr<ce::DescriptorPool> descriptorPool;
     std::shared_ptr<ce::UBO<ce::Buffer>> uboVP;
     std::shared_ptr<ce::Textures> textureMng;

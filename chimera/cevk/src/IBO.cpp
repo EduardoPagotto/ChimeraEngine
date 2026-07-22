@@ -1,5 +1,5 @@
 #include "IBO.hpp"
-#include "CommandBuffer.hpp"
+#include "CmdBuffer.hpp"
 
 namespace ce {
 

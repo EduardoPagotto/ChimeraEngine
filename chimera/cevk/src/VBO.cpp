@@ -1,5 +1,5 @@
 #include "VBO.hpp"
-#include "CommandBuffer.hpp"
+#include "CmdBuffer.hpp"
 
 namespace ce {
     VBO::VBO(VkPhysicalDevice physical, VkDevice logical) : physical(physical), logical(logical) {}

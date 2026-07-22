@@ -1,4 +1,5 @@
 #include "VulkanRenderer.hpp"
+#include "CmdBuffer.hpp"
 #include "CmdRender.hpp"
 #include <cstddef>
 #include <cstdlib>
@@ -27,7 +28,7 @@ VulkanRenderer::VulkanRenderer(ce::DevVk& devvk) {
 
     cmdBuffers.resize(swapchain->getSwapChainFrameBuffers().size());
     for (size_t i = 0; i < swapchain->getSwapChainFrameBuffers().size(); i++) {
-        cmdBuffers[i] = CommandBuffer();
+        cmdBuffers[i] = CmdBuffer();
         cmdBuffers[i].init(bvk->logical, graphicsCommandPool->get());
     }
 

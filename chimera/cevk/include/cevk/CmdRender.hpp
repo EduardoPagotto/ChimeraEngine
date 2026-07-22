@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Sync.hpp"
 #include <vector>
 #include <vulkan/vulkan_core.h>
 
@@ -8,8 +9,7 @@ namespace ce {
     class CmdRender {
       public:
         explicit CmdRender() = default;
-        explicit CmdRender(VkCommandBuffer cmdBuffer, VkCommandBufferUsageFlagBits flag);
-        virtual ~CmdRender();
+        virtual ~CmdRender() = default;
 
         CmdRender(const CmdRender&) = delete;
         CmdRender& operator=(const CmdRender&) = delete;
@@ -29,6 +29,8 @@ namespace ce {
                          uint32_t firstInstance);
         void end();
         void clearTemps();
+
+        void submitToRender(VkQueue queue, Sync& sync, const VkPipelineStageFlagBits& pipelineStageFlags);
 
       private:
         std::vector<VkBuffer> vextexBuffers;

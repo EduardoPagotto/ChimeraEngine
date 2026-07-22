@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Sync.hpp"
 #include <vulkan/vulkan_core.h>
 
 namespace ce {
@@ -16,8 +15,6 @@ namespace ce {
         void clean();
         void begin(VkCommandBufferUsageFlagBits flag);
         void end();
-
-        void submitToRender(VkQueue queue, Sync& sync, const VkPipelineStageFlagBits& pipelineStageFlags);
         void submitQueue(VkQueue queue);
 
         VkCommandBuffer& get() { return this->handle; }

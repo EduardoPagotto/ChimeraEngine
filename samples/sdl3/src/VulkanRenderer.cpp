@@ -109,12 +109,42 @@ void VulkanRenderer::draw() {
     // Get index of next image to be draw to, and signal semaphore when ready to be draw to
     uint32_t imageIndex = this->swapchain->acquireNextImage(sync.getWait());
 
-    this->recordCommands(imageIndex);
+    VkRenderPassBeginInfo renderPassBeginInfo{};
+    this->swapchain->passBegin(imageIndex, &renderPassBeginInfo);
+
+    ce::CmdRender cmd;
+    cmd.init(this->cmdBuffers[imageIndex].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
+
+    cmd.beginAndPipeline(renderPassBeginInfo, this->graphicPipeline->get());
+
+    for (size_t j = 0; j < this->modelList.size(); j++) {
+
+        ce::MeshModel thisModel = modelList[j];
+
+        cmd.pushConstants(this->pipelineLayout->get(), VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ce::Model),
+                          &thisModel.getModel2());
+
+        for (size_t k = 0; k < thisModel.getMeshCount(); k++) {
+
+            cmd.addVertexBuffer({0}, thisModel.getMesh(k)->getVertexBuffer());
+            cmd.bindVertexBuffer(0);
+            cmd.bindIndexBuffer(thisModel.getMesh(k)->getIndexBuffer(), {0});
+            cmd.addDescriptorSet(this->uboVP->getDescriptorSets()[imageIndex]);
+            cmd.addDescriptorSet(this->textureMng->getUbo()->getDescriptorSets()[thisModel.getMesh(k)->getTexId()]);
+            cmd.bindDescriptorSets(this->pipelineLayout->get());
+            cmd.drawIndexed(thisModel.getMesh(k)->getIndexCount(), 1, 0, 0, 0);
+            cmd.clearTemps();
+        }
+    }
+
+    cmd.end();
+    cmd.destroy();
+
     // Copy View Projection data in UBO
     this->uboVP->getUBO()[imageIndex]->mapper(&this->uboViewProjection);
 
     // -- SUBMIT COMMAND BUFFER TO RENDER
-    this->cmdBuffers[imageIndex].submitToRender(gQueue, sync, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+    cmd.submitToRender(gQueue, sync, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 
     // -- PRESENT RENDERED IMAGE TO SCREEN --
     this->swapchain->sendImageToScreen(pQueue, sync.getSignal(), imageIndex);
@@ -301,41 +331,6 @@ void VulkanRenderer::createDescriptorSets() {
     // Update the descripto sets with new buffer/binding info
     this->uboVP->updateDescriptorSets();
     this->uboVP->clearWriteDescriptorSet();
-}
-
-void VulkanRenderer::recordCommands(uint32_t currentImage) {
-
-    VkRenderPassBeginInfo renderPassBeginInfo{};
-    this->swapchain->passBegin(currentImage, &renderPassBeginInfo);
-
-    ce::CmdRender cmd;
-    cmd.init(this->cmdBuffers[currentImage].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
-
-    cmd.beginAndPipeline(renderPassBeginInfo, this->graphicPipeline->get());
-
-    for (size_t j = 0; j < this->modelList.size(); j++) {
-
-        ce::MeshModel thisModel = modelList[j];
-
-        cmd.pushConstants(this->pipelineLayout->get(), VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ce::Model),
-                          &thisModel.getModel2());
-
-        for (size_t k = 0; k < thisModel.getMeshCount(); k++) {
-
-            cmd.addVertexBuffer({0}, thisModel.getMesh(k)->getVertexBuffer());
-            cmd.bindVertexBuffer(0);
-            cmd.bindIndexBuffer(thisModel.getMesh(k)->getIndexBuffer(), {0});
-            cmd.addDescriptorSet(this->uboVP->getDescriptorSets()[currentImage]);
-            cmd.addDescriptorSet(this->textureMng->getUbo()->getDescriptorSets()[thisModel.getMesh(k)->getTexId()]);
-            cmd.bindDescriptorSets(this->pipelineLayout->get());
-            cmd.drawIndexed(thisModel.getMesh(k)->getIndexCount(), 1, 0, 0, 0);
-            cmd.clearTemps();
-        }
-    }
-
-    cmd.end();
-
-    cmd.destroy();
 }
 
 int VulkanRenderer::createMeshModel(const std::string& modelFile) {

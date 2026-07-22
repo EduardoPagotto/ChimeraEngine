@@ -1,11 +1,8 @@
 #include "CmdRender.hpp"
+#include <array>
 #include <stdexcept>
 
 namespace ce {
-
-    CmdRender::CmdRender(VkCommandBuffer cmdBuffer, VkCommandBufferUsageFlagBits flag) { this->init(cmdBuffer, flag); }
-
-    CmdRender::~CmdRender() { this->destroy(); }
 
     void CmdRender::init(VkCommandBuffer cmdBuffer, VkCommandBufferUsageFlagBits flag) {
 
@@ -23,11 +20,8 @@ namespace ce {
     }
 
     void CmdRender::destroy() {
-        if (this->cmdBuffer != VK_NULL_HANDLE) {
-            if (vkEndCommandBuffer(this->cmdBuffer) != VK_SUCCESS) {
-                throw std::runtime_error("Failed to end a CmdRender Buffer!");
-            }
-            this->cmdBuffer = VK_NULL_HANDLE;
+        if (vkEndCommandBuffer(this->cmdBuffer) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to end a CmdRender!");
         }
     }
 
@@ -85,5 +79,29 @@ namespace ce {
         vextexBuffers.clear();
         offsets.clear();
         descriptorSetGroup.clear();
+    }
+
+    void CmdRender::submitToRender(VkQueue queue, Sync& sync, const VkPipelineStageFlagBits& pipelineStageFlags) {
+        // -- SUBMIT COMMAND BUFFER TO RENDER
+        // Queue submission information
+        std::array<VkSemaphore, 1> waitSemaphores{sync.getWait()};
+        std::array<VkSemaphore, 1> signalSemaphores{sync.getSignal()};
+        std::array<VkPipelineStageFlags, 1> waitStages{pipelineStageFlags};
+
+        const VkSubmitInfo submitInfo{
+            .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+            .waitSemaphoreCount = static_cast<uint32_t>(waitSemaphores.size()), // Number of semaphores to wait on
+            .pWaitSemaphores = waitSemaphores.data(),                           //
+            .pWaitDstStageMask = waitStages.data(),                             // Stagegs to check semaphores at
+            .commandBufferCount = 1,             // Number of command buffers to submit FIXME: é isto mesmo?
+            .pCommandBuffers = &this->cmdBuffer, // Command buffer to submit
+            .signalSemaphoreCount = static_cast<uint32_t>(signalSemaphores.size()), // Number of semaphore to signal
+            .pSignalSemaphores = signalSemaphores.data(), // Semaphore to signal when command buffer finishes
+        };
+
+        // Submit command buffer to queue
+        if (vkQueueSubmit(queue, 1, &submitInfo, sync.getFence()) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to submit Command Buffer to Queue!");
+        }
     }
 } // namespace ce

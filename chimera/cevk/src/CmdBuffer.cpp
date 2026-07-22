@@ -1,5 +1,4 @@
 #include "CmdBuffer.hpp"
-#include <array>
 #include <stdexcept>
 
 namespace ce {
@@ -60,30 +59,6 @@ namespace ce {
         // End commands
         if (vkEndCommandBuffer(this->handle) != VK_SUCCESS) {
             throw std::runtime_error("Failed to end a Command Buffer!");
-        }
-    }
-
-    void CmdBuffer::submitToRender(VkQueue queue, Sync& sync, const VkPipelineStageFlagBits& pipelineStageFlags) {
-        // -- SUBMIT COMMAND BUFFER TO RENDER
-        // Queue submission information
-        std::array<VkSemaphore, 1> waitSemaphores{sync.getWait()};
-        std::array<VkSemaphore, 1> signalSemaphores{sync.getSignal()};
-        std::array<VkPipelineStageFlags, 1> waitStages{pipelineStageFlags};
-
-        const VkSubmitInfo submitInfo{
-            .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
-            .waitSemaphoreCount = static_cast<uint32_t>(waitSemaphores.size()), // Number of semaphores to wait on
-            .pWaitSemaphores = waitSemaphores.data(),                           //
-            .pWaitDstStageMask = waitStages.data(),                             // Stagegs to check semaphores at
-            .commandBufferCount = 1,          // Number of command buffers to submit FIXME: é isto mesmo?
-            .pCommandBuffers = &this->handle, // Command buffer to submit
-            .signalSemaphoreCount = static_cast<uint32_t>(signalSemaphores.size()), // Number of semaphore to signal
-            .pSignalSemaphores = signalSemaphores.data(), // Semaphore to signal when command buffer finishes
-        };
-
-        // Submit command buffer to queue
-        if (vkQueueSubmit(queue, 1, &submitInfo, sync.getFence()) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to submit Command Buffer to Queue!");
         }
     }
 
@@ -205,5 +180,4 @@ namespace ce {
             commandBuffer.submitQueue(queue);
         }
     } // namespace aux
-
 } // namespace ce

@@ -16,7 +16,7 @@ namespace ce {
     Textures::~Textures() {
         //
         vkDestroySampler(this->logical, this->textureSampler, nullptr);
-        samplerDescriptorPool.reset();
+        samplerDescriptorPool.destroy();
         uboSampler.reset();
     }
 
@@ -49,9 +49,8 @@ namespace ce {
         // CREATE DESCRIPTOR POOL
         // -- CREATE SAMPLER DESCRIPTOR POOL
         // Texture sampler pool
-        this->samplerDescriptorPool = std::make_shared<DescriptorPool>(this->logical);
-        this->samplerDescriptorPool->addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_OBJECTS);
-        this->samplerDescriptorPool->create(MAX_OBJECTS);
+        this->samplerDescriptorPool.addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_OBJECTS);
+        this->samplerDescriptorPool.create(this->logical, MAX_OBJECTS);
     }
 
     void Textures::createTextureSampler() {
@@ -110,7 +109,7 @@ namespace ce {
                                    VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
         // Copy image data
-        aux::CopyImageBuffer(this->logical, queue, commandPool, imageStagingBuffer.getBuffer(), texImageObj->getImage(),
+        aux::CopyImageBuffer(this->logical, queue, commandPool, imageStagingBuffer.get(), texImageObj->getImage(),
                              width, height);
 
         // Transition image to be shader readable for shader
@@ -125,7 +124,7 @@ namespace ce {
 
     int Textures::createTextureDescriptor(VkImageView textureImage) {
         //
-        auto [index, size] = this->uboSampler->allocateDescriptorSets(1, this->samplerDescriptorPool->get());
+        auto [index, size] = this->uboSampler->allocateDescriptorSets(1, this->samplerDescriptorPool.get());
 
         // Texture Image info
         const VkDescriptorImageInfo imageInfo{

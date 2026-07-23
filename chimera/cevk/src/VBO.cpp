@@ -34,7 +34,6 @@ namespace ce {
                           VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
         // Copy staging buffer to vertex buffer on GPU
-        aux::CopyBuffer(this->logical, queue, commandPool, stagingBuffer.getBuffer(), this->vbo->getBuffer(),
-                        bufferSize);
+        aux::CopyBuffer(this->logical, queue, commandPool, stagingBuffer.get(), this->vbo->get(), bufferSize);
     }
 } // namespace ce

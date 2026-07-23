@@ -28,12 +28,12 @@ VulkanRenderer::VulkanRenderer(ce::DevVk& devvk) {
     createPushConstantRange();
     createGraphicsPipeline();
 
-    graphicsCmdPool.init(bvk->logical, static_cast<uint32_t>(queueFamilyIndices.graphicsFamily));
+    this->graphicsCmdPool.init(bvk->logical, static_cast<uint32_t>(queueFamilyIndices.graphicsFamily));
 
-    cmdBuffers.resize(swapchain->getSwapChainFrameBuffers().size());
-    for (size_t i = 0; i < swapchain->getSwapChainFrameBuffers().size(); i++) {
-        cmdBuffers[i] = CmdBuffer();
-        cmdBuffers[i].init(bvk->logical, graphicsCmdPool.get());
+    this->cmdBuffers.resize(this->swapchain->getSwapChainFrameBuffers().size());
+    for (size_t i = 0; i < this->swapchain->getSwapChainFrameBuffers().size(); i++) {
+        this->cmdBuffers[i] = CmdBuffer();
+        this->cmdBuffers[i].init(bvk->logical, this->graphicsCmdPool.get());
     }
 
     createDescriptorPool();
@@ -74,7 +74,7 @@ VulkanRenderer::~VulkanRenderer() {
     }
 
     textureMng.reset();
-    descriptorPool.reset();
+    descriptorPool.destroy();
     uboVP.reset();
 
     for (size_t i = 0; i < this->syncs.size(); i++) {
@@ -100,9 +100,9 @@ void VulkanRenderer::updateModel(int modelId, glm::mat4 newModel) {
 }
 
 void VulkanRenderer::draw() {
-    // // -- GET NEXT IMAGE --
-    // // Wait for given fence to signal (open) from last draw before continuing
-    // // Manually reset (close) fence
+    // -- GET NEXT IMAGE --
+    // Wait for given fence to signal (open) from last draw before continuing
+    // Manually reset (close) fence
     auto& sync = this->syncs[this->currentFrame];
     sync.waitAndResetFence();
 
@@ -138,9 +138,6 @@ void VulkanRenderer::draw() {
     }
 
     cmd.end();
-
-    // // Copy View Projection data in UBO
-    // this->uboVP->getUBO()[imageIndex]->mapper(&this->uboViewProjection);
 
     // -- SUBMIT COMMAND BUFFER TO RENDER
     cmd.submitToRender(gQueue, sync, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
@@ -264,32 +261,31 @@ void VulkanRenderer::createDescriptorPool() {
 
     // CREATE DESCRIPTOR POOL
     // CREATE UNIFORM DESCRIPTOR POOL
-    this->descriptorPool = std::make_shared<ce::DescriptorPool>(this->bvk->logical);
+    // this->descriptorPool = std::make_shared<ce::DescriptorPool>(this->bvk->logical);
     // Type of Descriptors + how many DESCRIPTORS, not Descriptor Sets (combined makes the pool size)
     // ViewProjection Pool
-    this->descriptorPool->addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, static_cast<uint32_t>(this->uboVP->size()));
+    this->descriptorPool.addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, static_cast<uint32_t>(this->uboVP->size()));
 
-    // // Model Pool (Dynamic)
+    // Model Pool (Dynamic)
     // this->descriptorPool->addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, //
     //                                    static_cast<uint32_t>(this->modelDUniformBuffer.size());//
 
-    // Create Descriptor Pool
-    this->descriptorPool->create(
-        static_cast<uint32_t>(this->swapchain->getImages().size())); // Maximum number of descriptor Sets
+    // Create Descriptor Pool, Maximum number of descriptor Sets
+    this->descriptorPool.create(this->bvk->logical, static_cast<uint32_t>(this->swapchain->getImages().size()));
 }
 
 void VulkanRenderer::createDescriptorSets() {
 
-    this->uboVP->allocateDescriptorSets(this->uboVP->size(), this->descriptorPool->get());
+    this->uboVP->allocateDescriptorSets(this->uboVP->size(), this->descriptorPool.get());
 
     // Update all of descriptor set buffer bindings
     for (size_t i = 0; i < this->swapchain->getImages().size(); i++) {
         // VIEW PROJECTION DESCRIPTOR
         // Buffer info and data offset info
         const VkDescriptorBufferInfo vpBufferInfo{
-            .buffer = this->uboVP->getUBO()[i]->getBuffer(), // Buffer get data from
-            .offset = 0,                                     // Position of star of data
-            .range = sizeof(UboViewProjection)               // Size of data
+            .buffer = this->uboVP->getUBO()[i]->get(), // Buffer get data from
+            .offset = 0,                               // Position of star of data
+            .range = sizeof(UboViewProjection)         // Size of data
         };
 
         // Data about connection between binding and buffer

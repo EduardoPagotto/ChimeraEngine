@@ -6,20 +6,20 @@
 namespace ce {
     class DescriptorPool {
       public:
-        explicit DescriptorPool(VkDevice device) : device(device) {}
-        virtual ~DescriptorPool() { cleanup(); }
+        explicit DescriptorPool() = default;
+        virtual ~DescriptorPool() noexcept { destroy(); }
 
         DescriptorPool(const DescriptorPool&) = delete;
         DescriptorPool& operator=(const DescriptorPool&) = delete;
-        // DescriptorPool(DescriptorPool&& other) noexcept;
-        // DescriptorPool& operator=(DescriptorPool&& other) noexcept;
-        // explicit operator VkDescriptorPool() const noexcept;
 
-        [[nodiscard]] VkDescriptorPool& get() { return handle; }
+        VkDescriptorPool& get() { return handle; }
 
-        void addPoolSize(const VkDescriptorType& type, const uint32_t& count);
-        void create(const uint32_t& maxSets);
-        void cleanup() noexcept;
+        void addPoolSize(const VkDescriptorType& type, const uint32_t& count) {
+            this->poolSize.push_back(VkDescriptorPoolSize{.type = type, .descriptorCount = count});
+        }
+
+        void create(VkDevice device, const uint32_t& maxSets);
+        void destroy() noexcept;
 
       private:
         VkDevice device{VK_NULL_HANDLE};

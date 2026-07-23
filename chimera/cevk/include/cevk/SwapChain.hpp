@@ -46,20 +46,19 @@ namespace ce {
 
         void createRenderPass(const VkFormat& format);
 
-        VkSwapchainKHR swapchain;
         VkFormat imageFormat;
         VkExtent2D extent;
+        VkRect2D renderArea;
+
+        VkSwapchainKHR swapchain{VK_NULL_HANDLE};
+        VkRenderPass renderPass{VK_NULL_HANDLE};
         VkPhysicalDevice physical{VK_NULL_HANDLE};
         VkDevice logical{VK_NULL_HANDLE};
-
         SDL_Window* window{nullptr};
 
-        std::vector<std::shared_ptr<Image>> images;
         std::shared_ptr<Image> depthBufferImg;
+        std::vector<std::shared_ptr<Image>> images;
         std::vector<VkFramebuffer> frameBuffers;
-
-        VkRenderPass renderPass;
         std::vector<VkClearValue> clearValues;
-        VkRect2D renderArea;
     };
 } // namespace ce

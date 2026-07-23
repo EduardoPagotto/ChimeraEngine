@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Buffers.hpp"
-#include <memory>
 #include <vector>
 
 namespace ce {
@@ -12,11 +11,9 @@ namespace ce {
 
         IBO(const IBO&) = delete;
         IBO& operator=(const IBO&) = delete;
-        // IBO(IBO&& other) noexcept;
-        // IBO& operator=(IBO&& other) noexcept;
 
-        [[nodiscard]] size_t getCount() const { return this->count; }
-        [[nodiscard]] VkBuffer getBuffer() const { return this->ibo->getBuffer(); }
+        size_t getCount() const { return this->count; }
+        VkBuffer get() const { return this->ibo.get(); }
 
         void destroy();
         void create(VkQueue queue, VkCommandPool commandBuffer, std::vector<uint32_t>* indices);
@@ -25,6 +22,6 @@ namespace ce {
         size_t count;
         VkPhysicalDevice physical;
         VkDevice logical;
-        std::shared_ptr<Buffer> ibo;
+        Buffer ibo;
     };
 } // namespace ce

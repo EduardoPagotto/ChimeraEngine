@@ -26,7 +26,7 @@ namespace ce {
 
     int Mesh::getIndexCount() const { return this->ibo->getCount(); }
 
-    VkBuffer Mesh::getIndexBuffer() { return this->ibo->getBuffer(); }
+    VkBuffer Mesh::getIndexBuffer() { return this->ibo->get(); }
 
     int Mesh::getTexId() const { return this->texId; }
 

@@ -34,6 +34,6 @@ namespace ce {
         VkSampler textureSampler;
 
         std::shared_ptr<UBO<Image>> uboSampler;
-        std::shared_ptr<DescriptorPool> samplerDescriptorPool;
+        DescriptorPool samplerDescriptorPool;
     };
 } // namespace ce

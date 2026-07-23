@@ -2,26 +2,10 @@
 #include <stdexcept>
 
 namespace ce {
-    // DescriptorPool::DescriptorPool(DescriptorPool&& other) noexcept
-    //     : device{std::exchange(other.device, VK_NULL_HANDLE)}, handle{std::exchange(other.handle, VK_NULL_HANDLE)} {}
 
-    // DescriptorPool& DescriptorPool::operator=(DescriptorPool&& other) noexcept {
-    //     if (this != &other) {
-    //         cleanup(); // Destrói o recurso atual antes de assumir o novo
-    //         device = std::exchange(other.device, VK_NULL_HANDLE);
-    //         handle = std::exchange(other.handle, VK_NULL_HANDLE);
-    //     }
-    //     return *this;
-    // }
+    void DescriptorPool::create(VkDevice device, const uint32_t& maxSets) {
 
-    // DescriptorPool::operator VkDescriptorPool() const noexcept { return handle; }
-
-    void DescriptorPool::addPoolSize(const VkDescriptorType& type, const uint32_t& count) {
-        // Type of Descriptors + how many DESCRIPTORS, not Descriptor Sets (combined makes the pool size)
-        this->poolSize.push_back(VkDescriptorPoolSize{.type = type, .descriptorCount = count});
-    }
-
-    void DescriptorPool::create(const uint32_t& maxSets) {
+        this->device = device;
 
         // Data to create Descriptor Pool
         const VkDescriptorPoolCreateInfo poolCreateInfo{
@@ -40,7 +24,7 @@ namespace ce {
         this->poolSize.shrink_to_fit();
     }
 
-    void DescriptorPool::cleanup() noexcept {
+    void DescriptorPool::destroy() noexcept {
         if (this->handle != VK_NULL_HANDLE && this->device != VK_NULL_HANDLE) {
             vkDestroyDescriptorPool(this->device, this->handle, nullptr);
             handle = VK_NULL_HANDLE;

@@ -6,7 +6,10 @@ namespace ce {
 
 #pragma region Buffer
 
-    Buffer::~Buffer() { this->destroy(); }
+    void Buffer::init(VkPhysicalDevice physical, VkDevice device) {
+        this->physical = physical;
+        this->device = device;
+    }
 
     void Buffer::create(const VkDeviceSize& bufferSize, const VkBufferUsageFlags& bufferUsage,
                         const VkMemoryPropertyFlags& bufferProperties) {

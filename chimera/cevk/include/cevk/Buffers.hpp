@@ -8,28 +8,28 @@ namespace ce {
 
     class Buffer {
       public:
-        explicit Buffer(VkPhysicalDevice physical, VkDevice device) : physical(physical), device(device) {}
-        virtual ~Buffer();
+        explicit Buffer() = default;
+        explicit Buffer(VkPhysicalDevice physical, VkDevice device) { this->init(physical, device); }
+        virtual ~Buffer() { this->destroy(); }
 
-        // Proíbe cópia para evitar dupla desalocação
         Buffer(const Buffer&) = delete;
         Buffer& operator=(const Buffer&) = delete;
-        // Buffer(Buffer&& other) noexcept;
-        // Buffer& operator=(Buffer&& other) noexcept;
+
+        void init(VkPhysicalDevice physical, VkDevice device);
 
         void create(const VkDeviceSize& bufferSize, const VkBufferUsageFlags& bufferUsage,
                     const VkMemoryPropertyFlags& bufferProperties);
 
-        [[nodiscard]] VkBuffer getBuffer() const { return buffer; }
-        [[nodiscard]] VkDeviceMemory getMemory() const { return memory; }
-        [[nodiscard]] bool isValid() const { return memory != VK_NULL_HANDLE; }
+        VkBuffer get() const { return buffer; }
+        VkDeviceMemory getMemory() const { return memory; }
+        bool isValid() const { return memory != VK_NULL_HANDLE; }
         //[[nodiscard]] void* getMappedData() const { return mappedData; }
 
         void mapper(void* src);
 
-      private:
         void destroy();
 
+      private:
         VkPhysicalDevice physical{VK_NULL_HANDLE};
         VkDevice device{VK_NULL_HANDLE};
         VkBuffer buffer{VK_NULL_HANDLE};
@@ -37,18 +37,6 @@ namespace ce {
         VkDeviceSize bufferSize;
         // void* mappedData{nullptr};
     };
-
-#pragma endregion
-
-#pragma region Image
-
-#pragma endregion
-
-#pragma region CommandBuffer
-
-#pragma endregion
-
-#pragma region BufferDynamic
 
     // struct UboModel {
     //     glm::mat4 model;

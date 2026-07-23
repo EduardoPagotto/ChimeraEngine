@@ -17,7 +17,7 @@ namespace ce {
         // VBO& operator=(VBO&& other) noexcept;
 
         [[nodiscard]] size_t getCount() const { return this->count; }
-        [[nodiscard]] VkBuffer getBuffer() const { return this->vbo->getBuffer(); }
+        [[nodiscard]] VkBuffer getBuffer() const { return this->vbo->get(); }
 
         void destroy();
         void create(VkQueue queue, VkCommandPool commandPool, std::vector<Vertex>* vertices, size_t sizeVertex);

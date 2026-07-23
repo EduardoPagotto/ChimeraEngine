@@ -9,7 +9,7 @@ namespace ce {
 
     void IBO::destroy() {
         this->count = 0;
-        this->ibo.reset();
+        this->ibo.destroy();
     }
 
     void IBO::create(VkQueue queue, VkCommandPool commandBuffer, std::vector<uint32_t>* indices) {
@@ -28,13 +28,12 @@ namespace ce {
         stagingBuffer.mapper(indices->data());
 
         // Create buffer for index data on GPU aceess only area
-        this->ibo = std::make_shared<Buffer>(physical, logical);
-        this->ibo->create(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
-                          VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+        this->ibo.init(physical, logical);
+        this->ibo.create(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
+                         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
         // Copy from staging buffer to GPU access buffer
-        aux::CopyBuffer(this->logical, queue, commandBuffer, stagingBuffer.getBuffer(), this->ibo->getBuffer(),
-                        bufferSize);
+        aux::CopyBuffer(this->logical, queue, commandBuffer, stagingBuffer.get(), this->ibo.get(), bufferSize);
     }
 
 } // namespace ce

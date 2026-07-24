@@ -13,7 +13,7 @@ namespace ce {
         IBO& operator=(const IBO&) = delete;
 
         size_t getCount() const { return this->count; }
-        VkBuffer get() const { return this->ibo.get(); }
+        VkBuffer get() const { return this->buffer.get(); }
 
         void destroy();
         void create(VkQueue queue, VkCommandPool commandBuffer, std::vector<uint32_t>* indices);
@@ -22,6 +22,6 @@ namespace ce {
         size_t count;
         VkPhysicalDevice physical;
         VkDevice logical;
-        Buffer ibo;
+        Buffer buffer;
     };
 } // namespace ce

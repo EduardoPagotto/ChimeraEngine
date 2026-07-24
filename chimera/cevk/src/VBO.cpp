@@ -2,13 +2,10 @@
 #include "CmdBuffer.hpp"
 
 namespace ce {
-    VBO::VBO(VkPhysicalDevice physical, VkDevice logical) : physical(physical), logical(logical) {}
-
-    VBO::~VBO() { this->destroy(); }
 
     void VBO::destroy() {
         this->count = 0;
-        this->vbo.reset();
+        this->buffer.destroy();
     }
 
     void VBO::create(VkQueue queue, VkCommandPool commandPool, std::vector<Vertex>* vertices, size_t sizeVertex) {
@@ -26,14 +23,14 @@ namespace ce {
 
         stagingBuffer.mapper(vertices->data());
 
-        this->vbo = std::make_shared<Buffer>(physical, logical);
+        this->buffer.init(physical, logical);
         // Create buffer with TRANSFER_DST_BIT to mark as recipient of transfer data (also VERTEX_BUFFER)
         // Buffer memory is to be DEVICE_LOCAL_BIT meaning memory is on the GPU and only accessible by it and not
         // CPU(host)
-        this->vbo->create(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-                          VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+        this->buffer.create(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+                            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
         // Copy staging buffer to vertex buffer on GPU
-        aux::CopyBuffer(this->logical, queue, commandPool, stagingBuffer.get(), this->vbo->get(), bufferSize);
+        aux::CopyBuffer(this->logical, queue, commandPool, stagingBuffer.get(), this->buffer.get(), bufferSize);
     }
 } // namespace ce

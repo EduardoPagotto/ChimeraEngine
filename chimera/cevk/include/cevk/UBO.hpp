@@ -11,8 +11,8 @@ namespace ce {
       public:
         explicit UBO(VkDevice logical) : logical(logical) {
             // UNIFORM VALUES DESCRIPTOR SET LAYOUT AND DESCRIPTORSETS
-            this->descriptorSetLayout = std::make_shared<DescriptorSetLayout>(this->logical);
-            this->descriptorSets = std::make_shared<DescriptorSet>(this->logical);
+            this->descriptorSetLayout.init(this->logical);
+            this->descriptorSets.init(this->logical);
         }
         explicit UBO(VkPhysicalDevice physical, VkDevice logical, const size_t maxUBO, const size_t sizeDataUBO)
             : logical(logical) {
@@ -31,8 +31,8 @@ namespace ce {
             }
 
             // UNIFORM VALUES DESCRIPTOR SET LAYOUT AND DESCRIPTORSETS
-            this->descriptorSetLayout = std::make_shared<DescriptorSetLayout>(this->logical);
-            this->descriptorSets = std::make_shared<DescriptorSet>(this->logical);
+            this->descriptorSetLayout.init(this->logical);
+            this->descriptorSets.init(this->logical);
         }
 
         virtual ~UBO() {
@@ -41,22 +41,22 @@ namespace ce {
             //     this->ubo[i].reset();
             // }
 
-            this->descriptorSets.reset(); // FIXME: acima da erro
-            this->descriptorSetLayout.reset();
+            // this->descriptorSets.reset(); // FIXME: acima da erro
+            // this->descriptorSetLayout.reset();
         }
 
         void addDescriptorSetLayoutBinding(const VkDescriptorSetLayoutBinding& vpLayoutBinding) {
-            this->descriptorSetLayout->addBinding(vpLayoutBinding);
+            this->descriptorSetLayout.addBinding(vpLayoutBinding);
         }
 
-        void createDescriptorSetLayout() { this->descriptorSetLayout->create(); }
+        void createDescriptorSetLayout() { this->descriptorSetLayout.create(); }
 
         void addWriteDescriptorSet(const VkWriteDescriptorSet& vpSetWrite) { this->setWrites.push_back(vpSetWrite); }
         void clearWriteDescriptorSet() { this->setWrites.clear(); }
 
         std::pair<size_t, size_t> allocateDescriptorSets(size_t tot, const VkDescriptorPool& descriptorPool) {
-            std::vector<VkDescriptorSetLayout> setLayouts(tot, this->descriptorSetLayout->get());
-            return this->descriptorSets->allocate(descriptorPool, setLayouts);
+            std::vector<VkDescriptorSetLayout> setLayouts(tot, this->descriptorSetLayout.get());
+            return this->descriptorSets.allocate(descriptorPool, setLayouts);
         }
 
         void updateDescriptorSets() {
@@ -65,18 +65,18 @@ namespace ce {
                                    nullptr);
         }
 
-        [[nodiscard]] size_t size() const noexcept { return ubo.size(); }
-        [[nodiscard]] std::vector<std::shared_ptr<T>>& getUBO() { return ubo; }
-        [[nodiscard]] VkDescriptorSetLayout& getDescriptorSetLayout() const { return descriptorSetLayout->get(); }
-        [[nodiscard]] std::vector<VkDescriptorSet>& getDescriptorSets() const { return descriptorSets->get(); }
+        size_t size() const noexcept { return ubo.size(); }
+        std::vector<std::shared_ptr<T>>& getUBO() { return ubo; }
+        VkDescriptorSetLayout& getDescriptorSetLayout() { return descriptorSetLayout.get(); }
+        std::vector<VkDescriptorSet>& getDescriptorSets() { return descriptorSets.get(); }
 
       private:
         VkDevice logical;
-        std::shared_ptr<DescriptorSet> descriptorSets;
-        std::shared_ptr<DescriptorSetLayout> descriptorSetLayout;
-        Container<std::shared_ptr<T>, std::allocator<std::shared_ptr<T>>> ubo;
-
+        DescriptorSet descriptorSets;
+        DescriptorSetLayout descriptorSetLayout;
         std::vector<VkWriteDescriptorSet> setWrites;
+
+        Container<std::shared_ptr<T>, std::allocator<std::shared_ptr<T>>> ubo;
     };
 
 } // namespace ce

@@ -30,4 +30,5 @@ namespace ce {
 
         return {index, size}; // start position, total new allocate
     }
+
 } // namespace ce

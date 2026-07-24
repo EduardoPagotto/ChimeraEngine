@@ -271,7 +271,8 @@ void VulkanRenderer::createDescriptorPool() {
     //                                    static_cast<uint32_t>(this->modelDUniformBuffer.size());//
 
     // Create Descriptor Pool, Maximum number of descriptor Sets
-    this->descriptorPool.create(this->bvk->logical, static_cast<uint32_t>(this->swapchain->getImages().size()));
+    this->descriptorPool.create(this->bvk->logical, static_cast<uint32_t>(this->swapchain->getImages().size()),
+                                static_cast<VkDescriptorPoolCreateFlagBits>(0));
 }
 
 void VulkanRenderer::createDescriptorSets() {

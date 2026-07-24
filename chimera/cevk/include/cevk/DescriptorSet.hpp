@@ -1,14 +1,15 @@
 #pragma once
 
-#include <utility>
 #include <vector>
 #include <vulkan/vulkan_core.h>
 
 namespace ce {
     class DescriptorSet {
       public:
-        explicit DescriptorSet(VkDevice device) : device(device) {}
+        explicit DescriptorSet() = default;
         virtual ~DescriptorSet() = default;
+
+        void init(VkDevice device) { this->device = device; }
 
         DescriptorSet(const DescriptorSet&) = delete;
         DescriptorSet& operator=(const DescriptorSet&) = delete;
@@ -18,7 +19,7 @@ namespace ce {
         std::pair<size_t, size_t> allocate(const VkDescriptorPool& descriptorPool,
                                            std::vector<VkDescriptorSetLayout>& descriptorSetLayouts);
 
-        [[nodiscard]] std::vector<VkDescriptorSet>& get() { return this->descriptorSets; }
+        std::vector<VkDescriptorSet>& get() { return this->descriptorSets; }
 
       private:
         VkDevice device{VK_NULL_HANDLE};

@@ -50,7 +50,7 @@ namespace ce {
         // -- CREATE SAMPLER DESCRIPTOR POOL
         // Texture sampler pool
         this->samplerDescriptorPool.addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_OBJECTS);
-        this->samplerDescriptorPool.create(this->logical, MAX_OBJECTS);
+        this->samplerDescriptorPool.create(this->logical, MAX_OBJECTS, static_cast<VkDescriptorPoolCreateFlagBits>(0));
     }
 
     void Textures::createTextureSampler() {

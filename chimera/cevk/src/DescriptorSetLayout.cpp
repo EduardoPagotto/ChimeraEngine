@@ -2,9 +2,10 @@
 #include <stdexcept>
 
 namespace ce {
-    DescriptorSetLayout::~DescriptorSetLayout() {
-        if (handle != VK_NULL_HANDLE && device != VK_NULL_HANDLE) {
-            vkDestroyDescriptorSetLayout(device, this->handle, nullptr);
+    void DescriptorSetLayout::destroy() {
+        if (this->handle != VK_NULL_HANDLE && this->device != VK_NULL_HANDLE) {
+            vkDestroyDescriptorSetLayout(this->device, this->handle, nullptr);
+            this->handle = VK_NULL_HANDLE;
         }
     }
 

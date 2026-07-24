@@ -3,13 +3,15 @@
 
 namespace ce {
 
-    void DescriptorPool::create(VkDevice device, const uint32_t& maxSets) {
+    void DescriptorPool::create(VkDevice device, const uint32_t& maxSets, VkDescriptorPoolCreateFlagBits flags) {
 
         this->device = device;
+        this->flags = flags;
 
         // Data to create Descriptor Pool
         const VkDescriptorPoolCreateInfo poolCreateInfo{
             .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
+            .flags = flags,
             .maxSets = maxSets, // Maximum number of descriptor Sets that can be create from pool
             .poolSizeCount = static_cast<uint32_t>(this->poolSize.size()), // Amount of Pool Sizes being passed
             .pPoolSizes = this->poolSize.data()                            // Pool Sizes to create pool with

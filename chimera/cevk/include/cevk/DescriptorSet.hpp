@@ -19,10 +19,22 @@ namespace ce {
         std::pair<size_t, size_t> allocate(const VkDescriptorPool& descriptorPool,
                                            std::vector<VkDescriptorSetLayout>& descriptorSetLayouts);
 
-        std::vector<VkDescriptorSet>& get() { return this->descriptorSets; }
+        VkDescriptorSet& get(size_t index) { return this->descriptorSets[index]; }
+
+        size_t getSize() const { return this->descriptorSets.size(); }
+
+        void update() {
+            // Update the descripto sets with new buffer/binding info
+            vkUpdateDescriptorSets(device, static_cast<uint32_t>(this->setWrites.size()), this->setWrites.data(), 0,
+                                   nullptr);
+        }
+
+        void addWrite(const VkWriteDescriptorSet& vpSetWrite) { this->setWrites.push_back(vpSetWrite); }
+        void clearWrite() { this->setWrites.clear(); }
 
       private:
         VkDevice device{VK_NULL_HANDLE};
         std::vector<VkDescriptorSet> descriptorSets;
+        std::vector<VkWriteDescriptorSet> setWrites;
     };
 } // namespace ce

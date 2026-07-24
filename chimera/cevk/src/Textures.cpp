@@ -135,19 +135,19 @@ namespace ce {
 
         // Descriptor Write info
         const VkWriteDescriptorSet descriptorWrite{.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-                                                   .dstSet = this->uboSampler->getDescriptorSets()[index],
+                                                   .dstSet = this->uboSampler->getDescriptorSet().get(index),
                                                    .dstBinding = 0,
                                                    .dstArrayElement = 0,
                                                    .descriptorCount = 1,
                                                    .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
                                                    .pImageInfo = &imageInfo};
 
-        this->uboSampler->addWriteDescriptorSet(descriptorWrite);
+        this->uboSampler->getDescriptorSet().addWrite(descriptorWrite);
         // Update new descriptor set
-        this->uboSampler->updateDescriptorSets();
-        this->uboSampler->clearWriteDescriptorSet();
+        this->uboSampler->getDescriptorSet().update(); // updateDescriptorSets();
+        this->uboSampler->getDescriptorSet().clearWrite();
 
-        return this->uboSampler->getDescriptorSets().size() - 1;
+        return this->uboSampler->getDescriptorSet().getSize() - 1;
     }
 
     stbi_uc* Textures::loadTextureFile(const std::string& filename, int* width, int* height, VkDeviceSize* imageSize) {

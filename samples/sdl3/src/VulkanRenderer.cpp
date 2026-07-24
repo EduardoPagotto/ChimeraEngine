@@ -129,8 +129,8 @@ void VulkanRenderer::draw() {
             cmd.addVertexBuffer({0}, thisModel.getMesh(k)->getVertexBuffer());
             cmd.bindVertexBuffer(0);
             cmd.bindIndexBuffer(thisModel.getMesh(k)->getIndexBuffer(), {0});
-            cmd.addDescriptorSet(this->uboVP->getDescriptorSets()[imageIndex]);
-            cmd.addDescriptorSet(this->textureMng->getUbo()->getDescriptorSets()[thisModel.getMesh(k)->getTexId()]);
+            cmd.addDescriptorSet(this->uboVP->getDescriptorSet().get(imageIndex));
+            cmd.addDescriptorSet(this->textureMng->getUbo()->getDescriptorSet().get(thisModel.getMesh(k)->getTexId()));
             cmd.bindDescriptorSets(this->pipelineLayout->get());
             cmd.drawIndexed(thisModel.getMesh(k)->getIndexCount(), 1, 0, 0, 0);
             cmd.clearTemps();
@@ -292,12 +292,10 @@ void VulkanRenderer::createDescriptorSets() {
         // Data about connection between binding and buffer
         const VkWriteDescriptorSet vpSetWrite{
             .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-            .dstSet =
-                this->uboVP
-                    ->getDescriptorSets()[i], // this->descriptorSets->get()[i],            // Descriptor Set to update
-            .dstBinding = 0,                  // Binding to update (matches with binding on layout/shader)
-            .dstArrayElement = 0,             // index in array to update
-            .descriptorCount = 1,             // type of Descriptor
+            .dstSet = this->uboVP->getDescriptorSet().get(i), // Descriptor Set to update
+            .dstBinding = 0,      // Binding to update (matches with binding on layout/shader)
+            .dstArrayElement = 0, // index in array to update
+            .descriptorCount = 1, // type of Descriptor
             .descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, // Amount to update
             .pBufferInfo = &vpBufferInfo                         // Information about buffer data to bind
         };
@@ -322,11 +320,11 @@ void VulkanRenderer::createDescriptorSets() {
         // };
 
         // Add to a list of descriptor set writes
-        this->uboVP->addWriteDescriptorSet(vpSetWrite);
+        this->uboVP->getDescriptorSet().addWrite(vpSetWrite);
     }
     // Update the descripto sets with new buffer/binding info
-    this->uboVP->updateDescriptorSets();
-    this->uboVP->clearWriteDescriptorSet();
+    this->uboVP->getDescriptorSet().update(); // updateDescriptorSets();
+    this->uboVP->getDescriptorSet().clearWrite();
 }
 
 int VulkanRenderer::createMeshModel(const std::string& modelFile) {

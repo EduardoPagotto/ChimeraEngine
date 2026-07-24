@@ -51,30 +51,21 @@ namespace ce {
 
         void createDescriptorSetLayout() { this->descriptorSetLayout.create(); }
 
-        void addWriteDescriptorSet(const VkWriteDescriptorSet& vpSetWrite) { this->setWrites.push_back(vpSetWrite); }
-        void clearWriteDescriptorSet() { this->setWrites.clear(); }
-
         std::pair<size_t, size_t> allocateDescriptorSets(size_t tot, const VkDescriptorPool& descriptorPool) {
             std::vector<VkDescriptorSetLayout> setLayouts(tot, this->descriptorSetLayout.get());
             return this->descriptorSets.allocate(descriptorPool, setLayouts);
         }
 
-        void updateDescriptorSets() {
-            // Update the descripto sets with new buffer/binding info
-            vkUpdateDescriptorSets(logical, static_cast<uint32_t>(this->setWrites.size()), this->setWrites.data(), 0,
-                                   nullptr);
-        }
-
         size_t size() const noexcept { return ubo.size(); }
         std::vector<std::shared_ptr<T>>& getUBO() { return ubo; }
         VkDescriptorSetLayout& getDescriptorSetLayout() { return descriptorSetLayout.get(); }
-        std::vector<VkDescriptorSet>& getDescriptorSets() { return descriptorSets.get(); }
+
+        DescriptorSet& getDescriptorSet() { return this->descriptorSets; }
 
       private:
         VkDevice logical;
         DescriptorSet descriptorSets;
         DescriptorSetLayout descriptorSetLayout;
-        std::vector<VkWriteDescriptorSet> setWrites;
 
         Container<std::shared_ptr<T>, std::allocator<std::shared_ptr<T>>> ubo;
     };

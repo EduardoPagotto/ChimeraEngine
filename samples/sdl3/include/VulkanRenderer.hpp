@@ -8,6 +8,7 @@
 #include "SwapChain.hpp"
 #include "Sync.hpp"
 #include "Textures.hpp"
+#include "UBO.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -41,7 +42,7 @@ class VulkanRenderer {
     ce::CmdPool graphicsCmdPool;
     ce::DescriptorPool descriptorPool;
 
-    std::shared_ptr<ce::UBO<ce::Buffer>> uboVP;
+    std::shared_ptr<ce::UniformBuffer> uboVP;
     std::shared_ptr<ce::Textures> textureMng;
     std::shared_ptr<ce::PipelineLayout> pipelineLayout;
     std::shared_ptr<ce::Pipeline> graphicPipeline;

@@ -1,5 +1,6 @@
 #include "VulkanRenderer.hpp"
 #include "CmdRender.hpp"
+#include "UBO.hpp"
 #include <cstddef>
 #include <cstdlib>
 #include <glm/ext/matrix_clip_space.hpp>
@@ -19,8 +20,8 @@ VulkanRenderer::VulkanRenderer(ce::DevVk& devvk) {
 
     this->swapchain = std::make_shared<SwapChain>(bvk.get(), queueFamilyIndices);
 
-    this->uboVP = std::make_shared<UBO<Buffer>>(bvk->physical, bvk->logical, swapchain->getImages().size(),
-                                                sizeof(UboViewProjection));
+    this->uboVP = std::make_shared<UniformBuffer>();
+    this->uboVP->init(bvk->physical, bvk->logical, swapchain->getImages().size(), sizeof(UboViewProjection));
 
     this->textureMng = std::make_shared<Textures>(bvk->physical, bvk->logical);
 
@@ -111,7 +112,7 @@ void VulkanRenderer::draw() {
     uint32_t imageIndex = this->swapchain->acquireNextImage(sync.getWait(), &renderPassBeginInfo);
 
     // Copy View Projection data in UBO
-    this->uboVP->getUBO()[imageIndex]->mapper(&this->uboViewProjection);
+    this->uboVP->getBuffers()[imageIndex]->mapper(&this->uboViewProjection);
 
     ce::CmdRender cmd;
     cmd.begin(this->cmdBuffers[imageIndex].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT, renderPassBeginInfo,
@@ -265,7 +266,7 @@ void VulkanRenderer::createDescriptorPool() {
     // Type of Descriptors + how many DESCRIPTORS, not Descriptor Sets (combined makes the pool size)
     // ViewProjection Pool
     this->descriptorPool.addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-                                     static_cast<uint32_t>(this->uboVP->getUBO().size()));
+                                     static_cast<uint32_t>(this->uboVP->getBuffers().size()));
 
     // Model Pool (Dynamic)
     // this->descriptorPool->addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, //
@@ -278,16 +279,16 @@ void VulkanRenderer::createDescriptorPool() {
 
 void VulkanRenderer::createDescriptorSets() {
 
-    this->uboVP->allocateDescriptorSetsWithPool(this->uboVP->getUBO().size(), this->descriptorPool.get());
+    this->uboVP->allocateDescriptorSetsWithPool(this->uboVP->getBuffers().size(), this->descriptorPool.get());
 
     // Update all of descriptor set buffer bindings
     for (size_t i = 0; i < this->swapchain->getImages().size(); i++) {
         // VIEW PROJECTION DESCRIPTOR
         // Buffer info and data offset info
         const VkDescriptorBufferInfo vpBufferInfo{
-            .buffer = this->uboVP->getUBO()[i]->get(), // Buffer get data from
-            .offset = 0,                               // Position of star of data
-            .range = sizeof(UboViewProjection)         // Size of data
+            .buffer = this->uboVP->getBuffers()[i]->get(), // Buffer get data from
+            .offset = 0,                                   // Position of star of data
+            .range = sizeof(UboViewProjection)             // Size of data
         };
 
         // Data about connection between binding and buffer

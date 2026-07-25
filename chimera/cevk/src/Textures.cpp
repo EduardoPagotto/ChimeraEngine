@@ -1,6 +1,8 @@
 #include "Textures.hpp"
 #include "Buffers.hpp"
 #include "CmdBuffer.hpp"
+#include "DescriptorSet.hpp"
+#include "DescriptorSetLayout.hpp"
 #include "UBO.hpp"
 #include "cevk.hpp"
 
@@ -8,8 +10,7 @@ namespace ce {
 
     Textures::Textures(VkPhysicalDevice physical, VkDevice logical) : physical(physical), logical(logical) {
         //
-        this->uboSampler = std::make_shared<UniformSampler>();
-        this->uboSampler->init(logical);
+        this->uniformSampler.init(logical);
         this->createDescriptorSetLayout();
         this->createDescriptorPool();
         this->createTextureSampler();
@@ -19,17 +20,18 @@ namespace ce {
         //
         vkDestroySampler(this->logical, this->textureSampler, nullptr);
         samplerDescriptorPool.destroy();
-        uboSampler.reset();
+        uniformSampler.destroy();
     }
 
     int Textures::createTexture(const std::string& filename, VkQueue queue, VkCommandPool commandPool) {
         // Create Texture image and get its location in array
         int textureImageLoc = this->createTextureImage(filename, queue, commandPool);
-        this->uboSampler->getImages()[textureImageLoc]->createImageView(VK_IMAGE_ASPECT_COLOR_BIT);
+
+        this->uniformSampler.getImages()[textureImageLoc]->createImageView(VK_IMAGE_ASPECT_COLOR_BIT);
 
         // Create Texture Descriptor
         int descritorLoc =
-            this->createTextureDescriptor(this->uboSampler->getImages()[textureImageLoc]->getImageView());
+            this->createTextureDescriptor(this->uniformSampler.getImages()[textureImageLoc]->getImageView());
 
         // Return location of set with texture
         return descritorLoc;
@@ -39,14 +41,14 @@ namespace ce {
         //
         // CREATE TEXTURE SAMPLER DESCRIPTOR SET LAYOUT
         // Texture binding info
-        this->uboSampler->getDescriptorSetLayout().addBinding(
-            {.binding = 0,
-             .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-             .descriptorCount = 1,
-             .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
-             .pImmutableSamplers = nullptr});
+        ce::DescriptorSetLayout& samplerDSL = this->uniformSampler.getDescriptorSetLayout();
+        samplerDSL.addBinding({.binding = 0,
+                               .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                               .descriptorCount = 1,
+                               .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
+                               .pImmutableSamplers = nullptr});
 
-        this->uboSampler->getDescriptorSetLayout().create();
+        samplerDSL.create();
     }
 
     void Textures::createDescriptorPool() {
@@ -121,14 +123,14 @@ namespace ce {
                                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
         // add texture data to vector for reference
-        this->uboSampler->getImages().push_back(texImageObj);
+        this->uniformSampler.getImages().push_back(texImageObj);
 
-        return this->uboSampler->getImages().size() - 1;
+        return this->uniformSampler.getImages().size() - 1;
     }
 
     int Textures::createTextureDescriptor(VkImageView textureImage) {
         //
-        auto [index, size] = this->uboSampler->allocateDescriptorSetsWithPool(1, this->samplerDescriptorPool.get());
+        auto [index, size] = this->uniformSampler.allocateDescriptorSetsWithPool(1, this->samplerDescriptorPool.get());
 
         // Texture Image info
         const VkDescriptorImageInfo imageInfo{
@@ -137,21 +139,23 @@ namespace ce {
             .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL // Image to bind to set
         };
 
+        ce::DescriptorSet& samplerDS = this->uniformSampler.getDescriptorSet();
+
         // Descriptor Write info
         const VkWriteDescriptorSet descriptorWrite{.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-                                                   .dstSet = this->uboSampler->getDescriptorSet().get(index),
+                                                   .dstSet = samplerDS.get(index),
                                                    .dstBinding = 0,
                                                    .dstArrayElement = 0,
                                                    .descriptorCount = 1,
                                                    .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
                                                    .pImageInfo = &imageInfo};
 
-        this->uboSampler->getDescriptorSet().addWrite(descriptorWrite);
+        samplerDS.addWrite(descriptorWrite);
         // Update new descriptor set
-        this->uboSampler->getDescriptorSet().update(); // updateDescriptorSets();
-        this->uboSampler->getDescriptorSet().clearWrite();
+        samplerDS.update();
+        samplerDS.clearWrite();
 
-        return this->uboSampler->getDescriptorSet().getSize() - 1;
+        return samplerDS.getSize() - 1;
     }
 
     stbi_uc* Textures::loadTextureFile(const std::string& filename, int* width, int* height, VkDeviceSize* imageSize) {

@@ -14,7 +14,7 @@ namespace ce {
         Textures(const Textures&) = delete;
         Textures& operator=(const Textures&) = delete;
 
-        std::shared_ptr<UniformSampler> getUbo() { return uboSampler; }
+        UniformSampler& getUbo() { return uniformSampler; }
 
         int createTexture(const std::string& filename, VkQueue queue, VkCommandPool commandPool);
 
@@ -29,10 +29,9 @@ namespace ce {
 
         VkPhysicalDevice physical;
         VkDevice logical;
-
         VkSampler textureSampler;
 
-        std::shared_ptr<UniformSampler> uboSampler;
+        UniformSampler uniformSampler;
         DescriptorPool samplerDescriptorPool;
     };
 } // namespace ce

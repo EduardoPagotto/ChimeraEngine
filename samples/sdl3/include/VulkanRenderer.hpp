@@ -41,8 +41,8 @@ class VulkanRenderer {
     std::vector<ce::CmdBuffer> cmdBuffers;
     ce::CmdPool graphicsCmdPool;
     ce::DescriptorPool descriptorPool;
+    ce::UniformBuffer uniformBufferVP;
 
-    std::shared_ptr<ce::UniformBuffer> uboVP;
     std::shared_ptr<ce::Textures> textureMng;
     std::shared_ptr<ce::PipelineLayout> pipelineLayout;
     std::shared_ptr<ce::Pipeline> graphicPipeline;

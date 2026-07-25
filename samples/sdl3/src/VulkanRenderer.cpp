@@ -118,7 +118,7 @@ void VulkanRenderer::draw() {
               this->graphicPipeline->get());
 
     ce::DescriptorSet& vpUboDS = this->uniformBufferVP.getDescriptorSet();
-    ce::DescriptorSet& samplerUboDS = this->textureMng->getUbo().getDescriptorSet();
+    ce::DescriptorSet& samplerUboDS = this->textureMng->getUniformSampler().getDescriptorSet();
 
     for (size_t j = 0; j < this->modelList.size(); j++) {
 
@@ -221,7 +221,7 @@ void VulkanRenderer::createGraphicsPipeline() {
     // -- PIPELINE LAYOUT --
     this->pipelineLayout = std::make_shared<ce::PipelineLayout>(this->bvk->logical);
     this->pipelineLayout->addLayout(this->uniformBufferVP.getDescriptorSetLayout().get());
-    this->pipelineLayout->addLayout(this->textureMng->getUbo().getDescriptorSetLayout().get());
+    this->pipelineLayout->addLayout(this->textureMng->getUniformSampler().getDescriptorSetLayout().get());
     this->pipelineLayout->addPushRange(this->pushConstantRange);
     this->pipelineLayout->create();
 

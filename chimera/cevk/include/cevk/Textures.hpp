@@ -14,7 +14,7 @@ namespace ce {
         Textures(const Textures&) = delete;
         Textures& operator=(const Textures&) = delete;
 
-        UniformSampler& getUbo() { return uniformSampler; }
+        UniformSampler& getUniformSampler() { return uniformSampler; }
 
         int createTexture(const std::string& filename, VkQueue queue, VkCommandPool commandPool);
 

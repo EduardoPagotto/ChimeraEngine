@@ -45,21 +45,15 @@ namespace ce {
             // this->descriptorSetLayout.reset();
         }
 
-        void addDescriptorSetLayoutBinding(const VkDescriptorSetLayoutBinding& vpLayoutBinding) {
-            this->descriptorSetLayout.addBinding(vpLayoutBinding);
-        }
-
-        void createDescriptorSetLayout() { this->descriptorSetLayout.create(); }
-
-        std::pair<size_t, size_t> allocateDescriptorSets(size_t tot, const VkDescriptorPool& descriptorPool) {
+        std::pair<size_t, size_t> allocateDescriptorSetsWithPool(size_t tot, const VkDescriptorPool& descriptorPool) {
             std::vector<VkDescriptorSetLayout> setLayouts(tot, this->descriptorSetLayout.get());
             return this->descriptorSets.allocate(descriptorPool, setLayouts);
         }
 
         size_t size() const noexcept { return ubo.size(); }
         std::vector<std::shared_ptr<T>>& getUBO() { return ubo; }
-        VkDescriptorSetLayout& getDescriptorSetLayout() { return descriptorSetLayout.get(); }
 
+        DescriptorSetLayout& getDescriptorSetLayout() { return descriptorSetLayout; }
         DescriptorSet& getDescriptorSet() { return this->descriptorSets; }
 
       private:

@@ -156,7 +156,7 @@ void VulkanRenderer::createDescriptorSetLayout() {
 
     // UNIFORM VALUES DESCRIPTOR SET LAYOUT
     // UboViewProjection Binding info
-    this->uboVP->addDescriptorSetLayoutBinding({
+    this->uboVP->getDescriptorSetLayout().addBinding({
         .binding = 0, // Binding point in shader (designed by binding number in shader)
         .descriptorType =
             VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,    // Type of descriptor (uniform, dynamic, image sampler, etc)
@@ -172,7 +172,7 @@ void VulkanRenderer::createDescriptorSetLayout() {
     //                                             .stageFlags = VK_SHADER_STAGE_VERTEX_BIT,
     //                                             .pImmutableSamplers = nullptr});
 
-    this->uboVP->createDescriptorSetLayout();
+    this->uboVP->getDescriptorSetLayout().create(); // createDescriptorSetLayout();
 }
 
 void VulkanRenderer::createPushConstantRange() {
@@ -215,8 +215,8 @@ void VulkanRenderer::createGraphicsPipeline() {
 
     // -- PIPELINE LAYOUT --
     this->pipelineLayout = std::make_shared<ce::PipelineLayout>(this->bvk->logical);
-    this->pipelineLayout->addLayout(this->uboVP->getDescriptorSetLayout());
-    this->pipelineLayout->addLayout(this->textureMng->getUbo()->getDescriptorSetLayout());
+    this->pipelineLayout->addLayout(this->uboVP->getDescriptorSetLayout().get());
+    this->pipelineLayout->addLayout(this->textureMng->getUbo()->getDescriptorSetLayout().get());
     this->pipelineLayout->addPushRange(this->pushConstantRange);
     this->pipelineLayout->create();
 
@@ -277,7 +277,7 @@ void VulkanRenderer::createDescriptorPool() {
 
 void VulkanRenderer::createDescriptorSets() {
 
-    this->uboVP->allocateDescriptorSets(this->uboVP->size(), this->descriptorPool.get());
+    this->uboVP->allocateDescriptorSetsWithPool(this->uboVP->size(), this->descriptorPool.get());
 
     // Update all of descriptor set buffer bindings
     for (size_t i = 0; i < this->swapchain->getImages().size(); i++) {

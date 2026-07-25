@@ -36,13 +36,14 @@ namespace ce {
         //
         // CREATE TEXTURE SAMPLER DESCRIPTOR SET LAYOUT
         // Texture binding info
-        this->uboSampler->addDescriptorSetLayoutBinding({.binding = 0,
-                                                         .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                         .descriptorCount = 1,
-                                                         .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
-                                                         .pImmutableSamplers = nullptr});
+        this->uboSampler->getDescriptorSetLayout().addBinding(
+            {.binding = 0,
+             .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+             .descriptorCount = 1,
+             .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
+             .pImmutableSamplers = nullptr});
 
-        this->uboSampler->createDescriptorSetLayout();
+        this->uboSampler->getDescriptorSetLayout().create();
     }
 
     void Textures::createDescriptorPool() {
@@ -124,7 +125,7 @@ namespace ce {
 
     int Textures::createTextureDescriptor(VkImageView textureImage) {
         //
-        auto [index, size] = this->uboSampler->allocateDescriptorSets(1, this->samplerDescriptorPool.get());
+        auto [index, size] = this->uboSampler->allocateDescriptorSetsWithPool(1, this->samplerDescriptorPool.get());
 
         // Texture Image info
         const VkDescriptorImageInfo imageInfo{

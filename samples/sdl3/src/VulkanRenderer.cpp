@@ -264,7 +264,8 @@ void VulkanRenderer::createDescriptorPool() {
     // this->descriptorPool = std::make_shared<ce::DescriptorPool>(this->bvk->logical);
     // Type of Descriptors + how many DESCRIPTORS, not Descriptor Sets (combined makes the pool size)
     // ViewProjection Pool
-    this->descriptorPool.addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, static_cast<uint32_t>(this->uboVP->size()));
+    this->descriptorPool.addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+                                     static_cast<uint32_t>(this->uboVP->getUBO().size()));
 
     // Model Pool (Dynamic)
     // this->descriptorPool->addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, //
@@ -277,7 +278,7 @@ void VulkanRenderer::createDescriptorPool() {
 
 void VulkanRenderer::createDescriptorSets() {
 
-    this->uboVP->allocateDescriptorSetsWithPool(this->uboVP->size(), this->descriptorPool.get());
+    this->uboVP->allocateDescriptorSetsWithPool(this->uboVP->getUBO().size(), this->descriptorPool.get());
 
     // Update all of descriptor set buffer bindings
     for (size_t i = 0; i < this->swapchain->getImages().size(); i++) {

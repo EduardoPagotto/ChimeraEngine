@@ -36,13 +36,9 @@ namespace ce {
         }
 
         virtual ~UBO() {
-
-            // for (size_t i = 0; i < sizeDataUBO; i++) {
-            //     this->ubo[i].reset();
-            // }
-
-            // this->descriptorSets.reset(); // FIXME: acima da erro
-            // this->descriptorSetLayout.reset();
+            for (size_t i = 0; i < ubo.size(); i++) {
+                this->ubo[i].reset();
+            }
         }
 
         std::pair<size_t, size_t> allocateDescriptorSetsWithPool(size_t tot, const VkDescriptorPool& descriptorPool) {
@@ -50,9 +46,7 @@ namespace ce {
             return this->descriptorSets.allocate(descriptorPool, setLayouts);
         }
 
-        size_t size() const noexcept { return ubo.size(); }
         std::vector<std::shared_ptr<T>>& getUBO() { return ubo; }
-
         DescriptorSetLayout& getDescriptorSetLayout() { return descriptorSetLayout; }
         DescriptorSet& getDescriptorSet() { return this->descriptorSets; }
 

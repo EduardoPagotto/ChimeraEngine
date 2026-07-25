@@ -26,19 +26,15 @@ namespace ce {
     int Textures::createTexture(const std::string& filename, VkQueue queue, VkCommandPool commandPool) {
         // Create Texture image and get its location in array
         int textureImageLoc = this->createTextureImage(filename, queue, commandPool);
+        std::shared_ptr<Image>& image = this->uniformSampler.getImages()[textureImageLoc];
 
-        this->uniformSampler.getImages()[textureImageLoc]->createImageView(VK_IMAGE_ASPECT_COLOR_BIT);
+        image->createImageView(VK_IMAGE_ASPECT_COLOR_BIT);
 
-        // Create Texture Descriptor
-        int descritorLoc =
-            this->createTextureDescriptor(this->uniformSampler.getImages()[textureImageLoc]->getImageView());
-
-        // Return location of set with texture
-        return descritorLoc;
+        // Create Texture Descriptor and return location of set with texture
+        return this->createTextureDescriptor(image->getImageView());
     }
 
     void Textures::createDescriptorSetLayout() {
-        //
         // CREATE TEXTURE SAMPLER DESCRIPTOR SET LAYOUT
         // Texture binding info
         ce::DescriptorSetLayout& samplerDSL = this->uniformSampler.getDescriptorSetLayout();
@@ -52,9 +48,7 @@ namespace ce {
     }
 
     void Textures::createDescriptorPool() {
-        // CREATE DESCRIPTOR POOL
-        // -- CREATE SAMPLER DESCRIPTOR POOL
-        // Texture sampler pool
+        // CREATE SAMPLER DESCRIPTOR POOL
         this->samplerDescriptorPool.addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_OBJECTS);
         this->samplerDescriptorPool.create(this->logical, MAX_OBJECTS, static_cast<VkDescriptorPoolCreateFlagBits>(0));
     }

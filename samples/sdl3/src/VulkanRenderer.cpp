@@ -2,7 +2,6 @@
 #include "CmdRender.hpp"
 #include "DescriptorSet.hpp"
 #include "DescriptorSetLayout.hpp"
-#include "UBO.hpp"
 #include <cstddef>
 #include <cstdlib>
 #include <glm/ext/matrix_clip_space.hpp>
@@ -104,9 +103,8 @@ void VulkanRenderer::updateModel(int modelId, glm::mat4 newModel) {
 void VulkanRenderer::draw() {
     // -- GET NEXT IMAGE --
     // Wait for given fence to signal (open) from last draw before continuing
-    // Manually reset (close) fence
     auto& sync = this->syncs[this->currentFrame];
-    sync.waitAndResetFence();
+    sync.waitAndResetFence(); // Manually reset (close) fence
 
     // Get index of next image to be draw to, and signal semaphore when ready to be draw to
     VkRenderPassBeginInfo renderPassBeginInfo{};
@@ -232,20 +230,6 @@ void VulkanRenderer::createGraphicsPipeline() {
     this->graphicPipeline->addViewport(viewport);
     this->graphicPipeline->addScissor(scissor);
 
-    // // -- DYNAMIC STATES --
-    // this->graphicPipeline->addDynamicStateEnables(VK_DYNAMIC_STATE_VIEWPORT); // Dynamic Viewport: Can resize in
-    // command buffer with ;                                                                        //
-    // vkCmdSetViewport(commandbuffer, 0, 1, &viewport);
-    // this->graphicPipeline->addDynamicStateEnables(VK_DYNAMIC_STATE_SCISSOR);  // Dynamic Scissor: Can resize in
-    // command buffer with ;                                                                        //
-    // vkCmdSetViewport(commandbuffer, 0, 1, &scissor);
-
-    // Blend Attachment State (how blending is handled)
-    // Blending uses equation: (srcColorBlendfactor * new colour) colorBlendOp (dstColorBlendfactor * old colour)
-    // Sumarised 1: (VK_BLEND_FACTOR_SRC_ALPHA * new colour) + (VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA * old colour)
-    //            (new colour alpha * new colour) + ((i - new color alpha) * old colour)
-    // Sumarized 2: (1 * new alpha) + (0 * old Alpha) = new alpha
-
     const VkPipelineColorBlendAttachmentState colourState{
         .blendEnable = VK_TRUE,
         .srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA,
@@ -266,17 +250,11 @@ void VulkanRenderer::createGraphicsPipeline() {
 
 void VulkanRenderer::createDescriptorPool() {
 
-    // CREATE DESCRIPTOR POOL
     // CREATE UNIFORM DESCRIPTOR POOL
-    // this->descriptorPool = std::make_shared<ce::DescriptorPool>(this->bvk->logical);
     // Type of Descriptors + how many DESCRIPTORS, not Descriptor Sets (combined makes the pool size)
     // ViewProjection Pool
     this->descriptorPool.addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
                                      static_cast<uint32_t>(this->uniformBufferVP.getBuffers().size()));
-
-    // Model Pool (Dynamic)
-    // this->descriptorPool->addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, //
-    //                                    static_cast<uint32_t>(this->modelDUniformBuffer.size());//
 
     // Create Descriptor Pool, Maximum number of descriptor Sets
     this->descriptorPool.create(this->bvk->logical, static_cast<uint32_t>(this->swapchain->getImages().size()),
@@ -310,25 +288,6 @@ void VulkanRenderer::createDescriptorSets() {
             .descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, // Amount to update
             .pBufferInfo = &vpBufferInfo                         // Information about buffer data to bind
         };
-
-        // MODEL DESCRIPTOR
-        // Model buffer binding info
-        // VkDescriptorBufferInfo modelBufferInfo {
-        //     .buffer = this->modelDUniformBuffer[i],
-        //     .offset = 0,
-        //     .range = this->modelUniformAlignment
-        // };
-
-        // // Data about connection between binding and buffer
-        // VkWriteDescriptorSet modelSetWrite {
-        //     .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-        //     .dstSet = this->descriptorSets[i],
-        //     .dstBinding = 1,
-        //     .dstArrayElement = 0,
-        //     .descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
-        //     .descriptorCount = 1,
-        //     .pBufferInfo = &modelBufferInfo
-        // };
 
         // Add to a list of descriptor set writes
         uboDS.addWrite(vpSetWrite);

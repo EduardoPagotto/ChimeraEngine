@@ -1,14 +1,12 @@
 #include "SwapChain.hpp"
-#include "DevVK.hpp"
 #include <array>
 
 namespace ce {
 
-    SwapChain::SwapChain(BaseVK* pBVK, QueueFamilyIndices& indices)
-        : physical(pBVK->physical), logical(pBVK->logical), window(pBVK->window) {
+    SwapChain::SwapChain(VulkanContext& context) : context(context) {
 
         // Get Swap Chain details so we cam pick best setting
-        SwapChainDetails swapchainDetails = aux::GetSwapChainDetails(pBVK->physical, pBVK->surface);
+        SwapChainDetails swapchainDetails = VulkanContext::GetSwapChainDetails(context.physical, context.surface);
 
         // Find optimal surface value for our swap chain
         VkSurfaceFormatKHR surrfaceFormat = SwapChain::ChooseBestSurfaceFormat(swapchainDetails.formats);
@@ -33,10 +31,12 @@ namespace ce {
         const uint32_t* pQueueFamilyIndices = nullptr; // FIXME : nao seria um array de 1 ?
 
         // If Graphics and Presentation families are diferent, the swapchain must let images ge shared between families
-        if (indices.graphicsFamily != indices.presentationFamily) { // FIXME: ESTA ERRADO!!!!!!!
+        if (context.queueFamilyIndices.graphicsFamily !=
+            context.queueFamilyIndices.presentationFamily) { // FIXME: ESTA ERRADO!!!!!!!
             // Queue to share between
-            std::array<uint32_t, 2> queueFamilyIndices = {static_cast<uint32_t>(indices.graphicsFamily),
-                                                          static_cast<uint32_t>(indices.presentationFamily)};
+            std::array<uint32_t, 2> queueFamilyIndices = {
+                static_cast<uint32_t>(context.queueFamilyIndices.graphicsFamily),
+                static_cast<uint32_t>(context.queueFamilyIndices.presentationFamily)};
 
             imageSharingMode = VK_SHARING_MODE_CONCURRENT;
             queueFamilyIndexCount = static_cast<uint32_t>(queueFamilyIndices.size());
@@ -46,7 +46,7 @@ namespace ce {
         // Create information for swap chain
         const VkSwapchainCreateInfoKHR swapchainCreateInfo{
             .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
-            .surface = pBVK->surface,                          // Swapchain surface
+            .surface = context.surface,                        // Swapchain surface
             .minImageCount = imageCount,                       // Minimum image in swapchain
             .imageFormat = surrfaceFormat.format,              // Swapchain format
             .imageColorSpace = surrfaceFormat.colorSpace,      // Swapchain color space
@@ -67,7 +67,7 @@ namespace ce {
                                              //  old one to quickly hand over  responsabilities
 
         // Create Swapchain
-        if (vkCreateSwapchainKHR(pBVK->logical, &swapchainCreateInfo, nullptr, &this->swapchain) != VK_SUCCESS) {
+        if (vkCreateSwapchainKHR(context.logical, &swapchainCreateInfo, nullptr, &this->swapchain) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create a Swapchain");
         }
 
@@ -76,14 +76,14 @@ namespace ce {
 
         // Get swap chain images (first count the values)
         uint32_t swapChainImageCount;
-        vkGetSwapchainImagesKHR(pBVK->logical, this->swapchain, &swapChainImageCount, nullptr);
+        vkGetSwapchainImagesKHR(context.logical, this->swapchain, &swapChainImageCount, nullptr);
 
         std::vector<VkImage> lImages(swapChainImageCount);
-        vkGetSwapchainImagesKHR(pBVK->logical, this->swapchain, &swapChainImageCount, lImages.data());
+        vkGetSwapchainImagesKHR(context.logical, this->swapchain, &swapChainImageCount, lImages.data());
 
         for (VkImage image : lImages) {
 
-            auto imgObj = std::make_shared<Image>(pBVK->physical, pBVK->logical);
+            auto imgObj = std::make_shared<Image>(context.physical, context.logical);
             imgObj->createImageViewImportedImage(image, this->imageFormat,
                                                  VK_IMAGE_ASPECT_COLOR_BIT); // CreateImageView
             this->images.push_back(imgObj);
@@ -103,7 +103,7 @@ namespace ce {
     SwapChain::~SwapChain() {
 
         for (auto& framebuffer : this->frameBuffers) { // ? auto& mesmo ??
-            vkDestroyFramebuffer(this->logical, framebuffer, nullptr);
+            vkDestroyFramebuffer(context.logical, framebuffer, nullptr);
         }
 
         for (auto& image : this->images) {
@@ -113,8 +113,23 @@ namespace ce {
         // TODO: e aqui?
         this->depthBufferImg.reset();
 
-        vkDestroySwapchainKHR(this->logical, this->swapchain, nullptr);
-        vkDestroyRenderPass(this->logical, this->renderPass, nullptr);
+        vkDestroySwapchainKHR(context.logical, this->swapchain, nullptr);
+        vkDestroyRenderPass(context.logical, this->renderPass, nullptr);
+    }
+
+    uint32_t SwapChain::acquireNextImage(VkSemaphore& waitImage, VkRenderPassBeginInfo* r) {
+        uint32_t imageIndex;
+        vkAcquireNextImageKHR(context.logical, this->swapchain, std::numeric_limits<uint64_t>::max(), waitImage,
+                              VK_NULL_HANDLE, &imageIndex);
+
+        r->sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+        r->renderPass = this->renderPass;                               // Render pass to begin
+        r->framebuffer = this->frameBuffers[imageIndex];                //
+        r->renderArea = this->renderArea;                               //
+        r->clearValueCount = static_cast<uint32_t>(clearValues.size()); //
+        r->pClearValues = clearValues.data();                           // List of clear values
+
+        return imageIndex;
     }
 
     VkExtent2D SwapChain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities) {
@@ -126,7 +141,7 @@ namespace ce {
 
         int witdh;
         int height;
-        SDL_GetWindowSizeInPixels(this->window, &witdh, &height);
+        SDL_GetWindowSizeInPixels(context.window, &witdh, &height);
 
         VkExtent2D newExtent{
             .width = static_cast<uint32_t>(witdh),  //
@@ -167,7 +182,7 @@ namespace ce {
                 .layers = 1                         // Framebuffer layers
             };
 
-            if (vkCreateFramebuffer(this->logical, &framebufferCreateInfo, nullptr, &this->frameBuffers[i]) !=
+            if (vkCreateFramebuffer(context.logical, &framebufferCreateInfo, nullptr, &this->frameBuffers[i]) !=
                 VK_SUCCESS) {
                 throw std::runtime_error("Faleid to create a frambuffer");
             }
@@ -177,14 +192,14 @@ namespace ce {
     void SwapChain::createDepthBufferImage() {
 
         // Get suported format for depth buffer
-        VkFormat depthFormat = aux::ChooseSupportedFormat(
-            this->physical,
+        VkFormat depthFormat = VulkanContext::ChooseSupportedFormat(
+            context.physical,
             {VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D32_SFLOAT, VK_FORMAT_D24_UNORM_S8_UINT}, // Formats
             VK_IMAGE_TILING_OPTIMAL,                                                           // Tilling
             VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);                                   // Depth
 
         // Create Depth Buffer Image
-        this->depthBufferImg = std::make_shared<Image>(this->physical, this->logical);
+        this->depthBufferImg = std::make_shared<Image>(context.physical, context.logical);
         this->depthBufferImg->createImage(this->extent.width, this->extent.height, depthFormat, VK_IMAGE_TILING_OPTIMAL,
                                           VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
                                           VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
@@ -234,8 +249,8 @@ namespace ce {
 
         // Depth attachemnt of render pass
         const VkAttachmentDescription depthAttachemnt{
-            .format = aux::ChooseSupportedFormat(
-                this->physical,
+            .format = VulkanContext::ChooseSupportedFormat(
+                context.physical,
                 {VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D32_SFLOAT, VK_FORMAT_D24_UNORM_S8_UINT}, // Formats
                 VK_IMAGE_TILING_OPTIMAL,                                                           // Tilling
                 VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT),
@@ -308,7 +323,7 @@ namespace ce {
             .dependencyCount = static_cast<uint32_t>(subpassDependencies.size()),
             .pDependencies = subpassDependencies.data()};
 
-        if (vkCreateRenderPass(this->logical, &renderPassCreateInfo, nullptr, &this->renderPass) != VK_SUCCESS) {
+        if (vkCreateRenderPass(context.logical, &renderPassCreateInfo, nullptr, &this->renderPass) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create render pass!!!");
         }
     }

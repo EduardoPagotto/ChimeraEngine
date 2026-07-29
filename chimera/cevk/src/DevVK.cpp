@@ -11,14 +11,11 @@ namespace ce {
 
     DevVk::~DevVk() {
         // cleanup
-        vkDestroySurfaceKHR(this->instance, this->bvk->surface, nullptr);
-        vkDestroyDevice(this->bvk->logical, nullptr);
-
         if (this->validationEnabled) {
-            DestroyDebugReportCallbackEXT(this->instance, this->callback, nullptr);
+            DestroyDebugReportCallbackEXT(this->context.instance, this->callback, nullptr);
         }
 
-        vkDestroyInstance(this->instance, nullptr);
+        context.destroy();
     }
 
     void DevVk::init_device() {
@@ -68,7 +65,7 @@ namespace ce {
             .applicationVersion = VK_MAKE_VERSION(1, 0, 0), // Version app
             .pEngineName = "No engine",                     // Engine name
             .engineVersion = VK_MAKE_VERSION(1, 0, 0),      // engine version
-            .apiVersion = VK_API_VERSION_1_0                // the version of vulkan
+            .apiVersion = VK_API_VERSION_1_4                // the version of vulkan
         };
 
         // Set a validation layer tha instace will use
@@ -90,7 +87,7 @@ namespace ce {
                                               .ppEnabledExtensionNames = instanceExtensions.data()};
 
         // Create instance
-        if (vkCreateInstance(&createInfo, nullptr, &this->instance) != VK_SUCCESS) {
+        if (vkCreateInstance(&createInfo, nullptr, &this->context.instance) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create Vulkan Instance");
         }
     }
@@ -110,14 +107,15 @@ namespace ce {
 
         // Create debug callback with custom create function
 
-        if (CreateDebugReportCallbackEXT(this->instance, &callbackCreateInfo, nullptr, &this->callback) != VK_SUCCESS) {
+        if (CreateDebugReportCallbackEXT(this->context.instance, &callbackCreateInfo, nullptr, &this->callback) !=
+            VK_SUCCESS) {
             throw std::runtime_error("Failed to create Debug Callback!");
         }
     }
 
     void DevVk::createSurface() {
         // Create Surface (creates a surface creste info struct, runs the create surface function, returns result)
-        if (!SDL_Vulkan_CreateSurface(this->bvk->window, this->instance, nullptr, &this->bvk->surface)) {
+        if (!SDL_Vulkan_CreateSurface(context.window, this->context.instance, nullptr, &context.surface)) {
             throw std::runtime_error("Failed to create a surface!");
         }
     }
@@ -125,7 +123,7 @@ namespace ce {
     void DevVk::getNewPhysicalDevice() {
         // Enumerate Physical devices the vkInstance can access
         uint32_t deviceCount = 0;
-        vkEnumeratePhysicalDevices(this->instance, &deviceCount, nullptr);
+        vkEnumeratePhysicalDevices(this->context.instance, &deviceCount, nullptr);
 
         // if no devices avaible, then none suport Vulkan!
         if (deviceCount == 0) {
@@ -134,26 +132,30 @@ namespace ce {
 
         // get List of Physical devices
         std::vector<VkPhysicalDevice> deviceList(deviceCount);
-        vkEnumeratePhysicalDevices(this->instance, &deviceCount, deviceList.data());
+        vkEnumeratePhysicalDevices(this->context.instance, &deviceCount, deviceList.data());
 
         // mainDevice.physicalDevice = deviceList[0];
         for (const auto& device : deviceList) {
-            if (DevVk::CheckDeviceSuitable(device, this->bvk->surface)) {
-                this->bvk->physical = device;
+            if (DevVk::CheckDeviceSuitable(device, context.surface)) {
+                context.physical = device;
                 break;
             }
         }
 
         // Get properties of our new device
         VkPhysicalDeviceProperties deviceProperties;
-        vkGetPhysicalDeviceProperties(this->bvk->physical, &deviceProperties);
+        vkGetPhysicalDeviceProperties(context.physical, &deviceProperties);
         // minUniformBufferOffset = deviceProperties.limits.minUniformBufferOffsetAlignment;
+
+        if (!DevVk::checkDescriptorIndexingSupport(context.physical)) {
+            throw std::runtime_error("Descriptor Indexing Support not allowed");
+        }
     }
 
     void DevVk::createLogicalDevice() {
 
         // Get the queue family indices for the chosen Physical device
-        QueueFamilyIndices indices = aux::GetQueueFamilies(this->bvk->physical, this->bvk->surface);
+        QueueFamilyIndices indices = VulkanContext::GetQueueFamilies(context.physical, context.surface);
 
         // vector for queue creation information, and set for family indices
         std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
@@ -192,7 +194,7 @@ namespace ce {
         };
 
         // Create the Logical device for the givem physical device
-        if (vkCreateDevice(this->bvk->physical, &deviceCreateInfo, nullptr, &this->bvk->logical) != VK_SUCCESS) {
+        if (vkCreateDevice(context.physical, &deviceCreateInfo, nullptr, &context.logical) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create a logical device");
         }
 
@@ -200,8 +202,10 @@ namespace ce {
         // so we want handle to queues
         // From given logical device, of given Queue Family, of given Queue Index(0 since only one), place reference in
         // given Vkqueue
-        vkGetDeviceQueue(this->bvk->logical, indices.graphicsFamily, 0, &this->graphicsQueue);
-        vkGetDeviceQueue(this->bvk->logical, indices.presentationFamily, 0, &this->presentationQueue);
+        context.init();
+
+        // vkGetDeviceQueue(this->bvk->logical, indices.graphicsFamily, 0, &this->graphicsQueue);
+        // vkGetDeviceQueue(this->bvk->logical, indices.presentationFamily, 0, &this->presentationQueue);
     }
 
     // --utils
@@ -237,6 +241,28 @@ namespace ce {
         return true;
     }
 
+    bool DevVk::checkDescriptorIndexingSupport(VkPhysicalDevice device) {
+        // 1. Instanciar a estrutura específica que queremos checar
+        VkPhysicalDeviceDescriptorIndexingFeatures indexingFeatures = {
+            .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES};
+
+        // 2. Instanciar a estrutura base de recursos modernos
+        VkPhysicalDeviceFeatures2 deviceFeatures2 = {
+            .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2,
+            .pNext = &indexingFeatures // Encadeia para preencher os dados de indexação
+        };
+
+        // 3. Consultar o driver da GPU
+        vkGetPhysicalDeviceFeatures2(device, &deviceFeatures2);
+
+        // 4. Validar os três recursos essenciais para texturas bindless
+        bool hasDynamicIndexing = indexingFeatures.shaderSampledImageArrayNonUniformIndexing == VK_TRUE;
+        bool hasPartiallyBound = indexingFeatures.descriptorBindingPartiallyBound == VK_TRUE;
+        bool hasUpdateAfterBind = indexingFeatures.descriptorBindingSampledImageUpdateAfterBind == VK_TRUE;
+
+        return hasDynamicIndexing && hasPartiallyBound && hasUpdateAfterBind;
+    }
+
     bool DevVk::CheckDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface) {
 
         /*
@@ -248,13 +274,13 @@ namespace ce {
         VkPhysicalDeviceFeatures deviceFeatures;
         vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
 
-        QueueFamilyIndices indices = aux::GetQueueFamilies(device, surface);
+        QueueFamilyIndices indices = VulkanContext::GetQueueFamilies(device, surface);
 
         bool extensionsSupported = DevVk::CheckDeviceExtensionSupport(device);
 
         bool swapChainValid = false;
         if (extensionsSupported) {
-            SwapChainDetails swapChainDetails = aux::GetSwapChainDetails(device, surface);
+            SwapChainDetails swapChainDetails = VulkanContext::GetSwapChainDetails(device, surface);
             swapChainValid = !swapChainDetails.presentationModes.empty() && !swapChainDetails.formats.empty();
         }
 
@@ -331,129 +357,6 @@ namespace ce {
     }
 
     namespace aux {
-
-        SwapChainDetails GetSwapChainDetails(VkPhysicalDevice device, VkSurfaceKHR surface) {
-            SwapChainDetails swapChainDetails;
-
-            // -- CAPABILITIES --
-            // Get the surface capabilities for the given surface on the given physical device
-            vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &swapChainDetails.surfaceCapabilities);
-
-            // -- FORMATS --
-            uint32_t formatCount = 0;
-            vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, nullptr);
-
-            // If formats returned, get list of formats
-            if (formatCount != 0) {
-                swapChainDetails.formats.resize(formatCount);
-                vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, swapChainDetails.formats.data());
-            }
-
-            // -- PRESENTATION MODES --
-            uint32_t presentationCount = 0;
-            vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentationCount, nullptr);
-
-            // If presentation modes returned, get list of presentation modes
-            if (presentationCount != 0) {
-                swapChainDetails.presentationModes.resize(presentationCount);
-                vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentationCount,
-                                                          swapChainDetails.presentationModes.data());
-            }
-
-            return swapChainDetails;
-        }
-
-        VkFormat ChooseSupportedFormat(VkPhysicalDevice device, const std::vector<VkFormat>& formats,
-                                       VkImageTiling tilling, VkFormatFeatureFlags featureFlags) {
-
-            // Loop through options and find compatible one
-            for (VkFormat format : formats) {
-
-                // Get properties for give format on this device
-                VkFormatProperties properties;
-                vkGetPhysicalDeviceFormatProperties(device, format, &properties);
-
-                // Depending on tiling choice, nned to check for difference bit flag
-                if (tilling == VK_IMAGE_TILING_LINEAR &&
-                    (properties.linearTilingFeatures & featureFlags) == featureFlags) {
-                    //
-                    return format;
-                }
-                if (tilling == VK_IMAGE_TILING_OPTIMAL &&
-                    (properties.optimalTilingFeatures & featureFlags) == featureFlags) {
-                    //
-                    return format;
-                }
-            }
-
-            throw std::runtime_error("Failed to find a matching format!");
-        }
-
-        QueueFamilyIndices GetQueueFamilies(VkPhysicalDevice device, VkSurfaceKHR surface) {
-
-            QueueFamilyIndices indices;
-
-            // Get all Queue Family Property info for the given device
-            uint32_t queueFamilyCount = 0;
-            vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
-            std::vector<VkQueueFamilyProperties> queueFamilyList(queueFamilyCount);
-
-            vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilyList.data());
-
-            // Go through each queue family and check if it has at least 1 of the requered types of queue
-            int idx = 0;
-            for (const auto& queueFamily : queueFamilyList) {
-
-                // First check if queue has at least 1 queue in that family (could have no queue)
-                // Queue cam be multiple types defined through bitfield. Need to bitwise AND with VK_QUEUE_*_BIT to
-                // check if has requered type
-                if ((queueFamily.queueCount > 0) && ((queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) != 0)) {
-                    indices.graphicsFamily = idx; // if queue family is valid then get index
-                }
-
-                // Check if Queue Family support presentation
-                VkBool32 presentationSupport = VK_FALSE;
-                vkGetPhysicalDeviceSurfaceSupportKHR(device, idx, surface,
-                                                     &presentationSupport); // TODO: validar se result OK
-                // check if queue is presentation type (can bo boyh graphics and presentation)
-                if ((queueFamily.queueCount > 0) && (presentationSupport == VK_TRUE)) {
-                    indices.presentationFamily = idx;
-                }
-
-                // check if queue family indices are in valid state, stop searching if so
-                if (indices.isValid()) {
-                    break;
-                }
-
-                idx++;
-            }
-
-            return indices;
-        }
-
-        // --swapchain
-
-        uint32_t FindMemoryTypeIndex(VkPhysicalDevice physicalDevice, uint32_t allowedTypes,
-                                     VkMemoryPropertyFlags properties) {
-            // get properties of physical device memory
-            VkPhysicalDeviceMemoryProperties memoryProperties;
-            vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memoryProperties);
-
-            for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; i++) {
-
-                // Index of memory type must match corresponding bit in allowedTypes and desired property bit flag are
-                // part of memory type's property flags
-                if ((allowedTypes & (1 << i)) &&
-                    (memoryProperties.memoryTypes[i].propertyFlags & properties) == properties) { // NOLINT
-                    // this memory type is valid, so return its index
-                    return i;
-                }
-            }
-
-            throw std::runtime_error("Failed to find Memory!");
-        }
-
-        // --utils
 
         std::vector<char> readFile(const std::filesystem::path& filename) {
             // Open stream from given file

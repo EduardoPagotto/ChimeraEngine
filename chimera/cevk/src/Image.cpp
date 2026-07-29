@@ -1,5 +1,5 @@
 #include "Image.hpp"
-#include "DevVK.hpp"
+#include "cevk.hpp"
 #include <stdexcept>
 
 namespace ce {
@@ -37,10 +37,10 @@ namespace ce {
         vkGetImageMemoryRequirements(this->device, this->image, &memoryRequirements);
 
         // Allocate memory using image requeirement and user define properties
-        const VkMemoryAllocateInfo memoryAllocInfo{
-            .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
-            .allocationSize = memoryRequirements.size,
-            .memoryTypeIndex = aux::FindMemoryTypeIndex(this->physical, memoryRequirements.memoryTypeBits, propFlags)};
+        const VkMemoryAllocateInfo memoryAllocInfo{.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+                                                   .allocationSize = memoryRequirements.size,
+                                                   .memoryTypeIndex = VulkanContext::FindMemoryTypeIndex(
+                                                       this->physical, memoryRequirements.memoryTypeBits, propFlags)};
 
         if (vkAllocateMemory(this->device, &memoryAllocInfo, nullptr, &this->imageMemory) != VK_SUCCESS) {
             throw std::runtime_error("Failed to Allocate Memory for Image");

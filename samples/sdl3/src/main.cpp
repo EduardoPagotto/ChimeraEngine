@@ -1,5 +1,8 @@
+#include "DevVK.hpp"
 #define STB_IMAGE_IMPLEMENTATION
+
 #include "VulkanRenderer.hpp"
+#include "cevk.hpp"
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_init.h>
 #include <SDL3/SDL_log.h>
@@ -35,21 +38,53 @@ bool initWindow(const std::string& sName = "Teste", const int width = 800, const
     return true;
 }
 
+void teste() {
+
+    // // 1. Inicializa Vulkan e SDL3
+    // VulkanContext context{};
+    // // ... preencher struct context com os handles reais da sua engine ...
+
+    // // 2. Cria o Asset Manager injetando o contexto Vulkan
+    // AssetManager assetManager(context);
+
+    // // 3. Carrega textura no Escopo Global
+    // auto logo = assetManager.Load<VulkanTexture>("logo_jogos", "assets/logo.png");
+
+    // {
+    //     // 4. Entra em uma nova fase (Cria novo escopo)
+    //     assetManager.PushScope();
+
+    //     // Carrega textura específica desta fase
+    //     auto bg = assetManager.Load<VulkanTexture>("background", "assets/fase1_bg.png");
+
+    //     // Se pedir a "logo_jogos" aqui, ele busca e encontra no escopo Global pai
+    //     auto logoMenu = assetManager.Load<VulkanTexture>("logo_jogos", "assets/logo.png");
+
+    // } // 5. Sai da fase (PopScope deve ser chamado manualmente ou via RAII)
+    // assetManager.PopScope();
+    // // Neste ponto, "fase1_bg.png" foi destruído do Vulkan automaticamente.
+    // // "logo.png" continua vivo no escopo global.
+
+    // return 0;
+}
+
 int main() {
 
     auto result = SDL_APP_SUCCESS;
 
+    ce::VulkanContext context{};
     try {
 
         if (!initWindow("Teste")) {
             return SDL_APP_FAILURE;
         }
 
-        std::shared_ptr<ce::BaseVK> bvk = std::make_shared<ce::BaseVK>();
-        bvk->window = window;
+        // std::shared_ptr<ce::BaseVK> bvk = std::make_shared<ce::BaseVK>();
+        context.window = window;
 
-        ce::DevVk devvk(bvk);
-        VulkanRenderer vulkanRenderer(devvk);
+        ce::DevVk devvk(context);
+
+        VulkanRenderer vulkanRenderer(context);
 
         float angle = 0.0F;
         float deltaTime = 0;

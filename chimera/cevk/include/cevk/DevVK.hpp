@@ -6,22 +6,13 @@ namespace ce {
 
     class DevVk {
       public:
-        explicit DevVk(std::shared_ptr<BaseVK> bvk) : bvk(bvk) { init_device(); } // NOLINT
+        explicit DevVk(VulkanContext& context) : context(context) { this->init_device(); }
         virtual ~DevVk();
 
-        std::shared_ptr<BaseVK> getBaseVK() const { return bvk; }
-
-        [[nodiscard]] VkQueue& getGraphicsQueue() { return graphicsQueue; }
-        [[nodiscard]] VkQueue& getPresentationQueue() { return presentationQueue; }
-
       private:
-        // Vulkan components
-        // - Main
-        VkInstance instance;
         VkDebugReportCallbackEXT callback;
-        VkQueue graphicsQueue;
-        VkQueue presentationQueue;
-        std::shared_ptr<BaseVK> bvk;
+
+        VulkanContext& context;
 
         bool validationEnabled = true;
 
@@ -41,20 +32,10 @@ namespace ce {
         static bool CheckDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface);
         static bool CheckInstanceExtensionSupport(std::vector<const char*>* checkExtentions);
         static bool CheckValidationLayerSupport();
+        static bool checkDescriptorIndexingSupport(VkPhysicalDevice device);
     };
 
     namespace aux {
-
-        VkFormat ChooseSupportedFormat(VkPhysicalDevice device, const std::vector<VkFormat>& formats,
-                                       VkImageTiling tilling, VkFormatFeatureFlags featureFlags);
-
-        SwapChainDetails GetSwapChainDetails(VkPhysicalDevice device, VkSurfaceKHR surface);
-
-        QueueFamilyIndices GetQueueFamilies(VkPhysicalDevice device, VkSurfaceKHR surface);
-
-        // -- Swapchain
-        uint32_t FindMemoryTypeIndex(VkPhysicalDevice physicalDevice, uint32_t allowedTypes,
-                                     VkMemoryPropertyFlags properties);
 
         std::vector<char> readFile(const std::filesystem::path& filename);
     } // namespace aux

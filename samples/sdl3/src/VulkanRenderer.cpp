@@ -2,39 +2,32 @@
 #include "CmdRender.hpp"
 #include "DescriptorSet.hpp"
 #include "DescriptorSetLayout.hpp"
+#include "DevVK.hpp"
 #include <cstddef>
 #include <cstdlib>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
 #include <stdexcept>
 
-VulkanRenderer::VulkanRenderer(ce::DevVk& devvk) {
+VulkanRenderer::VulkanRenderer(ce::VulkanContext& context) : context(context) {
 
     using namespace ce;
 
-    this->bvk = devvk.getBaseVK();
-    this->gQueue = devvk.getGraphicsQueue();
-    this->pQueue = devvk.getPresentationQueue();
+    this->swapchain = std::make_shared<SwapChain>(context);
 
-    // Get inidices of queue families from device
-    QueueFamilyIndices queueFamilyIndices = aux::GetQueueFamilies(bvk->physical, bvk->surface);
+    this->uniformBufferVP.init(context.physical, context.logical, swapchain->getImages().size(),
+                               sizeof(UboViewProjection));
 
-    this->swapchain = std::make_shared<SwapChain>(bvk.get(), queueFamilyIndices);
-
-    this->uniformBufferVP.init(bvk->physical, bvk->logical, swapchain->getImages().size(), sizeof(UboViewProjection));
-
-    this->textureMng = std::make_shared<Textures>(bvk->physical, bvk->logical);
+    this->textureMng = std::make_shared<Textures>(context.physical, context.logical);
 
     createDescriptorSetLayout();
     createPushConstantRange();
     createGraphicsPipeline();
 
-    this->graphicsCmdPool.init(bvk->logical, static_cast<uint32_t>(queueFamilyIndices.graphicsFamily));
-
     this->cmdBuffers.resize(this->swapchain->getSwapChainFrameBuffers().size());
     for (size_t i = 0; i < this->swapchain->getSwapChainFrameBuffers().size(); i++) {
         this->cmdBuffers[i] = CmdBuffer();
-        this->cmdBuffers[i].init(bvk->logical, this->graphicsCmdPool.get());
+        this->cmdBuffers[i].init(context.logical, context.commandPool);
     }
 
     createDescriptorPool();
@@ -43,7 +36,7 @@ VulkanRenderer::VulkanRenderer(ce::DevVk& devvk) {
     this->syncs.resize(ce::MAX_FRAME_DRAWS);
     for (size_t i = 0; i < ce::MAX_FRAME_DRAWS; i++) {
         this->syncs[i] = ce::Sync();
-        this->syncs[i].init(this->bvk->logical);
+        this->syncs[i].init(this->context.logical);
     }
 
     // const float radixAngle = 45.0F;
@@ -61,13 +54,13 @@ VulkanRenderer::VulkanRenderer(ce::DevVk& devvk) {
     uboViewProjection.projection[1][1] *= -1; // vulkan inverted of OpenGL
 
     // Create our default "no texture" texture
-    textureMng->createTexture("plain.png", gQueue, graphicsCmdPool.get());
+    textureMng->createTexture("plain.png", context.graphicsQueue, context.commandPool);
 }
 
 VulkanRenderer::~VulkanRenderer() {
 
     // Wait until no action being run on device before destroying
-    vkDeviceWaitIdle(bvk->logical);
+    vkDeviceWaitIdle(context.logical);
 
     // free(modelTransferSpace);
     for (auto& model : modelList) {
@@ -86,7 +79,6 @@ VulkanRenderer::~VulkanRenderer() {
         cmdBuffers[i].destroy();
     }
 
-    graphicsCmdPool.destroy();
     graphicPipeline.reset();
     pipelineLayout.reset();
 }
@@ -143,15 +135,15 @@ void VulkanRenderer::draw() {
     cmd.end();
 
     // -- SUBMIT COMMAND BUFFER TO RENDER
-    cmd.submitToRender(gQueue, sync, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+    cmd.submitToRender(context.graphicsQueue, sync, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 
     // -- PRESENT RENDERED IMAGE TO SCREEN --
-    this->swapchain->sendImageToScreen(pQueue, sync.getSignal(), imageIndex);
+    this->swapchain->sendImageToScreen(context.presentationQueue, sync.getSignal(), imageIndex);
     // Get next frame
     this->currentFrame = (this->currentFrame + 1) % ce::MAX_FRAME_DRAWS;
     // AHHHH!!!!!! ugly!!!!! this is complete wrong, find what missmatch sYncs!!!
     if (this->currentFrame == (ce::MAX_FRAME_DRAWS - 1)) {
-        vkDeviceWaitIdle(bvk->logical);
+        vkDeviceWaitIdle(context.logical);
     }
 }
 
@@ -190,7 +182,7 @@ void VulkanRenderer::createPushConstantRange() {
 void VulkanRenderer::createGraphicsPipeline() {
 
     // Read in SPIR-V code shaders, Vertex Stage creation information and Fragment Stage creation information
-    std::shared_ptr<ce::Shader> shader = std::make_shared<ce::Shader>(bvk->logical);
+    std::shared_ptr<ce::Shader> shader = std::make_shared<ce::Shader>(context.logical);
     shader->addCode(VK_SHADER_STAGE_VERTEX_BIT, ce::aux::readFile("./bin/vert.spv"));
     shader->addCode(VK_SHADER_STAGE_FRAGMENT_BIT, ce::aux::readFile("./bin/frag.spv"));
 
@@ -219,14 +211,14 @@ void VulkanRenderer::createGraphicsPipeline() {
                                this->swapchain->getExtent()}; // Extent to describe region to use, starting at offset
 
     // -- PIPELINE LAYOUT --
-    this->pipelineLayout = std::make_shared<ce::PipelineLayout>(this->bvk->logical);
+    this->pipelineLayout = std::make_shared<ce::PipelineLayout>(this->context.logical);
     this->pipelineLayout->addLayout(this->uniformBufferVP.getDescriptorSetLayout().get());
     this->pipelineLayout->addLayout(this->textureMng->getUniformSampler().getDescriptorSetLayout().get());
     this->pipelineLayout->addPushRange(this->pushConstantRange);
     this->pipelineLayout->create();
 
     // TODO: mudar o nome da classe
-    this->graphicPipeline = std::make_shared<ce::Pipeline>(this->bvk->logical);
+    this->graphicPipeline = std::make_shared<ce::Pipeline>(this->context.logical);
     this->graphicPipeline->addViewport(viewport);
     this->graphicPipeline->addScissor(scissor);
 
@@ -257,7 +249,7 @@ void VulkanRenderer::createDescriptorPool() {
                                      static_cast<uint32_t>(this->uniformBufferVP.getBuffers().size()));
 
     // Create Descriptor Pool, Maximum number of descriptor Sets
-    this->descriptorPool.create(this->bvk->logical, static_cast<uint32_t>(this->swapchain->getImages().size()),
+    this->descriptorPool.create(this->context.logical, static_cast<uint32_t>(this->swapchain->getImages().size()),
                                 static_cast<VkDescriptorPoolCreateFlagBits>(0));
 }
 
@@ -323,14 +315,15 @@ int VulkanRenderer::createMeshModel(const std::string& modelFile) {
         } else {
 
             // Otherwise, create texture and set value to index of new texture
-            matToTex[i] = this->textureMng->createTexture(textureNames[i], this->gQueue, this->graphicsCmdPool.get());
+            matToTex[i] = this->textureMng->createTexture(textureNames[i], context.graphicsQueue, context.commandPool);
             // matToTex[i] = createTexture("panda.jpg");
         }
     }
 
     // Load in all our meshes
-    std::vector<ce::Mesh> modelMeshes = ce::MeshModel::LoadNode(
-        bvk->physical, bvk->logical, gQueue, this->graphicsCmdPool.get(), scene->mRootNode, scene, matToTex);
+    std::vector<ce::Mesh> modelMeshes =
+        ce::MeshModel::LoadNode(context.physical, context.logical, context.graphicsQueue, context.commandPool,
+                                scene->mRootNode, scene, matToTex);
 
     // Create mesh model and add to list
     ce::MeshModel meshModel(modelMeshes);

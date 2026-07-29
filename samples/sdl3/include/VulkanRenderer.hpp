@@ -1,21 +1,20 @@
 #pragma once
 
 #include "CmdBuffer.hpp"
-#include "CmdPool.hpp"
-#include "DevVK.hpp"
 #include "MeshModel.hpp"
 #include "Pipeline.hpp"
 #include "SwapChain.hpp"
 #include "Sync.hpp"
 #include "Textures.hpp"
 #include "UBO.hpp"
+#include "cevk.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 
 class VulkanRenderer {
   public:
-    explicit VulkanRenderer(ce::DevVk& devvk);
+    explicit VulkanRenderer(ce::VulkanContext& context);
     virtual ~VulkanRenderer();
 
     void updateModel(int modelId, glm::mat4 newModel);
@@ -25,8 +24,6 @@ class VulkanRenderer {
   private:
     int currentFrame = 0;
 
-    VkQueue gQueue; // graphicsQueue
-    VkQueue pQueue; // presentationQueue
     VkPushConstantRange pushConstantRange;
 
     // Scene Settings
@@ -35,11 +32,11 @@ class VulkanRenderer {
         glm::mat4 view;
     } uboViewProjection;
 
-    std::shared_ptr<ce::BaseVK> bvk;
+    ce::VulkanContext& context;
+
     std::shared_ptr<ce::SwapChain> swapchain;
 
     std::vector<ce::CmdBuffer> cmdBuffers;
-    ce::CmdPool graphicsCmdPool;
     ce::DescriptorPool descriptorPool;
     ce::UniformBuffer uniformBufferVP;
 

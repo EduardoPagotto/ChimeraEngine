@@ -111,3 +111,6 @@ IBO
 Image
 VBO
 UBO
+
+
+como implementar  Asset Manager com controle de escopo combinado com Injeção de Dependência com carga de textura com o SDL3_image e api grafica vulkan nativa usando Templates com o minimo do uso de RTTI

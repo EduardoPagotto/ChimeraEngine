@@ -1,6 +1,7 @@
 #include "Buffers.hpp"
-#include "DevVK.hpp"
+#include "cevk.hpp"
 #include <cstring>
+#include <stdexcept>
 
 namespace ce {
 
@@ -40,7 +41,7 @@ namespace ce {
             .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
             .allocationSize = memRequirements.size,
             .memoryTypeIndex =
-                aux::FindMemoryTypeIndex(this->physical, memRequirements.memoryTypeBits, bufferProperties)};
+                VulkanContext::FindMemoryTypeIndex(this->physical, memRequirements.memoryTypeBits, bufferProperties)};
 
         // Allocate memory to VkDebviceMemory
         if (vkAllocateMemory(this->device, &memoryAllocInfo, nullptr, &this->memory) != VK_SUCCESS) {

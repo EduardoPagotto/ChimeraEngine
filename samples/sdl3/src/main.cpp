@@ -1,4 +1,3 @@
-#include "DevVK.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 
 #include "VulkanRenderer.hpp"
@@ -81,8 +80,7 @@ int main() {
 
         // std::shared_ptr<ce::BaseVK> bvk = std::make_shared<ce::BaseVK>();
         context.window = window;
-
-        ce::DevVk devvk(context);
+        context.init();
 
         VulkanRenderer vulkanRenderer(context);
 

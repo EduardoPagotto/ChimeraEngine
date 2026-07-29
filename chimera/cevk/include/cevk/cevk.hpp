@@ -36,7 +36,8 @@ namespace ce {
     class VulkanContext {
       public:
         VulkanContext() = default;
-        ~VulkanContext() = default;
+        ~VulkanContext() { this->destroy(); }
+
         void init();
         void destroy();
 
@@ -59,6 +60,27 @@ namespace ce {
 
         static VkFormat ChooseSupportedFormat(VkPhysicalDevice device, const std::vector<VkFormat>& formats,
                                               VkImageTiling tilling, VkFormatFeatureFlags featureFlags);
+
+      private:
+        VkDebugReportCallbackEXT callback;
+        bool validationEnabled = true;
+
+        inline static std::vector<const char*> deviceExtensions{VK_KHR_SWAPCHAIN_EXTENSION_NAME};
+        inline static std::vector<const char*> validationLayers{"VK_LAYER_KHRONOS_validation"};
+
+        void createInstance();
+        void createDebugCallback();
+        void createSurface();
+        void getNewPhysicalDevice();
+        void createLogicalDevice();
+        void createGraphicsPool();
+
+        // utils
+        static bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
+        static bool CheckDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface);
+        static bool CheckInstanceExtensionSupport(std::vector<const char*>* checkExtentions);
+        static bool CheckValidationLayerSupport();
+        static bool checkDescriptorIndexingSupport(VkPhysicalDevice device);
     };
 
 } // namespace ce

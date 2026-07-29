@@ -1,4 +1,6 @@
 #include "Shader.hpp"
+#include <fstream>
+#include <iostream>
 #include <stdexcept>
 
 namespace ce {
@@ -82,4 +84,24 @@ namespace ce {
         inputAssembly.primitiveRestartEnable =
             primitiveRestartEnable; // Allow overiding of "strip" topology to start new primitive
     }
+
+    namespace aux {
+
+        std::vector<char> readFile(const std::filesystem::path& filename) {
+
+            std::ifstream file(filename, std::ios::binary | std::ios::ate);
+            if (!file.is_open()) {
+                throw std::runtime_error("Failed to open a file!");
+            }
+
+            auto filesize = static_cast<size_t>(file.tellg());
+            std::vector<char> fileBuffer(filesize);
+
+            file.seekg(0);
+            file.read(fileBuffer.data(), filesize);
+            file.close();
+
+            return fileBuffer;
+        }
+    } // namespace aux
 } // namespace ce

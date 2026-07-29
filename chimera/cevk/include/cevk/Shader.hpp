@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include <vector>
 #include <vulkan/vulkan_core.h>
 
@@ -29,4 +30,9 @@ namespace ce {
         VkPipelineVertexInputStateCreateInfo vertexInputCreateInfo = {};
         VkPipelineInputAssemblyStateCreateInfo inputAssembly = {};
     };
+
+    namespace aux {
+        std::vector<char> readFile(const std::filesystem::path& filename);
+    } // namespace aux
+
 } // namespace ce

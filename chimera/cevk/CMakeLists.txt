@@ -27,7 +27,6 @@ message(STATUS "Current: ${CMAKE_CURRENT_SOURCE_DIR}")
 set (IncludeDirs ${CMAKE_CURRENT_SOURCE_DIR}/include/cevk)
 
 set(SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/src/cevk.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/DevVK.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/debug.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/DescriptorPool.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/DescriptorSet.cpp

@@ -1,40 +1,36 @@
-#include <SDL3/SDL_log.h>
-#define STB_IMAGE_IMPLEMENTATION
-
+// #include "AssetManager.hpp"
 #include "VulkanRenderer.hpp"
+// #include "VulkanTexture.hpp"
 #include <SDL3/SDL.h>
+#include <SDL3/SDL_log.h>
 #include <glm/ext/matrix_transform.hpp>
 #include <string>
 
-void teste() {
+// void teste(ce::VulkanContext& context) {
 
-    // // 1. Inicializa Vulkan e SDL3
-    // VulkanContext context{};
-    // // ... preencher struct context com os handles reais da sua engine ...
+//     using namespace ce;
 
-    // // 2. Cria o Asset Manager injetando o contexto Vulkan
-    // AssetManager assetManager(context);
+//     // 1. Cria o Asset Manager injetando o contexto Vulkan
+//     AssetManager assetManager(context);
 
-    // // 3. Carrega textura no Escopo Global
-    // auto logo = assetManager.Load<VulkanTexture>("logo_jogos", "assets/logo.png");
+//     // 2. Carrega textura no Escopo Global
+//     auto logo = assetManager.Load<VulkanTexture>("logo_jogos", "assets/logo.png");
 
-    // {
-    //     // 4. Entra em uma nova fase (Cria novo escopo)
-    //     assetManager.PushScope();
+//     {
+//         // 3. Entra em uma nova fase (Cria novo escopo)
+//         assetManager.PushScope();
 
-    //     // Carrega textura específica desta fase
-    //     auto bg = assetManager.Load<VulkanTexture>("background", "assets/fase1_bg.png");
+//         // Carrega textura específica desta fase
+//         auto bg = assetManager.Load<VulkanTexture>("background", "assets/fase1_bg.png");
 
-    //     // Se pedir a "logo_jogos" aqui, ele busca e encontra no escopo Global pai
-    //     auto logoMenu = assetManager.Load<VulkanTexture>("logo_jogos", "assets/logo.png");
+//         // Se pedir a "logo_jogos" aqui, ele busca e encontra no escopo Global pai
+//         auto logoMenu = assetManager.Load<VulkanTexture>("logo_jogos", "assets/logo.png");
 
-    // } // 5. Sai da fase (PopScope deve ser chamado manualmente ou via RAII)
-    // assetManager.PopScope();
-    // // Neste ponto, "fase1_bg.png" foi destruído do Vulkan automaticamente.
-    // // "logo.png" continua vivo no escopo global.
-
-    // return 0;
-}
+//     } // 5. Sai da fase (PopScope deve ser chamado manualmente ou via RAII)
+//     assetManager.PopScope();
+//     // Neste ponto, "fase1_bg.png" foi destruído do Vulkan automaticamente.
+//     // "logo.png" continua vivo no escopo global.
+// }
 
 int main() {
 

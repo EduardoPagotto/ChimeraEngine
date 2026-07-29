@@ -103,14 +103,3 @@ glslangValidator  -V ./samples/sdl31/shades/ -o ./bin/T
 
 <b>YAML</b> (future)
  - [jbeder](https://github.com/jbeder/yaml-cpp/wiki/How-To-Emit-YAML)
-
-
-Buffer
-CommandBuffer
-IBO
-Image
-VBO
-UBO
-
-
-como implementar  Asset Manager com controle de escopo combinado com Injeção de Dependência com carga de textura com o SDL3_image e api grafica vulkan nativa usando Templates com o minimo do uso de RTTI

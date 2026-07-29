@@ -6,6 +6,7 @@ PROJECT(sdl_test VERSION 0.0.1 LANGUAGES CXX)
 list(APPEND CMAKE_PREFIX_PATH "/usr/local")
 
 find_package(SDL3 REQUIRED)
+find_package(SDL3_image REQUIRED)
 find_package(assimp REQUIRED)
 find_package(Vulkan REQUIRED)
 find_package(VulkanMemoryAllocator CONFIG REQUIRED)
@@ -16,6 +17,7 @@ set (IncludeDirs ${CMAKE_CURRENT_SOURCE_DIR}/include
 
 set (LIBRARY_DEPS ${CMAKE_SOURCE_DIR}/bin/libcevk.a
                   SDL3::SDL3
+                  SDL3_image::SDL3_image
                   Vulkan::Vulkan
                   GPUOpen::VulkanMemoryAllocator
                   assimp::assimp

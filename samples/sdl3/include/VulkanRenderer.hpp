@@ -40,6 +40,7 @@ class VulkanRenderer {
     ce::UniformBuffer uniformBufferVP;
 
     std::shared_ptr<ce::Textures> textureMng;
+
     std::shared_ptr<ce::PipelineLayout> pipelineLayout;
     std::shared_ptr<ce::Pipeline> graphicPipeline;
     std::vector<ce::Sync> syncs;

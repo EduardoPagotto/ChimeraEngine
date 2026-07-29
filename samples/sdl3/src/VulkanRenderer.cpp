@@ -17,7 +17,7 @@ VulkanRenderer::VulkanRenderer(ce::VulkanContext& context) : context(context) {
     this->uniformBufferVP.init(context.physical, context.logical, swapchain->getImages().size(),
                                sizeof(UboViewProjection));
 
-    this->textureMng = std::make_shared<Textures>(context.physical, context.logical);
+    this->textureMng = std::make_shared<Textures>(context);
 
     createDescriptorSetLayout();
     createPushConstantRange();
@@ -53,7 +53,7 @@ VulkanRenderer::VulkanRenderer(ce::VulkanContext& context) : context(context) {
     uboViewProjection.projection[1][1] *= -1; // vulkan inverted of OpenGL
 
     // Create our default "no texture" texture
-    textureMng->createTexture("plain.png", context.graphicsQueue, context.commandPool);
+    textureMng->createTexture("plain.png");
 }
 
 VulkanRenderer::~VulkanRenderer() {
@@ -314,7 +314,7 @@ int VulkanRenderer::createMeshModel(const std::string& modelFile) {
         } else {
 
             // Otherwise, create texture and set value to index of new texture
-            matToTex[i] = this->textureMng->createTexture(textureNames[i], context.graphicsQueue, context.commandPool);
+            matToTex[i] = this->textureMng->createTexture(textureNames[i]);
             // matToTex[i] = createTexture("panda.jpg");
         }
     }

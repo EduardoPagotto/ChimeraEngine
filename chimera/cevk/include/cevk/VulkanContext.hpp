@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cevk.hpp"
+#include <string>
 
 namespace ce {
 
@@ -9,6 +10,7 @@ namespace ce {
         VulkanContext() = default;
         ~VulkanContext() { this->destroy(); }
 
+        void createWindow(const std::string& sName = "Teste", const int width = 800, const int height = 600);
         void init();
         void destroy();
 

@@ -7,7 +7,6 @@
 #include "Sync.hpp"
 #include "Textures.hpp"
 #include "UBO.hpp"
-#include "cevk.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -51,7 +50,6 @@ class VulkanRenderer {
     void createDescriptorSetLayout();
     void createPushConstantRange();
     void createGraphicsPipeline();
-    void createCommandPool();
     void createDescriptorPool();
     void createDescriptorSets();
 };

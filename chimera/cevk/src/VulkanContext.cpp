@@ -2,11 +2,34 @@
 #include "debug.hpp"
 #include <SDL3/SDL_vulkan.h>
 #include <cstring>
+#include <format>
 #include <iostream>
 #include <set>
 #include <stdexcept>
 
 namespace ce {
+
+    void VulkanContext::createWindow(const std::string& sName, const int width, const int height) {
+
+        // 1. Initialize SDL3
+        if (!SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11")) {
+            throw std::runtime_error(std::format("SDL X11 Failed driver: {}", SDL_GetError()));
+        }
+
+        if (!SDL_Init(SDL_INIT_VIDEO)) {
+            throw std::runtime_error(std::format("SDL Video Failed: {}", SDL_GetError()));
+        }
+
+        // 2. Create Window with Vulkan support
+        this->window = SDL_CreateWindow(sName.c_str(), width, height, SDL_WINDOW_VULKAN);
+        if (this->window == nullptr) {
+            throw std::runtime_error(std::format("SDL Window creation failed: {}", SDL_GetError()));
+        }
+
+        SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Vulkan SDL3 Window Created OK");
+
+        this->init();
+    }
 
     void VulkanContext::init() {
 
@@ -24,14 +47,16 @@ namespace ce {
             this->commandPool = VK_NULL_HANDLE;
         }
 
-        vkDestroySurfaceKHR(instance, surface, nullptr);
-        vkDestroyDevice(logical, nullptr);
+        vkDestroySurfaceKHR(this->instance, this->surface, nullptr);
+        vkDestroyDevice(this->logical, nullptr);
 
         if (this->validationEnabled) {
             DestroyDebugReportCallbackEXT(this->instance, this->callback, nullptr);
         }
 
-        vkDestroyInstance(instance, nullptr);
+        vkDestroyInstance(this->instance, nullptr);
+
+        SDL_DestroyWindow(this->window);
     }
 
 #pragma region statics

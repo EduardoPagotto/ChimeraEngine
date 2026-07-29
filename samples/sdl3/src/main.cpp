@@ -1,41 +1,10 @@
 #define STB_IMAGE_IMPLEMENTATION
 
 #include "VulkanRenderer.hpp"
-#include "cevk.hpp"
 #include <SDL3/SDL.h>
-#include <SDL3/SDL_init.h>
-#include <SDL3/SDL_log.h>
 #include <glm/ext/matrix_transform.hpp>
-#include <glm/trigonometric.hpp>
 #include <iostream>
 #include <string>
-
-SDL_Window* window = nullptr;
-
-bool initWindow(const std::string& sName = "Teste", const int width = 800, const int height = 600) {
-
-    // 1. Initialize SDL3
-    if (!SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11")) {
-        std::cerr << "SDL X11 Failed: " << SDL_GetError() << '\n';
-        return false;
-    }
-
-    if (!SDL_Init(SDL_INIT_VIDEO)) {
-        std::cerr << "SDL_Init Failed: " << SDL_GetError() << '\n';
-        return false;
-    }
-
-    // 2. Create Window with Vulkan support
-    window = SDL_CreateWindow(sName.c_str(), width, height, SDL_WINDOW_VULKAN);
-    if (window == nullptr) {
-        std::cerr << "Window creation failed: " << SDL_GetError() << '\n';
-        return false;
-    }
-
-    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Vulkan SD3 Window Created");
-
-    return true;
-}
 
 void teste() {
 
@@ -71,16 +40,10 @@ int main() {
 
     auto result = SDL_APP_SUCCESS;
 
-    ce::VulkanContext context{};
     try {
 
-        if (!initWindow("Teste")) {
-            return SDL_APP_FAILURE;
-        }
-
-        // std::shared_ptr<ce::BaseVK> bvk = std::make_shared<ce::BaseVK>();
-        context.window = window;
-        context.init();
+        ce::VulkanContext context{};
+        context.createWindow("Teste z1");
 
         VulkanRenderer vulkanRenderer(context);
 
@@ -120,7 +83,6 @@ int main() {
         result = SDL_APP_FAILURE;
     }
 
-    SDL_DestroyWindow(window);
     SDL_Quit();
 
     return result;

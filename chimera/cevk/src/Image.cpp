@@ -1,5 +1,5 @@
 #include "Image.hpp"
-#include "cevk.hpp"
+#include "VulkanContext.hpp"
 #include <stdexcept>
 
 namespace ce {

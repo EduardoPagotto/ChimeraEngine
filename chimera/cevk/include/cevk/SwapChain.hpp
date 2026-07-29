@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Image.hpp"
-#include "cevk.hpp"
+#include "VulkanContext.hpp"
 #include <memory>
 #include <vector>
 

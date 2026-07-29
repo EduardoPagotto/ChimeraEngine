@@ -28,7 +28,7 @@ namespace ce {
         // indices.graphicsFamily == indices.presentationFamily
         VkSharingMode imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
         uint32_t queueFamilyIndexCount = 0;
-        const uint32_t* pQueueFamilyIndices = nullptr; // FIXME : nao seria um array de 1 ?
+        const uint32_t* pQueueFamilyIndices = nullptr; // FIXME: nao seria um array de 1 ?
 
         // If Graphics and Presentation families are diferent, the swapchain must let images ge shared between families
         if (context.queueFamilyIndices.graphicsFamily !=

@@ -3,7 +3,6 @@
 #include <SDL3/SDL_vulkan.h>
 #include <cstring>
 #include <format>
-#include <iostream>
 #include <set>
 #include <stdexcept>
 
@@ -26,7 +25,7 @@ namespace ce {
             throw std::runtime_error(std::format("SDL Window creation failed: {}", SDL_GetError()));
         }
 
-        SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Vulkan SDL3 Window Created OK");
+        SDL_LogInfo(SDL_LOG_CATEGORY_VIDEO, "Vulkan SDL3 Window Created OK");
 
         this->init();
     }
@@ -463,12 +462,14 @@ namespace ce {
         std::vector<VkExtensionProperties> extentions(extentionsCount);
         vkEnumerateInstanceExtensionProperties(nullptr, &extentionsCount, extentions.data());
 
+        SDL_LogInfo(SDL_LOG_CATEGORY_VIDEO, "Extentions: ");
         // check if give extentions are list of avaible extentins
         for (const auto& checkExtention : *checkExtentions) {
             bool hasExtentions = false;
             for (const auto& extention : extentions) {
                 if (std::strcmp(checkExtention, extention.extensionName) == 0) {
-                    std::cout << "Extenções: " << checkExtention << '\n';
+
+                    SDL_LogInfo(SDL_LOG_CATEGORY_VIDEO, "- %s", checkExtention);
                     hasExtentions = true;
                     break;
                 }
@@ -495,14 +496,16 @@ namespace ce {
         std::vector<VkLayerProperties> availableLayers(validationLayerCount);
         vkEnumerateInstanceLayerProperties(&validationLayerCount, availableLayers.data());
 
-        std::cout << "Camadas Vulkan Disponiveis (" << validationLayerCount << "):" << '\n';
-        for (const auto& layerProperties : availableLayers) {
-            std::cout << "\tLayer Name: " << layerProperties.layerName << '\n';
-            std::cout << "\tDescription: " << layerProperties.description << '\n';
-            std::cout << "\tImplementation Version: " << layerProperties.implementationVersion << '\n';
-            std::cout << "\tSpec Version: " << layerProperties.specVersion << '\n';
-            std::cout << "\t-----------------------------------" << '\n';
+        SDL_LogInfo(SDL_LOG_CATEGORY_VIDEO, "Camadas Vulkan Disponiveis %d", validationLayerCount);
+
+        for (const auto& prop : availableLayers) {
+            SDL_LogInfo(SDL_LOG_CATEGORY_VIDEO, "----------------------------------");
+            SDL_LogInfo(SDL_LOG_CATEGORY_VIDEO, "Layer Name: %s", prop.layerName);
+            SDL_LogInfo(SDL_LOG_CATEGORY_VIDEO, "Description:  %s", prop.description);
+            SDL_LogInfo(SDL_LOG_CATEGORY_VIDEO, "Implementation Version: %d", prop.implementationVersion);
+            SDL_LogInfo(SDL_LOG_CATEGORY_VIDEO, "Spec Version: %d", prop.specVersion);
         }
+        SDL_LogInfo(SDL_LOG_CATEGORY_VIDEO, "----------------------------------");
 
         // Check if given Validation Layer is in list of given Validation Layers
         for (const auto& validationLayer : validationLayers) {

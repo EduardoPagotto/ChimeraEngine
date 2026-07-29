@@ -1,9 +1,9 @@
+#include <SDL3/SDL_log.h>
 #define STB_IMAGE_IMPLEMENTATION
 
 #include "VulkanRenderer.hpp"
 #include <SDL3/SDL.h>
 #include <glm/ext/matrix_transform.hpp>
-#include <iostream>
 #include <string>
 
 void teste() {
@@ -39,6 +39,9 @@ void teste() {
 int main() {
 
     auto result = SDL_APP_SUCCESS;
+
+    // Habilita todas as mensagens em modo Debug
+    SDL_SetLogPriority(SDL_LOG_CATEGORY_VIDEO, SDL_LOG_PRIORITY_DEBUG);
 
     try {
 
@@ -79,7 +82,7 @@ int main() {
         }
 
     } catch (const std::runtime_error& e) {
-        std::cout << "Error: " << e.what() << '\n';
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s", e.what());
         result = SDL_APP_FAILURE;
     }
 

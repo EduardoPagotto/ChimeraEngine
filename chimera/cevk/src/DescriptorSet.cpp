@@ -3,7 +3,8 @@
 
 namespace ce {
     std::pair<size_t, size_t> DescriptorSet::allocate(const VkDescriptorPool& descriptorPool,
-                                                      std::vector<VkDescriptorSetLayout>& descriptorSetLayouts) {
+                                                      std::vector<VkDescriptorSetLayout>& descriptorSetLayouts,
+                                                      void* variableCountInfo) {
 
         // Reserve new spaces in descriptorSet
         size_t index = this->descriptorSets.size();
@@ -15,6 +16,7 @@ namespace ce {
         // Descriptor Set Allocation info
         const VkDescriptorSetAllocateInfo setAllocInfo{
             .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
+            .pNext = variableCountInfo,
             .descriptorPool = descriptorPool,                  // Pool to allocate Descriptor Set
             .descriptorSetCount = static_cast<uint32_t>(size), // Number of sets to allocate
             .pSetLayouts = descriptorSetLayouts.data()         // Layouts to use to allocate sets (1:1 relationship)

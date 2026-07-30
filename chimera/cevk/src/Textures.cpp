@@ -17,11 +17,11 @@ namespace ce {
         // CREATE DESCRIPTOR SET LAYOUT (SAMPLER), Texture binding info
         //------------------------------------------------------------------------------------
         ce::DescriptorSetLayout& samplerDSL = this->uniformSampler.getDescriptorSetLayout();
-        samplerDSL.addBinding({.binding = 0,
-                               .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                               .descriptorCount = 1,
-                               .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
-                               .pImmutableSamplers = nullptr});
+        samplerDSL.addBinding(VkDescriptorSetLayoutBinding{.binding = 0,
+                                                           .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                                           .descriptorCount = 1,
+                                                           .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
+                                                           .pImmutableSamplers = nullptr});
 
         samplerDSL.create();
 

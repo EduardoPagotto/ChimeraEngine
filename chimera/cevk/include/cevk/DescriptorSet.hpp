@@ -17,7 +17,8 @@ namespace ce {
         // DescriptorSet& operator=(DescriptorSet&& other) noexcept;
 
         std::pair<size_t, size_t> allocate(const VkDescriptorPool& descriptorPool,
-                                           std::vector<VkDescriptorSetLayout>& descriptorSetLayouts);
+                                           std::vector<VkDescriptorSetLayout>& descriptorSetLayouts,
+                                           void* variableCountInfo = VK_NULL_HANDLE);
 
         VkDescriptorSet& get(size_t index) { return this->descriptorSets[index]; }
 

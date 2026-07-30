@@ -9,11 +9,13 @@ namespace ce {
         }
     }
 
-    void DescriptorSetLayout::create() {
+    void DescriptorSetLayout::create(void* extendedInfo, const VkDescriptorSetLayoutCreateFlags& flags) {
 
         // Create Desciptor Set Layout with given bindingd
         const VkDescriptorSetLayoutCreateInfo layoutCreateInfo{
             .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+            .pNext = extendedInfo,
+            .flags = flags,
             .bindingCount = static_cast<uint32_t>(layoutBinding.size()), // Number of binding infos
             .pBindings = layoutBinding.data()                            // Array of binding infos
         };

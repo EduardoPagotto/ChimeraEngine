@@ -14,7 +14,7 @@ namespace ce {
 
         void init(VkDevice device) { this->device = device; }
         void destroy();
-        void create();
+        void create(void* extendedInfo = VK_NULL_HANDLE, const VkDescriptorSetLayoutCreateFlags& flags = 0);
 
         void addBinding(const VkDescriptorSetLayoutBinding& vpLayoutBinding) {
             this->layoutBinding.push_back(vpLayoutBinding);

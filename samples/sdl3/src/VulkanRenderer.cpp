@@ -108,8 +108,7 @@ void VulkanRenderer::draw() {
     cmd.begin(this->cmdBuffers[imageIndex].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT, renderPassBeginInfo,
               this->graphicPipeline->get());
 
-    ce::DescriptorSet& vpUboDS = this->uniformBufferVP.getDescriptorSet();
-    ce::DescriptorSet& samplerUboDS = this->textureMng->getUniformSampler().getDescriptorSet();
+    ce::DescriptorSet& vpUboDS = this->uniformBufferVP.getDescriptorSet(imageIndex);
 
     for (size_t j = 0; j < this->modelList.size(); j++) {
 
@@ -120,11 +119,14 @@ void VulkanRenderer::draw() {
 
         for (size_t k = 0; k < thisModel.getMeshCount(); k++) {
 
+            ce::DescriptorSet& samplerUboDS =
+                this->textureMng->getUniformSampler().getDescriptorSet(thisModel.getMesh(k)->getTexId());
+
             cmd.addVertexBuffer({0}, thisModel.getMesh(k)->getVertexBuffer());
             cmd.bindVertexBuffer(0);
             cmd.bindIndexBuffer(thisModel.getMesh(k)->getIndexBuffer(), {0});
-            cmd.addDescriptorSet(vpUboDS.get(imageIndex));
-            cmd.addDescriptorSet(samplerUboDS.get(thisModel.getMesh(k)->getTexId()));
+            cmd.addDescriptorSet(vpUboDS.get());
+            cmd.addDescriptorSet(samplerUboDS.get());
             cmd.bindDescriptorSets(this->pipelineLayout->get());
             cmd.drawIndexed(thisModel.getMesh(k)->getIndexCount(), 1, 0, 0, 0);
             cmd.clearTemps();
@@ -257,10 +259,13 @@ void VulkanRenderer::createDescriptorSets() {
     this->uniformBufferVP.allocateDescriptorSetsWithPool(this->uniformBufferVP.getBuffers().size(),
                                                          this->descriptorPool.get());
 
-    ce::DescriptorSet& uboDS = this->uniformBufferVP.getDescriptorSet();
+    ce::DescriptorSetWrite dsw(context.logical);
 
     // Update all of descriptor set buffer bindings
     for (size_t i = 0; i < this->uniformBufferVP.getBuffers().size(); i++) {
+
+        ce::DescriptorSet& uboDS = this->uniformBufferVP.getDescriptorSet(i);
+
         // VIEW PROJECTION DESCRIPTOR
         // Buffer info and data offset info
         const VkDescriptorBufferInfo vpBufferInfo{
@@ -271,18 +276,18 @@ void VulkanRenderer::createDescriptorSets() {
 
         // Data about connection between binding and buffer
         // Add to a list of descriptor set writes
-        uboDS.addWrite(VkWriteDescriptorSet{
+        dsw.add(VkWriteDescriptorSet{
             .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-            .dstSet = uboDS.get(i), // Descriptor Set to update
-            .dstBinding = 0,        // Binding to update (matches with binding on layout/shader)
-            .dstArrayElement = 0,   // index in array to update
-            .descriptorCount = 1,   // type of Descriptor
+            .dstSet = uboDS.get(), // Descriptor Set to update
+            .dstBinding = 0,       // Binding to update (matches with binding on layout/shader)
+            .dstArrayElement = 0,  // index in array to update
+            .descriptorCount = 1,  // type of Descriptor
             .descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, // Amount to update
             .pBufferInfo = &vpBufferInfo                         // Information about buffer data to bind
         });
     }
     // Update the descripto sets with new buffer/binding info
-    uboDS.update();
+    dsw.update();
 }
 
 int VulkanRenderer::createMeshModel(const std::string& modelFile) {

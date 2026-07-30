@@ -136,19 +136,21 @@ namespace ce {
             .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL // Image to bind to set
         };
 
-        ce::DescriptorSet& samplerDS = this->uniformSampler.getDescriptorSet();
+        ce::DescriptorSet& samplerDS = this->uniformSampler.getDescriptorSet(index);
 
+        ce::DescriptorSetWrite dsw(this->context.logical);
         // Descriptor Write info
-        samplerDS.addWrite(VkWriteDescriptorSet{.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-                                                .dstSet = samplerDS.get(index),
-                                                .dstBinding = 0,
-                                                .dstArrayElement = 0,
-                                                .descriptorCount = 1,
-                                                .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                .pImageInfo = &imageInfo});
+        dsw.add(VkWriteDescriptorSet{.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                                     .dstSet = samplerDS.get(),
+                                     .dstBinding = 0,
+                                     .dstArrayElement = 0,
+                                     .descriptorCount = 1,
+                                     .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                     .pImageInfo = &imageInfo});
 
-        samplerDS.update();
+        dsw.update();
 
-        return samplerDS.getSize() - 1;
+        // return samplerDS.getSize() - 1;
+        return index;
     }
 } // namespace ce

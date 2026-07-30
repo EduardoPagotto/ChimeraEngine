@@ -11,18 +11,20 @@ namespace ce {
 
         void init(VkDevice device) { this->device = device; }
 
-        DescriptorSet(const DescriptorSet&) = delete;
-        DescriptorSet& operator=(const DescriptorSet&) = delete;
-        // DescriptorSet(DescriptorSet&& other) noexcept;
-        // DescriptorSet& operator=(DescriptorSet&& other) noexcept;
+        VkDescriptorSet& get() { return this->descriptorSets; }
 
-        std::pair<size_t, size_t> allocate(const VkDescriptorPool& descriptorPool,
-                                           std::vector<VkDescriptorSetLayout>& descriptorSetLayouts,
-                                           void* variableCountInfo = VK_NULL_HANDLE);
+        void alloc(const VkDescriptorPool& descriptorPool, VkDescriptorSetLayout& descriptorSetLayouts,
+                   void* variableCountInfo = VK_NULL_HANDLE);
 
-        VkDescriptorSet& get(size_t index) { return this->descriptorSets[index]; }
+      private:
+        VkDevice device{VK_NULL_HANDLE};
+        VkDescriptorSet descriptorSets{VK_NULL_HANDLE};
+    };
 
-        size_t getSize() const { return this->descriptorSets.size(); }
+    class DescriptorSetWrite {
+      public:
+        DescriptorSetWrite(VkDevice device) : device(device) {}
+        virtual ~DescriptorSetWrite() = default;
 
         void update() {
             // Update the descripto sets with new buffer/binding info
@@ -33,11 +35,10 @@ namespace ce {
             this->setWrites.shrink_to_fit();
         }
 
-        void addWrite(const VkWriteDescriptorSet& vpSetWrite) { this->setWrites.push_back(vpSetWrite); }
+        void add(const VkWriteDescriptorSet& vpSetWrite) { this->setWrites.push_back(vpSetWrite); }
 
       private:
         VkDevice device{VK_NULL_HANDLE};
-        std::vector<VkDescriptorSet> descriptorSets;
         std::vector<VkWriteDescriptorSet> setWrites;
     };
 } // namespace ce

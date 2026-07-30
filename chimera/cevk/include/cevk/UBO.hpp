@@ -14,8 +14,8 @@ namespace ce {
         virtual ~UniformSampler() { this->destroy(); };
 
         void init(VkDevice logical) {
-            descriptorSetLayout.init(logical);
-            descriptorSets.init(logical);
+            this->logical = logical;
+            this->descriptorSetLayout.init(logical);
         }
 
         void destroy() {
@@ -26,18 +26,27 @@ namespace ce {
         }
 
         std::pair<size_t, size_t> allocateDescriptorSetsWithPool(size_t tot, const VkDescriptorPool& descriptorPool) {
-            std::vector<VkDescriptorSetLayout> setLayouts(tot, this->descriptorSetLayout.get());
-            return this->descriptorSets.allocate(descriptorPool, setLayouts);
+
+            size_t start = descriptors.size();
+            for (size_t i = 0; i < tot; i++) {
+                size_t pos = descriptors.size();
+                descriptors.push_back(DescriptorSet{});
+                descriptors[pos].init(this->logical);
+                descriptors[pos].alloc(descriptorPool, this->descriptorSetLayout.get());
+            }
+
+            return {start, tot};
         }
 
-        DescriptorSet& getDescriptorSet() { return this->descriptorSets; }
+        DescriptorSet& getDescriptorSet(size_t index) { return this->descriptors[index]; }
         DescriptorSetLayout& getDescriptorSetLayout() { return this->descriptorSetLayout; }
 
         std::vector<std::shared_ptr<Image>>& getImages() { return images; }
 
       private:
-        DescriptorSet descriptorSets;
+        VkDevice logical{VK_NULL_HANDLE};
         DescriptorSetLayout descriptorSetLayout;
+        std::vector<DescriptorSet> descriptors;
         std::vector<std::shared_ptr<Image>> images;
     };
 
@@ -48,6 +57,7 @@ namespace ce {
 
         void init(VkPhysicalDevice physical, VkDevice logical, const size_t maxUBO, const size_t sizeDataUBO) {
 
+            this->logical = logical;
             // ViewProjection Buffer size
             const VkDeviceSize vpBufferSize = sizeDataUBO; // tamanho do struct com os dados
 
@@ -63,7 +73,7 @@ namespace ce {
 
             // UNIFORM VALUES DESCRIPTOR SET LAYOUT AND DESCRIPTORSETS
             descriptorSetLayout.init(logical);
-            descriptorSets.init(logical);
+            // descriptorSets.init(logical);
         }
 
         void destroy() {
@@ -74,18 +84,28 @@ namespace ce {
         }
 
         std::pair<size_t, size_t> allocateDescriptorSetsWithPool(size_t tot, const VkDescriptorPool& descriptorPool) {
-            std::vector<VkDescriptorSetLayout> setLayouts(tot, this->descriptorSetLayout.get());
-            return this->descriptorSets.allocate(descriptorPool, setLayouts);
+
+            size_t start = descriptors.size();
+            for (size_t i = 0; i < tot; i++) {
+                size_t pos = descriptors.size();
+                descriptors.push_back(DescriptorSet{});
+                descriptors[pos].init(this->logical);
+                descriptors[pos].alloc(descriptorPool, this->descriptorSetLayout.get());
+            }
+
+            return {start, tot};
         }
 
-        DescriptorSet& getDescriptorSet() { return this->descriptorSets; }
+        DescriptorSet& getDescriptorSet(size_t index) { return this->descriptors[index]; }
         DescriptorSetLayout& getDescriptorSetLayout() { return this->descriptorSetLayout; }
 
         std::vector<std::shared_ptr<Buffer>>& getBuffers() { return buffers; }
 
       private:
-        DescriptorSet descriptorSets;
+        VkDevice logical{VK_NULL_HANDLE};
+        // DescriptorSet descriptorSets;
         DescriptorSetLayout descriptorSetLayout;
+        std::vector<DescriptorSet> descriptors;
         std::vector<std::shared_ptr<Buffer>> buffers;
     };
 

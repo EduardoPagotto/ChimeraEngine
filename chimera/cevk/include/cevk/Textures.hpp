@@ -7,7 +7,6 @@
 
 namespace ce {
     class Textures {
-
       public:
         explicit Textures(VulkanContext& context);
         virtual ~Textures();
@@ -19,9 +18,6 @@ namespace ce {
         int createTexture(const std::string& filename);
 
       private:
-        void createDescriptorSetLayout();
-        void createDescriptorPool();
-        void createTextureSampler();
         std::shared_ptr<Image> createTextureImage(const std::string& filename);
         int createTextureDescriptor(VkImageView textureImage);
 

@@ -108,5 +108,12 @@ em vulkan api como criar multiplas texturas usando indice apenas no fragment
 
 Bindless Textures
 
-em SDL3 e vulkan api nativa como criar
-Bindless Textures  mostrando os set dos dectriptors e samples usando indice apenas no fragment passando como indice em push
+
+
+gerar abaixo na sequencia
+
+em SDL3 e vulkan api nativa como criar Bindless Textures mostrando os set dos dectriptors e samples usando indice apenas no fragment passando como indice em push
+
+em SDL3 e vulkan api nativa como criar Bindless Textures com diversara images de texturas mostrando os set dos dectriptors e samples usando indice apenas no fragment passando como indice em push
+
+em SDL3 e vulkan api nativa como criar Bindless Textures mostrando a criacao do descriptorset unico e como passar para o fragment o indice

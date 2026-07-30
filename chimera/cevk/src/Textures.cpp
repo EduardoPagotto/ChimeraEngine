@@ -13,30 +13,9 @@ namespace ce {
     Textures::Textures(ce::VulkanContext& context) : context(context) {
         //
         this->uniformSampler.init(context.logical);
-        this->createDescriptorSetLayout();
-        this->createDescriptorPool();
-        this->createTextureSampler();
-    }
-
-    Textures::~Textures() {
-        //
-        vkDestroySampler(this->context.logical, this->textureSampler, nullptr);
-        samplerDescriptorPool.destroy();
-        uniformSampler.destroy();
-    }
-
-    int Textures::createTexture(const std::string& filename) {
-        // Create Texture image
-        std::shared_ptr<Image> texImageObj = this->createTextureImage(filename);
-        this->uniformSampler.getImages().push_back(texImageObj);
-
-        // Create Texture Descriptor and return location of set with texture
-        return this->createTextureDescriptor(texImageObj->getImageView());
-    }
-
-    void Textures::createDescriptorSetLayout() {
-        // CREATE TEXTURE SAMPLER DESCRIPTOR SET LAYOUT
-        // Texture binding info
+        //------------------------------------------------------------------------------------
+        // CREATE DESCRIPTOR SET LAYOUT (SAMPLER), Texture binding info
+        //------------------------------------------------------------------------------------
         ce::DescriptorSetLayout& samplerDSL = this->uniformSampler.getDescriptorSetLayout();
         samplerDSL.addBinding({.binding = 0,
                                .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
@@ -45,17 +24,17 @@ namespace ce {
                                .pImmutableSamplers = nullptr});
 
         samplerDSL.create();
-    }
 
-    void Textures::createDescriptorPool() {
-        // CREATE SAMPLER DESCRIPTOR POOL
+        //------------------------------------------------------------------------------------
+        // CREATE DESCRIPTOR POOL (SAMPLER)
+        //------------------------------------------------------------------------------------
         this->samplerDescriptorPool.addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_OBJECTS);
         this->samplerDescriptorPool.create(this->context.logical, MAX_OBJECTS,
                                            static_cast<VkDescriptorPoolCreateFlagBits>(0));
-    }
 
-    void Textures::createTextureSampler() {
-        // Sampler create info
+        //------------------------------------------------------------------------------------
+        //  CREATE TEXTURE SAMPLER
+        //------------------------------------------------------------------------------------
         const VkSamplerCreateInfo samplerCreateInfo{
             .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
             .magFilter = VK_FILTER_LINEAR,                   // How torender when image is magnified on screen
@@ -76,6 +55,21 @@ namespace ce {
         if (vkCreateSampler(context.logical, &samplerCreateInfo, nullptr, &this->textureSampler) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create a Sampler");
         }
+    }
+
+    Textures::~Textures() {
+        vkDestroySampler(this->context.logical, this->textureSampler, nullptr);
+        samplerDescriptorPool.destroy();
+        uniformSampler.destroy();
+    }
+
+    int Textures::createTexture(const std::string& filename) {
+        // Create Texture image
+        std::shared_ptr<Image> texImageObj = this->createTextureImage(filename);
+        this->uniformSampler.getImages().push_back(texImageObj);
+
+        // Create Texture Descriptor and return location of set with texture
+        return this->createTextureDescriptor(texImageObj->getImageView());
     }
 
     std::shared_ptr<Image> Textures::createTextureImage(const std::string& filename) {

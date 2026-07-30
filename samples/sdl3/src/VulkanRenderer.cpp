@@ -260,7 +260,7 @@ void VulkanRenderer::createDescriptorSets() {
     ce::DescriptorSet& uboDS = this->uniformBufferVP.getDescriptorSet();
 
     // Update all of descriptor set buffer bindings
-    for (size_t i = 0; i < this->swapchain->getImages().size(); i++) {
+    for (size_t i = 0; i < this->uniformBufferVP.getBuffers().size(); i++) {
         // VIEW PROJECTION DESCRIPTOR
         // Buffer info and data offset info
         const VkDescriptorBufferInfo vpBufferInfo{

@@ -139,18 +139,15 @@ namespace ce {
         ce::DescriptorSet& samplerDS = this->uniformSampler.getDescriptorSet();
 
         // Descriptor Write info
-        const VkWriteDescriptorSet descriptorWrite{.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-                                                   .dstSet = samplerDS.get(index),
-                                                   .dstBinding = 0,
-                                                   .dstArrayElement = 0,
-                                                   .descriptorCount = 1,
-                                                   .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                   .pImageInfo = &imageInfo};
+        samplerDS.addWrite(VkWriteDescriptorSet{.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                                                .dstSet = samplerDS.get(index),
+                                                .dstBinding = 0,
+                                                .dstArrayElement = 0,
+                                                .descriptorCount = 1,
+                                                .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                                .pImageInfo = &imageInfo});
 
-        samplerDS.addWrite(descriptorWrite);
-        // Update new descriptor set
         samplerDS.update();
-        samplerDS.clearWrite();
 
         return samplerDS.getSize() - 1;
     }

@@ -270,7 +270,8 @@ void VulkanRenderer::createDescriptorSets() {
         };
 
         // Data about connection between binding and buffer
-        const VkWriteDescriptorSet vpSetWrite{
+        // Add to a list of descriptor set writes
+        uboDS.addWrite(VkWriteDescriptorSet{
             .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
             .dstSet = uboDS.get(i), // Descriptor Set to update
             .dstBinding = 0,        // Binding to update (matches with binding on layout/shader)
@@ -278,14 +279,10 @@ void VulkanRenderer::createDescriptorSets() {
             .descriptorCount = 1,   // type of Descriptor
             .descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, // Amount to update
             .pBufferInfo = &vpBufferInfo                         // Information about buffer data to bind
-        };
-
-        // Add to a list of descriptor set writes
-        uboDS.addWrite(vpSetWrite);
+        });
     }
     // Update the descripto sets with new buffer/binding info
-    uboDS.update(); // updateDescriptorSets();
-    uboDS.clearWrite();
+    uboDS.update();
 }
 
 int VulkanRenderer::createMeshModel(const std::string& modelFile) {

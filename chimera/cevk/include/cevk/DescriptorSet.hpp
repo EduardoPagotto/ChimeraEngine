@@ -28,10 +28,12 @@ namespace ce {
             // Update the descripto sets with new buffer/binding info
             vkUpdateDescriptorSets(device, static_cast<uint32_t>(this->setWrites.size()), this->setWrites.data(), 0,
                                    nullptr);
+
+            this->setWrites.clear();
+            this->setWrites.shrink_to_fit();
         }
 
         void addWrite(const VkWriteDescriptorSet& vpSetWrite) { this->setWrites.push_back(vpSetWrite); }
-        void clearWrite() { this->setWrites.clear(); }
 
       private:
         VkDevice device{VK_NULL_HANDLE};

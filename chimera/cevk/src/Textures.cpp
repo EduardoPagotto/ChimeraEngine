@@ -26,14 +26,12 @@ namespace ce {
     }
 
     int Textures::createTexture(const std::string& filename) {
-        // Create Texture image and get its location in array
-        int textureImageLoc = this->createTextureImage(filename);
-        std::shared_ptr<Image>& image = this->uniformSampler.getImages()[textureImageLoc];
-
-        image->createImageView(VK_IMAGE_ASPECT_COLOR_BIT);
+        // Create Texture image
+        std::shared_ptr<Image> texImageObj = this->createTextureImage(filename);
+        this->uniformSampler.getImages().push_back(texImageObj);
 
         // Create Texture Descriptor and return location of set with texture
-        return this->createTextureDescriptor(image->getImageView());
+        return this->createTextureDescriptor(texImageObj->getImageView());
     }
 
     void Textures::createDescriptorSetLayout() {
@@ -80,7 +78,7 @@ namespace ce {
         }
     }
 
-    int Textures::createTextureImage(const std::string& filename) {
+    std::shared_ptr<Image> Textures::createTextureImage(const std::string& filename) {
 
         std::string fileLoc = "./assets/textures/" + filename;
         SDL_Surface* loadedSurface = IMG_Load(fileLoc.c_str());
@@ -128,10 +126,9 @@ namespace ce {
                                    texImageObj->getImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                    VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-        // add texture data to vector for reference
-        this->uniformSampler.getImages().push_back(texImageObj);
+        texImageObj->createImageView(VK_IMAGE_ASPECT_COLOR_BIT);
 
-        return this->uniformSampler.getImages().size() - 1;
+        return texImageObj;
     }
 
     int Textures::createTextureDescriptor(VkImageView textureImage) {

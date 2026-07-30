@@ -22,7 +22,7 @@ namespace ce {
         void createDescriptorSetLayout();
         void createDescriptorPool();
         void createTextureSampler();
-        int createTextureImage(const std::string& filename);
+        std::shared_ptr<Image> createTextureImage(const std::string& filename);
         int createTextureDescriptor(VkImageView textureImage);
 
         VulkanContext& context;

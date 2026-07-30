@@ -103,3 +103,10 @@ glslangValidator  -V ./samples/sdl31/shades/ -o ./bin/T
 
 <b>YAML</b> (future)
  - [jbeder](https://github.com/jbeder/yaml-cpp/wiki/How-To-Emit-YAML)
+
+em vulkan api como criar multiplas texturas usando indice apenas no fragment
+
+Bindless Textures
+
+em SDL3 e vulkan api nativa como criar
+Bindless Textures  mostrando os set dos dectriptors e samples usando indice apenas no fragment passando como indice em push

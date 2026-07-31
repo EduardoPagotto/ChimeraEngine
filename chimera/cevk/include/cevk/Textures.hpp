@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DescriptorPool.hpp"
+#include "Sampler.hpp"
 #include "UBO.hpp"
 #include "VulkanContext.hpp"
 #include <vulkan/vulkan_core.h>
@@ -22,7 +23,7 @@ namespace ce {
         int createTextureDescriptor(VkImageView textureImage);
 
         VulkanContext& context;
-        VkSampler textureSampler{VK_NULL_HANDLE};
+        Sampler texSampler;
         UniformSampler uniformSampler;
         DescriptorPool samplerDescriptorPool;
     };

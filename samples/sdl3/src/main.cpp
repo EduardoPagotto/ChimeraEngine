@@ -1,4 +1,5 @@
 #include "AssetManager.hpp"
+#include "TextureCrt.hpp"
 #include "VulkanRenderer.hpp"
 #include "VulkanTexture.hpp"
 #include <SDL3/SDL.h>
@@ -12,6 +13,8 @@ void teste(ce::VulkanContext& context) {
 
     // 1. Cria o Asset Manager injetando o contexto Vulkan
     AssetManager assetManager(context);
+    // BindlessUniformSampler uniform(context);
+    // uniform.create();
 
     // std::string fileLoc = "./assets/textures/" + filePath;
 

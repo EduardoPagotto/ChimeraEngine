@@ -28,37 +28,20 @@ namespace ce {
         //------------------------------------------------------------------------------------
         // CREATE DESCRIPTOR POOL (SAMPLER)
         //------------------------------------------------------------------------------------
-        this->samplerDescriptorPool.addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_OBJECTS);
+        this->samplerDescriptorPool.addPoolSize(
+            VkDescriptorPoolSize{.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, .descriptorCount = MAX_OBJECTS});
+
         this->samplerDescriptorPool.create(this->context.logical, MAX_OBJECTS,
                                            static_cast<VkDescriptorPoolCreateFlagBits>(0));
 
         //------------------------------------------------------------------------------------
         //  CREATE TEXTURE SAMPLER
         //------------------------------------------------------------------------------------
-        const VkSamplerCreateInfo samplerCreateInfo{
-            .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
-            .magFilter = VK_FILTER_LINEAR,                   // How torender when image is magnified on screen
-            .minFilter = VK_FILTER_LINEAR,                   // How to render when image is minifield on screen
-            .mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR,     // Mipmap interpolation mode
-            .addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT,  // texture wrap in U(x) direction wrap_s
-            .addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT,  // texture wrap in V(y) direction wrap_t
-            .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,  // texture wrap in W(z) direction wrap_r
-            .mipLodBias = 0.0F,                              // Level of detail of bias for mip level
-            .anisotropyEnable = VK_TRUE,                     // Enable anisotropy
-            .maxAnisotropy = 16,                             // Anisotropy sample level
-            .minLod = 0.0F,                                  // Minimum Level Detail ro pick mip level
-            .maxLod = 0.0F,                                  // Maximum Level Detail ro pick mip level
-            .borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK, // Border beond texture (only works for border clamp)
-            .unnormalizedCoordinates = VK_FALSE,             // Wheter coords should be normalized (between 0 and 1)
-        };
-
-        if (vkCreateSampler(context.logical, &samplerCreateInfo, nullptr, &this->textureSampler) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create a Sampler");
-        }
+        this->texSampler.init(context.logical);
     }
 
     Textures::~Textures() {
-        vkDestroySampler(this->context.logical, this->textureSampler, nullptr);
+        texSampler.destroy();
         samplerDescriptorPool.destroy();
         uniformSampler.destroy();
     }
@@ -131,7 +114,7 @@ namespace ce {
 
         // Texture Image info
         const VkDescriptorImageInfo imageInfo{
-            .sampler = this->textureSampler,                        // Image layout when in use
+            .sampler = this->texSampler.get(),                      // Image layout when in use
             .imageView = textureImage,                              // Sampler to use for set
             .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL // Image to bind to set
         };

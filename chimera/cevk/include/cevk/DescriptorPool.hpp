@@ -14,9 +14,7 @@ namespace ce {
 
         VkDescriptorPool& get() { return handle; }
 
-        void addPoolSize(const VkDescriptorType& type, const uint32_t& count) {
-            this->poolSize.push_back(VkDescriptorPoolSize{.type = type, .descriptorCount = count});
-        }
+        void addPoolSize(const VkDescriptorPoolSize& poolsize) { this->poolSize.push_back(poolsize); }
 
         void create(VkDevice device, const uint32_t& maxSets, VkDescriptorPoolCreateFlagBits flags);
         void destroy() noexcept;

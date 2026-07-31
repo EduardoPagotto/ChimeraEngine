@@ -246,8 +246,9 @@ void VulkanRenderer::createDescriptorPool() {
     // CREATE UNIFORM DESCRIPTOR POOL
     // Type of Descriptors + how many DESCRIPTORS, not Descriptor Sets (combined makes the pool size)
     // ViewProjection Pool
-    this->descriptorPool.addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-                                     static_cast<uint32_t>(this->uniformBufferVP.getBuffers().size()));
+    this->descriptorPool.addPoolSize(
+        VkDescriptorPoolSize{.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+                             .descriptorCount = static_cast<uint32_t>(this->uniformBufferVP.getBuffers().size())});
 
     // Create Descriptor Pool, Maximum number of descriptor Sets
     this->descriptorPool.create(this->context.logical, static_cast<uint32_t>(this->swapchain->getImages().size()),

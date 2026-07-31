@@ -32,6 +32,8 @@ void teste(ce::VulkanContext& context) {
         // Carrega textura específica desta fase
         auto bg = assetManager.load<VulkanTexture>("background", "./assets/textures/grid2.png");
 
+        uniform.addImgsUniform(sampler.get(), bg);
+
         // Se pedir a "logo_jogos" aqui, ele busca e encontra no escopo Global pai
         auto logoMenu = assetManager.load<VulkanTexture>("logo_jogos", "./assets/textures/grid3.png");
 

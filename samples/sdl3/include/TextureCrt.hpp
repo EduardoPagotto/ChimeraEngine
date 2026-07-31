@@ -72,9 +72,9 @@ namespace ce {
 
         void addImgsUniform(VkSampler globalSampler, std::shared_ptr<VulkanTexture> tex) {
 
-            this->uniform.getImages().push_back(tex->get());
+            // this->uniform.getImages().push_back(tex->get());
             //
-            //  Atualiza o Descriptor Set global colocando esta nova imagem no seu respectivo índice
+            //   Atualiza o Descriptor Set global colocando esta nova imagem no seu respectivo índice
             VkDescriptorImageInfo imageInfo = {
                 .sampler = globalSampler,                // Pode usar um sampler global ou um específico por textura
                 .imageView = tex->get()->getImageView(), // imageView,

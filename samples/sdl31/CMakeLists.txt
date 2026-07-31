@@ -13,9 +13,16 @@ find_package(VulkanMemoryAllocator CONFIG REQUIRED)
 find_package(fastgltf REQUIRED)
 
 set (IncludeDirs ${CMAKE_CURRENT_SOURCE_DIR}/include
-                 ${CMAKE_SOURCE_DIR}/chimera/cevk/include/cevk)
+                 ${CMAKE_SOURCE_DIR}/chimera/cevk/include/
+                 ${CMAKE_SOURCE_DIR}/chimera/cevk_infra/include/
+                 ${CMAKE_SOURCE_DIR}/chimera/cevk_engine/include/
+
+
+                 )
 
 set (LIBRARY_DEPS ${CMAKE_SOURCE_DIR}/bin/libcevk.a
+                  ${CMAKE_SOURCE_DIR}/bin/libcevk_engine.a
+                  ${CMAKE_SOURCE_DIR}/bin/libcevk_infra.a
                   SDL3::SDL3
                   SDL3_image::SDL3_image
                   Vulkan::Vulkan
@@ -23,7 +30,8 @@ set (LIBRARY_DEPS ${CMAKE_SOURCE_DIR}/bin/libcevk.a
                   assimp::assimp
                   fastgltf::fastgltf)
 
-add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+                               ${CMAKE_CURRENT_SOURCE_DIR}/src/Game.cpp)
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
@@ -31,4 +39,4 @@ target_include_directories (${PROJECT_NAME} PRIVATE ${IncludeDirs})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBRARY_DEPS})
 
-#add_dependencies(${PROJECT_NAME} cevk)
+add_dependencies(${PROJECT_NAME} cevk_engine)

@@ -52,6 +52,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 # Engine
 
 add_subdirectory(chimera/cevk)
+add_subdirectory(chimera/cevk_infra)
+add_subdirectory(chimera/cevk_engine)
 
 # add_subdirectory(chimera/src/core)
 # add_subdirectory(chimera/src/collada)
@@ -60,7 +62,7 @@ add_subdirectory(chimera/cevk)
 # Simple testes app
 
 add_subdirectory(samples/sdl3)
-#add_subdirectory(samples/sdl31)
+add_subdirectory(samples/sdl31)
 #add_subdirectory(samples/loader)
 
 # add_subdirectory(samples/raycasting)

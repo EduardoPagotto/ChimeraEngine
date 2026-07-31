@@ -301,9 +301,9 @@ namespace ce {
         vkGetPhysicalDeviceProperties(physical, &deviceProperties);
         // minUniformBufferOffset = deviceProperties.limits.minUniformBufferOffsetAlignment;
 
-        if (!VulkanContext::checkDescriptorIndexingSupport(physical)) {
-            throw std::runtime_error("Descriptor Indexing Support not allowed");
-        }
+        // if (!VulkanContext::checkDescriptorIndexingSupport(physical)) {
+        //     throw std::runtime_error("Descriptor Indexing Support not allowed");
+        // }
     }
 
     void VulkanContext::createLogicalDevice() {
@@ -331,6 +331,20 @@ namespace ce {
             queueCreateInfos.push_back(queueCreateInfo);
         }
 
+        VkPhysicalDeviceDescriptorIndexingFeatures indexingFeatures = {
+            .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES,
+            .descriptorBindingSampledImageUpdateAfterBind = VK_TRUE};
+
+        // 2. Query physical device support to ensure your GPU handles it
+        VkPhysicalDeviceFeatures2 deviceFeatures2 = {.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2,
+                                                     .pNext = &indexingFeatures};
+
+        vkGetPhysicalDeviceFeatures2(this->physical, &deviceFeatures2);
+
+        if (!indexingFeatures.descriptorBindingSampledImageUpdateAfterBind) {
+            throw std::runtime_error("GPU does not support updating sampled images after bind!");
+        }
+
         // Information to create logical device (sometimes called "device")
         // Physical Device Features the Logical Device will be using
         const VkPhysicalDeviceFeatures deviceFeatures{
@@ -339,6 +353,7 @@ namespace ce {
 
         const VkDeviceCreateInfo deviceCreateInfo{
             .sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+            .pNext = &indexingFeatures,                                             // bindlessTex
             .queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size()), // Number queueCreateInfos
             .pQueueCreateInfos =
                 queueCreateInfos.data(), // List of queueCreateInfos so device can create required queues
@@ -409,7 +424,8 @@ namespace ce {
     bool VulkanContext::checkDescriptorIndexingSupport(VkPhysicalDevice device) {
         // 1. Instanciar a estrutura específica que queremos checar
         VkPhysicalDeviceDescriptorIndexingFeatures indexingFeatures = {
-            .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES};
+            .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES,
+            .descriptorBindingSampledImageUpdateAfterBind = VK_TRUE};
 
         // 2. Instanciar a estrutura base de recursos modernos
         VkPhysicalDeviceFeatures2 deviceFeatures2 = {

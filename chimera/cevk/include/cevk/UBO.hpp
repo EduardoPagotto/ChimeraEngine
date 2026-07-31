@@ -25,14 +25,15 @@ namespace ce {
             this->images.clear();
         }
 
-        std::pair<size_t, size_t> allocateDescriptorSetsWithPool(size_t tot, const VkDescriptorPool& descriptorPool) {
+        std::pair<size_t, size_t> allocateDescriptorSetsWithPool(size_t tot, const VkDescriptorPool& descriptorPool,
+                                                                 void* variableCountInfo = VK_NULL_HANDLE) {
 
             size_t start = descriptors.size();
             for (size_t i = 0; i < tot; i++) {
                 size_t pos = descriptors.size();
                 descriptors.push_back(DescriptorSet{});
                 descriptors[pos].init(this->logical);
-                descriptors[pos].alloc(descriptorPool, this->descriptorSetLayout.get());
+                descriptors[pos].alloc(descriptorPool, this->descriptorSetLayout.get(), variableCountInfo);
             }
 
             return {start, tot};

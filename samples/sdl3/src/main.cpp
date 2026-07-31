@@ -13,13 +13,17 @@ void teste(ce::VulkanContext& context) {
 
     // 1. Cria o Asset Manager injetando o contexto Vulkan
     AssetManager assetManager(context);
-    // BindlessUniformSampler uniform(context);
-    // uniform.create();
+    BindlessUniformSampler uniform(context);
+    uniform.create();
+
+    Sampler sampler(context.logical);
 
     // std::string fileLoc = "./assets/textures/" + filePath;
 
     // 2. Carrega textura no Escopo Global
     auto logo = assetManager.load<VulkanTexture>("logo_jogos", "./assets/textures/grid1.png");
+
+    uniform.addImgsUniform(sampler.get(), logo);
 
     {
         // 3. Entra em uma nova fase (Cria novo escopo)

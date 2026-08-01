@@ -4,6 +4,7 @@
 #include "Sampler.hpp"
 #include "UBO.hpp"
 #include "VulkanContext.hpp"
+#include "VulkanTexture.hpp"
 #include <vulkan/vulkan_core.h>
 
 namespace ce {
@@ -13,11 +14,9 @@ namespace ce {
         virtual ~Textures();
 
         UniformSampler& getUniformSampler() { return uniformSampler; }
-        int createTexture(const std::string& filename);
+        int createTextureDescriptor(std::shared_ptr<VulkanTexture> vulkanTex);
 
       private:
-        int createTextureDescriptor(VkImageView textureImage);
-
         Sampler texSampler;
         UniformSampler uniformSampler;
         DescriptorPool samplerDescriptorPool;

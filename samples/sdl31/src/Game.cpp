@@ -38,7 +38,8 @@ Game::Game(std::shared_ptr<ce::VulkanContext> ctx, std::shared_ptr<ce::ScreenVK>
     uboViewProjection.projection[1][1] *= -1; // vulkan inverted of OpenGL
 
     // Create our default "no texture" texture
-    textureMng->createTexture("plain.png");
+    std::shared_ptr<VulkanTexture> vulkanTex = VulkanTexture::create(ctx, "./assets/textures/plain.png");
+    textureMng->createTextureDescriptor(vulkanTex);
 }
 
 Game::~Game() {
@@ -284,7 +285,10 @@ int Game::createMeshModel(const std::string& modelFile) {
         } else {
 
             // Otherwise, create texture and set value to index of new texture
-            matToTex[i] = this->textureMng->createTexture(textureNames[i]);
+            std::shared_ptr<ce::VulkanTexture> vulkanTex =
+                ce::VulkanTexture::create(ctx, "./assets/textures/" + textureNames[i]);
+
+            matToTex[i] = textureMng->createTextureDescriptor(vulkanTex);
             // matToTex[i] = createTexture("panda.jpg");
         }
     }

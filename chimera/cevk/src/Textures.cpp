@@ -2,7 +2,6 @@
 #include "DescriptorSet.hpp"
 #include "DescriptorSetLayout.hpp"
 #include "UBO.hpp"
-#include "VulkanTexture.hpp"
 #include "cevk.hpp"
 #include <SDL3_image/SDL_image.h>
 
@@ -44,23 +43,18 @@ namespace ce {
         uniformSampler.destroy();
     }
 
-    int Textures::createTexture(const std::string& filename) {
-        // Create Texture image
-        std::shared_ptr<Image> texImageObj = VulkanTexture::create(ctx, "./assets/textures/" + filename)->get();
+    int Textures::createTextureDescriptor(std::shared_ptr<VulkanTexture> vulkanTex) {
+
+        std::shared_ptr<Image> texImageObj = vulkanTex->get();
         this->uniformSampler.getImages().push_back(texImageObj);
 
-        // Create Texture Descriptor and return location of set with texture
-        return this->createTextureDescriptor(texImageObj->getImageView());
-    }
-
-    int Textures::createTextureDescriptor(VkImageView textureImage) {
         //
         auto [index, size] = this->uniformSampler.allocateDescriptorSetsWithPool(1, this->samplerDescriptorPool.get());
 
         // Texture Image info
         const VkDescriptorImageInfo imageInfo{
             .sampler = this->texSampler.get(),                      // Image layout when in use
-            .imageView = textureImage,                              // Sampler to use for set
+            .imageView = texImageObj->getImageView(),               // Sampler to use for set
             .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL // Image to bind to set
         };
 

@@ -2,6 +2,7 @@
 #include "cevk/CmdRender.hpp"
 #include "cevk/DescriptorSet.hpp"
 #include "cevk/DescriptorSetLayout.hpp"
+#include "cevk/VulkanTexture.hpp"
 #include <cstddef>
 #include <cstdlib>
 #include <glm/ext/matrix_clip_space.hpp>
@@ -52,7 +53,8 @@ VulkanRenderer::VulkanRenderer(std::shared_ptr<ce::VulkanContext> ctx) : ctx(ctx
     uboViewProjection.projection[1][1] *= -1; // vulkan inverted of OpenGL
 
     // Create our default "no texture" texture
-    textureMng->createTexture("plain.png");
+    std::shared_ptr<VulkanTexture> vulkanTex = VulkanTexture::create(ctx, "./assets/textures/plain.png");
+    textureMng->createTextureDescriptor(vulkanTex);
 }
 
 VulkanRenderer::~VulkanRenderer() {
@@ -316,8 +318,10 @@ int VulkanRenderer::createMeshModel(const std::string& modelFile) {
         } else {
 
             // Otherwise, create texture and set value to index of new texture
-            matToTex[i] = this->textureMng->createTexture(textureNames[i]);
-            // matToTex[i] = createTexture("panda.jpg");
+            std::shared_ptr<ce::VulkanTexture> vulkanTex =
+                ce::VulkanTexture::create(ctx, "./assets/textures/" + textureNames[i]);
+
+            matToTex[i] = textureMng->createTextureDescriptor(vulkanTex);
         }
     }
 

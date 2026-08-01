@@ -23,7 +23,7 @@ void teste(std::shared_ptr<ce::VulkanContext> ctx) {
     // 2. Carrega textura no Escopo Global
     auto logo = assetManager.load<VulkanTexture>("logo_jogos", "./assets/textures/grid1.png");
 
-    texBindless.addImgsUniform(logo);
+    texBindless.allocTexture(logo);
 
     {
         // 3. Entra em uma nova fase (Cria novo escopo)
@@ -32,7 +32,7 @@ void teste(std::shared_ptr<ce::VulkanContext> ctx) {
         // Carrega textura específica desta fase
         auto bg = assetManager.load<VulkanTexture>("background", "./assets/textures/grid2.png");
 
-        texBindless.addImgsUniform(bg);
+        texBindless.allocTexture(bg);
 
         // Se pedir a "logo_jogos" aqui, ele busca e encontra no escopo Global pai
         auto logoMenu = assetManager.load<VulkanTexture>("logo_jogos", "./assets/textures/grid3.png");

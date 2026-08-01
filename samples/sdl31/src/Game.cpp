@@ -39,7 +39,7 @@ Game::Game(std::shared_ptr<ce::VulkanContext> ctx, std::shared_ptr<ce::ScreenVK>
 
     // Create our default "no texture" texture
     std::shared_ptr<VulkanTexture> vulkanTex = VulkanTexture::create(ctx, "./assets/textures/plain.png");
-    textureMng->createTextureDescriptor(vulkanTex);
+    textureMng->allocTexture(vulkanTex);
 }
 
 Game::~Game() {
@@ -288,8 +288,7 @@ int Game::createMeshModel(const std::string& modelFile) {
             std::shared_ptr<ce::VulkanTexture> vulkanTex =
                 ce::VulkanTexture::create(ctx, "./assets/textures/" + textureNames[i]);
 
-            matToTex[i] = textureMng->createTextureDescriptor(vulkanTex);
-            // matToTex[i] = createTexture("panda.jpg");
+            matToTex[i] = textureMng->allocTexture(vulkanTex);
         }
     }
 

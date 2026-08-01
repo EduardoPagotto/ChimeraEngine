@@ -43,7 +43,7 @@ namespace ce {
         uniformSampler.destroy();
     }
 
-    int Textures::createTextureDescriptor(std::shared_ptr<VulkanTexture> vulkanTex) {
+    int Textures::allocTexture(std::shared_ptr<VulkanTexture> vulkanTex) {
 
         std::shared_ptr<Image> texImageObj = vulkanTex->get();
         this->uniformSampler.getImages().push_back(texImageObj);

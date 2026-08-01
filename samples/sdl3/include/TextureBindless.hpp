@@ -75,10 +75,8 @@ namespace ce {
 
         UniformSampler& getUniformSampler() { return uniform; }
 
-        void addImgsUniform(std::shared_ptr<VulkanTexture> tex) {
+        int allocTexture(std::shared_ptr<VulkanTexture> tex) {
 
-            // this->uniform.getImages().push_back(tex->get());
-            //
             //   Atualiza o Descriptor Set global colocando esta nova imagem no seu respectivo índice
             VkDescriptorImageInfo imageInfo = {
                 .sampler = this->texSampler.get(),       // Pode usar um sampler global ou um específico por textura
@@ -99,6 +97,8 @@ namespace ce {
 
             // Atualiza imediatamente (Vulkan permite isso mesmo se o set estiver em uso por conta do UPDATE_AFTER_BIND)
             dsw.update();
+
+            return tex->getBindlessIndex();
         }
 
       private:

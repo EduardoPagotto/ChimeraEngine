@@ -14,7 +14,7 @@ namespace ce {
         virtual ~Textures();
 
         UniformSampler& getUniformSampler() { return uniformSampler; }
-        int createTextureDescriptor(std::shared_ptr<VulkanTexture> vulkanTex);
+        int allocTexture(std::shared_ptr<VulkanTexture> vulkanTex);
 
       private:
         Sampler texSampler;

@@ -1,5 +1,5 @@
 #include "AssetManager.hpp"
-#include "TextureCrt.hpp"
+#include "TextureBindless.hpp"
 #include "VulkanRenderer.hpp"
 #include "cevk/VulkanTexture.hpp"
 #include <SDL3/SDL.h>
@@ -14,7 +14,7 @@ void teste(std::shared_ptr<ce::VulkanContext> ctx) {
 
     // 1. Cria o Asset Manager injetando o contexto Vulkan
     AssetManager assetManager(ctx);
-    TextureBindless uniform(ctx);
+    TextureBindless texBindless(ctx);
 
     // Sampler sampler(ctx->logical);
 
@@ -23,7 +23,7 @@ void teste(std::shared_ptr<ce::VulkanContext> ctx) {
     // 2. Carrega textura no Escopo Global
     auto logo = assetManager.load<VulkanTexture>("logo_jogos", "./assets/textures/grid1.png");
 
-    uniform.addImgsUniform(logo);
+    texBindless.addImgsUniform(logo);
 
     {
         // 3. Entra em uma nova fase (Cria novo escopo)
@@ -32,7 +32,7 @@ void teste(std::shared_ptr<ce::VulkanContext> ctx) {
         // Carrega textura específica desta fase
         auto bg = assetManager.load<VulkanTexture>("background", "./assets/textures/grid2.png");
 
-        uniform.addImgsUniform(bg);
+        texBindless.addImgsUniform(bg);
 
         // Se pedir a "logo_jogos" aqui, ele busca e encontra no escopo Global pai
         auto logoMenu = assetManager.load<VulkanTexture>("logo_jogos", "./assets/textures/grid3.png");

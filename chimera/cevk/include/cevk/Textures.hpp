@@ -12,9 +12,6 @@ namespace ce {
         explicit Textures(std::shared_ptr<VulkanContext> ctx);
         virtual ~Textures();
 
-        Textures(const Textures&) = delete;
-        Textures& operator=(const Textures&) = delete;
-
         UniformSampler& getUniformSampler() { return uniformSampler; }
         int createTexture(const std::string& filename);
 

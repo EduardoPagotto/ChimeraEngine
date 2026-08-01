@@ -1,6 +1,6 @@
 #include "AssetManager.hpp"
-#include "TextureBindless.hpp"
 #include "VulkanRenderer.hpp"
+#include "cevk/TextureBindless.hpp"
 #include "cevk/VulkanTexture.hpp"
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_log.h>

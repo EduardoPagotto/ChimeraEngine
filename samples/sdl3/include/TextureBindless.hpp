@@ -97,7 +97,6 @@ namespace ce {
 
             // Atualiza imediatamente (Vulkan permite isso mesmo se o set estiver em uso por conta do UPDATE_AFTER_BIND)
             dsw.update();
-
             return tex->getBindlessIndex();
         }
 

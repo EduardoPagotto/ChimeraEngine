@@ -71,8 +71,6 @@ namespace ce {
                                      .pImageInfo = &imageInfo});
 
         dsw.update();
-
-        // return samplerDS.getSize() - 1;
         return index;
     }
 } // namespace ce

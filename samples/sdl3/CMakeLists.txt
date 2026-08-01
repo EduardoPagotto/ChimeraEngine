@@ -13,7 +13,7 @@ find_package(VulkanMemoryAllocator CONFIG REQUIRED)
 find_package(fastgltf REQUIRED)
 
 set (IncludeDirs ${CMAKE_CURRENT_SOURCE_DIR}/include
-                 ${CMAKE_SOURCE_DIR}/chimera/cevk/include/cevk)
+                 ${CMAKE_SOURCE_DIR}/chimera/cevk/include)
 
 set (LIBRARY_DEPS ${CMAKE_SOURCE_DIR}/bin/libcevk.a
                   SDL3::SDL3

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "CmdBuffer.hpp"
-#include "MeshModel.hpp"
-#include "Pipeline.hpp"
-#include "SwapChain.hpp"
-#include "Sync.hpp"
-#include "Textures.hpp"
-#include "UBO.hpp"
+#include "cevk/CmdBuffer.hpp"
+#include "cevk/MeshModel.hpp"
+#include "cevk/Pipeline.hpp"
+#include "cevk/SwapChain.hpp"
+#include "cevk/Sync.hpp"
+#include "cevk/Textures.hpp"
+#include "cevk/UBO.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>

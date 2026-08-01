@@ -19,7 +19,6 @@ namespace ce {
         int createTexture(const std::string& filename);
 
       private:
-        std::shared_ptr<Image> createTextureImage(const std::string& filename);
         int createTextureDescriptor(VkImageView textureImage);
 
         Sampler texSampler;

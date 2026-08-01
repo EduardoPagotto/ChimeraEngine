@@ -7,7 +7,6 @@
 #include <format>
 #include <memory>
 #include <stdexcept>
-#include <vulkan/vulkan.h>
 
 namespace ce {
 

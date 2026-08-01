@@ -1,7 +1,7 @@
 #include "VulkanRenderer.hpp"
-#include "CmdRender.hpp"
-#include "DescriptorSet.hpp"
-#include "DescriptorSetLayout.hpp"
+#include "cevk/CmdRender.hpp"
+#include "cevk/DescriptorSet.hpp"
+#include "cevk/DescriptorSetLayout.hpp"
 #include <cstddef>
 #include <cstdlib>
 #include <glm/ext/matrix_clip_space.hpp>

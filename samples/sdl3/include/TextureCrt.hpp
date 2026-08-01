@@ -1,10 +1,10 @@
 #pragma once
-#include "DescriptorPool.hpp"
-#include "DescriptorSet.hpp"
-#include "DescriptorSetLayout.hpp"
-#include "UBO.hpp"
-#include "VulkanContext.hpp"
-#include "VulkanTexture.hpp"
+#include "cevk/DescriptorPool.hpp"
+#include "cevk/DescriptorSet.hpp"
+#include "cevk/DescriptorSetLayout.hpp"
+#include "cevk/UBO.hpp"
+#include "cevk/VulkanContext.hpp"
+#include "cevk/VulkanTexture.hpp"
 
 namespace ce {
 

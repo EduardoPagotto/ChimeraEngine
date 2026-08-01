@@ -1,6 +1,6 @@
 #pragma once
 #include "AssetScope.hpp"
-#include "VulkanContext.hpp"
+#include "cevk/VulkanContext.hpp"
 #include <memory>
 #include <vector>
 #include <vulkan/vulkan.h>

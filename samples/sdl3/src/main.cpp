@@ -1,7 +1,7 @@
 #include "AssetManager.hpp"
 #include "TextureCrt.hpp"
 #include "VulkanRenderer.hpp"
-#include "VulkanTexture.hpp"
+#include "cevk/VulkanTexture.hpp"
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_log.h>
 #include <glm/ext/matrix_transform.hpp>

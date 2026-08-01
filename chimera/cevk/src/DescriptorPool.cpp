@@ -6,7 +6,6 @@ namespace ce {
     void DescriptorPool::create(VkDevice device, const uint32_t& maxSets, VkDescriptorPoolCreateFlagBits flags) {
 
         this->device = device;
-        this->flags = flags;
 
         // Data to create Descriptor Pool
         const VkDescriptorPoolCreateInfo poolCreateInfo{
@@ -32,5 +31,4 @@ namespace ce {
             handle = VK_NULL_HANDLE;
         }
     }
-
 } // namespace ce

@@ -11,11 +11,11 @@ namespace ce {
 
     class AssetManager {
       private:
-        VulkanContext& vkContext; // Injeção de Dependência por referência
+        std::shared_ptr<VulkanContext> ctx; // Injeção de Dependência por referência
         std::vector<std::unique_ptr<AssetScope>> scopeStack;
 
       public:
-        explicit AssetManager(VulkanContext& context) : vkContext(context) {
+        explicit AssetManager(std::shared_ptr<VulkanContext> ctx) : ctx(ctx) {
             // Cria o escopo global (raiz) automaticamente
             pushScope();
         }
@@ -37,7 +37,7 @@ namespace ce {
             }
 
             // Se não achar, fábrica cria o recurso injetando o contexto Vulkan
-            auto newAsset = T::create(vkContext, std::forward<Args>(args)...);
+            auto newAsset = T::create(ctx, std::forward<Args>(args)...);
             scopeStack.back()->insert<T>(name, newAsset);
             return newAsset;
         }

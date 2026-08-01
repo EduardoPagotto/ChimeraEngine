@@ -3,10 +3,10 @@
 
 namespace ce {
 
-    SwapChain::SwapChain(VulkanContext& context) : context(context) {
+    SwapChain::SwapChain(std::shared_ptr<VulkanContext> ctx) : ctx(ctx) {
 
         // Get Swap Chain details so we cam pick best setting
-        SwapChainDetails swapchainDetails = VulkanContext::GetSwapChainDetails(context.physical, context.surface);
+        SwapChainDetails swapchainDetails = VulkanContext::GetSwapChainDetails(ctx->physical, ctx->surface);
 
         // Find optimal surface value for our swap chain
         VkSurfaceFormatKHR surrfaceFormat = SwapChain::ChooseBestSurfaceFormat(swapchainDetails.formats);
@@ -31,12 +31,12 @@ namespace ce {
         const uint32_t* pQueueFamilyIndices = nullptr; // FIXME: nao seria um array de 1 ?
 
         // If Graphics and Presentation families are diferent, the swapchain must let images ge shared between families
-        if (context.queueFamilyIndices.graphicsFamily !=
-            context.queueFamilyIndices.presentationFamily) { // FIXME: ESTA ERRADO!!!!!!!
+        if (ctx->queueFamilyIndices.graphicsFamily !=
+            ctx->queueFamilyIndices.presentationFamily) { // FIXME: ESTA ERRADO!!!!!!!
             // Queue to share between
             std::array<uint32_t, 2> queueFamilyIndices = {
-                static_cast<uint32_t>(context.queueFamilyIndices.graphicsFamily),
-                static_cast<uint32_t>(context.queueFamilyIndices.presentationFamily)};
+                static_cast<uint32_t>(ctx->queueFamilyIndices.graphicsFamily),
+                static_cast<uint32_t>(ctx->queueFamilyIndices.presentationFamily)};
 
             imageSharingMode = VK_SHARING_MODE_CONCURRENT;
             queueFamilyIndexCount = static_cast<uint32_t>(queueFamilyIndices.size());
@@ -46,7 +46,7 @@ namespace ce {
         // Create information for swap chain
         const VkSwapchainCreateInfoKHR swapchainCreateInfo{
             .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
-            .surface = context.surface,                        // Swapchain surface
+            .surface = ctx->surface,                           // Swapchain surface
             .minImageCount = imageCount,                       // Minimum image in swapchain
             .imageFormat = surrfaceFormat.format,              // Swapchain format
             .imageColorSpace = surrfaceFormat.colorSpace,      // Swapchain color space
@@ -67,7 +67,7 @@ namespace ce {
                                              //  old one to quickly hand over  responsabilities
 
         // Create Swapchain
-        if (vkCreateSwapchainKHR(context.logical, &swapchainCreateInfo, nullptr, &this->swapchain) != VK_SUCCESS) {
+        if (vkCreateSwapchainKHR(ctx->logical, &swapchainCreateInfo, nullptr, &this->swapchain) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create a Swapchain");
         }
 
@@ -76,14 +76,14 @@ namespace ce {
 
         // Get swap chain images (first count the values)
         uint32_t swapChainImageCount;
-        vkGetSwapchainImagesKHR(context.logical, this->swapchain, &swapChainImageCount, nullptr);
+        vkGetSwapchainImagesKHR(ctx->logical, this->swapchain, &swapChainImageCount, nullptr);
 
         std::vector<VkImage> lImages(swapChainImageCount);
-        vkGetSwapchainImagesKHR(context.logical, this->swapchain, &swapChainImageCount, lImages.data());
+        vkGetSwapchainImagesKHR(ctx->logical, this->swapchain, &swapChainImageCount, lImages.data());
 
         for (VkImage image : lImages) {
 
-            auto imgObj = std::make_shared<Image>(context.physical, context.logical);
+            auto imgObj = std::make_shared<Image>(ctx->physical, ctx->logical);
             imgObj->createImageViewImportedImage(image, this->imageFormat,
                                                  VK_IMAGE_ASPECT_COLOR_BIT); // CreateImageView
             this->images.push_back(imgObj);
@@ -103,7 +103,7 @@ namespace ce {
     SwapChain::~SwapChain() {
 
         for (auto& framebuffer : this->frameBuffers) { // ? auto& mesmo ??
-            vkDestroyFramebuffer(context.logical, framebuffer, nullptr);
+            vkDestroyFramebuffer(ctx->logical, framebuffer, nullptr);
         }
 
         for (auto& image : this->images) {
@@ -113,13 +113,13 @@ namespace ce {
         // TODO: e aqui?
         this->depthBufferImg.reset();
 
-        vkDestroySwapchainKHR(context.logical, this->swapchain, nullptr);
-        vkDestroyRenderPass(context.logical, this->renderPass, nullptr);
+        vkDestroySwapchainKHR(ctx->logical, this->swapchain, nullptr);
+        vkDestroyRenderPass(ctx->logical, this->renderPass, nullptr);
     }
 
     uint32_t SwapChain::acquireNextImage(VkSemaphore& waitImage, VkRenderPassBeginInfo* r) {
         uint32_t imageIndex;
-        vkAcquireNextImageKHR(context.logical, this->swapchain, std::numeric_limits<uint64_t>::max(), waitImage,
+        vkAcquireNextImageKHR(ctx->logical, this->swapchain, std::numeric_limits<uint64_t>::max(), waitImage,
                               VK_NULL_HANDLE, &imageIndex);
 
         r->sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -141,7 +141,7 @@ namespace ce {
 
         int witdh;
         int height;
-        SDL_GetWindowSizeInPixels(context.window, &witdh, &height);
+        SDL_GetWindowSizeInPixels(ctx->window, &witdh, &height);
 
         VkExtent2D newExtent{
             .width = static_cast<uint32_t>(witdh),  //
@@ -182,7 +182,7 @@ namespace ce {
                 .layers = 1                         // Framebuffer layers
             };
 
-            if (vkCreateFramebuffer(context.logical, &framebufferCreateInfo, nullptr, &this->frameBuffers[i]) !=
+            if (vkCreateFramebuffer(ctx->logical, &framebufferCreateInfo, nullptr, &this->frameBuffers[i]) !=
                 VK_SUCCESS) {
                 throw std::runtime_error("Faleid to create a frambuffer");
             }
@@ -193,13 +193,12 @@ namespace ce {
 
         // Get suported format for depth buffer
         VkFormat depthFormat = VulkanContext::ChooseSupportedFormat(
-            context.physical,
-            {VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D32_SFLOAT, VK_FORMAT_D24_UNORM_S8_UINT}, // Formats
-            VK_IMAGE_TILING_OPTIMAL,                                                           // Tilling
-            VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);                                   // Depth
+            ctx->physical, {VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D32_SFLOAT, VK_FORMAT_D24_UNORM_S8_UINT}, // Formats
+            VK_IMAGE_TILING_OPTIMAL,                                                                          // Tilling
+            VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);                                                  // Depth
 
         // Create Depth Buffer Image
-        this->depthBufferImg = std::make_shared<Image>(context.physical, context.logical);
+        this->depthBufferImg = std::make_shared<Image>(ctx->physical, ctx->logical);
         this->depthBufferImg->createImage(this->extent.width, this->extent.height, depthFormat, VK_IMAGE_TILING_OPTIMAL,
                                           VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
                                           VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
@@ -250,7 +249,7 @@ namespace ce {
         // Depth attachemnt of render pass
         const VkAttachmentDescription depthAttachemnt{
             .format = VulkanContext::ChooseSupportedFormat(
-                context.physical,
+                ctx->physical,
                 {VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D32_SFLOAT, VK_FORMAT_D24_UNORM_S8_UINT}, // Formats
                 VK_IMAGE_TILING_OPTIMAL,                                                           // Tilling
                 VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT),
@@ -323,7 +322,7 @@ namespace ce {
             .dependencyCount = static_cast<uint32_t>(subpassDependencies.size()),
             .pDependencies = subpassDependencies.data()};
 
-        if (vkCreateRenderPass(context.logical, &renderPassCreateInfo, nullptr, &this->renderPass) != VK_SUCCESS) {
+        if (vkCreateRenderPass(ctx->logical, &renderPassCreateInfo, nullptr, &this->renderPass) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create render pass!!!");
         }
     }

@@ -9,7 +9,7 @@ namespace ce {
 
     class SwapChain {
       public:
-        explicit SwapChain(VulkanContext& context);
+        explicit SwapChain(std::shared_ptr<VulkanContext> ctx);
         virtual ~SwapChain();
 
         void sendImageToScreen(VkQueue pQueue, VkSemaphore signal, uint32_t& imageIndex);
@@ -34,13 +34,14 @@ namespace ce {
         VkExtent2D extent;
         VkRect2D renderArea;
 
-        VulkanContext& context;
         VkSwapchainKHR swapchain{VK_NULL_HANDLE};
         VkRenderPass renderPass{VK_NULL_HANDLE};
 
+        std::shared_ptr<VulkanContext> ctx;
         std::shared_ptr<Image> depthBufferImg;
-        std::vector<std::shared_ptr<Image>> images;
+
         std::vector<VkFramebuffer> frameBuffers;
         std::vector<VkClearValue> clearValues;
+        std::vector<std::shared_ptr<Image>> images;
     };
 } // namespace ce

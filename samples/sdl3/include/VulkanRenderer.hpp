@@ -13,7 +13,7 @@
 
 class VulkanRenderer {
   public:
-    explicit VulkanRenderer(ce::VulkanContext& context);
+    explicit VulkanRenderer(std::shared_ptr<ce::VulkanContext> ctx);
     virtual ~VulkanRenderer();
 
     void updateModel(int modelId, glm::mat4 newModel);
@@ -31,7 +31,7 @@ class VulkanRenderer {
         glm::mat4 view;
     } uboViewProjection;
 
-    ce::VulkanContext& context;
+    std::shared_ptr<ce::VulkanContext> ctx;
 
     std::shared_ptr<ce::SwapChain> swapchain;
 

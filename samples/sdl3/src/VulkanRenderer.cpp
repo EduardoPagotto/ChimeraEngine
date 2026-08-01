@@ -8,16 +8,15 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <stdexcept>
 
-VulkanRenderer::VulkanRenderer(ce::VulkanContext& context) : context(context) {
+VulkanRenderer::VulkanRenderer(std::shared_ptr<ce::VulkanContext> ctx) : ctx(ctx) {
 
     using namespace ce;
 
-    this->swapchain = std::make_shared<SwapChain>(context);
+    this->swapchain = std::make_shared<SwapChain>(ctx);
 
-    this->uniformBufferVP.init(context.physical, context.logical, swapchain->getImages().size(),
-                               sizeof(UboViewProjection));
+    this->uniformBufferVP.init(ctx->physical, ctx->logical, swapchain->getImages().size(), sizeof(UboViewProjection));
 
-    this->textureMng = std::make_shared<Textures>(context);
+    this->textureMng = std::make_shared<Textures>(ctx);
 
     createDescriptorSetLayout();
     createPushConstantRange();
@@ -26,7 +25,7 @@ VulkanRenderer::VulkanRenderer(ce::VulkanContext& context) : context(context) {
     this->cmdBuffers.resize(this->swapchain->getSwapChainFrameBuffers().size());
     for (size_t i = 0; i < this->swapchain->getSwapChainFrameBuffers().size(); i++) {
         this->cmdBuffers[i] = CmdBuffer();
-        this->cmdBuffers[i].init(context.logical, context.commandPool);
+        this->cmdBuffers[i].init(ctx->logical, ctx->commandPool);
     }
 
     createDescriptorPool();
@@ -35,7 +34,7 @@ VulkanRenderer::VulkanRenderer(ce::VulkanContext& context) : context(context) {
     this->syncs.resize(ce::MAX_FRAME_DRAWS);
     for (size_t i = 0; i < ce::MAX_FRAME_DRAWS; i++) {
         this->syncs[i] = ce::Sync();
-        this->syncs[i].init(this->context.logical);
+        this->syncs[i].init(this->ctx->logical);
     }
 
     // const float radixAngle = 45.0F;
@@ -59,7 +58,7 @@ VulkanRenderer::VulkanRenderer(ce::VulkanContext& context) : context(context) {
 VulkanRenderer::~VulkanRenderer() {
 
     // Wait until no action being run on device before destroying
-    vkDeviceWaitIdle(context.logical);
+    vkDeviceWaitIdle(ctx->logical);
 
     // free(modelTransferSpace);
     for (auto& model : modelList) {
@@ -136,15 +135,15 @@ void VulkanRenderer::draw() {
     cmd.end();
 
     // -- SUBMIT COMMAND BUFFER TO RENDER
-    cmd.submitToRender(context.graphicsQueue, sync, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+    cmd.submitToRender(ctx->graphicsQueue, sync, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 
     // -- PRESENT RENDERED IMAGE TO SCREEN --
-    this->swapchain->sendImageToScreen(context.presentationQueue, sync.getSignal(), imageIndex);
+    this->swapchain->sendImageToScreen(ctx->presentationQueue, sync.getSignal(), imageIndex);
     // Get next frame
     this->currentFrame = (this->currentFrame + 1) % ce::MAX_FRAME_DRAWS;
     // AHHHH!!!!!! ugly!!!!! this is complete wrong, find what missmatch sYncs!!!
     if (this->currentFrame == (ce::MAX_FRAME_DRAWS - 1)) {
-        vkDeviceWaitIdle(context.logical);
+        vkDeviceWaitIdle(ctx->logical);
     }
 }
 
@@ -183,7 +182,7 @@ void VulkanRenderer::createPushConstantRange() {
 void VulkanRenderer::createGraphicsPipeline() {
 
     // Read in SPIR-V code shaders, Vertex Stage creation information and Fragment Stage creation information
-    std::shared_ptr<ce::Shader> shader = std::make_shared<ce::Shader>(context.logical);
+    std::shared_ptr<ce::Shader> shader = std::make_shared<ce::Shader>(ctx->logical);
     shader->addCode(VK_SHADER_STAGE_VERTEX_BIT, ce::aux::readFile("./bin/vert.spv"));
     shader->addCode(VK_SHADER_STAGE_FRAGMENT_BIT, ce::aux::readFile("./bin/frag.spv"));
 
@@ -212,14 +211,14 @@ void VulkanRenderer::createGraphicsPipeline() {
                                this->swapchain->getExtent()}; // Extent to describe region to use, starting at offset
 
     // -- PIPELINE LAYOUT --
-    this->pipelineLayout = std::make_shared<ce::PipelineLayout>(this->context.logical);
+    this->pipelineLayout = std::make_shared<ce::PipelineLayout>(this->ctx->logical);
     this->pipelineLayout->addLayout(this->uniformBufferVP.getDescriptorSetLayout().get());
     this->pipelineLayout->addLayout(this->textureMng->getUniformSampler().getDescriptorSetLayout().get());
     this->pipelineLayout->addPushRange(this->pushConstantRange);
     this->pipelineLayout->create();
 
     // TODO: mudar o nome da classe
-    this->graphicPipeline = std::make_shared<ce::Pipeline>(this->context.logical);
+    this->graphicPipeline = std::make_shared<ce::Pipeline>(this->ctx->logical);
     this->graphicPipeline->addViewport(viewport);
     this->graphicPipeline->addScissor(scissor);
 
@@ -251,7 +250,7 @@ void VulkanRenderer::createDescriptorPool() {
                              .descriptorCount = static_cast<uint32_t>(this->uniformBufferVP.getBuffers().size())});
 
     // Create Descriptor Pool, Maximum number of descriptor Sets
-    this->descriptorPool.create(this->context.logical, static_cast<uint32_t>(this->swapchain->getImages().size()),
+    this->descriptorPool.create(this->ctx->logical, static_cast<uint32_t>(this->swapchain->getImages().size()),
                                 static_cast<VkDescriptorPoolCreateFlagBits>(0));
 }
 
@@ -260,7 +259,7 @@ void VulkanRenderer::createDescriptorSets() {
     this->uniformBufferVP.allocateDescriptorSetsWithPool(this->uniformBufferVP.getBuffers().size(),
                                                          this->descriptorPool.get());
 
-    ce::DescriptorSetWrite dsw(context.logical);
+    ce::DescriptorSetWrite dsw(ctx->logical);
 
     // Update all of descriptor set buffer bindings
     for (size_t i = 0; i < this->uniformBufferVP.getBuffers().size(); i++) {
@@ -323,9 +322,8 @@ int VulkanRenderer::createMeshModel(const std::string& modelFile) {
     }
 
     // Load in all our meshes
-    std::vector<ce::Mesh> modelMeshes =
-        ce::MeshModel::LoadNode(context.physical, context.logical, context.graphicsQueue, context.commandPool,
-                                scene->mRootNode, scene, matToTex);
+    std::vector<ce::Mesh> modelMeshes = ce::MeshModel::LoadNode(ctx->physical, ctx->logical, ctx->graphicsQueue,
+                                                                ctx->commandPool, scene->mRootNode, scene, matToTex);
 
     // Create mesh model and add to list
     ce::MeshModel meshModel(modelMeshes);

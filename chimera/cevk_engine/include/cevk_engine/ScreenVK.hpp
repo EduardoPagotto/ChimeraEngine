@@ -16,7 +16,7 @@ namespace ce {
     class ScreenVK : public IScr {
 
       public:
-        explicit ScreenVK(VulkanContext& context);
+        explicit ScreenVK(std::shared_ptr<VulkanContext> ctx);
         virtual ~ScreenVK();
 
         virtual void before() override;
@@ -27,16 +27,11 @@ namespace ce {
         virtual const int getHeight() const override;
 
         std::shared_ptr<ce::SwapChain> getSwapchain() const { return this->swapchain; }
-
         std::vector<ce::CmdBuffer>& getCmdBuffers() { return this->cmdBuffers; }
-
         std::vector<ce::Sync>& getSyncs() { return this->syncs; }
 
-        // FB only
-        // virtual uint32_t* getPixels() = 0;
-        // virtual SDL_PixelFormat getPixelFormat() = 0;
       private:
-        VulkanContext& context;
+        std::shared_ptr<VulkanContext> ctx;
 
         std::shared_ptr<ce::SwapChain> swapchain;
         std::vector<ce::CmdBuffer> cmdBuffers;

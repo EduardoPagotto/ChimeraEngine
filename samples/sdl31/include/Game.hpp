@@ -10,7 +10,7 @@
 
 class Game : public ce::IStateMachine {
   public:
-    Game(ce::VulkanContext& context, std::shared_ptr<ce::ScreenVK> screen);
+    Game(std::shared_ptr<ce::VulkanContext> ctx, std::shared_ptr<ce::ScreenVK> screen);
     virtual ~Game();
     virtual void onAttach() override;
     virtual void onDeatach() override;
@@ -34,10 +34,7 @@ class Game : public ce::IStateMachine {
 
     int currentFrame{0};
 
-    ce::VulkanContext& context;
-    std::shared_ptr<ce::ScreenVK> screen;
-
-    // int currentFrame = 0;
+    std::shared_ptr<ce::VulkanContext> ctx;
 
     VkPushConstantRange pushConstantRange;
 
@@ -47,17 +44,14 @@ class Game : public ce::IStateMachine {
         glm::mat4 view;
     } uboViewProjection;
 
-    // std::shared_ptr<ce::SwapChain> swapchain;
-
-    // std::vector<ce::CmdBuffer> cmdBuffers;
-
     ce::DescriptorPool descriptorPool;
     ce::UniformBuffer uniformBufferVP;
-    std::shared_ptr<ce::Textures> textureMng;
 
+    std::shared_ptr<ce::ScreenVK> screen;
+    std::shared_ptr<ce::Textures> textureMng;
     std::shared_ptr<ce::PipelineLayout> pipelineLayout;
     std::shared_ptr<ce::Pipeline> graphicPipeline;
-    // std::vector<ce::Sync> syncs;
+
     // Scene Objects
     std::vector<ce::MeshModel> modelList;
 

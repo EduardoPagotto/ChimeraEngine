@@ -9,7 +9,7 @@
 namespace ce {
     class Textures {
       public:
-        explicit Textures(VulkanContext& context);
+        explicit Textures(std::shared_ptr<VulkanContext> ctx);
         virtual ~Textures();
 
         Textures(const Textures&) = delete;
@@ -22,9 +22,9 @@ namespace ce {
         std::shared_ptr<Image> createTextureImage(const std::string& filename);
         int createTextureDescriptor(VkImageView textureImage);
 
-        VulkanContext& context;
         Sampler texSampler;
         UniformSampler uniformSampler;
         DescriptorPool samplerDescriptorPool;
+        std::shared_ptr<VulkanContext> ctx;
     };
 } // namespace ce

@@ -11,9 +11,9 @@ namespace ce {
     class BindlessUniformSampler {
 
       public:
-        explicit BindlessUniformSampler(VulkanContext& context) : context(context) {
-            uniform.init(context.logical);
-            // globalBindlessDescriptorSet.init(context.logical);
+        explicit BindlessUniformSampler(std::shared_ptr<VulkanContext> ctx) : ctx(ctx) {
+            uniform.init(ctx->logical);
+            // globalBindlessDescriptorSet.init(ctx->logical);
         }
 
         virtual ~BindlessUniformSampler() {
@@ -55,7 +55,7 @@ namespace ce {
                 VkDescriptorPoolSize{.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, .descriptorCount = 10000});
 
             // Ativa suporte a bindless no pool e Precisamos de apenas 1 set único global
-            this->descriptorPool.create(context.logical, 1, VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT);
+            this->descriptorPool.create(ctx->logical, 1, VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT);
 
             //------------------------------------------------------------------------------------
             // --- ETAPA C: ALOCAR O DESCRIPTOR SET ÚNICO ---
@@ -82,7 +82,7 @@ namespace ce {
             };
 
             ce::DescriptorSet& globalBindlessDescriptorSet = this->uniform.getDescriptorSet(0);
-            ce::DescriptorSetWrite dsw(this->context.logical);
+            ce::DescriptorSetWrite dsw(this->ctx->logical);
 
             dsw.add(VkWriteDescriptorSet{.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
                                          .dstSet = globalBindlessDescriptorSet.get(), // O set global gigante
@@ -97,7 +97,7 @@ namespace ce {
         }
 
       private:
-        VulkanContext& context;
+        std::shared_ptr<VulkanContext> ctx;
         DescriptorPool descriptorPool;
         UniformSampler uniform;
 

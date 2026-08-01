@@ -13,14 +13,14 @@ int main(int argc, char* argv[]) {
 
     try {
 
-        ce::VulkanContext context{};
-        context.createWindow("Teste z1");
+        std::shared_ptr<ce::VulkanContext> ctx = std::make_shared<ce::VulkanContext>();
 
-        // std::shared_ptr<ce::IScr> scr = std::make_shared<ce::ScreenVK>(context);
-        std::shared_ptr<ce::ScreenVK> scr = std::make_shared<ce::ScreenVK>(context);
+        ctx->createWindow("Teste z1");
+
+        std::shared_ptr<ce::ScreenVK> scr = std::make_shared<ce::ScreenVK>(ctx);
 
         ce::Engine engine(scr);
-        std::shared_ptr<ce::IStateMachine> game = std::make_shared<Game>(context, scr);
+        std::shared_ptr<ce::IStateMachine> game = std::make_shared<Game>(ctx, scr);
 
         engine.getStack().pushState(game);
         engine.run();

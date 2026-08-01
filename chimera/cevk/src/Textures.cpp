@@ -10,9 +10,9 @@
 
 namespace ce {
 
-    Textures::Textures(ce::VulkanContext& context) : context(context) {
+    Textures::Textures(std::shared_ptr<VulkanContext> ctx) : ctx(ctx) {
         //
-        this->uniformSampler.init(context.logical);
+        this->uniformSampler.init(ctx->logical);
         //------------------------------------------------------------------------------------
         // CREATE DESCRIPTOR SET LAYOUT (SAMPLER), Texture binding info
         //------------------------------------------------------------------------------------
@@ -31,13 +31,13 @@ namespace ce {
         this->samplerDescriptorPool.addPoolSize(
             VkDescriptorPoolSize{.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, .descriptorCount = MAX_OBJECTS});
 
-        this->samplerDescriptorPool.create(this->context.logical, MAX_OBJECTS,
+        this->samplerDescriptorPool.create(this->ctx->logical, MAX_OBJECTS,
                                            static_cast<VkDescriptorPoolCreateFlagBits>(0));
 
         //------------------------------------------------------------------------------------
         //  CREATE TEXTURE SAMPLER
         //------------------------------------------------------------------------------------
-        this->texSampler.init(context.logical);
+        this->texSampler.init(ctx->logical);
     }
 
     Textures::~Textures() {
@@ -71,7 +71,7 @@ namespace ce {
         uint32_t texHeight = surface->h;
 
         // Create staging buffer to hold load data, redy to copy device
-        Buffer imageStagingBuffer(context.physical, context.logical);
+        Buffer imageStagingBuffer(ctx->physical, ctx->logical);
         imageStagingBuffer.create(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
                                   VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
@@ -82,7 +82,7 @@ namespace ce {
         SDL_DestroySurface(surface);
 
         // create image to hold final texture
-        std::shared_ptr<Image> texImageObj = std::make_shared<Image>(context.physical, context.logical);
+        std::shared_ptr<Image> texImageObj = std::make_shared<Image>(ctx->physical, ctx->logical);
 
         texImageObj->createImage(texWidth, texHeight, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_TILING_OPTIMAL,
                                  VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
@@ -90,18 +90,16 @@ namespace ce {
 
         // COPY DATA TO IMAGE
         // Transition image to be DST for copy operation
-        aux::TransitionImageLayout(this->context.logical, context.graphicsQueue, context.commandPool,
-                                   texImageObj->getImage(), VK_IMAGE_LAYOUT_UNDEFINED,
-                                   VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+        aux::TransitionImageLayout(this->ctx->logical, ctx->graphicsQueue, ctx->commandPool, texImageObj->getImage(),
+                                   VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
         // Copy image data
-        aux::CopyImageBuffer(this->context.logical, context.graphicsQueue, context.commandPool,
-                             imageStagingBuffer.get(), texImageObj->getImage(), texWidth, texHeight);
+        aux::CopyImageBuffer(this->ctx->logical, ctx->graphicsQueue, ctx->commandPool, imageStagingBuffer.get(),
+                             texImageObj->getImage(), texWidth, texHeight);
 
         // Transition image to be shader readable for shader
-        aux::TransitionImageLayout(this->context.logical, context.graphicsQueue, context.commandPool,
-                                   texImageObj->getImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                                   VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        aux::TransitionImageLayout(this->ctx->logical, ctx->graphicsQueue, ctx->commandPool, texImageObj->getImage(),
+                                   VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
         texImageObj->createImageView(VK_IMAGE_ASPECT_COLOR_BIT);
 
@@ -121,7 +119,7 @@ namespace ce {
 
         ce::DescriptorSet& samplerDS = this->uniformSampler.getDescriptorSet(index);
 
-        ce::DescriptorSetWrite dsw(this->context.logical);
+        ce::DescriptorSetWrite dsw(this->ctx->logical);
         // Descriptor Write info
         dsw.add(VkWriteDescriptorSet{.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
                                      .dstSet = samplerDS.get(),

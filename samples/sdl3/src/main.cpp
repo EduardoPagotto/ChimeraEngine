@@ -5,18 +5,19 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_log.h>
 #include <glm/ext/matrix_transform.hpp>
+#include <memory>
 #include <string>
 
-void teste(ce::VulkanContext& context) {
+void teste(std::shared_ptr<ce::VulkanContext> ctx) {
 
     using namespace ce;
 
     // 1. Cria o Asset Manager injetando o contexto Vulkan
-    AssetManager assetManager(context);
-    BindlessUniformSampler uniform(context);
+    AssetManager assetManager(ctx);
+    BindlessUniformSampler uniform(ctx);
     uniform.create();
 
-    Sampler sampler(context.logical);
+    Sampler sampler(ctx->logical);
 
     // std::string fileLoc = "./assets/textures/" + filePath;
 
@@ -52,10 +53,11 @@ int main() {
 
     try {
 
-        ce::VulkanContext context{};
-        context.createWindow("Teste z1");
+        std::shared_ptr<ce::VulkanContext> ctx = std::make_shared<ce::VulkanContext>();
 
-        VulkanRenderer vulkanRenderer(context);
+        ctx->createWindow("Teste z1");
+
+        VulkanRenderer vulkanRenderer(ctx);
 
         float angle = 0.0F;
         float deltaTime = 0;
@@ -63,7 +65,7 @@ int main() {
 
         int helicopter = vulkanRenderer.createMeshModel("./assets/models/Seahawk.obj");
 
-        teste(context);
+        // teste(context);
 
         for (bool running = true; running;) {
             SDL_Event event;

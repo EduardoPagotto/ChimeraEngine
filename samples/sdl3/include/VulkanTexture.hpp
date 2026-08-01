@@ -18,7 +18,7 @@ namespace ce {
         ~VulkanTexture() { texImg.reset(); }
 
         // Factory pattern exigido pelo AssetManager
-        static std::shared_ptr<VulkanTexture> create(VulkanContext& context, const std::string& filePath) {
+        static std::shared_ptr<VulkanTexture> create(std::shared_ptr<VulkanContext> ctx, const std::string& filePath) {
 
             SDL_Surface* loadedSurface = IMG_Load(filePath.c_str());
             if (!loadedSurface) {
@@ -33,7 +33,7 @@ namespace ce {
             uint32_t texHeight = surface->h;
 
             // Create staging buffer to hold load data, redy to copy device
-            Buffer imageStagingBuffer(context.physical, context.logical);
+            Buffer imageStagingBuffer(ctx->physical, ctx->logical);
             imageStagingBuffer.create(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
                                       VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
@@ -44,7 +44,7 @@ namespace ce {
             SDL_DestroySurface(surface);
 
             // create image to hold final texture
-            std::shared_ptr<Image> texImg = std::make_shared<Image>(context.physical, context.logical);
+            std::shared_ptr<Image> texImg = std::make_shared<Image>(ctx->physical, ctx->logical);
 
             texImg->createImage(texWidth, texHeight, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_TILING_OPTIMAL,
                                 VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
@@ -52,15 +52,15 @@ namespace ce {
 
             // COPY DATA TO IMAGE
             // Transition image to be DST for copy operation
-            aux::TransitionImageLayout(context.logical, context.graphicsQueue, context.commandPool, texImg->getImage(),
+            aux::TransitionImageLayout(ctx->logical, ctx->graphicsQueue, ctx->commandPool, texImg->getImage(),
                                        VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
             // Copy image data
-            aux::CopyImageBuffer(context.logical, context.graphicsQueue, context.commandPool, imageStagingBuffer.get(),
+            aux::CopyImageBuffer(ctx->logical, ctx->graphicsQueue, ctx->commandPool, imageStagingBuffer.get(),
                                  texImg->getImage(), texWidth, texHeight);
 
             // Transition image to be shader readable for shader
-            aux::TransitionImageLayout(context.logical, context.graphicsQueue, context.commandPool, texImg->getImage(),
+            aux::TransitionImageLayout(ctx->logical, ctx->graphicsQueue, ctx->commandPool, texImg->getImage(),
                                        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
             texImg->createImageView(VK_IMAGE_ASPECT_COLOR_BIT);

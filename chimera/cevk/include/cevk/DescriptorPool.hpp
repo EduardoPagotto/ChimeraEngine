@@ -19,12 +19,9 @@ namespace ce {
         void create(VkDevice device, const uint32_t& maxSets, VkDescriptorPoolCreateFlagBits flags);
         void destroy() noexcept;
 
-        VkDescriptorPoolCreateFlagBits getFlags() { return this->flags; }
-
       private:
         VkDevice device{VK_NULL_HANDLE};
         VkDescriptorPool handle{VK_NULL_HANDLE};
-        VkDescriptorPoolCreateFlagBits flags;
         std::vector<VkDescriptorPoolSize> poolSize;
     };
 } // namespace ce

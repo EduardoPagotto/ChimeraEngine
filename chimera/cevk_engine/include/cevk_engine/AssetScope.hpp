@@ -8,9 +8,6 @@
 namespace ce {
 
     class AssetScope {
-      private:
-        // Chave: ID do Tipo + Nome do Asset. Valor: Ponteiro genérico deletado corretamente
-        std::unordered_map<std::string, std::any> resources;
 
       public:
         AssetScope() = default;
@@ -33,5 +30,9 @@ namespace ce {
         }
 
         void Clear() { resources.clear(); }
+
+      private:
+        // Chave: ID do Tipo + Nome do Asset. Valor: Ponteiro genérico deletado corretamente
+        std::unordered_map<std::string, std::any> resources;
     };
 } // namespace ce

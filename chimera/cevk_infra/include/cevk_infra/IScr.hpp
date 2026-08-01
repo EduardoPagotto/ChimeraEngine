@@ -1,4 +1,5 @@
 #pragma once
+#include "cevk_infra/ServiceLocator.hpp"
 #include <SDL3/SDL.h>
 
 namespace ce {
@@ -7,7 +8,7 @@ namespace ce {
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
     /// @date 20270731
-    class IScr {
+    class IScr : public IService {
 
       public:
         virtual ~IScr() = default;

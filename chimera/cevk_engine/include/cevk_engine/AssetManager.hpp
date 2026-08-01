@@ -1,6 +1,7 @@
 #pragma once
 #include "AssetScope.hpp"
 #include "cevk/VulkanContext.hpp"
+#include "cevk_infra/ServiceLocator.hpp"
 #include <memory>
 #include <vector>
 #include <vulkan/vulkan.h>
@@ -9,18 +10,19 @@
 
 namespace ce {
 
-    class AssetManager {
-      private:
-        std::shared_ptr<VulkanContext> ctx; // Injeção de Dependência por referência
-        std::vector<std::unique_ptr<AssetScope>> scopeStack;
+    class AssetManager : public IService {
 
       public:
-        explicit AssetManager(std::shared_ptr<VulkanContext> ctx) : ctx(ctx) {
+        AssetManager(std::shared_ptr<VulkanContext> ctx) : ctx(ctx) {
             // Cria o escopo global (raiz) automaticamente
             pushScope();
         }
 
+        // IService base
+        std::type_index getTypeIndex() const override { return std::type_index(typeid(AssetManager)); }
+
         void pushScope() { scopeStack.push_back(std::make_unique<AssetScope>()); }
+
         void popScope() {
             if (scopeStack.size() > 1)
                 scopeStack.pop_back();
@@ -41,5 +43,9 @@ namespace ce {
             scopeStack.back()->insert<T>(name, newAsset);
             return newAsset;
         }
+
+      private:
+        std::shared_ptr<VulkanContext> ctx; // Injeção de Dependência por referência
+        std::vector<std::unique_ptr<AssetScope>> scopeStack;
     };
 } // namespace ce

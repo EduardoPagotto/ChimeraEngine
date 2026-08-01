@@ -2,32 +2,25 @@
 #include "cevk/DescriptorPool.hpp"
 #include "cevk/DescriptorSet.hpp"
 #include "cevk/DescriptorSetLayout.hpp"
+#include "cevk/Sampler.hpp"
 #include "cevk/UBO.hpp"
 #include "cevk/VulkanContext.hpp"
 #include "cevk/VulkanTexture.hpp"
 
 namespace ce {
 
-    class BindlessUniformSampler {
+    class TextureBindless {
 
       public:
-        explicit BindlessUniformSampler(std::shared_ptr<VulkanContext> ctx) : ctx(ctx) {
+        explicit TextureBindless(std::shared_ptr<VulkanContext> ctx) : ctx(ctx) {
+
+            // Init UnivforBuffer
             uniform.init(ctx->logical);
-            // globalBindlessDescriptorSet.init(ctx->logical);
-        }
-
-        virtual ~BindlessUniformSampler() {
-            descriptorPool.destroy();
-            uniform.destroy();
-        }
-
-        std::pair<size_t, size_t> create() {
-
-            DescriptorSetLayout& bindlessLayout = uniform.getDescriptorSetLayout();
 
             //------------------------------------------------------------------------------------
             // --- ETAPA A: DEFINIR O LAYOUT BINDLESS ---
             //------------------------------------------------------------------------------------
+            DescriptorSetLayout& bindlessLayout = uniform.getDescriptorSetLayout();
             bindlessLayout.addBinding(VkDescriptorSetLayoutBinding{
                 .binding = 0,
                 .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
@@ -35,7 +28,6 @@ namespace ce {
                 .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT});
 
             // Flags críticas para o comportamento Bindless
-            // VkDescriptorBindingFlags bindingFlags = VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT;
             const VkDescriptorBindingFlags bindingFlags =
                 VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT | // Permite atualizar o set após vinculá-lo na GPU
                 VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT;    // Permite ter índices vazios (sem textura alocada)
@@ -66,17 +58,30 @@ namespace ce {
                 .descriptorSetCount = 1,
                 .pDescriptorCounts = &maxTextures};
 
-            return uniform.allocateDescriptorSetsWithPool(1, this->descriptorPool.get(),
-                                                          static_cast<void*>(&variableCountInfo));
+            uniform.allocateDescriptorSetsWithPool(1, this->descriptorPool.get(),
+                                                   static_cast<void*>(&variableCountInfo));
+
+            //------------------------------------------------------------------------------------
+            //  CREATE TEXTURE SAMPLER
+            //------------------------------------------------------------------------------------
+            this->texSampler.init(ctx->logical);
         }
 
-        void addImgsUniform(VkSampler globalSampler, std::shared_ptr<VulkanTexture> tex) {
+        virtual ~TextureBindless() {
+            texSampler.destroy();
+            descriptorPool.destroy();
+            uniform.destroy();
+        }
+
+        UniformSampler& getUniformSampler() { return uniform; }
+
+        void addImgsUniform(std::shared_ptr<VulkanTexture> tex) {
 
             // this->uniform.getImages().push_back(tex->get());
             //
             //   Atualiza o Descriptor Set global colocando esta nova imagem no seu respectivo índice
             VkDescriptorImageInfo imageInfo = {
-                .sampler = globalSampler,                // Pode usar um sampler global ou um específico por textura
+                .sampler = this->texSampler.get(),       // Pode usar um sampler global ou um específico por textura
                 .imageView = tex->get()->getImageView(), // imageView,
                 .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
             };
@@ -97,9 +102,10 @@ namespace ce {
         }
 
       private:
-        std::shared_ptr<VulkanContext> ctx;
-        DescriptorPool descriptorPool;
+        Sampler texSampler;
         UniformSampler uniform;
+        DescriptorPool descriptorPool;
+        std::shared_ptr<VulkanContext> ctx;
 
     }; // namespace ce
 

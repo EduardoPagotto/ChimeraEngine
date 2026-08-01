@@ -1,13 +1,10 @@
 #include "Textures.hpp"
-#include "Buffers.hpp"
-#include "CmdBuffer.hpp"
 #include "DescriptorSet.hpp"
 #include "DescriptorSetLayout.hpp"
 #include "UBO.hpp"
 #include "VulkanTexture.hpp"
 #include "cevk.hpp"
 #include <SDL3_image/SDL_image.h>
-#include <format>
 
 namespace ce {
 
@@ -27,7 +24,7 @@ namespace ce {
         samplerDSL.create();
 
         //------------------------------------------------------------------------------------
-        // CREATE DESCRIPTOR POOL (SAMPLER)
+        // CREATE DESCRIPTOR POOL
         //------------------------------------------------------------------------------------
         this->samplerDescriptorPool.addPoolSize(
             VkDescriptorPoolSize{.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, .descriptorCount = MAX_OBJECTS});

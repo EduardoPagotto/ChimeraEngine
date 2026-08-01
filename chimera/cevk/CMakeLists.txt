@@ -35,6 +35,7 @@ set(SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/src/VulkanContext.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/VBO.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/IBO.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/Image.cpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/src/VulkanTexture.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/CmdBuffer.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/CmdRender.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/CmdPool.cpp

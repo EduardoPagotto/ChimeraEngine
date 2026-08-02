@@ -112,7 +112,9 @@ Bindless Textures
 
 gerar abaixo na sequencia
 
-em SDL3 e vulkan api nativa como criar Bindless Textures mostrando os set dos dectriptors e samples usando indice apenas no fragment passando como indice em push
+em SDL3 e vulkan api nativa como criar Bindless Textures mostrando os set dos dectriptors e samples usando indice apenas no fragment passando como indice e model no push e view e projection biond com rotina desenho
+
+em SDL3 e vulkan api nativa como criar Bindless Textures mostrando os set dos dectriptors e samples usando indice apenas no fragment passando como indice em push e a rotina desenho
 
 em SDL3 e vulkan api nativa como criar Bindless Textures com diversara images de texturas mostrando os set dos dectriptors e samples usando indice apenas no fragment passando como indice em push
 

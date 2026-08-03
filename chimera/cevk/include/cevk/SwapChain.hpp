@@ -9,8 +9,11 @@ namespace ce {
 
     class SwapChain {
       public:
-        explicit SwapChain(std::shared_ptr<VulkanContext> ctx);
-        virtual ~SwapChain();
+        explicit SwapChain() = default;
+        virtual ~SwapChain() { this->destroy(); }
+
+        void init(std::shared_ptr<VulkanContext> ctx);
+        void destroy();
 
         void sendImageToScreen(VkQueue pQueue, VkSemaphore signal, uint32_t& imageIndex);
         uint32_t acquireNextImage(VkSemaphore& waitImage, VkRenderPassBeginInfo* r);

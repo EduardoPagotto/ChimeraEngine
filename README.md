@@ -120,6 +120,11 @@ em SDL3 e vulkan api nativa como criar Bindless Textures com diversara images de
 
 em SDL3 e vulkan api nativa como criar Bindless Textures mostrando a criacao do descriptorset unico e como passar para o fragment o indice
 
+em Vulkan API criar Class com FrameData em double buffer, contendo VkCommandPool, VkCommandBuffer, VkSemaphores e VkFence, em pathner RAII para a criacao de destruicao dos handles do vulkan, criar class SwapchainData com VkSwapchainKHR, e um struct separado para VkImage, VkImageView, VkFence que sera um vector para cada image, no pathner RAII,implementar em c++20 codifique rotina des de criacao, destruicao e detalhe rotina de desenho con enfase na sincronizacao e no trato dos indices de imagens do swapchain e de current frame.
+
+
+Struct de SwapchainData com VkSwapchainKHR, VkFormat, VkExtent2D, vetores de VkImage, vetores de VkImageView, vetores de VkFence,
+codigique em c++20 com criacao do swapchain, e rodina de desenho detelhada
 
 
 

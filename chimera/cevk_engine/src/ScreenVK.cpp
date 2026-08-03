@@ -3,10 +3,10 @@
 namespace ce {
 
     ScreenVK::ScreenVK(std::shared_ptr<VulkanContext> ctx) : ctx(ctx) {
-        this->swapchain = std::make_shared<SwapChain>(ctx);
+        this->swapchain.init(ctx);
 
-        this->cmdBuffers.resize(this->swapchain->getSwapChainFrameBuffers().size());
-        for (size_t i = 0; i < this->swapchain->getSwapChainFrameBuffers().size(); i++) {
+        this->cmdBuffers.resize(this->swapchain.getSwapChainFrameBuffers().size());
+        for (size_t i = 0; i < this->swapchain.getSwapChainFrameBuffers().size(); i++) {
             this->cmdBuffers[i] = CmdBuffer();
             this->cmdBuffers[i].init(this->ctx->logical, this->ctx->commandPool);
         }
@@ -29,8 +29,6 @@ namespace ce {
         for (size_t i = 0; i < cmdBuffers.size(); i++) {
             cmdBuffers[i].destroy();
         }
-
-        this->swapchain.reset();
     }
 
     void ScreenVK::before() {}

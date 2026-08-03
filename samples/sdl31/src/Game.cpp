@@ -11,7 +11,7 @@ Game::Game(std::shared_ptr<ce::VulkanContext> ctx, std::shared_ptr<ce::ScreenVK>
 
     using namespace ce;
 
-    this->uniformBufferVP.init(ctx->physical, ctx->logical, screen->getSwapchain()->getImages().size(),
+    this->uniformBufferVP.init(ctx->physical, ctx->logical, screen->getSwapchain().getImages().size(),
                                sizeof(UboViewProjection));
 
     this->textureMng = std::make_shared<Textures>(ctx);
@@ -30,8 +30,7 @@ Game::Game(std::shared_ptr<ce::VulkanContext> ctx, std::shared_ptr<ce::ScreenVK>
     const glm::vec3 camPos = glm::vec3(-100.0F, 150.0F, 200.0F);
     const glm::vec3 camCenter = glm::vec3(0.0F, 0.0F, -2.0F);
     const glm::vec3 camUp = glm::vec3(0.0F, 1.0F, 0.0F);
-    const float aspect =
-        (float)screen->getSwapchain()->getExtent().width / (float)screen->getSwapchain()->getExtent().height;
+    float aspect = (float)screen->getSwapchain().getExtent().width / (float)screen->getSwapchain().getExtent().height;
 
     uboViewProjection.projection = glm::perspective(radixAngle, aspect, near, far);
     uboViewProjection.view = glm::lookAt(camPos, camCenter, camUp);
@@ -155,16 +154,16 @@ void Game::createGraphicsPipeline() {
     shader->setVertexInput(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_FALSE);
 
     // -- VIEWPORT & SCISSOR
-    const VkViewport viewport{.x = 0.0F,                                                   // x start coordinate
-                              .y = 0.0F,                                                   // y start coordinate
-                              .width = (float)screen->getSwapchain()->getExtent().width,   // width of viewport
-                              .height = (float)screen->getSwapchain()->getExtent().height, // height of viewport
-                              .minDepth = 0.0F,                                            // min framebuffer depth
-                              .maxDepth = 1.0F};                                           // max framebuffer depth
+    const VkViewport viewport{.x = 0.0F,                                                  // x start coordinate
+                              .y = 0.0F,                                                  // y start coordinate
+                              .width = (float)screen->getSwapchain().getExtent().width,   // width of viewport
+                              .height = (float)screen->getSwapchain().getExtent().height, // height of viewport
+                              .minDepth = 0.0F,                                           // min framebuffer depth
+                              .maxDepth = 1.0F};                                          // max framebuffer depth
 
     const VkRect2D scissor{
-        .offset = VkOffset2D{.x = 0, .y = 0},           // Offset to use region from
-        .extent = screen->getSwapchain()->getExtent()}; // Extent to describe region to use, starting at offset
+        .offset = VkOffset2D{.x = 0, .y = 0},          // Offset to use region from
+        .extent = screen->getSwapchain().getExtent()}; // Extent to describe region to use, starting at offset
 
     // -- PIPELINE LAYOUT --
     this->pipelineLayout = std::make_shared<ce::PipelineLayout>(this->ctx->logical);
@@ -193,7 +192,7 @@ void Game::createGraphicsPipeline() {
     this->graphicPipeline->addColourState(colourState);
 
     // -- GRAPHICS PIPELINE CREATION
-    this->graphicPipeline->create(shader, screen->getSwapchain()->getRenderPass(), this->pipelineLayout->get());
+    this->graphicPipeline->create(shader, screen->getSwapchain().getRenderPass(), this->pipelineLayout->get());
 }
 
 void Game::createDescriptorPool() {
@@ -206,7 +205,7 @@ void Game::createDescriptorPool() {
                              .descriptorCount = static_cast<uint32_t>(this->uniformBufferVP.getBuffers().size())});
 
     // Create Descriptor Pool, Maximum number of descriptor Sets
-    this->descriptorPool.create(this->ctx->logical, static_cast<uint32_t>(screen->getSwapchain()->getImages().size()),
+    this->descriptorPool.create(this->ctx->logical, static_cast<uint32_t>(screen->getSwapchain().getImages().size()),
                                 static_cast<VkDescriptorPoolCreateFlagBits>(0));
 }
 
@@ -315,7 +314,7 @@ void Game::draw() {
 
     // Get index of next image to be draw to, and signal semaphore when ready to be draw to
     VkRenderPassBeginInfo renderPassBeginInfo{};
-    uint32_t imageIndex = screen->getSwapchain()->acquireNextImage(sync.getWait(), &renderPassBeginInfo);
+    uint32_t imageIndex = screen->getSwapchain().acquireNextImage(sync.getWait(), &renderPassBeginInfo);
 
     // Copy View Projection data in UBO
     this->uniformBufferVP.getBuffers()[imageIndex]->mapper(&this->uboViewProjection);
@@ -355,7 +354,7 @@ void Game::draw() {
     cmd.submitToRender(ctx->graphicsQueue, sync, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 
     // -- PRESENT RENDERED IMAGE TO SCREEN --
-    screen->getSwapchain()->sendImageToScreen(ctx->presentationQueue, sync.getSignal(), imageIndex);
+    screen->getSwapchain().sendImageToScreen(ctx->presentationQueue, sync.getSignal(), imageIndex);
     // Get next frame
     this->currentFrame = (this->currentFrame + 1) % ce::MAX_FRAME_DRAWS;
     // AHHHH!!!!!! ugly!!!!! this is complete wrong, find what missmatch sYncs!!!

@@ -27,14 +27,14 @@ namespace ce {
         virtual const int getWidth() const override;
         virtual const int getHeight() const override;
 
-        std::shared_ptr<ce::SwapChain> getSwapchain() const { return this->swapchain; }
+        ce::SwapChain& getSwapchain() { return this->swapchain; }
         std::vector<ce::CmdBuffer>& getCmdBuffers() { return this->cmdBuffers; }
         std::vector<ce::Sync>& getSyncs() { return this->syncs; }
 
       private:
         std::shared_ptr<VulkanContext> ctx;
 
-        std::shared_ptr<ce::SwapChain> swapchain;
+        ce::SwapChain swapchain;
         std::vector<ce::CmdBuffer> cmdBuffers;
         std::vector<ce::Sync> syncs;
 

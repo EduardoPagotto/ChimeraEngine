@@ -1,9 +1,12 @@
 #include "SwapChain.hpp"
 #include <array>
+#include <vulkan/vulkan_core.h>
 
 namespace ce {
 
-    SwapChain::SwapChain(std::shared_ptr<VulkanContext> ctx) : ctx(ctx) {
+    void SwapChain::init(std::shared_ptr<VulkanContext> ctx) {
+
+        this->ctx = ctx;
 
         // Get Swap Chain details so we cam pick best setting
         SwapChainDetails swapchainDetails = VulkanContext::GetSwapChainDetails(ctx->physical, ctx->surface);
@@ -100,21 +103,32 @@ namespace ce {
         this->renderArea = {.offset = {.x = 0, .y = 0}, .extent = this->extent};
     }
 
-    SwapChain::~SwapChain() {
+    void SwapChain::destroy() {
 
-        for (auto& framebuffer : this->frameBuffers) { // ? auto& mesmo ??
-            vkDestroyFramebuffer(ctx->logical, framebuffer, nullptr);
+        if (this->ctx != nullptr) {
+
+            for (auto& framebuffer : this->frameBuffers) { // ? auto& mesmo ??
+                vkDestroyFramebuffer(ctx->logical, framebuffer, nullptr);
+            }
+
+            for (auto& image : this->images) {
+                image.reset();
+            }
+
+            // TODO: e aqui?
+            this->depthBufferImg.reset();
+
+            if (this->swapchain != VK_NULL_HANDLE) {
+                vkDestroySwapchainKHR(ctx->logical, this->swapchain, nullptr);
+                this->swapchain = VK_NULL_HANDLE;
+            }
+
+            if (this->renderPass != VK_NULL_HANDLE) {
+                vkDestroyRenderPass(ctx->logical, this->renderPass, nullptr);
+                this->renderPass = VK_NULL_HANDLE;
+            }
+            //}
         }
-
-        for (auto& image : this->images) {
-            image.reset();
-        }
-
-        // TODO: e aqui?
-        this->depthBufferImg.reset();
-
-        vkDestroySwapchainKHR(ctx->logical, this->swapchain, nullptr);
-        vkDestroyRenderPass(ctx->logical, this->renderPass, nullptr);
     }
 
     uint32_t SwapChain::acquireNextImage(VkSemaphore& waitImage, VkRenderPassBeginInfo* r) {

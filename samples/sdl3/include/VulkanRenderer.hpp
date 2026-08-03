@@ -33,7 +33,7 @@ class VulkanRenderer {
 
     std::shared_ptr<ce::VulkanContext> ctx;
 
-    std::shared_ptr<ce::SwapChain> swapchain;
+    ce::SwapChain swapchain;
 
     std::vector<ce::CmdBuffer> cmdBuffers;
     ce::DescriptorPool descriptorPool;

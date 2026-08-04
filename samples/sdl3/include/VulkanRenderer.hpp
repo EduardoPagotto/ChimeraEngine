@@ -1,10 +1,9 @@
 #pragma once
 
-#include "cevk/CmdBuffer.hpp"
+#include "cevk/Frame.hpp"
 #include "cevk/MeshModel.hpp"
 #include "cevk/Pipeline.hpp"
 #include "cevk/SwapChain.hpp"
-#include "cevk/Sync.hpp"
 #include "cevk/Textures.hpp"
 #include "cevk/UBO.hpp"
 #include <assimp/Importer.hpp>
@@ -35,7 +34,7 @@ class VulkanRenderer {
 
     ce::SwapChain swapchain;
 
-    std::vector<ce::CmdBuffer> cmdBuffers;
+    std::vector<ce::Frame> frames;
     ce::DescriptorPool descriptorPool;
     ce::UniformBuffer uniformBufferVP;
 
@@ -43,7 +42,7 @@ class VulkanRenderer {
 
     std::shared_ptr<ce::PipelineLayout> pipelineLayout;
     std::shared_ptr<ce::Pipeline> graphicPipeline;
-    std::vector<ce::Sync> syncs;
+
     // Scene Objects
     std::vector<ce::MeshModel> modelList;
 

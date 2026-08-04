@@ -15,6 +15,12 @@ VulkanRenderer::VulkanRenderer(std::shared_ptr<ce::VulkanContext> ctx) : ctx(ctx
 
     this->swapchain.init(ctx);
 
+    this->frames.resize(ce::MAX_FRAME_DRAWS);
+    for (size_t i = 0; i < ce::MAX_FRAME_DRAWS; i++) {
+        this->frames[i] = ce::Frame();
+        this->frames[i].init(this->ctx->logical, this->ctx->queueFamilyIndices.graphicsFamily);
+    }
+
     this->uniformBufferVP.init(ctx->physical, ctx->logical, swapchain.getSwapchainResSize(), sizeof(UboViewProjection));
 
     this->textureMng = std::make_shared<Textures>(ctx);
@@ -22,21 +28,8 @@ VulkanRenderer::VulkanRenderer(std::shared_ptr<ce::VulkanContext> ctx) : ctx(ctx
     createDescriptorSetLayout();
     createPushConstantRange();
     createGraphicsPipeline();
-
-    this->cmdBuffers.resize(this->swapchain.getSwapchainResSize());
-    for (size_t i = 0; i < this->swapchain.getSwapchainResSize(); i++) {
-        this->cmdBuffers[i] = CmdBuffer();
-        this->cmdBuffers[i].init(ctx->logical, ctx->commandPool);
-    }
-
     createDescriptorPool();
     createDescriptorSets();
-
-    this->syncs.resize(ce::MAX_FRAME_DRAWS);
-    for (size_t i = 0; i < ce::MAX_FRAME_DRAWS; i++) {
-        this->syncs[i] = ce::Sync();
-        this->syncs[i].init(this->ctx->logical);
-    }
 
     // const float radixAngle = 45.0F;
     const float near = 0.1F;
@@ -71,14 +64,6 @@ VulkanRenderer::~VulkanRenderer() {
     descriptorPool.destroy();
     uniformBufferVP.destroy();
 
-    for (size_t i = 0; i < this->syncs.size(); i++) {
-        this->syncs[i].destroy();
-    }
-
-    for (size_t i = 0; i < cmdBuffers.size(); i++) {
-        cmdBuffers[i].destroy();
-    }
-
     graphicPipeline.reset();
     pipelineLayout.reset();
 }
@@ -95,18 +80,39 @@ void VulkanRenderer::updateModel(int modelId, glm::mat4 newModel) {
 void VulkanRenderer::draw() {
     // -- GET NEXT IMAGE --
     // Wait for given fence to signal (open) from last draw before continuing
-    auto& sync = this->syncs[this->currentFrame];
-    sync.waitAndResetFence(); // Manually reset (close) fence
+    ce::Frame& frame = this->frames[this->currentFrame];
 
+    //------------------------------------------------------------------------
+    // PASSO 1: Sincronizar CPU com o Frame Virtual Atual
+    //------------------------------------------------------------------------
+    // Aguarda o frame de duas iterações atrás terminar de renderizar na GPU.
+    vkWaitForFences(ctx->logical, 1, &frame.inFlightFence, VK_TRUE, UINT64_MAX);
+
+    //------------------------------------------------------------------------
+    // PASSO 2: Adquirir uma Imagem da Swapchain
+    //------------------------------------------------------------------------
     // Get index of next image to be draw to, and signal semaphore when ready to be draw to
     VkRenderPassBeginInfo renderPassBeginInfo{};
-    uint32_t imageIndex = this->swapchain.acquireNextImage(sync.getWait(), &renderPassBeginInfo);
+    uint32_t imageIndex = this->swapchain.acquireNextImage(frame.imageAvailableSemaphore, &renderPassBeginInfo);
+
+    //------------------------------------------------------------------------
+    // PASSO 3: Tratar a Sincronização da Imagem Específica da Swapchain
+    //------------------------------------------------------------------------
+    // Se a imagem real adquirida ainda estiver sendo usada por algum frame virtual anterior, aguarde.
+    if (swapchain.getSwapchainRes(imageIndex).inFlightFence != VK_NULL_HANDLE) {
+        vkWaitForFences(ctx->logical, 1, &swapchain.getSwapchainRes(imageIndex).inFlightFence, VK_TRUE, UINT64_MAX);
+    }
+    // Mapeia a Fence do frame virtual atual para esta imagem da swapchain.
+    swapchain.getSwapchainRes(imageIndex).inFlightFence = frame.inFlightFence;
+
+    // Resetar a Fence do frame virtual para o estado não-sinalizado antes de enviar novos comandos
+    vkResetFences(ctx->logical, 1, &frame.inFlightFence);
 
     // Copy View Projection data in UBO
     this->uniformBufferVP.getBuffers()[imageIndex]->mapper(&this->uboViewProjection);
 
     ce::CmdRender cmd;
-    cmd.begin(this->cmdBuffers[imageIndex].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT, renderPassBeginInfo,
+    cmd.begin(frame.commandBuffer, VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT, renderPassBeginInfo,
               this->graphicPipeline->get());
 
     ce::DescriptorSet& vpUboDS = this->uniformBufferVP.getDescriptorSet(imageIndex);
@@ -137,10 +143,10 @@ void VulkanRenderer::draw() {
     cmd.end();
 
     // -- SUBMIT COMMAND BUFFER TO RENDER
-    cmd.submitToRender(ctx->graphicsQueue, sync, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+    cmd.submitToRender(ctx->graphicsQueue, &frame, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 
     // -- PRESENT RENDERED IMAGE TO SCREEN --
-    this->swapchain.sendImageToScreen(ctx->presentationQueue, sync.getSignal(), imageIndex);
+    this->swapchain.sendImageToScreen(ctx->presentationQueue, frame.renderFinishedSemaphore, imageIndex);
     // Get next frame
     this->currentFrame = (this->currentFrame + 1) % ce::MAX_FRAME_DRAWS;
     // AHHHH!!!!!! ugly!!!!! this is complete wrong, find what missmatch sYncs!!!

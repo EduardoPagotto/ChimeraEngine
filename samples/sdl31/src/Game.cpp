@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "Frame.hpp"
 #include "cevk/CmdRender.hpp"
 #include "cevk/Mesh.hpp"
 #include "cevk_infra/event.hpp"
@@ -13,8 +14,14 @@ Game::Game(std::shared_ptr<ce::VulkanContext> ctx, std::shared_ptr<ce::ScreenVK>
 
     this->swapchain.init(ctx);
 
-    this->cmdBuffers.resize(this->swapchain.getSwapchainResSize());
-    for (size_t i = 0; i < this->swapchain.getSwapchainResSize(); i++) {
+    // this->frames.resize(this->swapchain.getSwapchainResSize());
+    // for (size_t i = 0; i < this->swapchain.getSwapchainResSize(); i++) {
+    //     this->frames[i] = ce::Frame();
+    //     this->frames[i].init(this->ctx->logical, this->ctx->queueFamilyIndices.graphicsFamily);
+    // }
+
+    this->cmdBuffers.resize(ce::MAX_FRAME_DRAWS);
+    for (size_t i = 0; i < ce::MAX_FRAME_DRAWS; i++) {
         this->cmdBuffers[i] = CmdBuffer();
         this->cmdBuffers[i].init(this->ctx->logical, this->ctx->commandPool);
     }
@@ -326,6 +333,8 @@ void Game::draw() {
     auto& sync = this->syncs[this->currentFrame];
     sync.waitAndResetFence(); // Manually reset (close) fence
 
+    // ce::Frame& frame = this->frames[this->currentFrame];
+
     // Get index of next image to be draw to, and signal semaphore when ready to be draw to
     VkRenderPassBeginInfo renderPassBeginInfo{};
     uint32_t imageIndex = this->swapchain.acquireNextImage(sync.getWait(), &renderPassBeginInfo);
@@ -334,7 +343,7 @@ void Game::draw() {
     this->uniformBufferVP.getBuffers()[imageIndex]->mapper(&this->uboViewProjection);
 
     ce::CmdRender cmd;
-    cmd.begin(cmdBuffers[imageIndex].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT, renderPassBeginInfo,
+    cmd.begin(cmdBuffers[this->currentFrame].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT, renderPassBeginInfo,
               this->graphicPipeline->get());
 
     ce::DescriptorSet& vpUboDS = this->uniformBufferVP.getDescriptorSet(imageIndex);

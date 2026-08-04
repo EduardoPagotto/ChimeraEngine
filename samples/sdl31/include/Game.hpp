@@ -1,4 +1,5 @@
 #pragma once
+#include "Frame.hpp"
 #include "cevk/CmdBuffer.hpp"
 #include "cevk/MeshModel.hpp"
 #include "cevk/Pipeline.hpp"
@@ -51,6 +52,8 @@ class Game : public ce::IStateMachine {
     ce::UniformBuffer uniformBufferVP;
 
     ce::SwapChain swapchain;
+
+    std::vector<ce::Frame> frames;
     std::vector<ce::CmdBuffer> cmdBuffers;
     std::vector<ce::Sync> syncs;
 

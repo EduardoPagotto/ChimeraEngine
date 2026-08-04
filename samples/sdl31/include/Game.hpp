@@ -54,7 +54,7 @@ class Game : public ce::IStateMachine {
     ce::SwapChain swapchain;
 
     std::vector<ce::Frame> frames;
-    std::vector<ce::CmdBuffer> cmdBuffers;
+    // std::vector<ce::CmdBuffer> cmdBuffers;
     std::vector<ce::Sync> syncs;
 
     std::shared_ptr<ce::Textures> textureMng;

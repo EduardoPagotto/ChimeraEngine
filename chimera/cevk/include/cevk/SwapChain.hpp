@@ -44,6 +44,7 @@ namespace ce {
         VkRenderPass& getRenderPass() { return renderPass; }
         VkExtent2D& getExtent() { return this->extent; }
         size_t getSwapchainResSize() const { return this->swapchainRes.size(); }
+        SwapchainImageResource& getSwapchainRes(size_t index) { return this->swapchainRes[index]; }
 
       private:
         void createDepthBufferImage();

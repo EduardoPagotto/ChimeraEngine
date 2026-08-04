@@ -14,16 +14,10 @@ Game::Game(std::shared_ptr<ce::VulkanContext> ctx, std::shared_ptr<ce::ScreenVK>
 
     this->swapchain.init(ctx);
 
-    // this->frames.resize(this->swapchain.getSwapchainResSize());
-    // for (size_t i = 0; i < this->swapchain.getSwapchainResSize(); i++) {
-    //     this->frames[i] = ce::Frame();
-    //     this->frames[i].init(this->ctx->logical, this->ctx->queueFamilyIndices.graphicsFamily);
-    // }
-
-    this->cmdBuffers.resize(ce::MAX_FRAME_DRAWS);
+    this->frames.resize(ce::MAX_FRAME_DRAWS);
     for (size_t i = 0; i < ce::MAX_FRAME_DRAWS; i++) {
-        this->cmdBuffers[i] = CmdBuffer();
-        this->cmdBuffers[i].init(this->ctx->logical, this->ctx->commandPool);
+        this->frames[i] = ce::Frame();
+        this->frames[i].init(this->ctx->logical, this->ctx->queueFamilyIndices.graphicsFamily);
     }
 
     this->syncs.resize(ce::MAX_FRAME_DRAWS);
@@ -333,17 +327,41 @@ void Game::draw() {
     auto& sync = this->syncs[this->currentFrame];
     sync.waitAndResetFence(); // Manually reset (close) fence
 
-    // ce::Frame& frame = this->frames[this->currentFrame];
+    ce::Frame& frame = this->frames[this->currentFrame];
 
+    //------------------------------------------------------------------------
+    // PASSO 1: Sincronizar CPU com o Frame Virtual Atual
+    //------------------------------------------------------------------------
+    // Aguarda o frame de duas iterações atrás terminar de renderizar na GPU.
+    // vkWaitForFences(ctx->logical, 1, &frame.inFlightFence, VK_TRUE, UINT64_MAX);
+
+    //------------------------------------------------------------------------
+    // PASSO 2: Adquirir uma Imagem da Swapchain
+    //------------------------------------------------------------------------
     // Get index of next image to be draw to, and signal semaphore when ready to be draw to
     VkRenderPassBeginInfo renderPassBeginInfo{};
+    // uint32_t imageIndex = this->swapchain.acquireNextImage(frame.imageAvailableSemaphore, &renderPassBeginInfo);
+
     uint32_t imageIndex = this->swapchain.acquireNextImage(sync.getWait(), &renderPassBeginInfo);
+
+    //------------------------------------------------------------------------
+    // PASSO 3: Tratar a Sincronização da Imagem Específica da Swapchain
+    //------------------------------------------------------------------------
+    // Se a imagem real adquirida ainda estiver sendo usada por algum frame virtual anterior, aguarde.
+    // if (swapchain.getSwapchainRes(imageIndex).inFlightFence != VK_NULL_HANDLE) {
+    //    vkWaitForFences(ctx->logical, 1, &swapchain.getSwapchainRes(imageIndex).inFlightFence, VK_TRUE, UINT64_MAX);
+    //}
+    // Mapeia a Fence do frame virtual atual para esta imagem da swapchain.
+    // swapchain.getSwapchainRes(imageIndex).inFlightFence = frame.inFlightFence;
+
+    // Resetar a Fence do frame virtual para o estado não-sinalizado antes de enviar novos comandos
+    // vkResetFences(ctx->logical, 1, &frame.inFlightFence);
 
     // Copy View Projection data in UBO
     this->uniformBufferVP.getBuffers()[imageIndex]->mapper(&this->uboViewProjection);
 
     ce::CmdRender cmd;
-    cmd.begin(cmdBuffers[this->currentFrame].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT, renderPassBeginInfo,
+    cmd.begin(frame.commandBuffer, VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT, renderPassBeginInfo,
               this->graphicPipeline->get());
 
     ce::DescriptorSet& vpUboDS = this->uniformBufferVP.getDescriptorSet(imageIndex);

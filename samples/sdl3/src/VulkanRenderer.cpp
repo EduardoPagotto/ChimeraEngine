@@ -15,7 +15,7 @@ VulkanRenderer::VulkanRenderer(std::shared_ptr<ce::VulkanContext> ctx) : ctx(ctx
 
     this->swapchain.init(ctx);
 
-    this->uniformBufferVP.init(ctx->physical, ctx->logical, swapchain.getImages().size(), sizeof(UboViewProjection));
+    this->uniformBufferVP.init(ctx->physical, ctx->logical, swapchain.getSwapchainResSize(), sizeof(UboViewProjection));
 
     this->textureMng = std::make_shared<Textures>(ctx);
 
@@ -23,8 +23,8 @@ VulkanRenderer::VulkanRenderer(std::shared_ptr<ce::VulkanContext> ctx) : ctx(ctx
     createPushConstantRange();
     createGraphicsPipeline();
 
-    this->cmdBuffers.resize(this->swapchain.getSwapChainFrameBuffers().size());
-    for (size_t i = 0; i < this->swapchain.getSwapChainFrameBuffers().size(); i++) {
+    this->cmdBuffers.resize(this->swapchain.getSwapchainResSize());
+    for (size_t i = 0; i < this->swapchain.getSwapchainResSize(); i++) {
         this->cmdBuffers[i] = CmdBuffer();
         this->cmdBuffers[i].init(ctx->logical, ctx->commandPool);
     }
@@ -252,7 +252,7 @@ void VulkanRenderer::createDescriptorPool() {
                              .descriptorCount = static_cast<uint32_t>(this->uniformBufferVP.getBuffers().size())});
 
     // Create Descriptor Pool, Maximum number of descriptor Sets
-    this->descriptorPool.create(this->ctx->logical, static_cast<uint32_t>(this->swapchain.getImages().size()),
+    this->descriptorPool.create(this->ctx->logical, static_cast<uint32_t>(this->swapchain.getSwapchainResSize()),
                                 static_cast<VkDescriptorPoolCreateFlagBits>(0));
 }
 

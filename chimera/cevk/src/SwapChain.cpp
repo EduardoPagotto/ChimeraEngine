@@ -77,23 +77,48 @@ namespace ce {
         // Store for late reference
         this->imageFormat = surrfaceFormat.format;
 
+        this->createDepthBufferImage();
+        this->createRenderPass(this->imageFormat);
+
         // Get swap chain images (first count the values)
         uint32_t swapChainImageCount;
         vkGetSwapchainImagesKHR(ctx->logical, this->swapchain, &swapChainImageCount, nullptr);
+        std::vector<VkImage> swapchainImages(swapChainImageCount);
+        vkGetSwapchainImagesKHR(ctx->logical, this->swapchain, &swapChainImageCount, swapchainImages.data());
 
-        std::vector<VkImage> lImages(swapChainImageCount);
-        vkGetSwapchainImagesKHR(ctx->logical, this->swapchain, &swapChainImageCount, lImages.data());
+        swapchainRes.resize(swapChainImageCount);
 
-        for (VkImage image : lImages) {
+        for (size_t i = 0; i < swapChainImageCount; i++) {
 
-            auto imgObj = std::make_shared<Image>(ctx->physical, ctx->logical);
-            imgObj->createImageViewImportedImage(image, this->imageFormat,
-                                                 VK_IMAGE_ASPECT_COLOR_BIT); // CreateImageView
-            this->images.push_back(imgObj);
+            swapchainRes[i].image = swapchainImages[i];
+
+            VkImageViewCreateInfo viewInfo{.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+                                           .image = swapchainImages[i],
+                                           .viewType = VK_IMAGE_VIEW_TYPE_2D,
+                                           .format = this->imageFormat,
+                                           .subresourceRange = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                                                .baseMipLevel = 0,
+                                                                .levelCount = 1,
+                                                                .baseArrayLayer = 0,
+                                                                .layerCount = 1}};
+            vkCreateImageView(this->ctx->logical, &viewInfo, nullptr, &swapchainRes[i].imageView);
+
+            // Create framebuffer usinf color map and depth buffer
+            std::array<VkImageView, 2> attachments = {swapchainRes[i].imageView,
+                                                      depthBufferImg->getImageView()}; // order important same as upper
+            VkFramebufferCreateInfo framebufferInfo{
+                .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
+                .renderPass = this->renderPass,
+                .attachmentCount = static_cast<uint32_t>(attachments.size()), //
+                .pAttachments = attachments.data(), // List of attachments (1:1 with Render Pass)
+                .width = this->extent.width,
+                .height = this->extent.height,
+                .layers = 1};
+
+            vkCreateFramebuffer(this->ctx->logical, &framebufferInfo, nullptr, &swapchainRes[i].framebuffer);
+
+            swapchainRes[i].inFlightFence = VK_NULL_HANDLE;
         }
-
-        this->createRenderPass(this->imageFormat);
-        this->createFramebuffers(this->renderPass);
 
         // Information about how to begin a render pass (only need for graphical application)
         this->clearValues.resize(2);
@@ -107,13 +132,10 @@ namespace ce {
 
         if (this->ctx != nullptr) {
 
-            for (auto& framebuffer : this->frameBuffers) { // ? auto& mesmo ??
-                vkDestroyFramebuffer(ctx->logical, framebuffer, nullptr);
+            for (auto& res : this->swapchainRes) {
+                res.cleanup(this->ctx->logical);
             }
-
-            for (auto& image : this->images) {
-                image.reset();
-            }
+            this->swapchainRes.clear();
 
             // TODO: e aqui?
             this->depthBufferImg.reset();
@@ -138,7 +160,7 @@ namespace ce {
 
         r->sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
         r->renderPass = this->renderPass;                               // Render pass to begin
-        r->framebuffer = this->frameBuffers[imageIndex];                //
+        r->framebuffer = this->swapchainRes[imageIndex].framebuffer;    //
         r->renderArea = this->renderArea;                               //
         r->clearValueCount = static_cast<uint32_t>(clearValues.size()); //
         r->pClearValues = clearValues.data();                           // List of clear values
@@ -170,37 +192,6 @@ namespace ce {
                                     std::min(surfaceCapabilities.maxImageExtent.height, newExtent.height));
 
         return newExtent;
-    }
-
-    void SwapChain::createFramebuffers(VkRenderPass& renderPass) {
-
-        // create depth buffer
-        this->createDepthBufferImage();
-
-        // Resize framebuffer count to equal chain image count
-        this->frameBuffers.resize(this->images.size());
-
-        // Create a framebuffer for eache swap chain image
-        for (size_t i = 0; i < this->frameBuffers.size(); i++) {
-
-            std::array<VkImageView, 2> attachments = {this->images[i]->getImageView(),
-                                                      depthBufferImg->getImageView()}; // order important same as upper
-
-            const VkFramebufferCreateInfo framebufferCreateInfo = {
-                .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
-                .renderPass = renderPass, // Render Pass layout the framebuffer will be used with
-                .attachmentCount = static_cast<uint32_t>(attachments.size()), //
-                .pAttachments = attachments.data(), // List of attachments (1:1 with Render Pass)
-                .width = this->extent.width,        // Framebuffer width
-                .height = this->extent.height,      // Framebuffer height
-                .layers = 1                         // Framebuffer layers
-            };
-
-            if (vkCreateFramebuffer(ctx->logical, &framebufferCreateInfo, nullptr, &this->frameBuffers[i]) !=
-                VK_SUCCESS) {
-                throw std::runtime_error("Faleid to create a frambuffer");
-            }
-        }
     }
 
     void SwapChain::createDepthBufferImage() {

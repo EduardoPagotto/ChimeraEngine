@@ -11,7 +11,7 @@ Game::Game(std::shared_ptr<ce::VulkanContext> ctx, std::shared_ptr<ce::ScreenVK>
 
     using namespace ce;
 
-    this->uniformBufferVP.init(ctx->physical, ctx->logical, screen->getSwapchain().getImages().size(),
+    this->uniformBufferVP.init(ctx->physical, ctx->logical, screen->getSwapchain().getSwapchainResSize(),
                                sizeof(UboViewProjection));
 
     this->textureMng = std::make_shared<Textures>(ctx);
@@ -205,7 +205,7 @@ void Game::createDescriptorPool() {
                              .descriptorCount = static_cast<uint32_t>(this->uniformBufferVP.getBuffers().size())});
 
     // Create Descriptor Pool, Maximum number of descriptor Sets
-    this->descriptorPool.create(this->ctx->logical, static_cast<uint32_t>(screen->getSwapchain().getImages().size()),
+    this->descriptorPool.create(this->ctx->logical, static_cast<uint32_t>(screen->getSwapchain().getSwapchainResSize()),
                                 static_cast<VkDescriptorPoolCreateFlagBits>(0));
 }
 

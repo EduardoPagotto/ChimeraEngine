@@ -1,10 +1,8 @@
 #pragma once
-#include "Frame.hpp"
-#include "cevk/CmdBuffer.hpp"
+#include "cevk/Frame.hpp"
 #include "cevk/MeshModel.hpp"
 #include "cevk/Pipeline.hpp"
 #include "cevk/SwapChain.hpp"
-#include "cevk/Sync.hpp"
 #include "cevk/Textures.hpp"
 #include "cevk/UBO.hpp"
 #include "cevk/VulkanContext.hpp"
@@ -54,8 +52,6 @@ class Game : public ce::IStateMachine {
     ce::SwapChain swapchain;
 
     std::vector<ce::Frame> frames;
-    // std::vector<ce::CmdBuffer> cmdBuffers;
-    std::vector<ce::Sync> syncs;
 
     std::shared_ptr<ce::Textures> textureMng;
     std::shared_ptr<ce::PipelineLayout> pipelineLayout;

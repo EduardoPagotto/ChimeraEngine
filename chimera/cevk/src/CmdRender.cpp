@@ -80,11 +80,11 @@ namespace ce {
         descriptorSetGroup.clear();
     }
 
-    void CmdRender::submitToRender(VkQueue queue, Sync& sync, const VkPipelineStageFlagBits& pipelineStageFlags) {
+    void CmdRender::submitToRender(VkQueue queue, Frame* frame, const VkPipelineStageFlagBits& pipelineStageFlags) {
         // -- SUBMIT COMMAND BUFFER TO RENDER
         // Queue submission information
-        std::array<VkSemaphore, 1> waitSemaphores{sync.getWait()};
-        std::array<VkSemaphore, 1> signalSemaphores{sync.getSignal()};
+        std::array<VkSemaphore, 1> waitSemaphores{frame->imageAvailableSemaphore};   // sync.getWait()};
+        std::array<VkSemaphore, 1> signalSemaphores{frame->renderFinishedSemaphore}; // sync.getSignal()};
         std::array<VkPipelineStageFlags, 1> waitStages{pipelineStageFlags};
 
         const VkSubmitInfo submitInfo{
@@ -99,7 +99,7 @@ namespace ce {
         };
 
         // Submit command buffer to queue
-        if (vkQueueSubmit(queue, 1, &submitInfo, sync.getFence()) != VK_SUCCESS) {
+        if (vkQueueSubmit(queue, 1, &submitInfo, frame->inFlightFence) != VK_SUCCESS) {
             throw std::runtime_error("Failed to submit Command Buffer to Queue!");
         }
     }

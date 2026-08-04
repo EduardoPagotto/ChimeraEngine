@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Sync.hpp"
+#include "Frame.hpp"
 #include <vector>
 #include <vulkan/vulkan_core.h>
 
@@ -29,7 +29,7 @@ namespace ce {
         void end();
         void clearTemps();
 
-        void submitToRender(VkQueue queue, Sync& sync, const VkPipelineStageFlagBits& pipelineStageFlags);
+        void submitToRender(VkQueue queue, Frame* frame, const VkPipelineStageFlagBits& pipelineStageFlags);
 
       private:
         std::vector<VkBuffer> vextexBuffers;

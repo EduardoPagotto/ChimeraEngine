@@ -11,7 +11,21 @@ Game::Game(std::shared_ptr<ce::VulkanContext> ctx, std::shared_ptr<ce::ScreenVK>
 
     using namespace ce;
 
-    this->uniformBufferVP.init(ctx->physical, ctx->logical, screen->getSwapchain().getSwapchainResSize(),
+    this->swapchain.init(ctx);
+
+    this->cmdBuffers.resize(this->swapchain.getSwapchainResSize());
+    for (size_t i = 0; i < this->swapchain.getSwapchainResSize(); i++) {
+        this->cmdBuffers[i] = CmdBuffer();
+        this->cmdBuffers[i].init(this->ctx->logical, this->ctx->commandPool);
+    }
+
+    this->syncs.resize(ce::MAX_FRAME_DRAWS);
+    for (size_t i = 0; i < ce::MAX_FRAME_DRAWS; i++) {
+        this->syncs[i] = ce::Sync();
+        this->syncs[i].init(this->ctx->logical);
+    }
+
+    this->uniformBufferVP.init(ctx->physical, ctx->logical, this->swapchain.getSwapchainResSize(),
                                sizeof(UboViewProjection));
 
     this->textureMng = std::make_shared<Textures>(ctx);
@@ -30,7 +44,7 @@ Game::Game(std::shared_ptr<ce::VulkanContext> ctx, std::shared_ptr<ce::ScreenVK>
     const glm::vec3 camPos = glm::vec3(-100.0F, 150.0F, 200.0F);
     const glm::vec3 camCenter = glm::vec3(0.0F, 0.0F, -2.0F);
     const glm::vec3 camUp = glm::vec3(0.0F, 1.0F, 0.0F);
-    float aspect = (float)screen->getSwapchain().getExtent().width / (float)screen->getSwapchain().getExtent().height;
+    float aspect = (float)this->swapchain.getExtent().width / (float)this->swapchain.getExtent().height;
 
     uboViewProjection.projection = glm::perspective(radixAngle, aspect, near, far);
     uboViewProjection.view = glm::lookAt(camPos, camCenter, camUp);
@@ -154,16 +168,16 @@ void Game::createGraphicsPipeline() {
     shader->setVertexInput(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_FALSE);
 
     // -- VIEWPORT & SCISSOR
-    const VkViewport viewport{.x = 0.0F,                                                  // x start coordinate
-                              .y = 0.0F,                                                  // y start coordinate
-                              .width = (float)screen->getSwapchain().getExtent().width,   // width of viewport
-                              .height = (float)screen->getSwapchain().getExtent().height, // height of viewport
-                              .minDepth = 0.0F,                                           // min framebuffer depth
-                              .maxDepth = 1.0F};                                          // max framebuffer depth
+    const VkViewport viewport{.x = 0.0F,                                           // x start coordinate
+                              .y = 0.0F,                                           // y start coordinate
+                              .width = (float)this->swapchain.getExtent().width,   // width of viewport
+                              .height = (float)this->swapchain.getExtent().height, // height of viewport
+                              .minDepth = 0.0F,                                    // min framebuffer depth
+                              .maxDepth = 1.0F};                                   // max framebuffer depth
 
-    const VkRect2D scissor{
-        .offset = VkOffset2D{.x = 0, .y = 0},          // Offset to use region from
-        .extent = screen->getSwapchain().getExtent()}; // Extent to describe region to use, starting at offset
+    const VkRect2D scissor{.offset = VkOffset2D{.x = 0, .y = 0}, // Offset to use region from
+                           .extent =
+                               this->swapchain.getExtent()}; // Extent to describe region to use, starting at offset
 
     // -- PIPELINE LAYOUT --
     this->pipelineLayout = std::make_shared<ce::PipelineLayout>(this->ctx->logical);
@@ -192,7 +206,7 @@ void Game::createGraphicsPipeline() {
     this->graphicPipeline->addColourState(colourState);
 
     // -- GRAPHICS PIPELINE CREATION
-    this->graphicPipeline->create(shader, screen->getSwapchain().getRenderPass(), this->pipelineLayout->get());
+    this->graphicPipeline->create(shader, this->swapchain.getRenderPass(), this->pipelineLayout->get());
 }
 
 void Game::createDescriptorPool() {
@@ -205,7 +219,7 @@ void Game::createDescriptorPool() {
                              .descriptorCount = static_cast<uint32_t>(this->uniformBufferVP.getBuffers().size())});
 
     // Create Descriptor Pool, Maximum number of descriptor Sets
-    this->descriptorPool.create(this->ctx->logical, static_cast<uint32_t>(screen->getSwapchain().getSwapchainResSize()),
+    this->descriptorPool.create(this->ctx->logical, static_cast<uint32_t>(this->swapchain.getSwapchainResSize()),
                                 static_cast<VkDescriptorPoolCreateFlagBits>(0));
 }
 
@@ -309,19 +323,19 @@ int Game::createMeshModel(const std::string& modelFile) {
 void Game::draw() {
     // -- GET NEXT IMAGE --
     // Wait for given fence to signal (open) from last draw before continuing
-    auto& sync = screen->getSyncs()[this->currentFrame];
+    auto& sync = this->syncs[this->currentFrame];
     sync.waitAndResetFence(); // Manually reset (close) fence
 
     // Get index of next image to be draw to, and signal semaphore when ready to be draw to
     VkRenderPassBeginInfo renderPassBeginInfo{};
-    uint32_t imageIndex = screen->getSwapchain().acquireNextImage(sync.getWait(), &renderPassBeginInfo);
+    uint32_t imageIndex = this->swapchain.acquireNextImage(sync.getWait(), &renderPassBeginInfo);
 
     // Copy View Projection data in UBO
     this->uniformBufferVP.getBuffers()[imageIndex]->mapper(&this->uboViewProjection);
 
     ce::CmdRender cmd;
-    cmd.begin(screen->getCmdBuffers()[imageIndex].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT,
-              renderPassBeginInfo, this->graphicPipeline->get());
+    cmd.begin(cmdBuffers[imageIndex].get(), VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT, renderPassBeginInfo,
+              this->graphicPipeline->get());
 
     ce::DescriptorSet& vpUboDS = this->uniformBufferVP.getDescriptorSet(imageIndex);
 
@@ -354,7 +368,7 @@ void Game::draw() {
     cmd.submitToRender(ctx->graphicsQueue, sync, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 
     // -- PRESENT RENDERED IMAGE TO SCREEN --
-    screen->getSwapchain().sendImageToScreen(ctx->presentationQueue, sync.getSignal(), imageIndex);
+    this->swapchain.sendImageToScreen(ctx->presentationQueue, sync.getSignal(), imageIndex);
     // Get next frame
     this->currentFrame = (this->currentFrame + 1) % ce::MAX_FRAME_DRAWS;
     // AHHHH!!!!!! ugly!!!!! this is complete wrong, find what missmatch sYncs!!!

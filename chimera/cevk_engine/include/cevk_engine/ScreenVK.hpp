@@ -1,7 +1,4 @@
 #pragma once
-#include "cevk/CmdBuffer.hpp"
-#include "cevk/SwapChain.hpp"
-#include "cevk/Sync.hpp"
 #include "cevk/VulkanContext.hpp"
 #include "cevk_infra/IScr.hpp"
 #include "cevk_infra/ServiceLocator.hpp"
@@ -27,16 +24,8 @@ namespace ce {
         virtual const int getWidth() const override;
         virtual const int getHeight() const override;
 
-        ce::SwapChain& getSwapchain() { return this->swapchain; }
-        std::vector<ce::CmdBuffer>& getCmdBuffers() { return this->cmdBuffers; }
-        std::vector<ce::Sync>& getSyncs() { return this->syncs; }
-
       private:
         std::shared_ptr<VulkanContext> ctx;
-
-        ce::SwapChain swapchain;
-        std::vector<ce::CmdBuffer> cmdBuffers;
-        std::vector<ce::Sync> syncs;
 
         // VkPushConstantRange pushConstantRange;
 

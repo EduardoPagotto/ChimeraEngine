@@ -1,6 +1,9 @@
 #pragma once
+#include "cevk/CmdBuffer.hpp"
 #include "cevk/MeshModel.hpp"
 #include "cevk/Pipeline.hpp"
+#include "cevk/SwapChain.hpp"
+#include "cevk/Sync.hpp"
 #include "cevk/Textures.hpp"
 #include "cevk/UBO.hpp"
 #include "cevk/VulkanContext.hpp"
@@ -47,7 +50,10 @@ class Game : public ce::IStateMachine {
     ce::DescriptorPool descriptorPool;
     ce::UniformBuffer uniformBufferVP;
 
-    std::shared_ptr<ce::ScreenVK> screen;
+    ce::SwapChain swapchain;
+    std::vector<ce::CmdBuffer> cmdBuffers;
+    std::vector<ce::Sync> syncs;
+
     std::shared_ptr<ce::Textures> textureMng;
     std::shared_ptr<ce::PipelineLayout> pipelineLayout;
     std::shared_ptr<ce::Pipeline> graphicPipeline;
@@ -56,6 +62,7 @@ class Game : public ce::IStateMachine {
     std::vector<ce::MeshModel> modelList;
 
     //
+    std::shared_ptr<ce::ScreenVK> screen;
     //
     float angle{0.0F};
     float deltaTime{0};

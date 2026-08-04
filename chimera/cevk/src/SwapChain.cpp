@@ -11,8 +11,9 @@ namespace ce {
         // Get Swap Chain details so we cam pick best setting
         SwapChainDetails swapchainDetails = VulkanContext::GetSwapChainDetails(ctx->physical, ctx->surface);
 
-        // Find optimal surface value for our swap chain
+        // Find optimal surface value for our swap chain,  Store for late reference
         VkSurfaceFormatKHR surrfaceFormat = SwapChain::ChooseBestSurfaceFormat(swapchainDetails.formats);
+        this->imageFormat = surrfaceFormat.format;
 
         VkPresentModeKHR presentMode = SwapChain::ChooseBestPresentationMode(swapchainDetails.presentationModes);
         this->extent = this->chooseSwapExtent(swapchainDetails.surfaceCapabilities);
@@ -51,7 +52,7 @@ namespace ce {
             .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
             .surface = ctx->surface,                           // Swapchain surface
             .minImageCount = imageCount,                       // Minimum image in swapchain
-            .imageFormat = surrfaceFormat.format,              // Swapchain format
+            .imageFormat = this->imageFormat,                  // Swapchain format
             .imageColorSpace = surrfaceFormat.colorSpace,      // Swapchain color space
             .imageExtent = this->extent,                       // Swapchain image extents
             .imageArrayLayers = 1,                             // Number of layers for each image in chain
@@ -73,9 +74,6 @@ namespace ce {
         if (vkCreateSwapchainKHR(ctx->logical, &swapchainCreateInfo, nullptr, &this->swapchain) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create a Swapchain");
         }
-
-        // Store for late reference
-        this->imageFormat = surrfaceFormat.format;
 
         this->createDepthBufferImage();
         this->createRenderPass(this->imageFormat);

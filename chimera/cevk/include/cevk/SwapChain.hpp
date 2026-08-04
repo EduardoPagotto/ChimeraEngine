@@ -43,7 +43,6 @@ namespace ce {
         VkFormat& getImageFormat() { return this->imageFormat; }
         VkRenderPass& getRenderPass() { return renderPass; }
         VkExtent2D& getExtent() { return this->extent; }
-        SwapchainImageResource& getSwapchainRes(size_t index) { return this->swapchainRes[index]; }
         size_t getSwapchainResSize() const { return this->swapchainRes.size(); }
 
       private:

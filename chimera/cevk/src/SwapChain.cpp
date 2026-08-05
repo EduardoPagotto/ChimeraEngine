@@ -12,9 +12,7 @@ namespace ce {
         SwapChainDetails swapchainDetails = VulkanContext::GetSwapChainDetails(ctx->physical, ctx->surface);
 
         // Find optimal surface value for our swap chain,  Store for late reference
-        VkSurfaceFormatKHR surrfaceFormat = SwapChain::ChooseBestSurfaceFormat(swapchainDetails.formats);
-        this->imageFormat = surrfaceFormat.format;
-        this->colorSpace = surrfaceFormat.colorSpace;
+        this->surfaceFormat = SwapChain::ChooseBestSurfaceFormat(swapchainDetails.formats);
 
         VkPresentModeKHR presentMode = SwapChain::ChooseBestPresentationMode(swapchainDetails.presentationModes);
         this->extent = this->chooseSwapExtent(swapchainDetails.surfaceCapabilities);
@@ -53,8 +51,8 @@ namespace ce {
             .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
             .surface = ctx->surface,                           // Swapchain surface
             .minImageCount = imageCount,                       // Minimum image in swapchain
-            .imageFormat = this->imageFormat,                  // Swapchain format
-            .imageColorSpace = surrfaceFormat.colorSpace,      // Swapchain color space
+            .imageFormat = this->surfaceFormat.format,         // Swapchain format
+            .imageColorSpace = this->surfaceFormat.colorSpace, // Swapchain color space
             .imageExtent = this->extent,                       // Swapchain image extents
             .imageArrayLayers = 1,                             // Number of layers for each image in chain
             .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, // What attachement image will be used as
@@ -79,7 +77,7 @@ namespace ce {
         this->swapchainData = SwapchainData(ctx->logical, rawSwapchain);
 
         this->createDepthBufferImage();
-        this->createRenderPass(this->imageFormat);
+        this->createRenderPass(this->surfaceFormat.format);
 
         // Get swap chain images (first count the values)
         uint32_t swapChainImageCount;
@@ -97,7 +95,7 @@ namespace ce {
             VkImageViewCreateInfo viewInfo{.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
                                            .image = swapchainImages[i],
                                            .viewType = VK_IMAGE_VIEW_TYPE_2D,
-                                           .format = this->imageFormat,
+                                           .format = this->surfaceFormat.format,
                                            .subresourceRange = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
                                                                 .baseMipLevel = 0,
                                                                 .levelCount = 1,
@@ -384,8 +382,8 @@ namespace ce {
             .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
             .surface = this->ctx->surface,
             .minImageCount = 3,
-            .imageFormat = this->imageFormat,
-            .imageColorSpace = this->colorSpace,
+            .imageFormat = this->surfaceFormat.format,
+            .imageColorSpace = this->surfaceFormat.colorSpace,
             .imageExtent = this->extent,
             .imageArrayLayers = 1,
             .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
@@ -418,7 +416,7 @@ namespace ce {
             VkImageViewCreateInfo viewInfo{.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
                                            .image = swapchainImages[i],
                                            .viewType = VK_IMAGE_VIEW_TYPE_2D,
-                                           .format = this->imageFormat,
+                                           .format = this->surfaceFormat.format,
                                            .subresourceRange = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
                                                                 .baseMipLevel = 0,
                                                                 .levelCount = 1,

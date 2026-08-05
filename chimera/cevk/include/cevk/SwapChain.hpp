@@ -94,7 +94,7 @@ namespace ce {
         void sendImageToScreen(VkQueue pQueue, VkSemaphore signal, uint32_t& imageIndex);
         uint32_t acquireNextImage(VkSemaphore& waitImage, VkRenderPassBeginInfo* r);
 
-        VkFormat& getImageFormat() { return this->imageFormat; }
+        VkFormat& getImageFormat() { return this->surfaceFormat.format; }
         VkRenderPass& getRenderPass() { return renderPass; }
         VkExtent2D& getExtent() { return this->extent; }
         size_t getSwapchainResSize() const { return this->swapchainData.images.size(); }
@@ -114,8 +114,7 @@ namespace ce {
         static VkSurfaceFormatKHR ChooseBestSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& formats);
         static VkPresentModeKHR ChooseBestPresentationMode(const std::vector<VkPresentModeKHR>& presentationModes);
 
-        VkFormat imageFormat;
-        VkColorSpaceKHR colorSpace;
+        VkSurfaceFormatKHR surfaceFormat;
         VkExtent2D extent;
         VkRect2D renderArea;
 

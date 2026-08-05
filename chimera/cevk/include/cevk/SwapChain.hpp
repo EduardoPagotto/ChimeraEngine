@@ -5,29 +5,83 @@
 #include <memory>
 #include <vector>
 
-// Estrutura para os recursos individuais de cada imagem da Swapchain
-struct SwapchainImageResource {
-    VkImage image = VK_NULL_HANDLE;
-    VkImageView imageView = VK_NULL_HANDLE;
-    VkFramebuffer framebuffer = VK_NULL_HANDLE; // Gerenciado via ciclo da Swapchain
-    VkFence inFlightFence = VK_NULL_HANDLE;     // Rastreia se esta imagem específica está em uso
-
-    // RAII: A Swapchain possui as VkImages, então destruímos apenas a View e liberamos a Fence externa se necessário
-    void cleanup(VkDevice device) {
-        if (framebuffer) {
-            vkDestroyFramebuffer(device, framebuffer, nullptr);
-            framebuffer = VK_NULL_HANDLE;
-        }
-        if (imageView) {
-            vkDestroyImageView(device, imageView, nullptr);
-            imageView = VK_NULL_HANDLE;
-        }
-        // Nota: As Fences de imagem são referências apontando para as Fences do FrameData,
-        // ou criadas separadamente caso queira controle individual.
-    }
-};
-
 namespace ce {
+
+    // Estrutura para os recursos individuais de cada imagem da Swapchain
+    struct SwapchainImageResource {
+        VkImage image = VK_NULL_HANDLE;
+        VkImageView imageView = VK_NULL_HANDLE;
+        VkFramebuffer framebuffer = VK_NULL_HANDLE; // Gerenciado via ciclo da Swapchain
+        VkFence inFlightFence = VK_NULL_HANDLE;     // Rastreia se esta imagem específica está em uso
+
+        // RAII: A Swapchain possui as VkImages, então destruímos apenas a View e liberamos a Fence externa se
+        // necessário
+        void cleanup(VkDevice device) {
+            if (framebuffer) {
+                vkDestroyFramebuffer(device, framebuffer, nullptr);
+                framebuffer = VK_NULL_HANDLE;
+            }
+            if (imageView) {
+                vkDestroyImageView(device, imageView, nullptr);
+                imageView = VK_NULL_HANDLE;
+            }
+            // Nota: As Fences de imagem são referências apontando para as Fences do FrameData,
+            // ou criadas separadamente caso queira controle individual.
+        }
+    };
+
+    // Classe RAII para os dados da Swapchain
+    class SwapchainData {
+
+      public:
+        SwapchainData() = default;
+        SwapchainData(VkDevice device, VkSwapchainKHR oldSwapchain = VK_NULL_HANDLE)
+            : device(device), swapchain(oldSwapchain) {}
+
+        ~SwapchainData() { this->destroy(); }
+
+        // Movimentação permitida para transferência de escopo
+        SwapchainData(SwapchainData&& other) noexcept { *this = std::move(other); }
+
+        SwapchainData& operator=(SwapchainData&& other) noexcept {
+            if (this != &other) {
+                destroy();
+                this->device = other.device;
+                this->swapchain = other.swapchain;
+                this->images = std::move(other.images);
+
+                other.swapchain = VK_NULL_HANDLE;
+                other.device = VK_NULL_HANDLE;
+            }
+            return *this;
+        }
+
+        // Proibir cópia (Padrão RAII)
+        SwapchainData(const SwapchainData&) = delete;
+        SwapchainData& operator=(const SwapchainData&) = delete;
+
+        void destroy() {
+            if (device) {
+                for (auto& imgRes : images) {
+                    imgRes.cleanup(device);
+                }
+                images.clear();
+
+                if (swapchain != VK_NULL_HANDLE) {
+                    vkDestroySwapchainKHR(device, swapchain, nullptr);
+                    swapchain = VK_NULL_HANDLE;
+                }
+                device = VK_NULL_HANDLE;
+            }
+        }
+
+      private:
+        VkDevice device{VK_NULL_HANDLE};
+
+      public:
+        VkSwapchainKHR swapchain{VK_NULL_HANDLE};
+        std::vector<SwapchainImageResource> images;
+    };
 
     class SwapChain {
       public:
@@ -43,8 +97,8 @@ namespace ce {
         VkFormat& getImageFormat() { return this->imageFormat; }
         VkRenderPass& getRenderPass() { return renderPass; }
         VkExtent2D& getExtent() { return this->extent; }
-        size_t getSwapchainResSize() const { return this->swapchainRes.size(); }
-        SwapchainImageResource& getSwapchainRes(size_t index) { return this->swapchainRes[index]; }
+        size_t getSwapchainResSize() const { return this->swapchainData.images.size(); }
+        SwapchainImageResource& getSwapchainRes(size_t index) { return this->swapchainData.images[index]; }
 
       private:
         void createDepthBufferImage();
@@ -55,16 +109,15 @@ namespace ce {
         static VkPresentModeKHR ChooseBestPresentationMode(const std::vector<VkPresentModeKHR>& presentationModes);
 
         VkFormat imageFormat;
+        VkColorSpaceKHR colorSpace;
         VkExtent2D extent;
         VkRect2D renderArea;
 
-        VkSwapchainKHR swapchain{VK_NULL_HANDLE};
+        SwapchainData swapchainData;
         VkRenderPass renderPass{VK_NULL_HANDLE};
 
         std::shared_ptr<VulkanContext> ctx;
         std::shared_ptr<Image> depthBufferImg;
-
-        std::vector<SwapchainImageResource> swapchainRes;
         std::vector<VkClearValue> clearValues;
     };
 } // namespace ce

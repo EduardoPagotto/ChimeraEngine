@@ -14,6 +14,7 @@ namespace ce {
         // Find optimal surface value for our swap chain,  Store for late reference
         VkSurfaceFormatKHR surrfaceFormat = SwapChain::ChooseBestSurfaceFormat(swapchainDetails.formats);
         this->imageFormat = surrfaceFormat.format;
+        this->colorSpace = surrfaceFormat.colorSpace;
 
         VkPresentModeKHR presentMode = SwapChain::ChooseBestPresentationMode(swapchainDetails.presentationModes);
         this->extent = this->chooseSwapExtent(swapchainDetails.surfaceCapabilities);
@@ -71,24 +72,27 @@ namespace ce {
                                              //  old one to quickly hand over  responsabilities
 
         // Create Swapchain
-        if (vkCreateSwapchainKHR(ctx->logical, &swapchainCreateInfo, nullptr, &this->swapchain) != VK_SUCCESS) {
+        VkSwapchainKHR rawSwapchain;
+        if (vkCreateSwapchainKHR(ctx->logical, &swapchainCreateInfo, nullptr, &rawSwapchain) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create a Swapchain");
         }
+        this->swapchainData = SwapchainData(ctx->logical, rawSwapchain);
 
         this->createDepthBufferImage();
         this->createRenderPass(this->imageFormat);
 
         // Get swap chain images (first count the values)
         uint32_t swapChainImageCount;
-        vkGetSwapchainImagesKHR(ctx->logical, this->swapchain, &swapChainImageCount, nullptr);
+        vkGetSwapchainImagesKHR(ctx->logical, this->swapchainData.swapchain, &swapChainImageCount, nullptr);
         std::vector<VkImage> swapchainImages(swapChainImageCount);
-        vkGetSwapchainImagesKHR(ctx->logical, this->swapchain, &swapChainImageCount, swapchainImages.data());
+        vkGetSwapchainImagesKHR(ctx->logical, this->swapchainData.swapchain, &swapChainImageCount,
+                                swapchainImages.data());
 
-        swapchainRes.resize(swapChainImageCount);
+        this->swapchainData.images.resize(swapChainImageCount);
 
         for (size_t i = 0; i < swapChainImageCount; i++) {
 
-            swapchainRes[i].image = swapchainImages[i];
+            this->swapchainData.images[i].image = swapchainImages[i];
 
             VkImageViewCreateInfo viewInfo{.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
                                            .image = swapchainImages[i],
@@ -99,10 +103,10 @@ namespace ce {
                                                                 .levelCount = 1,
                                                                 .baseArrayLayer = 0,
                                                                 .layerCount = 1}};
-            vkCreateImageView(this->ctx->logical, &viewInfo, nullptr, &swapchainRes[i].imageView);
+            vkCreateImageView(this->ctx->logical, &viewInfo, nullptr, &this->swapchainData.images[i].imageView);
 
             // Create framebuffer usinf color map and depth buffer
-            std::array<VkImageView, 2> attachments = {swapchainRes[i].imageView,
+            std::array<VkImageView, 2> attachments = {this->swapchainData.images[i].imageView,
                                                       depthBufferImg->getImageView()}; // order important same as upper
             VkFramebufferCreateInfo framebufferInfo{
                 .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
@@ -113,9 +117,10 @@ namespace ce {
                 .height = this->extent.height,
                 .layers = 1};
 
-            vkCreateFramebuffer(this->ctx->logical, &framebufferInfo, nullptr, &swapchainRes[i].framebuffer);
+            vkCreateFramebuffer(this->ctx->logical, &framebufferInfo, nullptr,
+                                &this->swapchainData.images[i].framebuffer);
 
-            swapchainRes[i].inFlightFence = VK_NULL_HANDLE;
+            this->swapchainData.images[i].inFlightFence = VK_NULL_HANDLE;
         }
 
         // Information about how to begin a render pass (only need for graphical application)
@@ -130,18 +135,10 @@ namespace ce {
 
         if (this->ctx != nullptr) {
 
-            for (auto& res : this->swapchainRes) {
-                res.cleanup(this->ctx->logical);
-            }
-            this->swapchainRes.clear();
-
             // TODO: e aqui?
             this->depthBufferImg.reset();
 
-            if (this->swapchain != VK_NULL_HANDLE) {
-                vkDestroySwapchainKHR(ctx->logical, this->swapchain, nullptr);
-                this->swapchain = VK_NULL_HANDLE;
-            }
+            this->swapchainData.destroy();
 
             if (this->renderPass != VK_NULL_HANDLE) {
                 vkDestroyRenderPass(ctx->logical, this->renderPass, nullptr);
@@ -153,15 +150,15 @@ namespace ce {
 
     uint32_t SwapChain::acquireNextImage(VkSemaphore& waitImage, VkRenderPassBeginInfo* r) {
         uint32_t imageIndex;
-        vkAcquireNextImageKHR(ctx->logical, this->swapchain, std::numeric_limits<uint64_t>::max(), waitImage,
-                              VK_NULL_HANDLE, &imageIndex);
+        vkAcquireNextImageKHR(ctx->logical, this->swapchainData.swapchain, std::numeric_limits<uint64_t>::max(),
+                              waitImage, VK_NULL_HANDLE, &imageIndex);
 
         r->sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-        r->renderPass = this->renderPass;                               // Render pass to begin
-        r->framebuffer = this->swapchainRes[imageIndex].framebuffer;    //
-        r->renderArea = this->renderArea;                               //
-        r->clearValueCount = static_cast<uint32_t>(clearValues.size()); //
-        r->pClearValues = clearValues.data();                           // List of clear values
+        r->renderPass = this->renderPass;                                    // Render pass to begin
+        r->framebuffer = this->swapchainData.images[imageIndex].framebuffer; //
+        r->renderArea = this->renderArea;                                    //
+        r->clearValueCount = static_cast<uint32_t>(clearValues.size());      //
+        r->pClearValues = clearValues.data();                                // List of clear values
 
         return imageIndex;
     }
@@ -214,7 +211,7 @@ namespace ce {
         //
         // -- PRESENT RENDERED IMAGE TO SCREEN --
         std::array<VkSemaphore, 1> signalSemaphores{signal};
-        std::array<VkSwapchainKHR, 1> swapChains{this->swapchain};
+        std::array<VkSwapchainKHR, 1> swapChains{this->swapchainData.swapchain};
 
         const VkPresentInfoKHR presentInfo{
             .sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
@@ -366,5 +363,76 @@ namespace ce {
     }
 
 #pragma endregion auxiliar
+
+#pragma region teste
+
+    // void SwapChain::createSwapchain() {
+    //     VkSurfaceCapabilitiesKHR capabilities;
+    //     vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx->physical, ctx->surface, &capabilities);
+    //     this->extent = chooseSwapExtent(capabilities);
+
+    //     // Guardamos o ponteiro da swapchain antiga (se houver) para otimizar a criação
+    //     VkSwapchainKHR oldSwapchain = this->swapchain;
+
+    //     VkSwapchainCreateInfoKHR createInfo{
+    //         .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
+    //         .surface = ctx->surface,
+    //         .minImageCount = 3,
+    //         .imageFormat = this->imageFormat,
+    //         .imageColorSpace = this->colorSpace, // TODO: armazenar o struct inteiro
+    //         .imageExtent = this->extent,
+    //         .imageArrayLayers = 1,
+    //         .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+    //         .imageSharingMode = VK_SHARING_MODE_EXCLUSIVE,
+    //         .preTransform = capabilities.currentTransform,
+    //         .compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
+    //         .presentMode = VK_PRESENT_MODE_FIFO_KHR,
+    //         .clipped = VK_TRUE,
+    //         .oldSwapchain = oldSwapchain // Ajuda o driver reaproveitar recursos internos
+    //     };
+
+    //     VkSwapchainKHR rawSwapchain;
+    //     if (vkCreateSwapchainKHR(ctx->logical, &createInfo, nullptr, &rawSwapchain) != VK_SUCCESS) {
+    //         throw std::runtime_error("Falha ao criar Swapchain!");
+    //     }
+
+    //     // RAII em Ação: Atribuir a nova Swapchain destrói automaticamente as Views e Framebuffers antigos!
+    //     swapchainData = SwapchainData(device, rawSwapchain);
+
+    //     // Alocação das novas imagens e recriação de Views/Framebuffers
+    //     uint32_t imageCount;
+    //     vkGetSwapchainImagesKHR(device, swapchainData.swapchain, &imageCount, nullptr);
+    //     std::vector<VkImage> swapchainImages(imageCount);
+    //     vkGetSwapchainImagesKHR(device, swapchainData.swapchain, &imageCount, swapchainImages.data());
+
+    //     swapchainData.images.resize(imageCount);
+    //     for (uint32_t i = 0; i < imageCount; i++) {
+    //         swapchainData.images[i].image = swapchainImages[i];
+
+    //         VkImageViewCreateInfo viewInfo{.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+    //                                        .image = swapchainImages[i],
+    //                                        .viewType = VK_IMAGE_VIEW_TYPE_2D,
+    //                                        .format = surfaceFormat.format,
+    //                                        .subresourceRange = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+    //                                                             .baseMipLevel = 0,
+    //                                                             .levelCount = 1,
+    //                                                             .baseArrayLayer = 0,
+    //                                                             .layerCount = 1}};
+    //         vkCreateImageView(device, &viewInfo, nullptr, &swapchainData.images[i].imageView);
+
+    //         VkFramebufferCreateInfo framebufferInfo{.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
+    //                                                 .renderPass = renderPassData.renderPass,
+    //                                                 .attachmentCount = 1,
+    //                                                 .pAttachments = &swapchainData.images[i].imageView,
+    //                                                 .width = swapchainExtent.width,
+    //                                                 .height = swapchainExtent.height,
+    //                                                 .layers = 1};
+    //         vkCreateFramebuffer(device, &framebufferInfo, nullptr, &swapchainData.images[i].framebuffer);
+
+    //         swapchainData.images[i].inFlightFence = VK_NULL_HANDLE;
+    //     }
+    // }
+
+#pragma endregion
 
 } // namespace ce

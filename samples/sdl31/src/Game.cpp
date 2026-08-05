@@ -316,29 +316,20 @@ int Game::createMeshModel(const std::string& modelFile) {
 
 void Game::draw() {
     // -- GET NEXT IMAGE --
-    // Wait for given fence to signal (open) from last draw before continuing
     ce::Frame& frame = this->frames[this->currentFrame];
 
-    //------------------------------------------------------------------------
-    // PASSO 1: Sincronizar CPU com o Frame Virtual Atual
-    //------------------------------------------------------------------------
-    // Aguarda o frame de duas iterações atrás terminar de renderizar na GPU.
+    // Sincronizar CPU com o Frame Virtual Atual
     vkWaitForFences(ctx->logical, 1, &frame.inFlightFence, VK_TRUE, UINT64_MAX);
 
-    //------------------------------------------------------------------------
-    // PASSO 2: Adquirir uma Imagem da Swapchain
-    //------------------------------------------------------------------------
     // Get index of next image to be draw to, and signal semaphore when ready to be draw to
     VkRenderPassBeginInfo renderPassBeginInfo{};
     uint32_t imageIndex = this->swapchain.acquireNextImage(frame.imageAvailableSemaphore, &renderPassBeginInfo);
 
-    //------------------------------------------------------------------------
-    // PASSO 3: Tratar a Sincronização da Imagem Específica da Swapchain
-    //------------------------------------------------------------------------
     // Se a imagem real adquirida ainda estiver sendo usada por algum frame virtual anterior, aguarde.
     if (swapchain.getSwapchainRes(imageIndex).inFlightFence != VK_NULL_HANDLE) {
         vkWaitForFences(ctx->logical, 1, &swapchain.getSwapchainRes(imageIndex).inFlightFence, VK_TRUE, UINT64_MAX);
     }
+
     // Mapeia a Fence do frame virtual atual para esta imagem da swapchain.
     swapchain.getSwapchainRes(imageIndex).inFlightFence = frame.inFlightFence;
 
@@ -384,6 +375,7 @@ void Game::draw() {
 
     // -- PRESENT RENDERED IMAGE TO SCREEN --
     this->swapchain.sendImageToScreen(ctx->presentationQueue, frame.renderFinishedSemaphore, imageIndex);
+
     // Get next frame
     this->currentFrame = (this->currentFrame + 1) % ce::MAX_FRAME_DRAWS;
     // AHHHH!!!!!! ugly!!!!! this is complete wrong, find what missmatch sYncs!!!

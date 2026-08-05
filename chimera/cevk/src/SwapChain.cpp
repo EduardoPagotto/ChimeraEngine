@@ -223,8 +223,13 @@ namespace ce {
         };
 
         // Present Image
-        if (vkQueuePresentKHR(pQueue, &presentInfo) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to present Image!");
+        VkResult result = vkQueuePresentKHR(pQueue, &presentInfo);
+        // Janela redimensionou DURANTE ou APÓS a apresentação, ou a flag externa foi acionada
+        if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized) {
+            framebufferResized = false;
+            recreateSwapchain();
+        } else if (result != VK_SUCCESS) {
+            throw std::runtime_error("Failed to present Swapchain!");
         }
     }
 
@@ -366,72 +371,90 @@ namespace ce {
 
 #pragma region teste
 
-    // void SwapChain::createSwapchain() {
-    //     VkSurfaceCapabilitiesKHR capabilities;
-    //     vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx->physical, ctx->surface, &capabilities);
-    //     this->extent = chooseSwapExtent(capabilities);
+    void SwapChain::createSwapchain() {
+        //
+        VkSurfaceCapabilitiesKHR capabilities;
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx->physical, ctx->surface, &capabilities);
+        this->extent = chooseSwapExtent(capabilities);
 
-    //     // Guardamos o ponteiro da swapchain antiga (se houver) para otimizar a criação
-    //     VkSwapchainKHR oldSwapchain = this->swapchain;
+        // Guardamos o ponteiro da swapchain antiga (se houver) para otimizar a criação
+        VkSwapchainKHR oldSwapchain = swapchainData.swapchain;
 
-    //     VkSwapchainCreateInfoKHR createInfo{
-    //         .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
-    //         .surface = ctx->surface,
-    //         .minImageCount = 3,
-    //         .imageFormat = this->imageFormat,
-    //         .imageColorSpace = this->colorSpace, // TODO: armazenar o struct inteiro
-    //         .imageExtent = this->extent,
-    //         .imageArrayLayers = 1,
-    //         .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-    //         .imageSharingMode = VK_SHARING_MODE_EXCLUSIVE,
-    //         .preTransform = capabilities.currentTransform,
-    //         .compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
-    //         .presentMode = VK_PRESENT_MODE_FIFO_KHR,
-    //         .clipped = VK_TRUE,
-    //         .oldSwapchain = oldSwapchain // Ajuda o driver reaproveitar recursos internos
-    //     };
+        VkSwapchainCreateInfoKHR createInfo{
+            .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
+            .surface = this->ctx->surface,
+            .minImageCount = 3,
+            .imageFormat = this->imageFormat,
+            .imageColorSpace = this->colorSpace,
+            .imageExtent = this->extent,
+            .imageArrayLayers = 1,
+            .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+            .imageSharingMode = VK_SHARING_MODE_EXCLUSIVE,
+            .preTransform = capabilities.currentTransform,
+            .compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
+            .presentMode = VK_PRESENT_MODE_FIFO_KHR,
+            .clipped = VK_TRUE,
+            .oldSwapchain = oldSwapchain // Ajuda o driver reaproveitar recursos internos
+        };
 
-    //     VkSwapchainKHR rawSwapchain;
-    //     if (vkCreateSwapchainKHR(ctx->logical, &createInfo, nullptr, &rawSwapchain) != VK_SUCCESS) {
-    //         throw std::runtime_error("Falha ao criar Swapchain!");
-    //     }
+        VkSwapchainKHR rawSwapchain;
+        if (vkCreateSwapchainKHR(this->ctx->logical, &createInfo, nullptr, &rawSwapchain) != VK_SUCCESS) {
+            throw std::runtime_error("Falha ao criar Swapchain!");
+        }
 
-    //     // RAII em Ação: Atribuir a nova Swapchain destrói automaticamente as Views e Framebuffers antigos!
-    //     swapchainData = SwapchainData(device, rawSwapchain);
+        // RAII em Ação: Atribuir a nova Swapchain destrói automaticamente as Views e Framebuffers antigos!
+        swapchainData = SwapchainData(this->ctx->logical, rawSwapchain);
 
-    //     // Alocação das novas imagens e recriação de Views/Framebuffers
-    //     uint32_t imageCount;
-    //     vkGetSwapchainImagesKHR(device, swapchainData.swapchain, &imageCount, nullptr);
-    //     std::vector<VkImage> swapchainImages(imageCount);
-    //     vkGetSwapchainImagesKHR(device, swapchainData.swapchain, &imageCount, swapchainImages.data());
+        // Alocação das novas imagens e recriação de Views/Framebuffers
+        uint32_t imageCount;
+        vkGetSwapchainImagesKHR(this->ctx->logical, swapchainData.swapchain, &imageCount, nullptr);
+        std::vector<VkImage> swapchainImages(imageCount);
+        vkGetSwapchainImagesKHR(this->ctx->logical, swapchainData.swapchain, &imageCount, swapchainImages.data());
 
-    //     swapchainData.images.resize(imageCount);
-    //     for (uint32_t i = 0; i < imageCount; i++) {
-    //         swapchainData.images[i].image = swapchainImages[i];
+        swapchainData.images.resize(imageCount);
+        for (uint32_t i = 0; i < imageCount; i++) {
+            swapchainData.images[i].image = swapchainImages[i];
 
-    //         VkImageViewCreateInfo viewInfo{.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
-    //                                        .image = swapchainImages[i],
-    //                                        .viewType = VK_IMAGE_VIEW_TYPE_2D,
-    //                                        .format = surfaceFormat.format,
-    //                                        .subresourceRange = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-    //                                                             .baseMipLevel = 0,
-    //                                                             .levelCount = 1,
-    //                                                             .baseArrayLayer = 0,
-    //                                                             .layerCount = 1}};
-    //         vkCreateImageView(device, &viewInfo, nullptr, &swapchainData.images[i].imageView);
+            VkImageViewCreateInfo viewInfo{.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+                                           .image = swapchainImages[i],
+                                           .viewType = VK_IMAGE_VIEW_TYPE_2D,
+                                           .format = this->imageFormat,
+                                           .subresourceRange = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                                                .baseMipLevel = 0,
+                                                                .levelCount = 1,
+                                                                .baseArrayLayer = 0,
+                                                                .layerCount = 1}};
+            vkCreateImageView(this->ctx->logical, &viewInfo, nullptr, &swapchainData.images[i].imageView);
 
-    //         VkFramebufferCreateInfo framebufferInfo{.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
-    //                                                 .renderPass = renderPassData.renderPass,
-    //                                                 .attachmentCount = 1,
-    //                                                 .pAttachments = &swapchainData.images[i].imageView,
-    //                                                 .width = swapchainExtent.width,
-    //                                                 .height = swapchainExtent.height,
-    //                                                 .layers = 1};
-    //         vkCreateFramebuffer(device, &framebufferInfo, nullptr, &swapchainData.images[i].framebuffer);
+            VkFramebufferCreateInfo framebufferInfo{.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
+                                                    .renderPass = renderPass,
+                                                    .attachmentCount = 1,
+                                                    .pAttachments = &swapchainData.images[i].imageView,
+                                                    .width = this->extent.width,
+                                                    .height = this->extent.height,
+                                                    .layers = 1};
+            vkCreateFramebuffer(this->ctx->logical, &framebufferInfo, nullptr, &swapchainData.images[i].framebuffer);
 
-    //         swapchainData.images[i].inFlightFence = VK_NULL_HANDLE;
-    //     }
-    // }
+            swapchainData.images[i].inFlightFence = VK_NULL_HANDLE;
+        }
+    }
+
+    // Rotina de recriação total da Swapchain
+    void SwapChain::recreateSwapchain() {
+        // Trata o caso do aplicativo ser minimizado (largura ou altura igual a 0)
+        VkSurfaceCapabilitiesKHR capabilities;
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx->physical, ctx->surface, &capabilities);
+        while (capabilities.currentExtent.width == 0 || capabilities.currentExtent.height == 0) {
+            vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx->physical, ctx->surface, &capabilities);
+            // Insira um pequeno sleep ou aguarde eventos da janela aqui para não travar a CPU
+        }
+
+        // Aguarda a GPU terminar de renderizar qualquer frame pendente antes de destruir os alvos
+        vkDeviceWaitIdle(this->ctx->logical);
+
+        // Recria apenas os recursos dependentes do tamanho da tela
+        createSwapchain();
+    }
 
 #pragma endregion
 

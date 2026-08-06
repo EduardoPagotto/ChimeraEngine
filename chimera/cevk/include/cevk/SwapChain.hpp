@@ -100,14 +100,14 @@ namespace ce {
         explicit SwapChain() = default;
         virtual ~SwapChain() { this->destroy(); }
 
-        void init(std::shared_ptr<VulkanContext> ctx, bool depthBufferEnable = true);
+        void init(std::shared_ptr<VulkanContext> ctx, VkRenderPass renderPass, bool depthBufferEnable = true);
         void destroy();
 
-        void sendImageToScreen(VkQueue pQueue, VkSemaphore signal, uint32_t& imageIndex);
-        uint32_t acquireNextImage(VkSemaphore& waitImage, VkRenderPassBeginInfo* r);
+        uint32_t acquireNextImage(VkSemaphore& waitImage, const std::vector<VkClearValue>& clearValues,
+                                  VkRenderPassBeginInfo* r);
 
         VkFormat& getImageFormat() { return this->surfaceFormat.format; }
-        VkRenderPass& getRenderPass() { return renderPass; }
+        VkSwapchainKHR getSwapchain() { return this->swapchainData.swapchain; }
         VkExtent2D& getExtent() { return this->extent; }
         size_t getSwapchainResSize() const { return this->swapchainData.images.size(); }
         SwapchainImageResource& getSwapchainRes(size_t index) { return this->swapchainData.images[index]; }
@@ -115,15 +115,16 @@ namespace ce {
         // Método público para ser chamado pelo laço de eventos da janela
         void notifyResize() { framebufferResized = true; }
 
+        static VkSurfaceFormatKHR ChooseBestSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& formats);
+
       private:
-        void createSwapchain();
-        void recreateSwapchain();
+        // void createSwapchain();
+        // void recreateSwapchain();
         SetupSwapchain setupParams();
 
-        void createRenderPass(const VkFormat& format);
+        // void createRenderPass(const VkFormat& format);
         VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities);
 
-        static VkSurfaceFormatKHR ChooseBestSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& formats);
         static VkPresentModeKHR ChooseBestPresentationMode(const std::vector<VkPresentModeKHR>& presentationModes);
 
         VkSurfaceFormatKHR surfaceFormat;
@@ -131,12 +132,11 @@ namespace ce {
         VkRect2D renderArea;
 
         SwapchainData swapchainData;
-        VkRenderPass renderPass{VK_NULL_HANDLE};
+        VkRenderPass renderpass{VK_NULL_HANDLE};
 
         bool framebufferResized{false};
 
         std::shared_ptr<VulkanContext> ctx{VK_NULL_HANDLE};
         std::shared_ptr<DepthBufferImage> depthBuffer{nullptr};
-        std::vector<VkClearValue> clearValues;
     };
 } // namespace ce

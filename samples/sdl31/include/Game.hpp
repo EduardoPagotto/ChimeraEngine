@@ -2,6 +2,7 @@
 #include "cevk/Frame.hpp"
 #include "cevk/MeshModel.hpp"
 #include "cevk/Pipeline.hpp"
+#include "cevk/RenderPass.hpp"
 #include "cevk/SwapChain.hpp"
 #include "cevk/Textures.hpp"
 #include "cevk/UBO.hpp"
@@ -49,7 +50,9 @@ class Game : public ce::IStateMachine {
     ce::DescriptorPool descriptorPool;
     ce::UniformBuffer uniformBufferVP;
 
+    ce::RenderPass renderPass;
     ce::SwapChain swapchain;
+    std::vector<VkClearValue> clearValues;
 
     std::vector<ce::Frame> frames;
 

@@ -13,7 +13,16 @@ VulkanRenderer::VulkanRenderer(std::shared_ptr<ce::VulkanContext> ctx) : ctx(ctx
 
     using namespace ce;
 
-    this->swapchain.init(ctx);
+    // clear colour
+    this->clearValues.resize(2);
+    this->clearValues[0].color = {{0.6F, 0.65F, 0.4F, 1.0F}};
+    this->clearValues[1].depthStencil.depth = 1.0F;
+
+    // Get Swap Chain details so we cam pick best setting
+    SwapChainDetails swapchainDetails = VulkanContext::GetSwapChainDetails(ctx->physical, ctx->surface);
+    this->renderPass.init(ctx, SwapChain::ChooseBestSurfaceFormat(swapchainDetails.formats).format);
+
+    this->swapchain.init(ctx, this->renderPass.getRenderPass());
 
     this->frames.resize(ce::MAX_FRAME_DRAWS);
     for (size_t i = 0; i < ce::MAX_FRAME_DRAWS; i++) {
@@ -93,7 +102,8 @@ void VulkanRenderer::draw() {
     //------------------------------------------------------------------------
     // Get index of next image to be draw to, and signal semaphore when ready to be draw to
     VkRenderPassBeginInfo renderPassBeginInfo{};
-    uint32_t imageIndex = this->swapchain.acquireNextImage(frame.imageAvailableSemaphore, &renderPassBeginInfo);
+    uint32_t imageIndex =
+        this->swapchain.acquireNextImage(frame.imageAvailableSemaphore, this->clearValues, &renderPassBeginInfo);
 
     //------------------------------------------------------------------------
     // PASSO 3: Tratar a Sincronização da Imagem Específica da Swapchain
@@ -146,7 +156,8 @@ void VulkanRenderer::draw() {
     cmd.submitToRender(ctx->graphicsQueue, &frame, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 
     // -- PRESENT RENDERED IMAGE TO SCREEN --
-    this->swapchain.sendImageToScreen(ctx->presentationQueue, frame.renderFinishedSemaphore, imageIndex);
+    this->renderPass.sendImageToScreen(ctx->presentationQueue, frame.renderFinishedSemaphore,
+                                       this->swapchain.getSwapchain(), imageIndex);
     // Get next frame
     this->currentFrame = (this->currentFrame + 1) % ce::MAX_FRAME_DRAWS;
     // AHHHH!!!!!! ugly!!!!! this is complete wrong, find what missmatch sYncs!!!
@@ -245,7 +256,7 @@ void VulkanRenderer::createGraphicsPipeline() {
     this->graphicPipeline->addColourState(colourState);
 
     // -- GRAPHICS PIPELINE CREATION
-    this->graphicPipeline->create(shader, this->swapchain.getRenderPass(), this->pipelineLayout->get());
+    this->graphicPipeline->create(shader, this->renderPass.getRenderPass(), this->pipelineLayout->get());
 }
 
 void VulkanRenderer::createDescriptorPool() {

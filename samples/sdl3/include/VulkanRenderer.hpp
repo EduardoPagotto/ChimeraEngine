@@ -3,6 +3,7 @@
 #include "cevk/Frame.hpp"
 #include "cevk/MeshModel.hpp"
 #include "cevk/Pipeline.hpp"
+#include "cevk/RenderPass.hpp"
 #include "cevk/SwapChain.hpp"
 #include "cevk/Textures.hpp"
 #include "cevk/UBO.hpp"
@@ -32,7 +33,9 @@ class VulkanRenderer {
 
     std::shared_ptr<ce::VulkanContext> ctx;
 
+    ce::RenderPass renderPass;
     ce::SwapChain swapchain;
+    std::vector<VkClearValue> clearValues;
 
     std::vector<ce::Frame> frames;
     ce::DescriptorPool descriptorPool;

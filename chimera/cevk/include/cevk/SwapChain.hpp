@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Image.hpp"
+#include "DepthBufferImage.hpp"
 #include "VulkanContext.hpp"
 #include <memory>
 #include <vector>
@@ -100,7 +100,7 @@ namespace ce {
         explicit SwapChain() = default;
         virtual ~SwapChain() { this->destroy(); }
 
-        void init(std::shared_ptr<VulkanContext> ctx);
+        void init(std::shared_ptr<VulkanContext> ctx, bool depthBufferEnable = true);
         void destroy();
 
         void sendImageToScreen(VkQueue pQueue, VkSemaphore signal, uint32_t& imageIndex);
@@ -120,7 +120,6 @@ namespace ce {
         void recreateSwapchain();
         SetupSwapchain setupParams();
 
-        void createDepthBufferImage();
         void createRenderPass(const VkFormat& format);
         VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities);
 
@@ -136,8 +135,8 @@ namespace ce {
 
         bool framebufferResized{false};
 
-        std::shared_ptr<VulkanContext> ctx;
-        std::shared_ptr<Image> depthBufferImg;
+        std::shared_ptr<VulkanContext> ctx{VK_NULL_HANDLE};
+        std::shared_ptr<DepthBufferImage> depthBuffer{nullptr};
         std::vector<VkClearValue> clearValues;
     };
 } // namespace ce

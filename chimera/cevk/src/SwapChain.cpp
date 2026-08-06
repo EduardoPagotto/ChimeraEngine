@@ -5,7 +5,7 @@
 
 namespace ce {
 
-    void SwapChain::init(std::shared_ptr<VulkanContext> ctx) {
+    void SwapChain::init(std::shared_ptr<VulkanContext> ctx, bool depthBufferEnable) {
 
         this->ctx = ctx;
 
@@ -13,6 +13,14 @@ namespace ce {
         // Get Swap Chain details so we cam pick best setting
         this->surfaceFormat = setup.surfaceFormat;
         this->extent = setup.extent;
+
+        if (depthBufferEnable) {
+            if (this->depthBuffer) {
+                this->depthBuffer.reset();
+            }
+
+            this->depthBuffer = std::make_shared<DepthBufferImage>(this->ctx, this->extent);
+        }
 
         uint32_t queueFamilyIndexCount = 0;
         const uint32_t* pQueueFamilyIndices = nullptr;
@@ -51,7 +59,6 @@ namespace ce {
         }
         this->swapchainData = SwapchainData(ctx->logical, rawSwapchain);
 
-        this->createDepthBufferImage();
         this->createRenderPass(this->surfaceFormat.format);
 
         // Get swap chain images (first count the values)
@@ -78,8 +85,13 @@ namespace ce {
             vkCreateImageView(this->ctx->logical, &viewInfo, nullptr, &this->swapchainData.images[i].imageView);
 
             // Create framebuffer usinf color map and depth buffer
-            std::array<VkImageView, 2> attachments = {this->swapchainData.images[i].imageView,
-                                                      depthBufferImg->getImageView()}; // order important same as upper
+
+            std::vector<VkImageView> attachments;
+            attachments.push_back(this->swapchainData.images[i].imageView);
+            if (this->depthBuffer) {
+                attachments.push_back(this->depthBuffer->getImageView()); // order important same as upper
+            }
+
             VkFramebufferCreateInfo framebufferInfo{
                 .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
                 .renderPass = this->renderPass,
@@ -108,7 +120,7 @@ namespace ce {
         if (this->ctx != nullptr) {
 
             // TODO: e aqui?
-            this->depthBufferImg.reset();
+            this->depthBuffer.reset();
 
             this->swapchainData.destroy();
 
@@ -159,24 +171,6 @@ namespace ce {
                                     std::min(surfaceCapabilities.maxImageExtent.height, newExtent.height));
 
         return newExtent;
-    }
-
-    void SwapChain::createDepthBufferImage() {
-
-        // Get suported format for depth buffer
-        VkFormat depthFormat = VulkanContext::ChooseSupportedFormat(
-            ctx->physical, {VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D32_SFLOAT, VK_FORMAT_D24_UNORM_S8_UINT}, // Formats
-            VK_IMAGE_TILING_OPTIMAL,                                                                          // Tilling
-            VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);                                                  // Depth
-
-        // Create Depth Buffer Image
-        this->depthBufferImg = std::make_shared<Image>(ctx->physical, ctx->logical);
-        this->depthBufferImg->createImage(this->extent.width, this->extent.height, depthFormat, VK_IMAGE_TILING_OPTIMAL,
-                                          VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-                                          VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-        // Create Depth Buffer Image View
-        this->depthBufferImg->createImageView(VK_IMAGE_ASPECT_DEPTH_BIT);
     }
 
     void SwapChain::sendImageToScreen(VkQueue pQueue, VkSemaphore signal, uint32_t& imageIndex) {
@@ -357,6 +351,11 @@ namespace ce {
         this->surfaceFormat = setup.surfaceFormat;
         this->extent = setup.extent;
 
+        if (this->depthBuffer) {
+            this->depthBuffer.reset();
+            this->depthBuffer = std::make_shared<DepthBufferImage>(this->ctx, this->extent);
+        }
+
         uint32_t queueFamilyIndexCount = 0;
         const uint32_t* pQueueFamilyIndices = nullptr;
 
@@ -394,7 +393,6 @@ namespace ce {
         }
         this->swapchainData = SwapchainData(ctx->logical, rawSwapchain);
 
-        this->createDepthBufferImage();
         this->createRenderPass(this->surfaceFormat.format);
 
         // Get swap chain images (first count the values)
@@ -421,8 +419,12 @@ namespace ce {
             vkCreateImageView(this->ctx->logical, &viewInfo, nullptr, &this->swapchainData.images[i].imageView);
 
             // Create framebuffer usinf color map and depth buffer
-            std::array<VkImageView, 2> attachments = {this->swapchainData.images[i].imageView,
-                                                      depthBufferImg->getImageView()}; // order important same as upper
+            std::vector<VkImageView> attachments;
+            attachments.push_back(this->swapchainData.images[i].imageView);
+            if (this->depthBuffer) {
+                attachments.push_back(this->depthBuffer->getImageView()); // order important same as upper
+            }
+
             VkFramebufferCreateInfo framebufferInfo{
                 .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
                 .renderPass = this->renderPass,

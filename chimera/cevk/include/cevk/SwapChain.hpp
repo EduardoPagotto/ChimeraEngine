@@ -83,6 +83,18 @@ namespace ce {
         std::vector<SwapchainImageResource> images;
     };
 
+    struct SetupSwapchain {
+        VkSurfaceFormatKHR surfaceFormat;
+        VkSurfaceTransformFlagBitsKHR currentTransform;
+        VkPresentModeKHR presentMode;
+        VkExtent2D extent;
+        uint32_t imageCount{0};
+        VkSharingMode imageSharingMode;
+        // uint32_t queueFamilyIndexCount{0};
+        //  pQueueFamilyIndices
+        std::vector<uint32_t> queueFamilyIndices;
+    };
+
     class SwapChain {
       public:
         explicit SwapChain() = default;
@@ -106,6 +118,7 @@ namespace ce {
       private:
         void createSwapchain();
         void recreateSwapchain();
+        SetupSwapchain setupParams();
 
         void createDepthBufferImage();
         void createRenderPass(const VkFormat& format);

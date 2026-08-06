@@ -1,4 +1,5 @@
 #include "SwapChain.hpp"
+#include <SDL3/SDL_log.h>
 #include <array>
 #include <vulkan/vulkan_core.h>
 
@@ -8,62 +9,36 @@ namespace ce {
 
         this->ctx = ctx;
 
+        SetupSwapchain setup = this->setupParams();
         // Get Swap Chain details so we cam pick best setting
-        SwapChainDetails swapchainDetails = VulkanContext::GetSwapChainDetails(ctx->physical, ctx->surface);
+        this->surfaceFormat = setup.surfaceFormat;
+        this->extent = setup.extent;
 
-        // Find optimal surface value for our swap chain,  Store for late reference
-        this->surfaceFormat = SwapChain::ChooseBestSurfaceFormat(swapchainDetails.formats);
-
-        VkPresentModeKHR presentMode = SwapChain::ChooseBestPresentationMode(swapchainDetails.presentationModes);
-        this->extent = this->chooseSwapExtent(swapchainDetails.surfaceCapabilities);
-
-        // how many images are in the swap chain? Get 1 more than the minimum to allow triple buffering
-        uint32_t imageCount = swapchainDetails.surfaceCapabilities.minImageCount + 1;
-
-        // If imagecount higher than max the clamp down to max
-        // If 0, then limitless
-        if (swapchainDetails.surfaceCapabilities.maxImageCount > 0 &&
-            swapchainDetails.surfaceCapabilities.maxImageCount < imageCount) {
-            imageCount = swapchainDetails.surfaceCapabilities.maxImageCount;
-        }
-
-        // If Graphics and Presentation families are diferent, the swapchain must let images ge shared between families
-        // indices.graphicsFamily == indices.presentationFamily
-        VkSharingMode imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
         uint32_t queueFamilyIndexCount = 0;
-        const uint32_t* pQueueFamilyIndices = nullptr; // FIXME: nao seria um array de 1 ?
+        const uint32_t* pQueueFamilyIndices = nullptr;
 
-        // If Graphics and Presentation families are diferent, the swapchain must let images ge shared between families
-        if (ctx->queueFamilyIndices.graphicsFamily !=
-            ctx->queueFamilyIndices.presentationFamily) { // FIXME: ESTA ERRADO!!!!!!!
-            // Queue to share between
-            std::array<uint32_t, 2> queueFamilyIndices = {
-                static_cast<uint32_t>(ctx->queueFamilyIndices.graphicsFamily),
-                static_cast<uint32_t>(ctx->queueFamilyIndices.presentationFamily)};
-
-            imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-            queueFamilyIndexCount = static_cast<uint32_t>(queueFamilyIndices.size());
-            pQueueFamilyIndices = queueFamilyIndices.data();
+        if (setup.imageSharingMode == VK_SHARING_MODE_CONCURRENT) {
+            queueFamilyIndexCount = setup.queueFamilyIndices.size();
+            pQueueFamilyIndices = setup.queueFamilyIndices.data();
         }
 
         // Create information for swap chain
         const VkSwapchainCreateInfoKHR swapchainCreateInfo{
             .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
-            .surface = ctx->surface,                           // Swapchain surface
-            .minImageCount = imageCount,                       // Minimum image in swapchain
-            .imageFormat = this->surfaceFormat.format,         // Swapchain format
-            .imageColorSpace = this->surfaceFormat.colorSpace, // Swapchain color space
-            .imageExtent = this->extent,                       // Swapchain image extents
-            .imageArrayLayers = 1,                             // Number of layers for each image in chain
-            .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, // What attachement image will be used as
-            .imageSharingMode = imageSharingMode,              // Image share handling
-            .queueFamilyIndexCount = queueFamilyIndexCount,    // Number of queues to share images between
-            .pQueueFamilyIndices = pQueueFamilyIndices,        // Array of queues to share between
-            .preTransform =
-                swapchainDetails.surfaceCapabilities.currentTransform, // Transform to perform on swap chain images
-            .compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,       // How to handle blending images with external
-                                                                       // graphics(e.g. other windows)
-            .presentMode = presentMode,                                // Swapchain presentation mode
+            .surface = this->ctx->surface,                       // Swapchain surface
+            .minImageCount = setup.imageCount,                   // Minimum image in swapchain
+            .imageFormat = this->surfaceFormat.format,           // Swapchain format
+            .imageColorSpace = this->surfaceFormat.colorSpace,   // Swapchain color space
+            .imageExtent = this->extent,                         // Swapchain image extents
+            .imageArrayLayers = 1,                               // Number of layers for each image in chain
+            .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,   // What attachement image will be used as
+            .imageSharingMode = setup.imageSharingMode,          // Image share handling
+            .queueFamilyIndexCount = queueFamilyIndexCount,      // Number of queues to share images between
+            .pQueueFamilyIndices = pQueueFamilyIndices,          // Array of queues to share between
+            .preTransform = setup.currentTransform,              // Transform to perform on swap chain images
+            .compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR, // How to handle blending images with external
+                                                                 // graphics(e.g. other windows)
+            .presentMode = setup.presentMode,                    // Swapchain presentation mode
             .clipped =
                 VK_TRUE, // Whether to clip parts of image not in view (e.g. behind another window, off screen, etc)
             .oldSwapchain = VK_NULL_HANDLE}; //  If old swap chain been destroyed and this one replaces it, then link
@@ -89,7 +64,6 @@ namespace ce {
         this->swapchainData.images.resize(swapChainImageCount);
 
         for (size_t i = 0; i < swapChainImageCount; i++) {
-
             this->swapchainData.images[i].image = swapchainImages[i];
 
             VkImageViewCreateInfo viewInfo{.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
@@ -224,8 +198,11 @@ namespace ce {
         VkResult result = vkQueuePresentKHR(pQueue, &presentInfo);
         // Janela redimensionou DURANTE ou APÓS a apresentação, ou a flag externa foi acionada
         if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized) {
-            framebufferResized = false;
-            recreateSwapchain();
+
+            // SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "resized (%d)...", result);
+
+            // framebufferResized = false;
+            // recreateSwapchain();
         } else if (result != VK_SUCCESS) {
             throw std::runtime_error("Failed to present Swapchain!");
         }
@@ -371,47 +348,66 @@ namespace ce {
 
     void SwapChain::createSwapchain() {
         //
-        VkSurfaceCapabilitiesKHR capabilities;
-        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx->physical, ctx->surface, &capabilities);
-        this->extent = chooseSwapExtent(capabilities);
+        ////VkSurfaceCapabilitiesKHR capabilities;
+        // vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx->physical, ctx->surface, &capabilities);
+        // this->extent = chooseSwapExtent(capabilities);
+
+        SetupSwapchain setup = this->setupParams();
+        // Get Swap Chain details so we cam pick best setting
+        this->surfaceFormat = setup.surfaceFormat;
+        this->extent = setup.extent;
+
+        uint32_t queueFamilyIndexCount = 0;
+        const uint32_t* pQueueFamilyIndices = nullptr;
+
+        if (setup.imageSharingMode == VK_SHARING_MODE_CONCURRENT) {
+            queueFamilyIndexCount = setup.queueFamilyIndices.size();
+            pQueueFamilyIndices = setup.queueFamilyIndices.data();
+        }
 
         // Guardamos o ponteiro da swapchain antiga (se houver) para otimizar a criação
         VkSwapchainKHR oldSwapchain = swapchainData.swapchain;
 
-        VkSwapchainCreateInfoKHR createInfo{
+        const VkSwapchainCreateInfoKHR swapchainCreateInfo{
             .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
             .surface = this->ctx->surface,
-            .minImageCount = 3,
+            .minImageCount = setup.imageCount,
             .imageFormat = this->surfaceFormat.format,
             .imageColorSpace = this->surfaceFormat.colorSpace,
             .imageExtent = this->extent,
             .imageArrayLayers = 1,
             .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-            .imageSharingMode = VK_SHARING_MODE_EXCLUSIVE,
-            .preTransform = capabilities.currentTransform,
+            .imageSharingMode = setup.imageSharingMode,
+            .queueFamilyIndexCount = queueFamilyIndexCount, // Number of queues to share images between
+            .pQueueFamilyIndices = pQueueFamilyIndices,     // Array of queues to share between
+            .preTransform = setup.currentTransform,
             .compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
-            .presentMode = VK_PRESENT_MODE_FIFO_KHR,
+            .presentMode = setup.presentMode,
             .clipped = VK_TRUE,
             .oldSwapchain = oldSwapchain // Ajuda o driver reaproveitar recursos internos
         };
 
+        // Create Swapchain
         VkSwapchainKHR rawSwapchain;
-        if (vkCreateSwapchainKHR(this->ctx->logical, &createInfo, nullptr, &rawSwapchain) != VK_SUCCESS) {
-            throw std::runtime_error("Falha ao criar Swapchain!");
+        if (vkCreateSwapchainKHR(ctx->logical, &swapchainCreateInfo, nullptr, &rawSwapchain) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to create a Swapchain");
         }
+        this->swapchainData = SwapchainData(ctx->logical, rawSwapchain);
 
-        // RAII em Ação: Atribuir a nova Swapchain destrói automaticamente as Views e Framebuffers antigos!
-        swapchainData = SwapchainData(this->ctx->logical, rawSwapchain);
+        this->createDepthBufferImage();
+        this->createRenderPass(this->surfaceFormat.format);
 
-        // Alocação das novas imagens e recriação de Views/Framebuffers
-        uint32_t imageCount;
-        vkGetSwapchainImagesKHR(this->ctx->logical, swapchainData.swapchain, &imageCount, nullptr);
-        std::vector<VkImage> swapchainImages(imageCount);
-        vkGetSwapchainImagesKHR(this->ctx->logical, swapchainData.swapchain, &imageCount, swapchainImages.data());
+        // Get swap chain images (first count the values)
+        uint32_t swapChainImageCount;
+        vkGetSwapchainImagesKHR(ctx->logical, this->swapchainData.swapchain, &swapChainImageCount, nullptr);
+        std::vector<VkImage> swapchainImages(swapChainImageCount);
+        vkGetSwapchainImagesKHR(ctx->logical, this->swapchainData.swapchain, &swapChainImageCount,
+                                swapchainImages.data());
 
-        swapchainData.images.resize(imageCount);
-        for (uint32_t i = 0; i < imageCount; i++) {
-            swapchainData.images[i].image = swapchainImages[i];
+        this->swapchainData.images.resize(swapChainImageCount);
+
+        for (size_t i = 0; i < swapChainImageCount; i++) {
+            this->swapchainData.images[i].image = swapchainImages[i];
 
             VkImageViewCreateInfo viewInfo{.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
                                            .image = swapchainImages[i],
@@ -422,18 +418,24 @@ namespace ce {
                                                                 .levelCount = 1,
                                                                 .baseArrayLayer = 0,
                                                                 .layerCount = 1}};
-            vkCreateImageView(this->ctx->logical, &viewInfo, nullptr, &swapchainData.images[i].imageView);
+            vkCreateImageView(this->ctx->logical, &viewInfo, nullptr, &this->swapchainData.images[i].imageView);
 
-            VkFramebufferCreateInfo framebufferInfo{.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
-                                                    .renderPass = renderPass,
-                                                    .attachmentCount = 1,
-                                                    .pAttachments = &swapchainData.images[i].imageView,
-                                                    .width = this->extent.width,
-                                                    .height = this->extent.height,
-                                                    .layers = 1};
-            vkCreateFramebuffer(this->ctx->logical, &framebufferInfo, nullptr, &swapchainData.images[i].framebuffer);
+            // Create framebuffer usinf color map and depth buffer
+            std::array<VkImageView, 2> attachments = {this->swapchainData.images[i].imageView,
+                                                      depthBufferImg->getImageView()}; // order important same as upper
+            VkFramebufferCreateInfo framebufferInfo{
+                .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
+                .renderPass = this->renderPass,
+                .attachmentCount = static_cast<uint32_t>(attachments.size()), //
+                .pAttachments = attachments.data(), // List of attachments (1:1 with Render Pass)
+                .width = this->extent.width,
+                .height = this->extent.height,
+                .layers = 1};
 
-            swapchainData.images[i].inFlightFence = VK_NULL_HANDLE;
+            vkCreateFramebuffer(this->ctx->logical, &framebufferInfo, nullptr,
+                                &this->swapchainData.images[i].framebuffer);
+
+            this->swapchainData.images[i].inFlightFence = VK_NULL_HANDLE;
         }
     }
 
@@ -452,6 +454,45 @@ namespace ce {
 
         // Recria apenas os recursos dependentes do tamanho da tela
         createSwapchain();
+    }
+
+    SetupSwapchain SwapChain::setupParams() {
+
+        SetupSwapchain setup{};
+
+        // Get Swap Chain details so we cam pick best setting
+        SwapChainDetails swapchainDetails = VulkanContext::GetSwapChainDetails(ctx->physical, ctx->surface);
+
+        setup.currentTransform = swapchainDetails.surfaceCapabilities.currentTransform;
+
+        // Find optimal surface value for our swap chain,  Store for late reference
+        setup.surfaceFormat = SwapChain::ChooseBestSurfaceFormat(swapchainDetails.formats);
+        setup.presentMode = SwapChain::ChooseBestPresentationMode(swapchainDetails.presentationModes);
+        setup.extent = this->chooseSwapExtent(swapchainDetails.surfaceCapabilities);
+
+        // how many images are in the swap chain? Get 1 more than the minimum to allow triple buffering
+        setup.imageCount = swapchainDetails.surfaceCapabilities.minImageCount + 1;
+
+        // If imagecount higher than max the clamp down to max
+        // If 0, then limitless
+        if (swapchainDetails.surfaceCapabilities.maxImageCount > 0 &&
+            swapchainDetails.surfaceCapabilities.maxImageCount < setup.imageCount) {
+            setup.imageCount = swapchainDetails.surfaceCapabilities.maxImageCount;
+        }
+
+        // If Graphics and Presentation families are diferent, the swapchain must let images ge shared between families
+        // indices.graphicsFamily == indices.presentationFamily
+        setup.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+        if (ctx->queueFamilyIndices.graphicsFamily != ctx->queueFamilyIndices.presentationFamily) {
+            setup.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+            setup.queueFamilyIndices.push_back(ctx->queueFamilyIndices.graphicsFamily);
+            setup.queueFamilyIndices.push_back(ctx->queueFamilyIndices.presentationFamily);
+        } else {
+            setup.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+            setup.queueFamilyIndices.push_back(ctx->queueFamilyIndices.graphicsFamily);
+        }
+
+        return setup;
     }
 
 #pragma endregion

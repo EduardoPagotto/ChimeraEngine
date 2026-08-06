@@ -2,8 +2,11 @@
 #include "cevk/CmdRender.hpp"
 #include "cevk/Mesh.hpp"
 #include "cevk_infra/event.hpp"
+#include <SDL3/SDL_init.h>
+#include <SDL3/SDL_log.h>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
+#include <cstdint>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
 
@@ -109,6 +112,14 @@ bool Game::onEvent(const SDL_Event& event) {
                     sendChimeraEvent(EventCE::FLOW_STOP, nullptr, nullptr);
                     break;
             }
+        } break;
+        case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED: {
+
+            // this->swapchain.notifyResize();
+            int32_t novaWidth = event.window.data1;
+            int32_t novaHeight = event.window.data2;
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "WIDTH: %d HEIGHT: %d", novaWidth, novaHeight);
+
         } break;
     }
     return true;

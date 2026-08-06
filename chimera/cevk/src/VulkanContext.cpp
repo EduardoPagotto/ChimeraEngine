@@ -20,7 +20,7 @@ namespace ce {
         }
 
         // 2. Create Window with Vulkan support
-        this->window = SDL_CreateWindow(sName.c_str(), width, height, SDL_WINDOW_VULKAN);
+        this->window = SDL_CreateWindow(sName.c_str(), width, height, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
         if (this->window == nullptr) {
             throw std::runtime_error(std::format("SDL Window creation failed: {}", SDL_GetError()));
         }

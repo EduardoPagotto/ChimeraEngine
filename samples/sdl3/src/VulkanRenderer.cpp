@@ -15,7 +15,8 @@ VulkanRenderer::VulkanRenderer(std::shared_ptr<ce::VulkanContext> ctx) : ctx(ctx
 
     // clear colour
     this->clearValues.resize(2);
-    this->clearValues[0].color = {{0.6F, 0.65F, 0.4F, 1.0F}};
+    // this->clearValues[0].color = {{0.6F, 0.65F, 0.4F, 1.0F}};
+    this->clearValues[0].color = {{0.0F, 0.0F, 0.0F, 1.0F}};
     this->clearValues[1].depthStencil.depth = 1.0F;
 
     // Get Swap Chain details so we cam pick best setting
@@ -30,7 +31,8 @@ VulkanRenderer::VulkanRenderer(std::shared_ptr<ce::VulkanContext> ctx) : ctx(ctx
         this->frames[i].init(this->ctx->logical, this->ctx->queueFamilyIndices.graphicsFamily);
     }
 
-    this->uniformBufferVP.init(ctx->physical, ctx->logical, swapchain.getSwapchainResSize(), sizeof(UboViewProjection));
+    this->uniformBufferVP.init(ctx->physical, ctx->logical, this->swapchain.getSwapchainResSize(),
+                               sizeof(UboViewProjection));
 
     this->textureMng = std::make_shared<Textures>(ctx);
 
@@ -48,7 +50,7 @@ VulkanRenderer::VulkanRenderer(std::shared_ptr<ce::VulkanContext> ctx) : ctx(ctx
     const glm::vec3 camPos = glm::vec3(-100.0F, 150.0F, 200.0F);
     const glm::vec3 camCenter = glm::vec3(0.0F, 0.0F, -2.0F);
     const glm::vec3 camUp = glm::vec3(0.0F, 1.0F, 0.0F);
-    const float aspect = (float)swapchain.getExtent().width / (float)swapchain.getExtent().height;
+    float aspect = (float)this->swapchain.getExtent().width / (float)this->swapchain.getExtent().height;
 
     uboViewProjection.projection = glm::perspective(radixAngle, aspect, near, far);
     uboViewProjection.view = glm::lookAt(camPos, camCenter, camUp);
@@ -75,6 +77,9 @@ VulkanRenderer::~VulkanRenderer() {
 
     graphicPipeline.reset();
     pipelineLayout.reset();
+
+    this->swapchain.destroy();
+    this->renderPass.destroy();
 }
 
 void VulkanRenderer::updateModel(int modelId, glm::mat4 newModel) {
@@ -88,38 +93,23 @@ void VulkanRenderer::updateModel(int modelId, glm::mat4 newModel) {
 
 void VulkanRenderer::draw() {
     // -- GET NEXT IMAGE --
-    // Wait for given fence to signal (open) from last draw before continuing
     ce::Frame& frame = this->frames[this->currentFrame];
 
-    //------------------------------------------------------------------------
-    // PASSO 1: Sincronizar CPU com o Frame Virtual Atual
-    //------------------------------------------------------------------------
-    // Aguarda o frame de duas iterações atrás terminar de renderizar na GPU.
-    vkWaitForFences(ctx->logical, 1, &frame.inFlightFence, VK_TRUE, UINT64_MAX);
-
-    //------------------------------------------------------------------------
-    // PASSO 2: Adquirir uma Imagem da Swapchain
-    //------------------------------------------------------------------------
-    // Get index of next image to be draw to, and signal semaphore when ready to be draw to
-    VkRenderPassBeginInfo renderPassBeginInfo{};
-    uint32_t imageIndex =
-        this->swapchain.acquireNextImage(frame.imageAvailableSemaphore, this->clearValues, &renderPassBeginInfo);
-
-    //------------------------------------------------------------------------
-    // PASSO 3: Tratar a Sincronização da Imagem Específica da Swapchain
-    //------------------------------------------------------------------------
-    // Se a imagem real adquirida ainda estiver sendo usada por algum frame virtual anterior, aguarde.
-    if (swapchain.getSwapchainRes(imageIndex).inFlightFence != VK_NULL_HANDLE) {
-        vkWaitForFences(ctx->logical, 1, &swapchain.getSwapchainRes(imageIndex).inFlightFence, VK_TRUE, UINT64_MAX);
-    }
-    // Mapeia a Fence do frame virtual atual para esta imagem da swapchain.
-    swapchain.getSwapchainRes(imageIndex).inFlightFence = frame.inFlightFence;
-
-    // Resetar a Fence do frame virtual para o estado não-sinalizado antes de enviar novos comandos
-    vkResetFences(ctx->logical, 1, &frame.inFlightFence);
+    // Get index of next image to be draw to, execute sincronization
+    auto [imageIndex, swapchainRes] =
+        this->swapchain.acquireNextImage(frame.inFlightFence, frame.imageAvailableSemaphore);
 
     // Copy View Projection data in UBO
     this->uniformBufferVP.getBuffers()[imageIndex]->mapper(&this->uboViewProjection);
+
+    VkRenderPassBeginInfo renderPassBeginInfo = {
+        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+        .renderPass = this->renderPass.getRenderPass(),               // Render pass to begin
+        .framebuffer = swapchainRes.framebuffer,                      //
+        .renderArea = this->swapchain.getRenderArea(),                //
+        .clearValueCount = static_cast<uint32_t>(clearValues.size()), //
+        .pClearValues = clearValues.data(),                           // List of clear values
+    };
 
     ce::CmdRender cmd;
     cmd.begin(frame.commandBuffer, VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT, renderPassBeginInfo,
@@ -156,8 +146,17 @@ void VulkanRenderer::draw() {
     cmd.submitToRender(ctx->graphicsQueue, &frame, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 
     // -- PRESENT RENDERED IMAGE TO SCREEN --
-    this->renderPass.sendImageToScreen(ctx->presentationQueue, frame.renderFinishedSemaphore,
-                                       this->swapchain.getSwapchain(), imageIndex);
+    VkResult result = this->renderPass.sendImageToScreen(ctx->presentationQueue, frame.renderFinishedSemaphore,
+                                                         this->swapchain.getSwapchain(), imageIndex);
+
+    if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) { //|| framebufferResized
+        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "resized (%d)...", result);
+        // framebufferResized = false;
+        this->swapchain.recreateSwapchain();
+    } else if (result != VK_SUCCESS) {
+        throw std::runtime_error("Failed to present Swapchain!");
+    }
+
     // Get next frame
     this->currentFrame = (this->currentFrame + 1) % ce::MAX_FRAME_DRAWS;
     // AHHHH!!!!!! ugly!!!!! this is complete wrong, find what missmatch sYncs!!!

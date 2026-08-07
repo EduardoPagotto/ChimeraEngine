@@ -158,9 +158,6 @@ namespace ce {
         size_t getSwapchainResSize() const { return this->swapchainData.images.size(); }
         SwapchainImageResource& getSwapchainRes(size_t index) { return this->swapchainData.images[index]; }
 
-        // Método público para ser chamado pelo laço de eventos da janela
-        void notifyResize() { framebufferResized = true; }
-
         static VkSurfaceFormatKHR ChooseBestSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& formats);
 
         VkRect2D& getRenderArea() { return this->renderArea; }
@@ -182,8 +179,6 @@ namespace ce {
 
         SwapchainData swapchainData;
         VkRenderPass renderpass{VK_NULL_HANDLE};
-
-        bool framebufferResized{false};
 
         std::shared_ptr<VulkanContext> ctx{VK_NULL_HANDLE};
         std::shared_ptr<DepthBufferImage> depthBuffer{nullptr};

@@ -3,6 +3,7 @@
 #include "cevk/Mesh.hpp"
 #include "cevk_infra/event.hpp"
 #include <SDL3/SDL_init.h>
+#include <SDL3/SDL_keycode.h>
 #include <SDL3/SDL_log.h>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
@@ -124,17 +125,29 @@ bool Game::onEvent(const SDL_Event& event) {
                 case SDLK_ESCAPE:
                     sendChimeraEvent(EventCE::FLOW_STOP, nullptr, nullptr);
                     break;
+                case SDLK_F1: {
+                    SDL_SetWindowFullscreen(ctx->window, !this->fullscreen);
+                    this->fullscreen = !this->fullscreen;
+                } break;
             }
         } break;
-        case SDL_EVENT_WINDOW_RESIZED:
-        case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED: {
-
-            // this->swapchain.notifyResize();
+        case SDL_EVENT_WINDOW_RESIZED: {
             int32_t novaWidth = event.window.data1;
             int32_t novaHeight = event.window.data2;
-            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "WIDTH: %d HEIGHT: %d", novaWidth, novaHeight);
-
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Resize: %d x %d", novaWidth, novaHeight);
         } break;
+        case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED: {
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Pixel change !!");
+        } break;
+        case SDL_EVENT_WINDOW_MOUSE_ENTER:
+        case SDL_EVENT_WINDOW_MAXIMIZED:
+        case SDL_EVENT_WINDOW_RESTORED:
+            sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr);
+            break;
+        case SDL_EVENT_WINDOW_MOUSE_LEAVE:
+        case SDL_EVENT_WINDOW_MINIMIZED:
+            sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr);
+            break;
     }
     return true;
 }
@@ -398,9 +411,9 @@ void Game::draw() {
                                                          this->swapchain.getSwapchain(), imageIndex);
 
     if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) { //|| framebufferResized
-        // SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "resized (%d)...", result);
+        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "resized (%d)...", result);
         // framebufferResized = false;
-        // recreateSwapchain();
+        this->swapchain.recreateSwapchain();
     } else if (result != VK_SUCCESS) {
         throw std::runtime_error("Failed to present Swapchain!");
     }

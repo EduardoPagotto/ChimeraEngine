@@ -21,9 +21,6 @@ namespace ce {
 
     void SwapChain::createSwapchain(bool depthBufferEnable, bool rebuild) {
         //
-        ////VkSurfaceCapabilitiesKHR capabilities;
-        // vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx->physical, ctx->surface, &capabilities);
-        // this->extent = chooseSwapExtent(capabilities);
         SetupSwapchain setup = this->setupParams();
         // Get Swap Chain details so we cam pick best setting
         this->surfaceFormat = setup.surfaceFormat;
@@ -103,6 +100,9 @@ namespace ce {
         VkSurfaceCapabilitiesKHR capabilities;
         vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx->physical, ctx->surface, &capabilities);
         uint32_t count = 0;
+        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Swapchain recreate (%d x %d)", capabilities.currentExtent.width,
+                     capabilities.currentExtent.height);
+
         while (capabilities.currentExtent.width == 0 || capabilities.currentExtent.height == 0) {
             vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx->physical, ctx->surface, &capabilities);
             SDL_Delay(1000); // FIXME: signal ??

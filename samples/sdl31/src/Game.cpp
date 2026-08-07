@@ -18,7 +18,8 @@ Game::Game(std::shared_ptr<ce::VulkanContext> ctx, std::shared_ptr<ce::ScreenVK>
 
     // clear colour
     this->clearValues.resize(2);
-    this->clearValues[0].color = {{0.6F, 0.65F, 0.4F, 1.0F}};
+    // this->clearValues[0].color = {{0.6F, 0.65F, 0.4F, 1.0F}};
+    this->clearValues[0].color = {{0.0F, 0.0F, 0.0F, 1.0F}};
     this->clearValues[1].depthStencil.depth = 1.0F;
 
     // Get Swap Chain details so we cam pick best setting

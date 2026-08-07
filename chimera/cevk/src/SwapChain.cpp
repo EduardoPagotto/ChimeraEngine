@@ -44,9 +44,7 @@ namespace ce {
         }
 
         // Guardamos o ponteiro da swapchain antiga (se houver) para otimizar a criação
-        VkSwapchainKHR oldSwapchain = VK_NULL_HANDLE;
-        if (rebuild)
-            oldSwapchain = swapchainData.swapchain;
+        VkSwapchainKHR oldSwapchain = (rebuild) ? swapchainData.swapchain : VK_NULL_HANDLE;
 
         // Create information for swap chain
         const VkSwapchainCreateInfoKHR swapchainCreateInfo{

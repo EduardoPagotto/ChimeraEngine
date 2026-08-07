@@ -103,8 +103,7 @@ namespace ce {
         void init(std::shared_ptr<VulkanContext> ctx, VkRenderPass renderPass, bool depthBufferEnable = true);
         void destroy();
 
-        uint32_t acquireNextImage(VkSemaphore& waitImage, const std::vector<VkClearValue>& clearValues,
-                                  VkRenderPassBeginInfo* r);
+        std::pair<uint32_t, SwapchainImageResource&> acquireNextImage(VkFence& inFlightFence, VkSemaphore& waitImage);
 
         VkFormat& getImageFormat() { return this->surfaceFormat.format; }
         VkSwapchainKHR getSwapchain() { return this->swapchainData.swapchain; }
@@ -117,12 +116,13 @@ namespace ce {
 
         static VkSurfaceFormatKHR ChooseBestSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& formats);
 
+        VkRect2D& getRenderArea() { return this->renderArea; }
+
       private:
         // void createSwapchain();
         // void recreateSwapchain();
         SetupSwapchain setupParams();
 
-        // void createRenderPass(const VkFormat& format);
         VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities);
 
         static VkPresentModeKHR ChooseBestPresentationMode(const std::vector<VkPresentModeKHR>& presentationModes);

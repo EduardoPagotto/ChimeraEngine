@@ -116,20 +116,30 @@ namespace ce {
         }
     }
 
-    uint32_t SwapChain::acquireNextImage(VkSemaphore& waitImage, const std::vector<VkClearValue>& clearValues,
-                                         VkRenderPassBeginInfo* r) {
+    std::pair<uint32_t, SwapchainImageResource&> SwapChain::acquireNextImage(VkFence& inFlightFence,
+                                                                             VkSemaphore& waitImage) {
+
+        // Sincronizar CPU com o Frame Virtual Atual
+        vkWaitForFences(ctx->logical, 1, &inFlightFence, VK_TRUE, UINT64_MAX);
+
+        // Get index of next image to be draw to, and signal semaphore when ready to be draw to
         uint32_t imageIndex;
         vkAcquireNextImageKHR(ctx->logical, this->swapchainData.swapchain, std::numeric_limits<uint64_t>::max(),
                               waitImage, VK_NULL_HANDLE, &imageIndex);
 
-        r->sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-        r->renderPass = this->renderpass;                                    // Render pass to begin
-        r->framebuffer = this->swapchainData.images[imageIndex].framebuffer; //
-        r->renderArea = this->renderArea;                                    //
-        r->clearValueCount = static_cast<uint32_t>(clearValues.size());      //
-        r->pClearValues = clearValues.data();                                // List of clear values
+        // Se a imagem real adquirida ainda estiver sendo usada por algum frame virtual anterior, aguarde.
+        if (this->swapchainData.images[imageIndex].inFlightFence != VK_NULL_HANDLE) {
+            vkWaitForFences(ctx->logical, 1, &this->swapchainData.images[imageIndex].inFlightFence, VK_TRUE,
+                            UINT64_MAX);
+        }
 
-        return imageIndex;
+        // Mapeia a Fence do frame virtual atual para esta imagem da swapchain.
+        this->swapchainData.images[imageIndex].inFlightFence = inFlightFence;
+
+        // Resetar a Fence do frame virtual para o estado não-sinalizado antes de enviar novos comandos
+        vkResetFences(ctx->logical, 1, &inFlightFence);
+
+        return {imageIndex, this->swapchainData.images[imageIndex]};
     }
 
     VkExtent2D SwapChain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities) {

@@ -126,6 +126,7 @@ bool Game::onEvent(const SDL_Event& event) {
                     break;
             }
         } break;
+        case SDL_EVENT_WINDOW_RESIZED:
         case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED: {
 
             // this->swapchain.notifyResize();
@@ -342,27 +343,21 @@ void Game::draw() {
     // -- GET NEXT IMAGE --
     ce::Frame& frame = this->frames[this->currentFrame];
 
-    // Sincronizar CPU com o Frame Virtual Atual
-    vkWaitForFences(ctx->logical, 1, &frame.inFlightFence, VK_TRUE, UINT64_MAX);
-
-    // Get index of next image to be draw to, and signal semaphore when ready to be draw to
-    VkRenderPassBeginInfo renderPassBeginInfo{};
-    uint32_t imageIndex =
-        this->swapchain.acquireNextImage(frame.imageAvailableSemaphore, this->clearValues, &renderPassBeginInfo);
-
-    // Se a imagem real adquirida ainda estiver sendo usada por algum frame virtual anterior, aguarde.
-    if (swapchain.getSwapchainRes(imageIndex).inFlightFence != VK_NULL_HANDLE) {
-        vkWaitForFences(ctx->logical, 1, &swapchain.getSwapchainRes(imageIndex).inFlightFence, VK_TRUE, UINT64_MAX);
-    }
-
-    // Mapeia a Fence do frame virtual atual para esta imagem da swapchain.
-    swapchain.getSwapchainRes(imageIndex).inFlightFence = frame.inFlightFence;
-
-    // Resetar a Fence do frame virtual para o estado não-sinalizado antes de enviar novos comandos
-    vkResetFences(ctx->logical, 1, &frame.inFlightFence);
+    // Get index of next image to be draw to, execute sincronization
+    auto [imageIndex, swapchainRes] =
+        this->swapchain.acquireNextImage(frame.inFlightFence, frame.imageAvailableSemaphore);
 
     // Copy View Projection data in UBO
     this->uniformBufferVP.getBuffers()[imageIndex]->mapper(&this->uboViewProjection);
+
+    VkRenderPassBeginInfo renderPassBeginInfo = {
+        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+        .renderPass = this->renderPass.getRenderPass(),               // Render pass to begin
+        .framebuffer = swapchainRes.framebuffer,                      //
+        .renderArea = this->swapchain.getRenderArea(),                //
+        .clearValueCount = static_cast<uint32_t>(clearValues.size()), //
+        .pClearValues = clearValues.data(),                           // List of clear values
+    };
 
     ce::CmdRender cmd;
     cmd.begin(frame.commandBuffer, VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT, renderPassBeginInfo,

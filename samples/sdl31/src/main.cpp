@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
 
     using namespace ce;
 
-    auto result = SDL_APP_SUCCESS;
+    auto result = EXIT_SUCCESS;
 
     // Habilita todas as mensagens em modo Debug
     SDL_SetLogPriority(SDL_LOG_CATEGORY_VIDEO, SDL_LOG_PRIORITY_DEBUG);
@@ -71,12 +71,12 @@ int main(int argc, char* argv[]) {
     } catch (const std::runtime_error& e) {
 
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s", e.what());
-        result = SDL_APP_FAILURE;
+        result = EXIT_FAILURE;
 
     } catch (...) {
 
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha Desconhecida");
-        result = SDL_APP_FAILURE;
+        result = EXIT_FAILURE;
     }
 
     return result;

@@ -320,6 +320,17 @@
 				"cwd": "${workspaceFolder}"
 			},
 			{
+				"name": "loader_glft",
+				"type": "lldb-dap",
+				"request": "launch",
+				"program": "${workspaceFolder}/bin/loader_glft",
+				"args": [],
+				"env": {
+					//"SDL_VIDEODRIVER": "x11"
+				},
+				"cwd": "${workspaceFolder}"
+			},
+			{
 				"name": "loader",
 				"type": "lldb-dap",
 				"request": "launch",

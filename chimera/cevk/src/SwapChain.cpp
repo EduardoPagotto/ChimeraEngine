@@ -69,40 +69,9 @@ namespace ce {
         this->swapchainData.images.resize(swapChainImageCount);
 
         for (size_t i = 0; i < swapChainImageCount; i++) {
-            this->swapchainData.images[i].image = swapchainImages[i];
-
-            VkImageViewCreateInfo viewInfo{.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
-                                           .image = swapchainImages[i],
-                                           .viewType = VK_IMAGE_VIEW_TYPE_2D,
-                                           .format = this->surfaceFormat.format,
-                                           .subresourceRange = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                                                                .baseMipLevel = 0,
-                                                                .levelCount = 1,
-                                                                .baseArrayLayer = 0,
-                                                                .layerCount = 1}};
-            vkCreateImageView(this->ctx->logical, &viewInfo, nullptr, &this->swapchainData.images[i].imageView);
-
-            // Create framebuffer usinf color map and depth buffer
-
-            std::vector<VkImageView> attachments;
-            attachments.push_back(this->swapchainData.images[i].imageView);
-            if (this->depthBuffer) {
-                attachments.push_back(this->depthBuffer->getImageView()); // order important same as upper
-            }
-
-            VkFramebufferCreateInfo framebufferInfo{
-                .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
-                .renderPass = this->renderpass,
-                .attachmentCount = static_cast<uint32_t>(attachments.size()), //
-                .pAttachments = attachments.data(), // List of attachments (1:1 with Render Pass)
-                .width = this->extent.width,
-                .height = this->extent.height,
-                .layers = 1};
-
-            vkCreateFramebuffer(this->ctx->logical, &framebufferInfo, nullptr,
-                                &this->swapchainData.images[i].framebuffer);
-
-            this->swapchainData.images[i].inFlightFence = VK_NULL_HANDLE;
+            this->swapchainData.images[i] = {};
+            this->swapchainData.images[i].create(ctx->logical, swapchainImages[i], this->renderpass, this->extent,
+                                                 this->surfaceFormat.format, this->depthBuffer->getImageView());
         }
 
         this->renderArea = {.offset = {.x = 0, .y = 0}, .extent = this->extent};
@@ -128,13 +97,7 @@ namespace ce {
                               waitImage, VK_NULL_HANDLE, &imageIndex);
 
         // Se a imagem real adquirida ainda estiver sendo usada por algum frame virtual anterior, aguarde.
-        if (this->swapchainData.images[imageIndex].inFlightFence != VK_NULL_HANDLE) {
-            vkWaitForFences(ctx->logical, 1, &this->swapchainData.images[imageIndex].inFlightFence, VK_TRUE,
-                            UINT64_MAX);
-        }
-
-        // Mapeia a Fence do frame virtual atual para esta imagem da swapchain.
-        this->swapchainData.images[imageIndex].inFlightFence = inFlightFence;
+        this->swapchainData.images[imageIndex].syncImg(ctx->logical, inFlightFence);
 
         // Resetar a Fence do frame virtual para o estado não-sinalizado antes de enviar novos comandos
         vkResetFences(ctx->logical, 1, &inFlightFence);

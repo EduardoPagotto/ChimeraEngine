@@ -8,11 +8,27 @@ namespace ce {
 
         this->ctx = ctx;
         this->renderpass = renderPass;
+        this->createSwapchain(depthBufferEnable, false);
+    }
 
+    void SwapChain::destroy() {
+
+        if (this->ctx != nullptr) {
+            this->depthBuffer.reset();
+            this->swapchainData.destroy();
+        }
+    }
+
+    void SwapChain::createSwapchain(bool depthBufferEnable, bool rebuild) {
+        //
+        ////VkSurfaceCapabilitiesKHR capabilities;
+        // vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx->physical, ctx->surface, &capabilities);
+        // this->extent = chooseSwapExtent(capabilities);
         SetupSwapchain setup = this->setupParams();
         // Get Swap Chain details so we cam pick best setting
         this->surfaceFormat = setup.surfaceFormat;
         this->extent = setup.extent;
+        this->renderArea = {.offset = {.x = 0, .y = 0}, .extent = this->extent};
 
         if (depthBufferEnable) {
             if (this->depthBuffer) {
@@ -29,6 +45,11 @@ namespace ce {
             queueFamilyIndexCount = setup.queueFamilyIndices.size();
             pQueueFamilyIndices = setup.queueFamilyIndices.data();
         }
+
+        // Guardamos o ponteiro da swapchain antiga (se houver) para otimizar a criação
+        VkSwapchainKHR oldSwapchain = VK_NULL_HANDLE;
+        if (rebuild)
+            oldSwapchain = swapchainData.swapchain;
 
         // Create information for swap chain
         const VkSwapchainCreateInfoKHR swapchainCreateInfo{
@@ -49,14 +70,15 @@ namespace ce {
             .presentMode = setup.presentMode,                    // Swapchain presentation mode
             .clipped =
                 VK_TRUE, // Whether to clip parts of image not in view (e.g. behind another window, off screen, etc)
-            .oldSwapchain = VK_NULL_HANDLE}; //  If old swap chain been destroyed and this one replaces it, then link
-                                             //  old one to quickly hand over  responsabilities
+            .oldSwapchain = oldSwapchain}; //  If old swap chain been destroyed and this one replaces it, then link
+                                           //  old one to quickly hand over  responsabilities
 
         // Create Swapchain
         VkSwapchainKHR rawSwapchain;
         if (vkCreateSwapchainKHR(ctx->logical, &swapchainCreateInfo, nullptr, &rawSwapchain) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create a Swapchain");
         }
+
         this->swapchainData = SwapchainData(ctx->logical, rawSwapchain);
 
         // Get swap chain images (first count the values)
@@ -73,16 +95,25 @@ namespace ce {
             this->swapchainData.images[i].create(ctx->logical, swapchainImages[i], this->renderpass, this->extent,
                                                  this->surfaceFormat.format, this->depthBuffer->getImageView());
         }
-
-        this->renderArea = {.offset = {.x = 0, .y = 0}, .extent = this->extent};
     }
 
-    void SwapChain::destroy() {
-
-        if (this->ctx != nullptr) {
-            this->depthBuffer.reset();
-            this->swapchainData.destroy();
+    // Rotina de recriação total da Swapchain
+    void SwapChain::recreateSwapchain() {
+        // Trata o caso do aplicativo ser minimizado (largura ou altura igual a 0)
+        VkSurfaceCapabilitiesKHR capabilities;
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx->physical, ctx->surface, &capabilities);
+        uint32_t count = 0;
+        while (capabilities.currentExtent.width == 0 || capabilities.currentExtent.height == 0) {
+            vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx->physical, ctx->surface, &capabilities);
+            SDL_Delay(1000); // FIXME: signal ??
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "waiting (%d)..", count++);
         }
+
+        // Aguarda a GPU terminar de renderizar qualquer frame pendente antes de destruir os alvos
+        vkDeviceWaitIdle(this->ctx->logical);
+
+        // Recria apenas os recursos dependentes do tamanho da tela
+        createSwapchain((this->depthBuffer != nullptr), true);
     }
 
     std::pair<uint32_t, SwapchainImageResource&> SwapChain::acquireNextImage(VkFence& inFlightFence,
@@ -168,126 +199,6 @@ namespace ce {
 
 #pragma endregion auxiliar
 
-#pragma region teste
-
-    // void SwapChain::createSwapchain() {
-    //     //
-    //     ////VkSurfaceCapabilitiesKHR capabilities;
-    //     // vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx->physical, ctx->surface, &capabilities);
-    //     // this->extent = chooseSwapExtent(capabilities);
-
-    //     SetupSwapchain setup = this->setupParams();
-    //     // Get Swap Chain details so we cam pick best setting
-    //     this->surfaceFormat = setup.surfaceFormat;
-    //     this->extent = setup.extent;
-
-    //     if (this->depthBuffer) {
-    //         this->depthBuffer.reset();
-    //         this->depthBuffer = std::make_shared<DepthBufferImage>(this->ctx, this->extent);
-    //     }
-
-    //     uint32_t queueFamilyIndexCount = 0;
-    //     const uint32_t* pQueueFamilyIndices = nullptr;
-
-    //     if (setup.imageSharingMode == VK_SHARING_MODE_CONCURRENT) {
-    //         queueFamilyIndexCount = setup.queueFamilyIndices.size();
-    //         pQueueFamilyIndices = setup.queueFamilyIndices.data();
-    //     }
-
-    //     // Guardamos o ponteiro da swapchain antiga (se houver) para otimizar a criação
-    //     VkSwapchainKHR oldSwapchain = swapchainData.swapchain;
-
-    //     const VkSwapchainCreateInfoKHR swapchainCreateInfo{
-    //         .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
-    //         .surface = this->ctx->surface,
-    //         .minImageCount = setup.imageCount,
-    //         .imageFormat = this->surfaceFormat.format,
-    //         .imageColorSpace = this->surfaceFormat.colorSpace,
-    //         .imageExtent = this->extent,
-    //         .imageArrayLayers = 1,
-    //         .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-    //         .imageSharingMode = setup.imageSharingMode,
-    //         .queueFamilyIndexCount = queueFamilyIndexCount, // Number of queues to share images between
-    //         .pQueueFamilyIndices = pQueueFamilyIndices,     // Array of queues to share between
-    //         .preTransform = setup.currentTransform,
-    //         .compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
-    //         .presentMode = setup.presentMode,
-    //         .clipped = VK_TRUE,
-    //         .oldSwapchain = oldSwapchain // Ajuda o driver reaproveitar recursos internos
-    //     };
-
-    //     // Create Swapchain
-    //     VkSwapchainKHR rawSwapchain;
-    //     if (vkCreateSwapchainKHR(ctx->logical, &swapchainCreateInfo, nullptr, &rawSwapchain) != VK_SUCCESS) {
-    //         throw std::runtime_error("Failed to create a Swapchain");
-    //     }
-    //     this->swapchainData = SwapchainData(ctx->logical, rawSwapchain);
-
-    //     this->createRenderPass(this->surfaceFormat.format);
-
-    //     // Get swap chain images (first count the values)
-    //     uint32_t swapChainImageCount;
-    //     vkGetSwapchainImagesKHR(ctx->logical, this->swapchainData.swapchain, &swapChainImageCount, nullptr);
-    //     std::vector<VkImage> swapchainImages(swapChainImageCount);
-    //     vkGetSwapchainImagesKHR(ctx->logical, this->swapchainData.swapchain, &swapChainImageCount,
-    //                             swapchainImages.data());
-
-    //     this->swapchainData.images.resize(swapChainImageCount);
-
-    //     for (size_t i = 0; i < swapChainImageCount; i++) {
-    //         this->swapchainData.images[i].image = swapchainImages[i];
-
-    //         VkImageViewCreateInfo viewInfo{.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
-    //                                        .image = swapchainImages[i],
-    //                                        .viewType = VK_IMAGE_VIEW_TYPE_2D,
-    //                                        .format = this->surfaceFormat.format,
-    //                                        .subresourceRange = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-    //                                                             .baseMipLevel = 0,
-    //                                                             .levelCount = 1,
-    //                                                             .baseArrayLayer = 0,
-    //                                                             .layerCount = 1}};
-    //         vkCreateImageView(this->ctx->logical, &viewInfo, nullptr, &this->swapchainData.images[i].imageView);
-
-    //         // Create framebuffer usinf color map and depth buffer
-    //         std::vector<VkImageView> attachments;
-    //         attachments.push_back(this->swapchainData.images[i].imageView);
-    //         if (this->depthBuffer) {
-    //             attachments.push_back(this->depthBuffer->getImageView()); // order important same as upper
-    //         }
-
-    //         VkFramebufferCreateInfo framebufferInfo{
-    //             .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
-    //             .renderPass = this->renderPass,
-    //             .attachmentCount = static_cast<uint32_t>(attachments.size()), //
-    //             .pAttachments = attachments.data(), // List of attachments (1:1 with Render Pass)
-    //             .width = this->extent.width,
-    //             .height = this->extent.height,
-    //             .layers = 1};
-
-    //         vkCreateFramebuffer(this->ctx->logical, &framebufferInfo, nullptr,
-    //                             &this->swapchainData.images[i].framebuffer);
-
-    //         this->swapchainData.images[i].inFlightFence = VK_NULL_HANDLE;
-    //     }
-    // }
-
-    // // Rotina de recriação total da Swapchain
-    // void SwapChain::recreateSwapchain() {
-    //     // Trata o caso do aplicativo ser minimizado (largura ou altura igual a 0)
-    //     VkSurfaceCapabilitiesKHR capabilities;
-    //     vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx->physical, ctx->surface, &capabilities);
-    //     while (capabilities.currentExtent.width == 0 || capabilities.currentExtent.height == 0) {
-    //         vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx->physical, ctx->surface, &capabilities);
-    //         // Insira um pequeno sleep ou aguarde eventos da janela aqui para não travar a CPU
-    //     }
-
-    //     // Aguarda a GPU terminar de renderizar qualquer frame pendente antes de destruir os alvos
-    //     vkDeviceWaitIdle(this->ctx->logical);
-
-    //     // Recria apenas os recursos dependentes do tamanho da tela
-    //     createSwapchain();
-    // }
-
     SetupSwapchain SwapChain::setupParams() {
 
         SetupSwapchain setup{};
@@ -326,7 +237,5 @@ namespace ce {
 
         return setup;
     }
-
-#pragma endregion
 
 } // namespace ce

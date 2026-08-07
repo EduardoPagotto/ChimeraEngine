@@ -165,9 +165,11 @@ namespace ce {
 
         VkRect2D& getRenderArea() { return this->renderArea; }
 
+        void recreateSwapchain();
+
       private:
-        // void createSwapchain();
-        // void recreateSwapchain();
+        void createSwapchain(bool depthBufferEnable, bool rebuild);
+
         SetupSwapchain setupParams();
 
         VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities);

@@ -57,6 +57,9 @@ namespace ce {
         explicit Loader(const std::filesystem::path& filePath);
         virtual ~Loader();
 
+        void testMat();
+        void testMesh();
+
       private:
         static glm::mat4 getNodeTransform(const fastgltf::Node& node);
 
@@ -66,9 +69,14 @@ namespace ce {
         void getMaterials();
         void getMeshs();
 
+        void getImages();
+
         fastgltf::Asset asset;
         std::vector<SceneNode> sceneHierarchy;
         std::vector<MeshData> vMeshs;
         std::vector<MaterialData> vMaterial;
+        // std::vecto
+
+        void textureDefDebug(TextureDef& t);
     };
 } // namespace ce

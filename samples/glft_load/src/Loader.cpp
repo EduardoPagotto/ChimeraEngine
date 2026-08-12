@@ -1,11 +1,13 @@
 #include "Loader.hpp"
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_init.h>
+#include <SDL3/SDL_log.h>
 #include <fastgltf/core.hpp>
 #include <fastgltf/glm_element_traits.hpp>
 #include <fastgltf/tools.hpp>
 #include <fastgltf/types.hpp>
 #include <glm/glm.hpp>
+#include <variant>
 
 namespace ce {
     Loader::Loader(const std::filesystem::path& filePath) {
@@ -30,9 +32,10 @@ namespace ce {
         // fastgltf::Asset asset = std::move(expectedAsset.get());
         this->asset = std::move(expectedAsset.get());
 
-        this->getScene();
-        this->getMaterials();
-        this->getMeshs();
+        this->getImages();
+        // this->getScene();
+        // this->getMaterials();
+        // this->getMeshs();
     }
 
     Loader::~Loader() {}
@@ -61,11 +64,13 @@ namespace ce {
         } else if (const auto* transform = std::get_if<fastgltf::TRS>(&node.transform)) {
             // O nó usa os componentes translation, rotation e scale individualmente
             glm::vec3 translation(transform->translation[0], transform->translation[1], transform->translation[2]);
-            glm::quat rotation(transform->rotation[3], transform->rotation[0], transform->rotation[1], transform->rotation[2]);
+            glm::quat rotation(transform->rotation[3], transform->rotation[0], transform->rotation[1],
+                               transform->rotation[2]);
             glm::vec3 scale(transform->scale[0], transform->scale[1], transform->scale[2]);
 
             // Constrói a matriz final
-            nodeMatrix = glm::translate(glm::mat4(1.0F), translation) * glm::mat4_cast(rotation) * glm::scale(glm::mat4(1.0F), scale);
+            nodeMatrix = glm::translate(glm::mat4(1.0F), translation) * glm::mat4_cast(rotation) *
+                         glm::scale(glm::mat4(1.0F), scale);
         }
 
         return nodeMatrix;
@@ -116,8 +121,8 @@ namespace ce {
                     auto& indexAccessor = asset.accessors[primitive.indicesAccessor.value()];
                     meshData.indices.resize(indexAccessor.count);
 
-                    fastgltf::iterateAccessorWithIndex<uint32_t>(asset, indexAccessor,
-                                                                 [&](uint32_t idx, size_t size) { meshData.indices[size] = idx; });
+                    fastgltf::iterateAccessorWithIndex<uint32_t>(
+                        asset, indexAccessor, [&](uint32_t idx, size_t size) { meshData.indices[size] = idx; });
                 }
 
                 // --- VERTEX BUFFER ---
@@ -130,9 +135,10 @@ namespace ce {
                     meshData.vertices.resize(posAccessor.count);
 
                     // Carrega as posições
-                    fastgltf::iterateAccessorWithIndex<glm::vec3>(asset, posAccessor, [&](glm::vec3 vertexPosition, size_t index) {
-                        meshData.vertices[index].position = vertexPosition;
-                    });
+                    fastgltf::iterateAccessorWithIndex<glm::vec3>(
+                        asset, posAccessor, [&](glm::vec3 vertexPosition, size_t index) {
+                            meshData.vertices[index].position = vertexPosition;
+                        });
                 }
 
                 if (normalAttr != primitive.attributes.end()) {
@@ -140,15 +146,16 @@ namespace ce {
 
                     // Carrega normal
                     fastgltf::iterateAccessorWithIndex<glm::vec3>(
-                        asset, normalAccessor, [&](glm::vec3 nor, size_t index) { meshData.vertices[index].normal = nor; });
+                        asset, normalAccessor,
+                        [&](glm::vec3 nor, size_t index) { meshData.vertices[index].normal = nor; });
                 }
 
                 if (uvAttr != primitive.attributes.end()) {
                     auto& uvAccessor = asset.accessors[uvAttr->accessorIndex];
 
                     // Carrega as UVs
-                    fastgltf::iterateAccessorWithIndex<glm::vec2>(asset, uvAccessor,
-                                                                  [&](glm::vec2 uvd, size_t index) { meshData.vertices[index].uv = uvd; });
+                    fastgltf::iterateAccessorWithIndex<glm::vec2>(
+                        asset, uvAccessor, [&](glm::vec2 uvd, size_t index) { meshData.vertices[index].uv = uvd; });
                 }
 
                 // --- TEXTURAS ---
@@ -159,6 +166,18 @@ namespace ce {
             }
 
             this->vMeshs.push_back(meshData);
+        }
+    }
+
+    void Loader::getImages() {
+
+        size_t i = 0;
+        for (const auto& image : asset.images) {
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\tImage (%lu) name: %s", i++, image.name.c_str());
+            if (auto val = std::get_if<fastgltf::sources::URI>(&image.data)) {
+                SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\tURI: %s", val->uri.c_str());
+                SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\tPath: %s", std::string(val->uri.path()).c_str());
+            }
         }
     }
 
@@ -188,7 +207,8 @@ namespace ce {
 
                     // Caminho da imagem em disco ou arquivo embutido
                     if (std::holds_alternative<fastgltf::sources::URI>(image.data)) {
-                        materialData.metallicRoughnessTexture.source = std::get<fastgltf::sources::URI>(image.data).uri.c_str();
+                        materialData.metallicRoughnessTexture.source =
+                            std::get<fastgltf::sources::URI>(image.data).uri.c_str();
                     }
                 }
             }
@@ -211,4 +231,41 @@ namespace ce {
             this->vMaterial.push_back(materialData);
         }
     }
+
+    void Loader::textureDefDebug(TextureDef& t) {
+        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\ttextureIndex: %d", t.textureIndex);
+        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\t\ttexID: %d", t.texID);
+        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\t\tsource: %s", t.source.c_str());
+    }
+
+    void Loader::testMat() {
+
+        uint32_t count = 0;
+        for (MaterialData& mat : this->vMaterial) {
+
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "-------------------");
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "index: %d", count++);
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "name: %s", mat.name.c_str());
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\tmetallic: %f", mat.metallic);
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\troughness: %f", mat.roughness);
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\tColor: %f %f %f %f", mat.baseColorFactor.r, mat.baseColorFactor.g,
+                         mat.baseColorFactor.b, mat.baseColorFactor.a);
+
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\tmetallicRoughnessTexture");
+            textureDefDebug(mat.metallicRoughnessTexture);
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\tbaseColorTexture");
+            textureDefDebug(mat.baseColorTexture);
+        }
+    }
+
+    void Loader::testMesh() {
+
+        uint32_t count = 0;
+        for (MeshData& m : vMeshs) {
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "-------------------");
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "index: %d", count++);
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "materialID : %d", m.materialID);
+        }
+    }
+
 } // namespace ce

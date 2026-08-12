@@ -17,7 +17,13 @@ int main() {
 
     try {
 
+        // Habilita todas as mensagens em modo Debug
+        SDL_SetLogPriority(SDL_LOG_CATEGORY_VIDEO, SDL_LOG_PRIORITY_DEBUG);
+
         ce::Loader loader("./assets/seahawk/Seahawk.gltf");
+
+        // loader.testMat();
+        loader.testMesh();
 
         // loadModel("./assets/models/teste/cubo.gltf", &mesh);
 
@@ -33,7 +39,8 @@ int main() {
         // for (const auto& vertice : mesh.vertices) {
 
         //     std::cout << "Position: " << vertice.position.x << ", " << vertice.position.y << ", " <<
-        //     vertice.position.z; std::cout << "\t | Normal: " << vertice.normal.x << ", " << vertice.normal.y << ", "
+        //     vertice.position.z; std::cout << "\t | Normal: " << vertice.normal.x << ", " << vertice.normal.y
+        //     << ", "
         //     << vertice.normal.z; std::cout << "\t | UV: " << vertice.uv.x << ", " << vertice.uv.y << '\n';
         // }
         // std::cout << "Texture URI: " << mesh.textureName << '\n';

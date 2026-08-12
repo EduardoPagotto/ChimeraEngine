@@ -34,7 +34,7 @@ namespace ce {
 
         this->getImages();
         // this->getScene();
-        // this->getMaterials();
+        this->getMaterials();
         // this->getMeshs();
     }
 
@@ -197,45 +197,20 @@ namespace ce {
             auto color = pbr.baseColorFactor;
             materialData.baseColorFactor = glm::vec4(color[0], color[1], color[2], color[3]);
 
+            materialData.emissiveFactor.x = material.emissiveFactor.x();
+            materialData.emissiveFactor.y = material.emissiveFactor.y();
+            materialData.emissiveFactor.z = material.emissiveFactor.z();
+
             if (pbr.metallicRoughnessTexture.has_value()) {
-                materialData.metallicRoughnessTexture.textureIndex = pbr.metallicRoughnessTexture->textureIndex;
-                const auto& textureInfo = pbr.metallicRoughnessTexture.value();
-                auto texture = asset.textures[textureInfo.textureIndex];
-
-                if (texture.imageIndex.has_value()) {
-                    const auto& image = asset.images[texture.imageIndex.value()];
-
-                    // Caminho da imagem em disco ou arquivo embutido
-                    if (std::holds_alternative<fastgltf::sources::URI>(image.data)) {
-                        materialData.metallicRoughnessTexture.source =
-                            std::get<fastgltf::sources::URI>(image.data).uri.c_str();
-                    }
-                }
+                materialData.metallicRoughnessTexture = pbr.metallicRoughnessTexture->textureIndex;
             }
 
             if (pbr.baseColorTexture.has_value()) {
-                materialData.baseColorTexture.textureIndex = pbr.baseColorTexture->textureIndex;
-                const auto& textureInfo = pbr.baseColorTexture.value();
-                auto& texture = asset.textures[textureInfo.textureIndex];
-
-                if (texture.imageIndex.has_value()) {
-                    const auto& image = asset.images[texture.imageIndex.value()];
-
-                    // Caminho da imagem em disco ou arquivo embutido
-                    if (std::holds_alternative<fastgltf::sources::URI>(image.data)) {
-                        materialData.baseColorTexture.source = std::get<fastgltf::sources::URI>(image.data).uri.c_str();
-                    }
-                }
+                materialData.baseColorTexture = pbr.baseColorTexture->textureIndex;
             }
 
             this->vMaterial.push_back(materialData);
         }
-    }
-
-    void Loader::textureDefDebug(TextureDef& t) {
-        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\ttextureIndex: %d", t.textureIndex);
-        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\t\ttexID: %d", t.texID);
-        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\t\tsource: %s", t.source.c_str());
     }
 
     void Loader::testMat() {
@@ -248,13 +223,20 @@ namespace ce {
             SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "name: %s", mat.name.c_str());
             SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\tmetallic: %f", mat.metallic);
             SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\troughness: %f", mat.roughness);
-            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\tColor: %f %f %f %f", mat.baseColorFactor.r, mat.baseColorFactor.g,
-                         mat.baseColorFactor.b, mat.baseColorFactor.a);
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\tBase Color: %f %f %f %f", mat.baseColorFactor.r,
+                         mat.baseColorFactor.g, mat.baseColorFactor.b, mat.baseColorFactor.a);
 
-            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\tmetallicRoughnessTexture");
-            textureDefDebug(mat.metallicRoughnessTexture);
-            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\tbaseColorTexture");
-            textureDefDebug(mat.baseColorTexture);
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\tEmisive Color: %f %f %f", mat.emissiveFactor.r,
+                         mat.emissiveFactor.g, mat.emissiveFactor.b);
+
+            if (mat.metallicRoughnessTexture.has_value()) {
+                SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\tmetallicRoughnessTexture: %lu",
+                             mat.metallicRoughnessTexture.value());
+            }
+
+            if (mat.baseColorTexture.has_value()) {
+                SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "\tbaseColorTexture: %lu", mat.baseColorTexture.value());
+            }
         }
     }
 

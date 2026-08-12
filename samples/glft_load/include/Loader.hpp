@@ -12,19 +12,14 @@ struct Vertex {
     glm::vec2 uv;
 };
 
-struct TextureDef {
-    std::string source;
-    uint32_t textureIndex;
-    uint32_t texID;
-};
-
 struct MaterialData {
     std::string name;
     float metallic;
     float roughness;
     glm::vec4 baseColorFactor;
-    TextureDef metallicRoughnessTexture;
-    TextureDef baseColorTexture;
+    glm::vec3 emissiveFactor;
+    std::optional<size_t> metallicRoughnessTexture;
+    std::optional<size_t> baseColorTexture;
 };
 
 struct MeshData {
@@ -75,8 +70,5 @@ namespace ce {
         std::vector<SceneNode> sceneHierarchy;
         std::vector<MeshData> vMeshs;
         std::vector<MaterialData> vMaterial;
-        // std::vecto
-
-        void textureDefDebug(TextureDef& t);
     };
 } // namespace ce

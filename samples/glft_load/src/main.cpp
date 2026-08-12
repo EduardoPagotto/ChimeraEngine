@@ -22,8 +22,9 @@ int main() {
 
         ce::Loader loader("./assets/seahawk/Seahawk.gltf");
 
-        // loader.testMat();
-        loader.testMesh();
+        loader.testMat();
+
+        // loader.testMesh();
 
         // loadModel("./assets/models/teste/cubo.gltf", &mesh);
 

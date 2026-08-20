@@ -225,7 +225,8 @@
 		},
 		"glsllint.glslangValidatorArgs": [
 			"-V"
-		]
+		],
+		"chat.disableAIFeatures": true
 		// OTHERS
 	},
 	"launch": {

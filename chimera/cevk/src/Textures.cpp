@@ -9,11 +9,11 @@ namespace ce {
 
     Textures::Textures(std::shared_ptr<VulkanContext> ctx) : ctx(ctx) {
         //
-        this->uniformSampler.init(ctx->logical);
+        this->uniform.init(ctx->logical);
         //------------------------------------------------------------------------------------
         // CREATE DESCRIPTOR SET LAYOUT (SAMPLER), Texture binding info
         //------------------------------------------------------------------------------------
-        ce::DescriptorSetLayout& samplerDSL = this->uniformSampler.getDescriptorSetLayout();
+        ce::DescriptorSetLayout& samplerDSL = this->uniform.getDescriptorSetLayout();
         samplerDSL.addBinding(VkDescriptorSetLayoutBinding{.binding = 0,
                                                            .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
                                                            .descriptorCount = 1,
@@ -25,11 +25,10 @@ namespace ce {
         //------------------------------------------------------------------------------------
         // CREATE DESCRIPTOR POOL
         //------------------------------------------------------------------------------------
-        this->samplerDescriptorPool.addPoolSize(
+        this->descriptorPool.addPoolSize(
             VkDescriptorPoolSize{.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, .descriptorCount = MAX_OBJECTS});
 
-        this->samplerDescriptorPool.create(this->ctx->logical, MAX_OBJECTS,
-                                           static_cast<VkDescriptorPoolCreateFlagBits>(0));
+        this->descriptorPool.create(this->ctx->logical, MAX_OBJECTS, static_cast<VkDescriptorPoolCreateFlagBits>(0));
 
         //------------------------------------------------------------------------------------
         //  CREATE TEXTURE SAMPLER
@@ -39,17 +38,17 @@ namespace ce {
 
     Textures::~Textures() {
         texSampler.destroy();
-        samplerDescriptorPool.destroy();
-        uniformSampler.destroy();
+        descriptorPool.destroy();
+        uniform.destroy();
     }
 
     int Textures::allocTexture(std::shared_ptr<VulkanTexture> vulkanTex) {
 
         std::shared_ptr<Image> texImageObj = vulkanTex->get();
-        this->uniformSampler.getImages().push_back(texImageObj);
+        this->uniform.getImages().push_back(texImageObj);
 
         //
-        auto [index, size] = this->uniformSampler.allocateDescriptorSetsWithPool(1, this->samplerDescriptorPool.get());
+        auto [index, size] = this->uniform.allocateDescriptorSetsWithPool(1, this->descriptorPool.get());
 
         // Texture Image info
         const VkDescriptorImageInfo imageInfo{
@@ -58,7 +57,7 @@ namespace ce {
             .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL // Image to bind to set
         };
 
-        ce::DescriptorSet& samplerDS = this->uniformSampler.getDescriptorSet(index);
+        ce::DescriptorSet& samplerDS = this->uniform.getDescriptorSet(index);
 
         ce::DescriptorSetWrite dsw(this->ctx->logical);
         // Descriptor Write info

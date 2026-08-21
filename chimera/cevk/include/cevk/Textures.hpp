@@ -13,13 +13,13 @@ namespace ce {
         explicit Textures(std::shared_ptr<VulkanContext> ctx);
         virtual ~Textures();
 
-        UniformSampler& getUniformSampler() { return uniformSampler; }
+        UniformSampler& getUniformSampler() { return uniform; }
         int allocTexture(std::shared_ptr<VulkanTexture> vulkanTex);
 
       private:
         Sampler texSampler;
-        UniformSampler uniformSampler;
-        DescriptorPool samplerDescriptorPool;
+        UniformSampler uniform;
+        DescriptorPool descriptorPool;
         std::shared_ptr<VulkanContext> ctx;
     };
 } // namespace ce

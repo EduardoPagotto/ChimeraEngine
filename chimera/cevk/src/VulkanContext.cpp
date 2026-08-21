@@ -11,8 +11,8 @@ namespace ce {
     void VulkanContext::createWindow(const std::string& sName, const int width, const int height) {
 
         // 1. Initialize SDL3
-        if (!SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11")) {
-            throw std::runtime_error(std::format("SDL X11 Failed driver: {}", SDL_GetError()));
+        if (!SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "wayland")) {
+            throw std::runtime_error(std::format("SDL wayland Failed driver: {}", SDL_GetError()));
         }
 
         if (!SDL_Init(SDL_INIT_VIDEO)) {

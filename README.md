@@ -82,11 +82,10 @@ SDL_VIDEODRIVER=x11 ./bin/terrain
 glslangValidator  -V ./samples/sdl31/assets/shaders/shader.vert -o ./bin/vert.spv
 glslangValidator  -V ./samples/sdl31/assets/shaders/shader.frag -o ./bin/frag.spv
 
-glslangValidator  -V ./samples/sdl31/shades/TexturedQuad.vert -o ./bin/TexturedQuad.vert.spv
-glslangValidator  -V ./samples/sdl31/shades/TexturedQuad.frag -o ./bin/TexturedQuad.frag.spv
+glslangValidator -V ./samples/test/sdl32/assets/shader/teste1.vert -o ./bin/bindless.vert.spv
+glslangValidator -V ./samples/test/sdl32/assets/shader/teste1.frag -o ./bin/bindless.frag.spv
 
-glslangValidator  -V ./samples/sdl31/shades/ -o ./bin/
-glslangValidator  -V ./samples/sdl31/shades/ -o ./bin/T
+
 ```
 
 ## Refs

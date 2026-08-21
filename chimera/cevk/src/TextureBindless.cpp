@@ -5,15 +5,13 @@
 namespace ce {
 
     TextureBindless::TextureBindless(std::shared_ptr<VulkanContext> ctx) : ctx(ctx) {
-
-        // Init UnivforBuffer
-        uniform.init(ctx->logical);
-
+        //
+        this->uniform.init(ctx->logical);
         //------------------------------------------------------------------------------------
-        // --- ETAPA A: DEFINIR O LAYOUT BINDLESS ---
+        // 1. CREATE DESCRIPTOR SET LAYOUT BINDLESS
         //------------------------------------------------------------------------------------
-        DescriptorSetLayout& bindlessLayout = uniform.getDescriptorSetLayout();
-        bindlessLayout.addBinding(VkDescriptorSetLayoutBinding{
+        DescriptorSetLayout& layout = this->uniform.getDescriptorSetLayout();
+        layout.addBinding(VkDescriptorSetLayoutBinding{
             .binding = 0,
             .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
             .descriptorCount = 10000, // Tamanho máximo do array (capacidade total de texturas)
@@ -29,11 +27,10 @@ namespace ce {
             .bindingCount = 1,
             .pBindingFlags = &bindingFlags};
 
-        bindlessLayout.create(static_cast<void*>(&extendedInfo),
-                              VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT);
+        layout.create(static_cast<void*>(&extendedInfo), VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT);
 
         //------------------------------------------------------------------------------------
-        // --- ETAPA B: CRIAR O DESCRIPTOR POOL ---
+        // 2. CREATE DESCRIPTOR POOL
         //------------------------------------------------------------------------------------
         this->descriptorPool.addPoolSize(
             VkDescriptorPoolSize{.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, .descriptorCount = 10000});
@@ -42,7 +39,7 @@ namespace ce {
         this->descriptorPool.create(ctx->logical, 1, VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT);
 
         //------------------------------------------------------------------------------------
-        // --- ETAPA C: ALOCAR O DESCRIPTOR SET ÚNICO ---
+        // 3. ALOCAR O DESCRIPTOR SET ÚNICO ---
         //------------------------------------------------------------------------------------
         uint32_t maxTextures = 10000;
         VkDescriptorSetVariableDescriptorCountAllocateInfo variableCountInfo = {
@@ -53,7 +50,7 @@ namespace ce {
         uniform.allocateDescriptorSetsWithPool(1, this->descriptorPool.get(), static_cast<void*>(&variableCountInfo));
 
         //------------------------------------------------------------------------------------
-        //  CREATE TEXTURE SAMPLER
+        //  4. CREATE TEXTURE SAMPLER
         //------------------------------------------------------------------------------------
         this->texSampler.init(ctx->logical);
     }
@@ -73,13 +70,14 @@ namespace ce {
             .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
         };
 
-        ce::DescriptorSet& globalBindlessDescriptorSet = this->uniform.getDescriptorSet(0);
-        ce::DescriptorSetWrite dsw(this->ctx->logical);
+        DescriptorSet& descriptorSet = this->uniform.getDescriptorSet(0);
 
+        DescriptorSetWrite dsw(this->ctx->logical);
+        // Descriptor Write info
         dsw.add(VkWriteDescriptorSet{.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-                                     .dstSet = globalBindlessDescriptorSet.get(), // O set global gigante
-                                     .dstBinding = 0,                             // Binding 0 do shader
-                                     .dstArrayElement = tex->getBindlessIndex(),  // Posição no array do shader
+                                     .dstSet = descriptorSet.get(),              // O set global gigante
+                                     .dstBinding = 0,                            // Binding 0 do shader
+                                     .dstArrayElement = tex->getBindlessIndex(), // Posição no array do shader
                                      .descriptorCount = 1,
                                      .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
                                      .pImageInfo = &imageInfo});

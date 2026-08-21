@@ -11,19 +11,19 @@ namespace ce {
         //
         this->uniform.init(ctx->logical);
         //------------------------------------------------------------------------------------
-        // CREATE DESCRIPTOR SET LAYOUT (SAMPLER), Texture binding info
+        // 1. CREATE DESCRIPTOR SET LAYOUT (SAMPLER), Texture binding info
         //------------------------------------------------------------------------------------
-        ce::DescriptorSetLayout& samplerDSL = this->uniform.getDescriptorSetLayout();
-        samplerDSL.addBinding(VkDescriptorSetLayoutBinding{.binding = 0,
-                                                           .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                           .descriptorCount = 1,
-                                                           .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
-                                                           .pImmutableSamplers = nullptr});
+        DescriptorSetLayout& layout = this->uniform.getDescriptorSetLayout();
+        layout.addBinding(VkDescriptorSetLayoutBinding{.binding = 0,
+                                                       .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                                       .descriptorCount = 1,
+                                                       .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
+                                                       .pImmutableSamplers = nullptr});
 
-        samplerDSL.create();
+        layout.create();
 
         //------------------------------------------------------------------------------------
-        // CREATE DESCRIPTOR POOL
+        // 2. CREATE DESCRIPTOR POOL
         //------------------------------------------------------------------------------------
         this->descriptorPool.addPoolSize(
             VkDescriptorPoolSize{.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, .descriptorCount = MAX_OBJECTS});
@@ -31,7 +31,7 @@ namespace ce {
         this->descriptorPool.create(this->ctx->logical, MAX_OBJECTS, static_cast<VkDescriptorPoolCreateFlagBits>(0));
 
         //------------------------------------------------------------------------------------
-        //  CREATE TEXTURE SAMPLER
+        //  3. CREATE TEXTURE SAMPLER
         //------------------------------------------------------------------------------------
         this->texSampler.init(ctx->logical);
     }
@@ -57,12 +57,12 @@ namespace ce {
             .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL // Image to bind to set
         };
 
-        ce::DescriptorSet& samplerDS = this->uniform.getDescriptorSet(index);
+        DescriptorSet& descriptorSet = this->uniform.getDescriptorSet(index);
 
-        ce::DescriptorSetWrite dsw(this->ctx->logical);
+        DescriptorSetWrite dsw(this->ctx->logical);
         // Descriptor Write info
         dsw.add(VkWriteDescriptorSet{.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-                                     .dstSet = samplerDS.get(),
+                                     .dstSet = descriptorSet.get(),
                                      .dstBinding = 0,
                                      .dstArrayElement = 0,
                                      .descriptorCount = 1,

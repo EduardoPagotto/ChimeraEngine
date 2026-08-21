@@ -79,8 +79,8 @@ SDL_VIDEODRIVER=x11 ./bin/terrain
 
 # compile spirv
 ```bash
-glslangValidator  -V ./assets/shaders/shader.vert -o ./bin/vert.spv
-glslangValidator  -V ./assets/shaders/shader.frag -o ./bin/frag.spv
+glslangValidator  -V ./samples/sdl31/assets/shaders/shader.vert -o ./bin/vert.spv
+glslangValidator  -V ./samples/sdl31/assets/shaders/shader.frag -o ./bin/frag.spv
 
 glslangValidator  -V ./samples/sdl31/shades/TexturedQuad.vert -o ./bin/TexturedQuad.vert.spv
 glslangValidator  -V ./samples/sdl31/shades/TexturedQuad.frag -o ./bin/TexturedQuad.frag.spv

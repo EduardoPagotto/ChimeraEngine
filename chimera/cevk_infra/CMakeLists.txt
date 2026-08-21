@@ -8,7 +8,8 @@ message(STATUS "Compiling: ${PROJECT_NAME}")
 message(STATUS "Base: ${CMAKE_SOURCE_DIR}")
 message(STATUS "Current: ${CMAKE_CURRENT_SOURCE_DIR}")
 
-set (IncludeDirs ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set (IncludeDirs ${CMAKE_CURRENT_SOURCE_DIR}/include
+                 ${CMAKE_SOURCE_DIR}/chimera/cevk/include)
 
 set(SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/src/Timer.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/StateStack.cpp

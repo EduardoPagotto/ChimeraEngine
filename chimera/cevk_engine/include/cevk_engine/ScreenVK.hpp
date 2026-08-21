@@ -1,7 +1,6 @@
 #pragma once
 #include "cevk/VulkanContext.hpp"
 #include "cevk_infra/IScr.hpp"
-#include "cevk_infra/ServiceLocator.hpp"
 #include <SDL3/SDL.h>
 #include <memory>
 
@@ -11,7 +10,7 @@ namespace ce {
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
     /// @date 20270801
-    class ScreenVK : public ServiceBase<IScr> {
+    class ScreenVK : public IScr {
 
       public:
         explicit ScreenVK(std::shared_ptr<VulkanContext> ctx);

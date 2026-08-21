@@ -343,6 +343,18 @@
 				}
 				// "preLaunchTask": "CMake: build"
 			},
+			{
+				"name": "loaderAsset",
+				"type": "lldb-dap",
+				"request": "launch",
+				"program": "${workspaceFolder}/bin/loader_asset",
+				"args": [],
+				"cwd": "${workspaceFolder}",
+				"env": {
+					//"DEBUG_MODE": "true"
+				}
+				// "preLaunchTask": "CMake: build"
+			},
 		],
 		"compounds": []
 	},

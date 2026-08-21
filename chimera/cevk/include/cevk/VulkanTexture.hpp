@@ -30,4 +30,13 @@ namespace ce {
 
         inline static uint32_t nextTextureIndex = 0;
     };
+
+    struct TextureLoader {
+        using result_type = std::shared_ptr<VulkanTexture>;
+        std::shared_ptr<VulkanTexture> operator()(std::shared_ptr<VulkanContext> ctx,
+                                                  const std::string& filePath) const {
+            return VulkanTexture::create(ctx, filePath);
+        }
+    };
+
 } // namespace ce

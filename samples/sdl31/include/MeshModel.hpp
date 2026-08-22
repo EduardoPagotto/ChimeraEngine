@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Mesh.hpp"
+#include "cevk/Mesh.hpp"
 #include <assimp/scene.h>
 
 namespace ce {

@@ -1,6 +1,6 @@
 #pragma once
+#include "MeshModel.hpp"
 #include "cevk/Frame.hpp"
-#include "cevk/MeshModel.hpp"
 #include "cevk/Pipeline.hpp"
 #include "cevk/RenderPass.hpp"
 #include "cevk/SwapChain.hpp"

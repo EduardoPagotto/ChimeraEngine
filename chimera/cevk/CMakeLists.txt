@@ -41,7 +41,6 @@ set(SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/src/VulkanContext.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/Shader.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/Textures.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/TextureBindless.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/MeshModel.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/Mesh.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/SwapChain.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/Pipeline.cpp)

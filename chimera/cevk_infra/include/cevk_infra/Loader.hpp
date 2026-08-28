@@ -13,6 +13,7 @@
 #include <glm/ext/matrix_float4x4.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
 #include <stdexcept>
 #include <string_view>
 #include <variant>
@@ -134,11 +135,20 @@ namespace ce {
                     if (primitive.type != fastgltf::PrimitiveType::Triangles)
                         continue;
 
+                    for (const auto& [attributeName, accessorIndex] : primitive.attributes) {
+                        // attributeName geralmente é uma string ou um tipo mapeável estruturado
+                        std::cout << "Nome: " << attributeName << " (Index do Accessor: " << accessorIndex << ")\n";
+                    }
+
                     PrimitiveData currentPrim;
+
+                    const auto* posAttribute = primitive.findAttribute("POSITION");
+                    // const auto* normAttribute = primitive.findAttribute("NORMAL");
+                    const auto* uvAttribute = primitive.findAttribute("TEXCOORD_0");
+                    const auto* colorAttribute = primitive.findAttribute("COLOR_0");
 
                     // --- PROCESS VERTICES ---
                     // Find the core POSITION attribute accessor to determine the sizing requirement
-                    const auto* posAttribute = primitive.findAttribute("POSITION");
                     if (posAttribute == primitive.attributes.end())
                         continue; // Invalid primitive
 
@@ -151,8 +161,7 @@ namespace ce {
                         asset, posAccessor, [&](glm::vec3 pos, size_t idx) { currentPrim.vertices[idx].pos = pos; });
 
                     // Fetch and map the NORMAL attribute if present
-                    // if (const auto* normAttribute = primitive.findAttribute("NORMAL");
-                    //     normAttribute != primitive.attributes.end()) {
+                    // if (normAttribute != primitive.attributes.end()) {
                     //     const auto& normAccessor = asset.accessors[normAttribute->accessorIndex];
                     //     fastgltf::iterateAccessorWithIndex<glm::vec3>(
                     //         asset, normAccessor,
@@ -160,16 +169,14 @@ namespace ce {
                     // }
 
                     // Fetch and map the TEXCOORD_0 (Texture Coordinates) attribute if present
-                    if (const auto* uvAttribute = primitive.findAttribute("TEXCOORD_0");
-                        uvAttribute != primitive.attributes.end()) {
+                    if (uvAttribute != primitive.attributes.end()) {
                         const auto& uvAccessor = asset.accessors[uvAttribute->accessorIndex];
                         fastgltf::iterateAccessorWithIndex<glm::vec2>(
                             asset, uvAccessor, [&](glm::vec2 uv, size_t idx) { currentPrim.vertices[idx].tex = uv; });
                     }
 
                     // Fetch and map the COLOR_0 attribute if present
-                    if (const auto* colorAttribute = primitive.findAttribute("COLOR_0");
-                        colorAttribute != primitive.attributes.end()) {
+                    if (colorAttribute != primitive.attributes.end()) {
                         const auto& colorAccessor = asset.accessors[colorAttribute->accessorIndex];
 
                         // glTF colors can be written as either vec3 (RGB) or vec4 (RGBA)
@@ -184,8 +191,8 @@ namespace ce {
                         const auto& indexAccessor = asset.accessors[primitive.indicesAccessor.value()];
                         currentPrim.indices.resize(indexAccessor.count);
 
-                        // iterateAccessor automatically handles converting uint8, uint16, or uint32 data types up to
-                        // standard uint32_t
+                        // iterateAccessor automatically handles converting uint8, uint16, or uint32 data types up
+                        // to standard uint32_t
                         fastgltf::iterateAccessorWithIndex<uint32_t>(
                             asset, indexAccessor,
                             [&](uint32_t index, size_t idx) { currentPrim.indices[idx] = index; });

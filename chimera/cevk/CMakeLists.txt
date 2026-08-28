@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 4.3.0)
 PROJECT(cevk VERSION 0.0.1 LANGUAGES CXX)
 
 find_package(SDL3 REQUIRED)
-find_package(assimp REQUIRED)
 find_package(Vulkan REQUIRED)
 find_package(VulkanMemoryAllocator CONFIG REQUIRED)
 

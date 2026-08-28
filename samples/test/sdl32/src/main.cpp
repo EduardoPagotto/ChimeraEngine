@@ -1,15 +1,15 @@
 // #include "AssetManager.hpp"
 #include "Game.hpp"
-#include "cevk/VulkanTexture.hpp"
 #include "cevk_engine/ScreenVK.hpp"
 #include "cevk_infra/Engine.hpp"
 #include <SDL3/SDL.h>
 #include <memory>
-// #include "cevk/TextureBindless.hpp"
-// #include "cevk_engine/AssetManager.hpp"
-// #include "cevk_infra/ServiceLocator.hpp"
-#include "AssetManager.hpp"
-#include <entt/entt.hpp>
+// #include "cevk/VulkanTexture.hpp"
+//  #include "cevk/TextureBindless.hpp"
+//  #include "cevk_engine/AssetManager.hpp"
+//  #include "cevk_infra/ServiceLocator.hpp"
+//  #include "AssetManager.hpp"
+//  #include <entt/entt.hpp>
 
 void teste(std::shared_ptr<ce::VulkanContext> ctx) {
 
@@ -55,11 +55,11 @@ int main(int argc, char* argv[]) {
 
         ctx->createWindow("Teste z1");
 
-        entt::registry registry;
-        auto& assetManager = registry.ctx().emplace<AssetManager>();
+        // entt::registry registry;
+        // auto& assetManager = registry.ctx().emplace<AssetManager>();
 
-        entt::id_type id_textura = entt::hashed_string{"id_tex"};
-        assetManager.texture.load(id_textura, ctx, "assets/player.png");
+        // entt::id_type id_textura = entt::hashed_string{"id_tex"};
+        // assetManager.texture.load(id_textura, ctx, "assets/player.png");
 
         std::shared_ptr<ce::ScreenVK> scr = std::make_shared<ScreenVK>(ctx);
 

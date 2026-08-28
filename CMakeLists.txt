@@ -62,7 +62,7 @@ add_subdirectory(chimera/cevk_engine)
 # Simple testes app
 
 add_subdirectory(samples/sdl31)
-#add_subdirectory(samples/sdl32)
+add_subdirectory(samples/test/sdl32)
 add_subdirectory(samples/test/loader_asset)
 #add_subdirectory(samples/test/glft_load)
 

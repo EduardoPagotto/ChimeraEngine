@@ -21,6 +21,8 @@ int main() {
         SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "index: %d", tex.getIndex());
     }
 
+    auto meshes = loader.getMeshs(ctx);
+
     assetManager.texture.clear();
 
     return 0;

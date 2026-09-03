@@ -20,8 +20,8 @@ namespace ce {
         virtual void after() override;
         virtual void toggleFullScreen() override;
         virtual void reshape(int _width, int _height) override;
-        virtual const int getWidth() const override;
-        virtual const int getHeight() const override;
+        virtual int getWidth() const override;
+        virtual int getHeight() const override;
 
       private:
         std::shared_ptr<VulkanContext> ctx;

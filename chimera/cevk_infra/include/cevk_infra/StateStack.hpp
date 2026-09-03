@@ -13,7 +13,7 @@ namespace ce {
       public:
         StateStack() { stateInsert = states.begin(); }
         virtual ~StateStack() { states.clear(); }
-        inline void clear() { states.clear(); }
+        void clear() { states.clear(); }
 
         void pushState(std::shared_ptr<IStateMachine> state);
         void pushOverlay(std::shared_ptr<IStateMachine> overlay);
@@ -22,8 +22,8 @@ namespace ce {
 
         std::shared_ptr<IStateMachine> getState(const std::string& name);
 
-        inline std::vector<std::shared_ptr<IStateMachine>>::iterator begin() { return states.begin(); }
-        inline std::vector<std::shared_ptr<IStateMachine>>::iterator end() { return states.end(); }
+        std::vector<std::shared_ptr<IStateMachine>>::iterator begin() { return states.begin(); }
+        std::vector<std::shared_ptr<IStateMachine>>::iterator end() { return states.end(); }
 
       private:
         std::vector<std::shared_ptr<IStateMachine>> states;

@@ -19,7 +19,7 @@ namespace ce {
         virtual ~Engine() = default;
         void run();
 
-        inline StateStack& getStack() { return stack; }
+        StateStack& getStack() { return stack; }
 
       private:
         std::shared_ptr<IScr> screen;

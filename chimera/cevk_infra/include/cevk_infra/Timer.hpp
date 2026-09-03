@@ -19,15 +19,15 @@ namespace ce {
         void resume();
         uint32_t restart();
 
-        const uint32_t ticks();
+        uint32_t ticks() const;
         bool stepCount();
         uint32_t deltaCountMS();
 
-        inline bool isStarted() const { return started; }
-        inline bool isPaused() const { return paused; }
-        inline uint32_t getCountStep() const { return countStep; }
-        inline void setElapsedCount(const uint32_t& val) { elapsedCount = val; }
-        inline double deltaTimeSecounds() { return ((double)deltaCountMS()) / 1000.0f; }
+        bool isStarted() const { return started; }
+        bool isPaused() const { return paused; }
+        uint32_t getCountStep() const { return countStep; }
+        void setElapsedCount(const uint32_t& val) { elapsedCount = val; }
+        double deltaTimeSecounds() { return ((double)deltaCountMS()) / 1000.0F; }
 
       private:
         bool started = false;

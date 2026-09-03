@@ -19,9 +19,9 @@ namespace ce {
         std::shared_ptr<Image> get() { return this->texImg; }
 
         void clearBindlessIndex() { this->delta = index; }
-        const uint32_t getBindlessIndex() const { return (index - delta); }
-        const uint32_t getIndex() const { return this->index; }
-        inline static void ResetIndex() { nextTextureIndex = 0; }
+        uint32_t getBindlessIndex() const { return (index - delta); }
+        uint32_t getIndex() const { return this->index; }
+        static void ResetIndex() { nextTextureIndex = 0; }
 
       private:
         std::shared_ptr<Image> texImg;

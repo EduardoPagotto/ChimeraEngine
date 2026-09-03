@@ -35,13 +35,12 @@ namespace ce {
         return elapsedTicks;
     }
 
-    const uint32_t Timer::ticks() {
+    uint32_t Timer::ticks() const {
         if (started) {
             if (!paused) {
                 return SDL_GetTicks() - startTicks;
-            } else {
-                return pausedTicks;
             }
+            return pausedTicks;
         }
         return 0;
     }

@@ -8,7 +8,7 @@
 
 namespace ce {
 
-    void VulkanContext::createWindow(const std::string& sName, const int width, const int height) {
+    void VulkanContext::createWindow(const std::string& sName, const int& width, const int& height) {
 
         // 1. Initialize SDL3
         if (!SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "wayland")) {

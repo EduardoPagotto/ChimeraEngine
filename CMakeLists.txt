@@ -26,6 +26,17 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 # make dynamic cfs
 add_subdirectory(configured)
 
+
+# Locate the clang-tidy executable on the system
+find_program(CLANG_TIDY_EXE NAMES "clang-tidy")
+
+if(CLANG_TIDY_EXE)
+    # This forces clang-tidy to run on all target source files whenever you build
+    set(CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_EXE};-config-file=${CMAKE_SOURCE_DIR}/.clang-tidy)
+else()
+    message(STATUS "clang-tidy not found.")
+endif()
+
 # # inclui projetos externos
 # include(FetchContent)
 

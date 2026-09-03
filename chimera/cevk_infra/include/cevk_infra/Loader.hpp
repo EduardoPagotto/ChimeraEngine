@@ -76,11 +76,10 @@ namespace ce {
 
         virtual ~Loader() = default;
 
-        std::pair<entt::id_type, std::string_view> getIdentify(const fastgltf::Image& image) {
+        static std::pair<entt::id_type, std::string_view> getIdentify(const fastgltf::Image& image) {
 
-            if (auto val = std::get_if<fastgltf::sources::URI>(&image.data)) {
-                std::string name =
-                    (!image.name.empty()) ? std::string(image.name.c_str()) : std::string(val->uri.c_str());
+            if (const auto* val = std::get_if<fastgltf::sources::URI>(&image.data)) {
+                std::string name = (!image.name.empty()) ? std::string(image.name) : std::string(val->uri.c_str());
 
                 return {entt::hashed_string{name.c_str()}, val->uri.path()};
             }
@@ -132,8 +131,9 @@ namespace ce {
                 // 3. Process every primitive (sub-mesh) inside this mesh
                 for (const auto& primitive : mesh.primitives) {
                     // We only care about rendering triangles
-                    if (primitive.type != fastgltf::PrimitiveType::Triangles)
+                    if (primitive.type != fastgltf::PrimitiveType::Triangles) {
                         continue;
+                    }
 
                     for (const auto& [attributeName, accessorIndex] : primitive.attributes) {
                         // attributeName geralmente é uma string ou um tipo mapeável estruturado
@@ -149,8 +149,9 @@ namespace ce {
 
                     // --- PROCESS VERTICES ---
                     // Find the core POSITION attribute accessor to determine the sizing requirement
-                    if (posAttribute == primitive.attributes.end())
+                    if (posAttribute == primitive.attributes.end()) {
                         continue; // Invalid primitive
+                    }
 
                     const auto& posAccessor = asset.accessors[posAttribute->accessorIndex];
                     size_t vertexCount = posAccessor.count;

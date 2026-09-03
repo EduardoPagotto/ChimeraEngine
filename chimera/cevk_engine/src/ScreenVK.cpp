@@ -10,7 +10,7 @@ namespace ce {
     void ScreenVK::after() {}
     void ScreenVK::toggleFullScreen() {}
     void ScreenVK::reshape(int _width, int _height) {}
-    const int ScreenVK::getWidth() const { return 0; }
-    const int ScreenVK::getHeight() const { return 0; }
+    int ScreenVK::getWidth() const { return 0; }
+    int ScreenVK::getHeight() const { return 0; }
 
 } // namespace ce

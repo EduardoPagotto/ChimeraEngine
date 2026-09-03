@@ -109,6 +109,38 @@
 				"textDecoration": ";box-shadow:0 0 5px 3px #2faf6470;border-radius:0.25em"
 			}
 		},
+		// TOD_TREE
+		"todo-tree.ripgrep.ripgrep": "/usr/bin/rg",
+		"todo-tree.highlights.defaultHighlight": {
+			"icon": "alert",
+			"type": "text",
+			"foreground": "#ff0000",
+			"background": "#ffffff",
+			"opacity": 50,
+			"iconColour": "#0000ff"
+		},
+		"todo-tree.highlights.customHighlight": {
+			"TODO": {
+				"icon": "check",
+				"type": "line"
+			},
+			"FIXME": {
+				"foreground": "#000000",
+				"iconColour": "#eeff00",
+				"gutterIcon": true
+			}
+		},
+		//
+		"clangTidyVisualizer.clangTidyPath": "/usr/bin/clang-tidy",
+		"clangTidyVisualizer.language": "en",
+		"clangTidyVisualizer.report.outputDir":"./report",
+		"clangTidyVisualizer.ui.statusBar": true,
+		"clangTidyVisualizer.ignorePatterns": [
+			"toolchain",
+			"asset",
+			"build",
+			"bin"
+		],
 		// CMAKE
 		"cmake.configureOnOpen": true,
 		"cmake.options.statusBarVisibility": "visible",
@@ -118,7 +150,7 @@
 			"--background-index",
 			"--compile-commands-dir=${workspaceFolder}/build", // Aponta para a pasta onde o CMake gera o compile_commands.json
 			"--clang-tidy",
-			"--header-insertion=iwyu"
+			//"--header-insertion=iwyu"
 		],
 		"editor.formatOnSave": true, // Formata automaticamente ao salvar
 		"editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
@@ -227,7 +259,6 @@
 			"-V"
 		],
 		"chat.disableAIFeatures": true
-		// OTHERS
 	},
 	"launch": {
 		"version": "0.2.0",

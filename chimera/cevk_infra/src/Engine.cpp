@@ -11,7 +11,7 @@ namespace ce {
         SDL_Log("Engine Register: chimera_engine OK");
     }
 
-    void Engine::run() {
+    void Engine::run() { // NOLINT
 
         SDL_Event event;
         bool kill{false};
@@ -63,24 +63,27 @@ namespace ce {
                 }
 
                 for (auto it = stack.end(); it != stack.begin();) {
-                    if ((*--it)->onEvent(event) == false)
+                    if (!(*--it)->onEvent(event)) {
                         break;
+                    }
                 }
             }
 
-            ts = (double)countDelta / 1000.0f;
+            ts = (double)countDelta / 1000.0F;
             if (!pause) { // update game
-                for (auto it = stack.begin(); it != stack.end(); it++)
+                for (auto it = stack.begin(); it != stack.end(); it++) {
                     (*it)->onUpdate(ts);
+                }
 
                 screen->before();
-                for (auto it = stack.begin(); it != stack.end(); it++)
+                for (auto it = stack.begin(); it != stack.end(); it++) {
                     (*it)->onRender();
+                }
 
                 screen->after();
             }
 
-            if (timerFPS.stepCount() == true) { // count FPS each second
+            if (timerFPS.stepCount()) { // count FPS each second
                 fps = timerFPS.getCountStep();
                 sendChimeraEvent(EventCE::NEW_FPS, (void*)&fps, nullptr);
             }

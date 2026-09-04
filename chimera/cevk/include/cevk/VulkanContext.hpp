@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cevk.hpp"
+#include <array>
 #include <string>
 
 namespace ce {
@@ -36,8 +37,8 @@ namespace ce {
         VkDebugReportCallbackEXT callback;
         bool validationEnabled = true;
 
-        inline static std::vector<const char*> deviceExtensions{VK_KHR_SWAPCHAIN_EXTENSION_NAME};
-        inline static std::vector<const char*> validationLayers{"VK_LAYER_KHRONOS_validation"};
+        static constexpr std::array<const char*, 1> deviceExtensions{VK_KHR_SWAPCHAIN_EXTENSION_NAME};
+        static constexpr std::array<const char*, 1> validationLayers{"VK_LAYER_KHRONOS_validation"};
 
         void createInstance();
         void createDebugCallback();

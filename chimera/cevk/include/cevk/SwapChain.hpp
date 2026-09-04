@@ -18,11 +18,11 @@ namespace ce {
         // RAII: A Swapchain possui as VkImages, então destruímos apenas a View e liberamos a Fence externa se
         // necessário
         void cleanup(VkDevice device) {
-            if (framebuffer) {
+            if (framebuffer != VK_NULL_HANDLE) {
                 vkDestroyFramebuffer(device, framebuffer, nullptr);
                 framebuffer = VK_NULL_HANDLE;
             }
-            if (imageView) {
+            if (imageView != VK_NULL_HANDLE) {
                 vkDestroyImageView(device, imageView, nullptr);
                 imageView = VK_NULL_HANDLE;
             }
@@ -66,7 +66,7 @@ namespace ce {
             vkCreateFramebuffer(device, &framebufferInfo, nullptr, &this->framebuffer);
         }
 
-        __attribute__((always_inline)) inline void syncImg(VkDevice device, VkFence frameFence) {
+        __attribute__((always_inline)) void syncImg(VkDevice device, VkFence frameFence) {
             // Se a imagem real adquirida ainda estiver sendo usada por algum frame virtual anterior, aguarde.
             if (this->inFlightFence != VK_NULL_HANDLE) {
                 vkWaitForFences(device, 1, &this->inFlightFence, VK_TRUE, UINT64_MAX);

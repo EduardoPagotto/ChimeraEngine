@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include "cevk/CmdRender.hpp"
 #include "cevk/Mesh.hpp"
+#include "cevk/RenderPass.hpp"
 #include "cevk_infra/event.hpp"
 #include <SDL3/SDL_init.h>
 #include <SDL3/SDL_keycode.h>
@@ -412,8 +413,8 @@ void Game::draw() {
     cmd.submitToRender(ctx->graphicsQueue, &frame, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 
     // -- PRESENT RENDERED IMAGE TO SCREEN --
-    VkResult result = this->renderPass.sendImageToScreen(ctx->presentationQueue, frame.renderFinishedSemaphore,
-                                                         this->swapchain.getSwapchain(), imageIndex);
+    VkResult result = ce::RenderPass::SendImageToScreen(ctx->presentationQueue, frame.renderFinishedSemaphore,
+                                                        this->swapchain.getSwapchain(), imageIndex);
 
     if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) { //|| framebufferResized
         SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "resized (%d)...", result);

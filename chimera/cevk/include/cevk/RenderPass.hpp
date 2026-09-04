@@ -127,7 +127,8 @@ namespace ce {
 
         VkRenderPass& getRenderPass() { return this->renderPass; }
 
-        VkResult sendImageToScreen(VkQueue pQueue, VkSemaphore signal, VkSwapchainKHR swapchain, uint32_t& imageIndex) {
+        static VkResult SendImageToScreen(VkQueue pQueue, VkSemaphore signal, VkSwapchainKHR swapchain,
+                                          uint32_t& imageIndex) {
             //
             // -- PRESENT RENDERED IMAGE TO SCREEN --
             std::array<VkSemaphore, 1> signalSemaphores{signal};

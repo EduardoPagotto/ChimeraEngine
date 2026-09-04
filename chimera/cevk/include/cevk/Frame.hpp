@@ -68,18 +68,22 @@ namespace ce {
         }
 
         void destroy() {
-            if (device) {
-                if (imageAvailableSemaphore)
+            if (device != VK_NULL_HANDLE) {
+                if (imageAvailableSemaphore != VK_NULL_HANDLE) {
                     vkDestroySemaphore(device, imageAvailableSemaphore, nullptr);
+                }
 
-                if (renderFinishedSemaphore)
+                if (renderFinishedSemaphore != VK_NULL_HANDLE) {
                     vkDestroySemaphore(device, renderFinishedSemaphore, nullptr);
+                }
 
-                if (inFlightFence)
+                if (inFlightFence != VK_NULL_HANDLE) {
                     vkDestroyFence(device, inFlightFence, nullptr);
+                }
 
-                if (commandPool) // commandBuffer -> Destrói o buffer automaticamente
+                if (commandPool != VK_NULL_HANDLE) { // commandBuffer -> Destrói o buffer automaticamente
                     vkDestroyCommandPool(device, commandPool, nullptr);
+                }
 
                 device = VK_NULL_HANDLE;
             }

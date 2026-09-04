@@ -226,7 +226,7 @@ namespace ce {
         // Set a validation layer tha instace will use
         uint32_t enabledLayerCount = 0;
         const char* const* ppEnabledLayerNames = nullptr;
-        if (this->validationEnabled && validationLayers.size() > 0) {
+        if ((!validationLayers.empty()) && this->validationEnabled) {
             enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
             ppEnabledLayerNames = validationLayers.data();
         }

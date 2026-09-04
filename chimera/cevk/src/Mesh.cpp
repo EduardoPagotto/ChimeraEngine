@@ -20,11 +20,11 @@ namespace ce {
         this->texId = newTexId;
     }
 
-    int Mesh::getVertexCount() const { return this->vbo->getCount(); }
+    size_t Mesh::getVertexCount() const { return this->vbo->getCount(); }
 
     VkBuffer Mesh::getVertexBuffer() { return this->vbo->getBuffer(); }
 
-    int Mesh::getIndexCount() const { return this->ibo->getCount(); }
+    size_t Mesh::getIndexCount() const { return this->ibo->getCount(); }
 
     VkBuffer Mesh::getIndexBuffer() { return this->ibo->get(); }
 

@@ -27,10 +27,10 @@ namespace ce {
 
         const Model& getModel2() const { return this->model; }
 
-        int getVertexCount() const;
+        size_t getVertexCount() const;
         VkBuffer getVertexBuffer();
 
-        int getIndexCount() const;
+        size_t getIndexCount() const;
         VkBuffer getIndexBuffer();
 
         void destroyBuffers();

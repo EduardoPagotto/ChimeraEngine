@@ -130,6 +130,8 @@ bool Game::onEvent(const SDL_Event& event) {
                     SDL_SetWindowFullscreen(ctx->window, !this->fullscreen);
                     this->fullscreen = !this->fullscreen;
                 } break;
+                default:
+                    break;
             }
         } break;
         case SDL_EVENT_WINDOW_RESIZED: {
@@ -148,6 +150,9 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_EVENT_WINDOW_MOUSE_LEAVE:
         case SDL_EVENT_WINDOW_MINIMIZED:
             sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr);
+            break;
+
+        default:
             break;
     }
     return true;
@@ -408,8 +413,8 @@ void Game::draw() {
     cmd.submitToRender(ctx->graphicsQueue, &frame, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 
     // -- PRESENT RENDERED IMAGE TO SCREEN --
-    VkResult result = this->renderPass.sendImageToScreen(ctx->presentationQueue, frame.renderFinishedSemaphore,
-                                                         this->swapchain.getSwapchain(), imageIndex);
+    VkResult result = ce::RenderPass::SendImageToScreen(ctx->presentationQueue, frame.renderFinishedSemaphore,
+                                                        this->swapchain.getSwapchain(), imageIndex);
 
     if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) { //|| framebufferResized
         SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "resized (%d)...", result);

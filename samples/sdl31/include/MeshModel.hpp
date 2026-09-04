@@ -25,13 +25,12 @@ namespace ce {
 
         static std::vector<std::string> LoadMaterials(const aiScene* scene);
 
-        static std::vector<Mesh> LoadNode(VkPhysicalDevice newPhysicalDevice, VkDevice newDevice, VkQueue transferQueue,
-                                          VkCommandPool transferCommandPool, aiNode* node, const aiScene* scene,
+        static std::vector<Mesh> LoadNode(VkPhysicalDevice physical, VkDevice logical, VkQueue queue,
+                                          VkCommandPool commandPool, aiNode* node, const aiScene* scene,
                                           std::vector<int>& matToText);
 
-        static Mesh LoadMesh(VkPhysicalDevice newPhysicalDevice, VkDevice newDevice, VkQueue transferQueue,
-                             VkCommandPool transferCommandPool, aiMesh* mesh, const aiScene* scene,
-                             std::vector<int> matToText);
+        static Mesh LoadMesh(VkPhysicalDevice physical, VkDevice logical, VkQueue queue, VkCommandPool commandPool,
+                             aiMesh* mesh, const aiScene* scene, std::vector<int> matToText);
 
       private:
         std::vector<Mesh> meshList;

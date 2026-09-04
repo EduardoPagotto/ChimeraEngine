@@ -58,32 +58,31 @@ namespace ce {
         return textureList;
     }
 
-    std::vector<Mesh> MeshModel::LoadNode(VkPhysicalDevice newPhysicalDevice, VkDevice newDevice, VkQueue transferQueue,
-                                          VkCommandPool transferCommandPool, aiNode* node, const aiScene* scene,
+    std::vector<Mesh> MeshModel::LoadNode(VkPhysicalDevice physical, VkDevice logical, VkQueue queue,
+                                          VkCommandPool commandPool, aiNode* node, const aiScene* scene,
                                           std::vector<int>& matToText) {
         //
         std::vector<Mesh> meshList;
 
         // Go through each mesh at this node and create it, then add it to our meshList
         for (size_t i = 0; i < node->mNumMeshes; i++) {
-            meshList.push_back(LoadMesh(newPhysicalDevice, newDevice, transferQueue, transferCommandPool,
-                                        scene->mMeshes[node->mMeshes[i]], scene, matToText));
+            meshList.push_back(
+                LoadMesh(physical, logical, queue, commandPool, scene->mMeshes[node->mMeshes[i]], scene, matToText));
         }
 
         // Go through each attached to this node and load it, then append their meshes to this node's mesh list
         for (size_t i = 0; i < node->mNumChildren; i++) {
             //
-            std::vector<Mesh> newList = LoadNode(newPhysicalDevice, newDevice, transferQueue, transferCommandPool,
-                                                 node->mChildren[i], scene, matToText);
+            std::vector<Mesh> newList =
+                LoadNode(physical, logical, queue, commandPool, node->mChildren[i], scene, matToText);
             meshList.insert(meshList.end(), newList.begin(), newList.end());
         }
 
         return meshList;
     }
 
-    Mesh MeshModel::LoadMesh(VkPhysicalDevice newPhysicalDevice, VkDevice newDevice, VkQueue transferQueue,
-                             VkCommandPool transferCommandPool, aiMesh* mesh, const aiScene* scene,
-                             std::vector<int> matToText) {
+    Mesh MeshModel::LoadMesh(VkPhysicalDevice physical, VkDevice logical, VkQueue queue, VkCommandPool commandPool,
+                             aiMesh* mesh, const aiScene* scene, std::vector<int> matToText) {
         //
         std::vector<Vertex> vertices;
         std::vector<uint32_t> indices;
@@ -120,13 +119,7 @@ namespace ce {
         }
 
         // Create new Mesh with details and return it
-        return {newPhysicalDevice,
-                newDevice,
-                transferQueue,
-                transferCommandPool,
-                &vertices,
-                &indices,
-                matToText[mesh->mMaterialIndex]};
+        return {physical, logical, queue, commandPool, &vertices, &indices, matToText[mesh->mMaterialIndex]};
     }
 
 } // namespace ce

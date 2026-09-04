@@ -5,6 +5,10 @@
 
 namespace ce {
 
+    struct Model {
+        glm::mat4 model;
+    };
+
     class MeshModel {
       public:
         MeshModel() = default;

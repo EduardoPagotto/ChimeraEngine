@@ -7,48 +7,39 @@
 
 namespace ce {
 
-    struct Model {
-        glm::mat4 model;
-    };
-
     class Mesh {
       public:
         Mesh() = default;
-        Mesh(VkPhysicalDevice newPhysicalDevice, VkDevice newDevice, VkQueue transferQueue,
-             VkCommandPool transferCommandPool, std::vector<Vertex>* vertices, std::vector<uint32_t>* indices,
-             int newTexId);
+        Mesh(VkPhysicalDevice physical, VkDevice logical, VkQueue transferQueue, VkCommandPool transferCommandPool,
+             std::vector<Vertex>* vertices, std::vector<uint32_t>* indices, int newTexId)
+            : texId(newTexId) {
+            //
+            this->vbo = std::make_shared<VBO>(physical, logical);
+            this->vbo->create(transferQueue, transferCommandPool, vertices, sizeof(Vertex));
+
+            this->ibo = std::make_shared<IBO>(physical, logical);
+            this->ibo->create(transferQueue, transferCommandPool, indices);
+        }
 
         virtual ~Mesh() = default;
 
-        void setModel(glm::mat4 newModel);
-        Model getModel();
+        int getTexId() const { return this->texId; }
 
-        int getTexId() const;
+        size_t getVertexCount() const { return this->vbo->getCount(); }
+        VkBuffer getVertexBuffer() { return this->vbo->getBuffer(); }
 
-        const Model& getModel2() const { return this->model; }
+        size_t getIndexCount() const { return this->ibo->getCount(); }
+        VkBuffer getIndexBuffer() { return this->ibo->get(); }
 
-        size_t getVertexCount() const;
-        VkBuffer getVertexBuffer();
-
-        size_t getIndexCount() const;
-        VkBuffer getIndexBuffer();
-
-        void destroyBuffers();
+        void destroyBuffers() {
+            this->vbo.reset();
+            this->ibo.reset();
+        }
 
       private:
-        Model model;
-
         int texId;
-
-        VkPhysicalDevice physicalDevice;
-        VkDevice device;
 
         std::shared_ptr<VBO> vbo;
         std::shared_ptr<IBO> ibo;
-
-        void createVertexBuffer(VkQueue transferQueue, VkCommandPool transferCommandPool,
-                                std::vector<Vertex>* vertices);
-        void createIndexBuffer(VkQueue transferQueue, VkCommandPool transferCommandPool,
-                               std::vector<uint32_t>* indices);
     };
 } // namespace ce

@@ -301,7 +301,7 @@ void Game::createDescriptorSets() {
 // Loader Models
 //---------------------------------------------
 
-void Game::updateModel(int modelId, glm::mat4 newModel) {
+void Game::updateModel(size_t modelId, glm::mat4 newModel) {
 
     if (modelId >= this->modelList.size()) {
         return;
@@ -310,7 +310,7 @@ void Game::updateModel(int modelId, glm::mat4 newModel) {
     this->modelList[modelId].setModel(newModel);
 }
 
-int Game::createMeshModel(const std::string& modelFile) {
+size_t Game::createMeshModel(const std::string& modelFile) {
     // Import model "scene"
     Assimp::Importer importer;
 
@@ -339,7 +339,7 @@ int Game::createMeshModel(const std::string& modelFile) {
             std::shared_ptr<ce::VulkanTexture> vulkanTex =
                 ce::VulkanTexture::Create(ctx, "./assets/textures/" + textureNames[i]);
 
-            matToTex[i] = textureMng->allocTexture(vulkanTex);
+            matToTex[i] = static_cast<int>(textureMng->allocTexture(vulkanTex));
         }
     }
 

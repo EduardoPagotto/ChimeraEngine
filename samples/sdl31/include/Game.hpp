@@ -30,8 +30,8 @@ class Game : public ce::IStateMachine {
     void createDescriptorPool();
     void createDescriptorSets();
 
-    void updateModel(int modelId, glm::mat4 newModel);
-    int createMeshModel(const std::string& modelFile);
+    void updateModel(size_t modelId, glm::mat4 newModel);
+    size_t createMeshModel(const std::string& modelFile);
 
     void draw();
 
@@ -69,7 +69,7 @@ class Game : public ce::IStateMachine {
     float angle{0};
     float deltaTime{0};
     float lastTime{0};
-    int helicopter{0};
+    size_t helicopter{0};
 
     bool fullscreen{false};
 };

@@ -44,7 +44,7 @@ namespace ce {
         }
 
         // Guardamos o ponteiro da swapchain antiga (se houver) para otimizar a criação
-        VkSwapchainKHR oldSwapchain = (rebuild) ? swapchainData.swapchain : VK_NULL_HANDLE;
+        VkSwapchainKHR oldSwapchain = rebuild ? swapchainData.swapchain : VK_NULL_HANDLE;
 
         // Create information for swap chain
         const VkSwapchainCreateInfoKHR swapchainCreateInfo{
@@ -199,7 +199,7 @@ namespace ce {
 
     SetupSwapchain SwapChain::setupParams() {
 
-        SetupSwapchain setup{};
+        SetupSwapchain setup;
 
         // Get Swap Chain details so we cam pick best setting
         SwapChainDetails swapchainDetails = VulkanContext::GetSwapChainDetails(ctx->physical, ctx->surface);

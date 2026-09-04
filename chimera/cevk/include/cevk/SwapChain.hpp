@@ -108,7 +108,7 @@ namespace ce {
         SwapchainData& operator=(const SwapchainData&) = delete;
 
         void destroy() {
-            if (device) {
+            if (device != VK_NULL_HANDLE) {
                 for (auto& imgRes : images) {
                     imgRes.cleanup(device);
                 }
@@ -153,7 +153,7 @@ namespace ce {
         std::pair<uint32_t, SwapchainImageResource&> acquireNextImage(VkFence& inFlightFence, VkSemaphore& waitImage);
 
         VkFormat& getImageFormat() { return this->surfaceFormat.format; }
-        VkSwapchainKHR getSwapchain() { return this->swapchainData.swapchain; }
+        VkSwapchainKHR getSwapchain() const { return this->swapchainData.swapchain; }
         VkExtent2D& getExtent() { return this->extent; }
         size_t getSwapchainResSize() const { return this->swapchainData.images.size(); }
         SwapchainImageResource& getSwapchainRes(size_t index) { return this->swapchainData.images[index]; }

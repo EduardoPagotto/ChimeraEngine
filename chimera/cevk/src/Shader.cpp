@@ -98,7 +98,7 @@ namespace ce {
             std::vector<char> fileBuffer(filesize);
 
             file.seekg(0);
-            file.read(fileBuffer.data(), filesize);
+            file.read(fileBuffer.data(), static_cast<long>(filesize));
             file.close();
 
             return fileBuffer;

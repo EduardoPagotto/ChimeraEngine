@@ -70,8 +70,8 @@ namespace ce {
 
             // Index of memory type must match corresponding bit in allowedTypes and desired property bit flag are
             // part of memory type's property flags
-            if ((allowedTypes & (1 << i)) &&
-                (memoryProperties.memoryTypes[i].propertyFlags & properties) == properties) { // NOLINT
+            if (((allowedTypes & (1 << i)) > 0) &&
+                (memoryProperties.memoryTypes[i].propertyFlags & properties) == properties) {
                 // this memory type is valid, so return its index
                 return i;
             }
@@ -341,7 +341,7 @@ namespace ce {
 
         vkGetPhysicalDeviceFeatures2(this->physical, &deviceFeatures2);
 
-        if (!indexingFeatures.descriptorBindingSampledImageUpdateAfterBind) {
+        if (indexingFeatures.descriptorBindingSampledImageUpdateAfterBind == VK_FALSE) {
             throw std::runtime_error("GPU does not support updating sampled images after bind!");
         }
 
@@ -505,7 +505,7 @@ namespace ce {
         vkEnumerateInstanceLayerProperties(&validationLayerCount, nullptr);
 
         // Check if no validation layers found AND we want at least 1 layer
-        if (validationLayerCount == 0 && validationLayers.size() > 0) {
+        if ((!validationLayers.empty()) && (validationLayerCount == 0)) {
             return false;
         }
 

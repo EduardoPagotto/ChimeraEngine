@@ -61,7 +61,7 @@ namespace ce {
         uniform.destroy();
     }
 
-    int TextureBindless::allocTexture(std::shared_ptr<VulkanTexture> tex) {
+    uint32_t TextureBindless::allocTexture(std::shared_ptr<VulkanTexture> tex) {
 
         //   Atualiza o Descriptor Set global colocando esta nova imagem no seu respectivo índice
         VkDescriptorImageInfo imageInfo = {

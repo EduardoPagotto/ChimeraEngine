@@ -12,7 +12,7 @@ namespace ce {
         virtual ~TextureBindless();
 
         UniformSampler& getUniformSampler() { return uniform; }
-        int allocTexture(std::shared_ptr<VulkanTexture> tex);
+        uint32_t allocTexture(std::shared_ptr<VulkanTexture> tex);
 
       private:
         Sampler texSampler;

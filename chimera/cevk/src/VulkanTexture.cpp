@@ -11,14 +11,14 @@ namespace ce {
                                                          const std::string& filePath) {
 
         SDL_Surface* loadedSurface = IMG_Load(filePath.c_str());
-        if (!loadedSurface) {
+        if (loadedSurface == nullptr) {
             throw std::runtime_error(std::format("{}", SDL_GetError()));
         }
 
         SDL_Surface* surface = SDL_ConvertSurface(loadedSurface, SDL_PIXELFORMAT_ABGR8888);
         SDL_DestroySurface(loadedSurface); // Libera o original intermediário
 
-        VkDeviceSize imageSize = surface->w * surface->h * 4;
+        VkDeviceSize imageSize = static_cast<VkDeviceSize>(surface->w) * static_cast<VkDeviceSize>(surface->h) * 4;
         uint32_t texWidth = surface->w;
         uint32_t texHeight = surface->h;
 

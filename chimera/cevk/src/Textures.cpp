@@ -42,7 +42,7 @@ namespace ce {
         uniform.destroy();
     }
 
-    int Textures::allocTexture(std::shared_ptr<VulkanTexture> vulkanTex) {
+    uint32_t Textures::allocTexture(std::shared_ptr<VulkanTexture> vulkanTex) {
 
         std::shared_ptr<Image> texImageObj = vulkanTex->get();
         this->uniform.getImages().push_back(texImageObj);

@@ -19,7 +19,7 @@ namespace ce {
 
         void destroyMeshModel();
 
-        static std::vector<std::string> loadMaterials(const aiScene* scene);
+        static std::vector<std::string> LoadMaterials(const aiScene* scene);
 
         static std::vector<Mesh> LoadNode(VkPhysicalDevice newPhysicalDevice, VkDevice newDevice, VkQueue transferQueue,
                                           VkCommandPool transferCommandPool, aiNode* node, const aiScene* scene,

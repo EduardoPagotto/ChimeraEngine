@@ -421,7 +421,7 @@ namespace ce {
         return true;
     }
 
-    bool VulkanContext::checkDescriptorIndexingSupport(VkPhysicalDevice device) {
+    bool VulkanContext::CheckDescriptorIndexingSupport(VkPhysicalDevice device) {
         // 1. Instanciar a estrutura específica que queremos checar
         VkPhysicalDeviceDescriptorIndexingFeatures indexingFeatures = {
             .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES,

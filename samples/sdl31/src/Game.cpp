@@ -60,7 +60,7 @@ Game::Game(std::shared_ptr<ce::VulkanContext> ctx, std::shared_ptr<ce::ScreenVK>
     uboViewProjection.projection[1][1] *= -1; // vulkan inverted of OpenGL
 
     // Create our default "no texture" texture
-    std::shared_ptr<VulkanTexture> vulkanTex = VulkanTexture::create(ctx, "./assets/textures/plain.png");
+    std::shared_ptr<VulkanTexture> vulkanTex = VulkanTexture::Create(ctx, "./assets/textures/plain.png");
     textureMng->allocTexture(vulkanTex);
 }
 
@@ -97,7 +97,7 @@ void Game::onDeatach() {}
 
 void Game::onRender() {
 
-    float now = SDL_GetTicks() / 1000.0F;
+    float now = SDL_GetTicks() / 1000.0F; // NOLINT
     deltaTime = now - lastTime;
     lastTime = now;
 
@@ -322,7 +322,7 @@ int Game::createMeshModel(const std::string& modelFile) {
     }
 
     // Get vector of all material with 1:1 ID placement
-    std::vector<std::string> textureNames = ce::MeshModel::loadMaterials(scene);
+    std::vector<std::string> textureNames = ce::MeshModel::LoadMaterials(scene);
 
     // Convesion from the material list IDs to our Descriptor Array IDs
     std::vector<int> matToTex(textureNames.size());
@@ -337,7 +337,7 @@ int Game::createMeshModel(const std::string& modelFile) {
 
             // Otherwise, create texture and set value to index of new texture
             std::shared_ptr<ce::VulkanTexture> vulkanTex =
-                ce::VulkanTexture::create(ctx, "./assets/textures/" + textureNames[i]);
+                ce::VulkanTexture::Create(ctx, "./assets/textures/" + textureNames[i]);
 
             matToTex[i] = textureMng->allocTexture(vulkanTex);
         }

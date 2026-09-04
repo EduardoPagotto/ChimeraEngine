@@ -76,7 +76,7 @@ namespace ce {
 
         virtual ~Loader() = default;
 
-        static std::pair<entt::id_type, std::string_view> getIdentify(const fastgltf::Image& image) {
+        static std::pair<entt::id_type, std::string_view> GetIdentify(const fastgltf::Image& image) {
 
             if (const auto* val = std::get_if<fastgltf::sources::URI>(&image.data)) {
                 std::string name = (!image.name.empty()) ? std::string(image.name) : std::string(val->uri.c_str());
@@ -93,7 +93,7 @@ namespace ce {
             size_t i = 0;
             for (const auto& image : asset.images) {
 
-                auto [id_textura, uri] = getIdentify(image);
+                auto [id_textura, uri] = GetIdentify(image);
 
                 auto fim = imgPath / uri;
 

@@ -7,7 +7,7 @@
 namespace ce {
 
     // Factory pattern exigido pelo AssetManager
-    std::shared_ptr<VulkanTexture> VulkanTexture::create(std::shared_ptr<VulkanContext> ctx,
+    std::shared_ptr<VulkanTexture> VulkanTexture::Create(std::shared_ptr<VulkanContext> ctx,
                                                          const std::string& filePath) {
 
         SDL_Surface* loadedSurface = IMG_Load(filePath.c_str());

@@ -53,6 +53,6 @@ namespace ce {
         static bool CheckDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface);
         static bool CheckInstanceExtensionSupport(std::vector<const char*>* checkExtentions);
         static bool CheckValidationLayerSupport();
-        static bool checkDescriptorIndexingSupport(VkPhysicalDevice device);
+        static bool CheckDescriptorIndexingSupport(VkPhysicalDevice device);
     };
 } // namespace ce

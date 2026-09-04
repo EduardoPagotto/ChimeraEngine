@@ -23,7 +23,7 @@ namespace ce {
             mesh.destroyBuffers();
         }
     }
-    std::vector<std::string> MeshModel::loadMaterials(const aiScene* scene) {
+    std::vector<std::string> MeshModel::LoadMaterials(const aiScene* scene) {
 
         // Create 1:1 sized list of textures
         std::vector<std::string> textureList(scene->mNumMaterials);
@@ -66,15 +66,15 @@ namespace ce {
 
         // Go through each mesh at this node and create it, then add it to our meshList
         for (size_t i = 0; i < node->mNumMeshes; i++) {
-            meshList.push_back(LoadMesh(newPhysicalDevice, newDevice, transferQueue, transferCommandPool, scene->mMeshes[node->mMeshes[i]],
-                                        scene, matToText));
+            meshList.push_back(LoadMesh(newPhysicalDevice, newDevice, transferQueue, transferCommandPool,
+                                        scene->mMeshes[node->mMeshes[i]], scene, matToText));
         }
 
         // Go through each attached to this node and load it, then append their meshes to this node's mesh list
         for (size_t i = 0; i < node->mNumChildren; i++) {
             //
-            std::vector<Mesh> newList =
-                LoadNode(newPhysicalDevice, newDevice, transferQueue, transferCommandPool, node->mChildren[i], scene, matToText);
+            std::vector<Mesh> newList = LoadNode(newPhysicalDevice, newDevice, transferQueue, transferCommandPool,
+                                                 node->mChildren[i], scene, matToText);
             meshList.insert(meshList.end(), newList.begin(), newList.end());
         }
 
@@ -82,7 +82,8 @@ namespace ce {
     }
 
     Mesh MeshModel::LoadMesh(VkPhysicalDevice newPhysicalDevice, VkDevice newDevice, VkQueue transferQueue,
-                             VkCommandPool transferCommandPool, aiMesh* mesh, const aiScene* scene, std::vector<int> matToText) {
+                             VkCommandPool transferCommandPool, aiMesh* mesh, const aiScene* scene,
+                             std::vector<int> matToText) {
         //
         std::vector<Vertex> vertices;
         std::vector<uint32_t> indices;
@@ -119,7 +120,13 @@ namespace ce {
         }
 
         // Create new Mesh with details and return it
-        return {newPhysicalDevice, newDevice, transferQueue, transferCommandPool, &vertices, &indices, matToText[mesh->mMaterialIndex]};
+        return {newPhysicalDevice,
+                newDevice,
+                transferQueue,
+                transferCommandPool,
+                &vertices,
+                &indices,
+                matToText[mesh->mMaterialIndex]};
     }
 
 } // namespace ce

@@ -14,7 +14,7 @@ namespace ce {
         ~VulkanTexture() { texImg.reset(); }
 
         // Factory pattern exigido pelo AssetManager
-        static std::shared_ptr<VulkanTexture> create(std::shared_ptr<VulkanContext> ctx, const std::string& filePath);
+        static std::shared_ptr<VulkanTexture> Create(std::shared_ptr<VulkanContext> ctx, const std::string& filePath);
 
         std::shared_ptr<Image> get() { return this->texImg; }
 
@@ -35,7 +35,7 @@ namespace ce {
         using result_type = std::shared_ptr<VulkanTexture>;
         std::shared_ptr<VulkanTexture> operator()(std::shared_ptr<VulkanContext> ctx,
                                                   const std::string& filePath) const {
-            return VulkanTexture::create(ctx, filePath);
+            return VulkanTexture::Create(ctx, filePath);
         }
     };
 

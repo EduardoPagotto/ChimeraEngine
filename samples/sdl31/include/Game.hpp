@@ -66,7 +66,7 @@ class Game : public ce::IStateMachine {
     //
     std::shared_ptr<ce::ScreenVK> screen;
     //
-    float angle{0.0F};
+    float angle{0};
     float deltaTime{0};
     float lastTime{0};
     int helicopter{0};

@@ -20,7 +20,7 @@ class Game : public ce::IStateMachine {
     virtual void onRender() override;
     virtual void onUpdate(const double& ts) override;
     virtual bool onEvent(const SDL_Event& event) override;
-    virtual const std::string getName() const override;
+    virtual std::string getName() const override;
 
   private:
     // - Vulkan create functions

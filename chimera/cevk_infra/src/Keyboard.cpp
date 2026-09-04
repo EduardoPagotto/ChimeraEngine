@@ -12,15 +12,16 @@ namespace ce {
         mod = event.mod;
     }
 
-    const bool Keyboard::isPressed(const SDL_Keycode& key) noexcept {
+    bool Keyboard::isPressed(const SDL_Keycode& key) noexcept {
 
-        if (mapKey.contains(key))
-            return (mapKey[key] == true);
+        if (mapKey.contains(key)) {
+            return (mapKey[key]);
+        }
 
         return false;
     }
 
-    const bool Keyboard::getEvent(const SDL_Event& event) noexcept {
+    bool Keyboard::getEvent(const SDL_Event& event) noexcept {
 
         switch (event.type) {
             case SDL_EVENT_KEY_DOWN:
@@ -28,6 +29,8 @@ namespace ce {
                 break;
             case SDL_EVENT_KEY_UP:
                 Keyboard::setUp(event.key);
+                break;
+            default:
                 break;
         }
 

@@ -126,7 +126,7 @@ namespace ce {
             // 2. Iterate through all meshes within the asset
             for (const auto& mesh : asset.meshes) {
                 MeshData currentMesh;
-                currentMesh.name = mesh.name.c_str();
+                currentMesh.name = mesh.name;
 
                 // 3. Process every primitive (sub-mesh) inside this mesh
                 for (const auto& primitive : mesh.primitives) {

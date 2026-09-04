@@ -15,11 +15,11 @@ namespace ce {
         Mouse() noexcept = default;
         virtual ~Mouse() noexcept = default;
 
-        const bool getButtonState(const uint8_t& indice) noexcept;
-        const glm::ivec2 getMove() const noexcept { return pos; }
-        const glm::ivec2 getMoveRel() noexcept;
+        bool getButtonState(const uint8_t& indice) noexcept;
+        glm::ivec2 getMove() const noexcept { return pos; }
+        glm::ivec2 getMoveRel() noexcept;
 
-        const bool getEvent(const SDL_Event& event) noexcept;
+        bool getEvent(const SDL_Event& event) noexcept;
 
         void updateBt(const SDL_MouseButtonEvent& bt) noexcept { this->buttonState[bt.button] = bt.down; }
         void updateMv(const SDL_MouseMotionEvent& mv) noexcept;

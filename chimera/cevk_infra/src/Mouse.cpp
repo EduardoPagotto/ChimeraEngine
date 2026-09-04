@@ -2,15 +2,16 @@
 
 namespace ce {
 
-    const bool Mouse::getButtonState(const uint8_t& indice) noexcept {
+    bool Mouse::getButtonState(const uint8_t& indice) noexcept {
 
-        if (this->buttonState.contains(indice))
+        if (this->buttonState.contains(indice)) {
             return buttonState[indice];
+        }
 
         return false;
     }
 
-    const glm::ivec2 Mouse::getMoveRel() noexcept {
+    glm::ivec2 Mouse::getMoveRel() noexcept {
         if (flag1 != flag2) {
             flag1 = flag2;
             return rel;
@@ -18,7 +19,7 @@ namespace ce {
         return glm::ivec2(0);
     }
 
-    const bool Mouse::getEvent(const SDL_Event& event) noexcept {
+    bool Mouse::getEvent(const SDL_Event& event) noexcept {
         switch (event.type) {
             case SDL_EVENT_MOUSE_BUTTON_DOWN:
             case SDL_EVENT_MOUSE_BUTTON_UP:
@@ -29,6 +30,8 @@ namespace ce {
                 break;
             case SDL_EVENT_MOUSE_WHEEL:
                 this->updateWl(event.wheel);
+                break;
+            default:
                 break;
         }
         return false;

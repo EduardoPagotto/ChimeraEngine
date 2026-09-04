@@ -154,7 +154,7 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-const std::string Game::getName() const { return "Game"; }
+std::string Game::getName() const { return "Game"; }
 
 //---------------------------------------------
 // Inicializaçao

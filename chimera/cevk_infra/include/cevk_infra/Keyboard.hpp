@@ -15,9 +15,9 @@ namespace ce {
 
         void setDown(const SDL_KeyboardEvent& event) noexcept;
         void setUp(const SDL_KeyboardEvent& event) noexcept;
-        const bool isPressed(const SDL_Keycode& key) noexcept;
+        bool isPressed(const SDL_Keycode& key) noexcept;
         bool isModPressed(const SDL_Keymod& keyMod) const noexcept { return ((keyMod & mod) != 0); }
-        const bool getEvent(const SDL_Event& event) noexcept;
+        bool getEvent(const SDL_Event& event) noexcept;
 
       private:
         std::map<SDL_Keycode, bool> mapKey;

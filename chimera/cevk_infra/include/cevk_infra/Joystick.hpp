@@ -14,7 +14,7 @@ namespace ce {
         Joystick() noexcept;
         virtual ~Joystick() noexcept;
 
-        const bool getEvent(const SDL_Event& event) noexcept;
+        bool getEvent(const SDL_Event& event) noexcept;
         SDL_Joystick* get(const SDL_JoystickID& joystick_id) noexcept;
 
       private:

@@ -8,13 +8,14 @@ namespace ce {
     };
 
     Joystick::~Joystick() noexcept {
-        for (auto i = joys.begin(); i != joys.end(); i++)
+        for (auto i = joys.begin(); i != joys.end(); i++) {
             SDL_CloseJoystick(i->second);
+        }
 
         joys.clear();
     };
 
-    const bool Joystick::getEvent(const SDL_Event& event) noexcept {
+    bool Joystick::getEvent(const SDL_Event& event) noexcept {
 
         switch (event.type) {
             case SDL_EVENT_JOYSTICK_ADDED:
@@ -23,6 +24,8 @@ namespace ce {
             case SDL_EVENT_JOYSTICK_REMOVED:
                 this->removed(event.jdevice);
                 break;
+            default:
+                break;
         }
 
         return false;
@@ -30,33 +33,35 @@ namespace ce {
 
     SDL_Joystick* Joystick::get(const SDL_JoystickID& joystick_id) noexcept {
 
-        if (auto got = joys.find(joystick_id); got != joys.end())
+        if (auto got = joys.find(joystick_id); got != joys.end()) {
             return got->second;
+        }
 
         return nullptr;
     }
 
     void Joystick::added(void) {
 
-        int i, num_joysticks;
-        SDL_JoystickID* joysticks = SDL_GetJoysticks(&num_joysticks);
-        if (joysticks) {
-            for (i = 0; i < num_joysticks; ++i) {
+        int num_joysticks;
+        if (SDL_JoystickID* joysticks = SDL_GetJoysticks(&num_joysticks); joysticks != nullptr) {
+            for (int i = 0; i < num_joysticks; ++i) {
                 SDL_JoystickID instance_id = joysticks[i];
 
                 const char* name = SDL_GetJoystickNameForID(instance_id);
                 const char* path = SDL_GetJoystickPathForID(instance_id);
 
-                SDL_Log("Joystick %" SDL_PRIu32 ": %s%s%s VID 0x%.4x, PID 0x%.4x", instance_id, name ? name : "Unknown",
-                        path ? ", " : "", path ? path : "", SDL_GetJoystickVendorForID(instance_id),
+                SDL_Log("Joystick %" SDL_PRIu32 ": %s%s%s VID 0x%.4x, PID 0x%.4x", instance_id,
+                        (name != nullptr) ? name : "Unknown", (path != nullptr) ? ", " : "",
+                        (path != nullptr) ? path : "", SDL_GetJoystickVendorForID(instance_id),
                         SDL_GetJoystickProductForID(instance_id));
 
                 char guid[64];
                 SDL_GUIDToString(SDL_GetJoystickGUIDForID(instance_id), guid, sizeof(guid));
                 SDL_LogInfo(SDL_LOG_CATEGORY_INPUT, " guid: %s", guid);
 
-                if (joys.contains(instance_id))
+                if (joys.contains(instance_id)) {
                     continue;
+                }
 
                 SDL_Joystick* handle = SDL_OpenJoystick(instance_id);
 

@@ -22,16 +22,18 @@ namespace ce {
     }
 
     void StateStack::popOverlay(std::shared_ptr<IStateMachine> overlay) {
-        if (auto it = std::find(states.begin(), states.end(), overlay); it != states.end())
+        if (auto it = std::find(states.begin(), states.end(), overlay); it != states.end()) {
             states.erase(it);
+        }
 
         overlay->onDeatach();
     }
 
     std::shared_ptr<IStateMachine> StateStack::getState(const std::string& name) {
         for (std::shared_ptr<IStateMachine> state : states) {
-            if (state->getName() == name)
+            if (state->getName() == name) {
                 return state;
+            }
         }
 
         return nullptr;

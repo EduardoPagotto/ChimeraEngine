@@ -6,35 +6,44 @@ namespace ce {
 
     enum class AabbBondery { BSW = 0, BSE = 1, TSW = 2, TSE = 3, BNW = 4, BNE = 5, TNW = 6, TNE = 7 };
 
+    enum class AabbLimits {
+        LX_LY_LZ = 0,
+        HX_LY_LZ = 1,
+        LX_HY_LZ = 2,
+        HX_HY_LZ = 3,
+        LX_LY_HZ = 4,
+        HX_LY_HZ = 5,
+        LX_HY_HZ = 6,
+        HX_HY_HZ = 7
+    };
+
     class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
       protected:
         std::array<glm::vec3, 8> vertex;
 
       private:
-        glm::vec3 position{0.0f};
-        glm::vec3 size{0.0f};
+        glm::vec3 position{0.0F};
+        glm::vec3 size{0.0F};
 
       public:
-        AABB() noexcept = default;
-
-        AABB(const AABB& _cpy) noexcept = default;
-
-        AABB(const glm::vec3& min, const glm::vec3& max) noexcept { this->setBoundary(min, max); }
+        explicit AABB() noexcept = default;
+        explicit AABB(const AABB& _cpy) noexcept = default;
+        explicit AABB(const glm::vec3& min, const glm::vec3& max) noexcept { this->setBoundary(min, max); }
 
         virtual ~AABB() = default;
 
-        inline const bool visible(const Frustum& _frustum) const noexcept { return _frustum.AABBVisible(vertex); }
+        bool visible(const Frustum& _frustum) const noexcept { return _frustum.aabbVisible(vertex); }
 
-        inline const glm::vec3 getPosition() const { return position; }
+        glm::vec3 getPosition() const { return position; }
 
-        inline const glm::vec3 getSize() const { return size; }
+        glm::vec3 getSize() const { return size; }
 
-        inline void setPosition(const glm::vec3& pos, const glm::vec3& size) noexcept {
-            const glm::vec3 halfV = (size / 2.0f);
+        void setPosition(const glm::vec3& pos, const glm::vec3& size) noexcept {
+            const glm::vec3 halfV = (size / 2.0F);
             setBoundary((pos - halfV), (pos + halfV)); // min and max
         }
 
-        inline void setBoundary(const glm::vec3& min, const glm::vec3& max) noexcept {
+        void setBoundary(const glm::vec3& min, const glm::vec3& max) noexcept {
 
             vertex[0] = min; // glm::vec3(min.x, min.y, min.z); // AabbBondery::BSW 0 Minimal point (front)
             vertex[1] = glm::vec3(max.x, min.y, min.z); // AabbBondery::BSE 1
@@ -46,26 +55,28 @@ namespace ce {
             vertex[7] = max; // glm::vec3(max.x, max.y, max.z); // AabbBondery::TNE 7 Maximal point (back)
 
             this->size = getSizeMinMax(min, max);
-            this->position = min + (this->size / 2.0f);
+            this->position = min + (this->size / 2.0F);
         }
 
-        inline const bool intersects(const AABB& val) const noexcept {
+        bool intersects(const AABB& val) const noexcept {
             return (val.vertex[0].x > vertex[7].x || val.vertex[7].x < vertex[0].x || val.vertex[0].y < vertex[7].y ||
                     val.vertex[7].y < vertex[0].y || val.vertex[0].z < vertex[7].z || val.vertex[7].z < vertex[0].z);
         }
 
-        inline const bool contains(const glm::vec3& val) const noexcept {
-            return !((val.x < vertex[0].x) || (val.y < vertex[0].y) || (val.z < vertex[0].z) || (val.x > vertex[7].x) ||
-                     (val.y > vertex[7].y) || (val.z > vertex[7].z));
+        bool contains(const glm::vec3& val) const noexcept {
+            // TODO: TESTAR!!
+            return (val.x >= vertex[0].x) && (val.y >= vertex[0].y) && (val.z >= vertex[0].z) &&
+                   (val.x <= vertex[7].x) && (val.y <= vertex[7].y) && (val.z <= vertex[7].z); // NOLINT
         }
 
-        inline const AABB transformation(const glm::mat4& transformation) const noexcept {
+        AABB transformation(const glm::mat4& transformation) const noexcept {
             // TODO: TESTAR!! ref: https://www.gamedev.net/forums/topic/673361-axis-aligned-boxes-and-rotations/
-            glm::vec3 val{glm::vec3(transformation * glm::vec4(vertex[0], 1.0f))};
-            glm::vec3 min{val}, max{val};
+            glm::vec3 val{glm::vec3(transformation * glm::vec4(vertex[0], 1.0F))};
+            glm::vec3 min{val};
+            glm::vec3 max{val};
 
             for (const glm::vec3& point : vertex) {
-                val = glm::vec3(transformation * glm::vec4(point, 1.0f));
+                val = glm::vec3(transformation * glm::vec4(point, 1.0F));
                 min = glm::min(min, val);
                 max = glm::max(max, val);
             }
@@ -76,6 +87,6 @@ namespace ce {
         const std::array<glm::vec3, 8>& getAllVertex() const { return vertex; }
 
         // FIXME: dot normal posicao para distancia (calcula do AABB em relacao ao frustum)
-        // inline const float distance(const Frustum& _frustum) const noexcept { return _frustum.AABBDistance(vertex); }
+        // float distance(const Frustum& _frustum) const noexcept { return _frustum.AABBDistance(vertex); }
     };
 } // namespace ce

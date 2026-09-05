@@ -1,5 +1,6 @@
 #pragma once
 #include "Plane.hpp"
+#include <algorithm>
 #include <array>
 
 namespace ce {
@@ -16,14 +17,14 @@ namespace ce {
         virtual ~Frustum() noexcept = default;
 
         void set(const glm::mat4& vpmi) noexcept {                           // ViewProjectionMatrixInverse
-            const glm::vec4 A = vpmi * glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);  // 4
-            const glm::vec4 B = vpmi * glm::vec4(1.0f, -1.0f, 1.0f, 1.0f);   // 5
-            const glm::vec4 C = vpmi * glm::vec4(-1.0f, 1.0f, 1.0f, 1.0f);   // 6
-            const glm::vec4 D = vpmi * glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);    // 7
-            const glm::vec4 E = vpmi * glm::vec4(-1.0f, -1.0f, -1.0f, 1.0f); // 0
-            const glm::vec4 F = vpmi * glm::vec4(1.0f, -1.0f, -1.0f, 1.0f);  // 1
-            const glm::vec4 G = vpmi * glm::vec4(-1.0f, 1.0f, -1.0f, 1.0f);  // 2
-            const glm::vec4 H = vpmi * glm::vec4(1.0f, 1.0f, -1.0f, 1.0f);   // 3
+            const glm::vec4 A = vpmi * glm::vec4(-1.0F, -1.0F, 1.0F, 1.0F);  // 4
+            const glm::vec4 B = vpmi * glm::vec4(1.0F, -1.0F, 1.0F, 1.0F);   // 5
+            const glm::vec4 C = vpmi * glm::vec4(-1.0F, 1.0F, 1.0F, 1.0F);   // 6
+            const glm::vec4 D = vpmi * glm::vec4(1.0F, 1.0F, 1.0F, 1.0F);    // 7
+            const glm::vec4 E = vpmi * glm::vec4(-1.0F, -1.0F, -1.0F, 1.0F); // 0
+            const glm::vec4 F = vpmi * glm::vec4(1.0F, -1.0F, -1.0F, 1.0F);  // 1
+            const glm::vec4 G = vpmi * glm::vec4(-1.0F, 1.0F, -1.0F, 1.0F);  // 2
+            const glm::vec4 H = vpmi * glm::vec4(1.0F, 1.0F, -1.0F, 1.0F);   // 3
 
             points[0] = glm::vec3(A.x / A.w, A.y / A.w, A.z / A.w);
             points[1] = glm::vec3(B.x / B.w, B.y / B.w, B.z / B.w);
@@ -42,19 +43,14 @@ namespace ce {
             planes[5] = Plane(points[5], points[4], points[6]);
         }
 
-        const bool AABBVisible(const std::array<glm::vec3, 8>& vList) const {
-
-            for (const Plane& plane : planes) {
-                if (plane.AABBBehind(vList)) {
-                    return false;
-                }
-            }
-            return true;
+        bool aabbVisible(const std::array<glm::vec3, 8>& vList) const {
+            return std::ranges::all_of(planes, [&vList](const Plane& plane) { return !plane.aabbBehind(vList); });
         }
 
         // FIXME: dot normal posicao para distancia (calcula do AABB em relacao ao frustum)
-        // inline const float AABBDistance(const std::vector<glm::vec3>& vList) const { return
-        // planes[5].AABBDistance(vList); }
+        // float aabbDistance(const std::array<glm::vec3, 8>& vList) const {
+        //      return planes[5].aabbDistance(vList);
+        // }
 
         // void render_debug() const {
         //     glBegin(GL_LINES);

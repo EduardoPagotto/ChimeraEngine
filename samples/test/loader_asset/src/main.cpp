@@ -17,8 +17,10 @@ int main() {
         entt::registry registry;
         auto& assetManager = registry.ctx().emplace<AssetManager>();
 
-        Loader loader("./assets/seahawk/Seahawk.gltf", &registry);
-        loader.getImages("./assets/seahawk/", ctx);
+        Loader loader("./samples/test/loader_asset/assets/testez1.gltf", &registry);
+        loader.getImages("./samples/test/loader_asset/assets/", ctx);
+        // Loader loader("./assets/seahawk/Seahawk.gltf", &registry);
+        // loader.getImages("./assets/seahawk/", ctx);
 
         for (auto&& [id, handle] : assetManager.texture) {
             const VulkanTexture tex = *handle;

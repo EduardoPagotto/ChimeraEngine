@@ -29,25 +29,27 @@ namespace ce {
     // };
 
     // Define a structured representation for your parsed submesh/primitive
-    struct PrimitiveData {
-        std::vector<Vertex> vertices;
-        std::vector<uint32_t> indices;
-    };
-
-    struct MeshData {
-        std::string name;
-        std::vector<PrimitiveData> primitives;
-    };
-
-    // struct MeshPart {
-    //     std::vector<uint32_t> indices;
-    //     size_t materialIndex;
-    // };
-
-    // struct CompleteMesh {
+    // struct PrimitiveData {
     //     std::vector<Vertex> vertices;
-    //     std::vector<MeshPart> parts; // Each part represents a glTF primitive
+    //     std::vector<uint32_t> indices;
+    //     std::optional<std::size_t> materialIndex;
     // };
+
+    // struct MeshData {
+    //     std::string name;
+    //     std::vector<PrimitiveData> primitives;
+    // };
+
+    struct MeshPart {
+        std::vector<uint32_t> indices;
+        size_t materialIndex;
+    };
+
+    struct CompleteMesh {
+        std::string name;
+        std::vector<Vertex> vertices;
+        std::vector<MeshPart> parts; // Each part represents a glTF primitive
+    };
 
     class Loader {
       public:
@@ -61,8 +63,12 @@ namespace ce {
                 throw std::runtime_error("Failed to read file buffer into memory.");
             }
 
-            fastgltf::Parser parser;
-            constexpr auto options = fastgltf::Options::LoadExternalBuffers | fastgltf::Options::DecomposeNodeMatrices;
+            fastgltf::Parser parser(fastgltf::Extensions::KHR_lights_punctual);
+
+            constexpr auto options = fastgltf::Options::LoadExternalBuffers | fastgltf::Options::DecomposeNodeMatrices |
+                                     fastgltf::Options::DontRequireValidAssetMember;
+
+            // constexpr auto extensions = fastgltf::Extensions::KHR_lights_punctual;
 
             // 3. Parse the asset using the buffer (.get() unpacks the expected value)
             auto expectedAsset = parser.loadGltf(expectedBuffer.get(), filePath.parent_path(), options);
@@ -118,95 +124,217 @@ namespace ce {
             }
         }
 
-        std::vector<MeshData> getMeshs(std::shared_ptr<VulkanContext> ctx) {
+        std::vector<CompleteMesh> getMeshs(std::shared_ptr<VulkanContext> ctx) { // NOLINT
             // auto& assetManager = registry->ctx().get<AssetManager>();
 
-            std::vector<MeshData> outMeshes;
+            std::vector<CompleteMesh> outMeshes;
 
             // 2. Iterate through all meshes within the asset
             for (const auto& mesh : asset.meshes) {
-                MeshData currentMesh;
-                currentMesh.name = mesh.name;
 
+                CompleteMesh completeMesh;
+                completeMesh.name = mesh.name;
+
+                uint32_t countPrimitive = 0;
                 // 3. Process every primitive (sub-mesh) inside this mesh
                 for (const auto& primitive : mesh.primitives) {
+
                     // We only care about rendering triangles
                     if (primitive.type != fastgltf::PrimitiveType::Triangles) {
                         continue;
                     }
 
-                    for (const auto& [attributeName, accessorIndex] : primitive.attributes) {
-                        // attributeName geralmente é uma string ou um tipo mapeável estruturado
-                        std::cout << "Nome: " << attributeName << " (Index do Accessor: " << accessorIndex << ")\n";
+                    if (countPrimitive == 0) { // VBO
+
+                        // Verificando compartilhamento de Índices (Indices)
+                        if (primitive.indicesAccessor.has_value()) {
+                            size_t accessorIndex = primitive.indicesAccessor.value();
+                            std::cout << "Acessor de Índices: ID " << accessorIndex << "\n";
+                        }
+
+                        for (const auto& [attributeName, accessorIndex] : primitive.attributes) {
+                            // attributeName geralmente é uma string ou um tipo mapeável estruturado
+                            std::cout << " - Nome: " << attributeName << " (Index do Accessor: " << accessorIndex
+                                      << ")\n";
+                        }
+
+                        const auto* posAttribute = primitive.findAttribute("POSITION");
+                        // const auto* normAttribute = primitive.findAttribute("NORMAL");
+                        const auto* uvAttribute = primitive.findAttribute("TEXCOORD_0");
+                        const auto* colorAttribute = primitive.findAttribute("COLOR_0");
+
+                        // --- PROCESS VERTICES ---
+                        // Find the core POSITION attribute accessor to determine the sizing requirement
+                        if (posAttribute == primitive.attributes.end()) {
+                            continue; // Invalid primitive
+                        }
+
+                        const auto& posAccessor = asset.accessors[posAttribute->accessorIndex];
+                        size_t vertexCount = posAccessor.count;
+                        completeMesh.vertices.resize(vertexCount);
+
+                        // Fetch and map the POSITION attribute into GLM vec3
+                        fastgltf::iterateAccessorWithIndex<glm::vec3>(
+                            asset, posAccessor,
+                            [&](glm::vec3 pos, size_t idx) { completeMesh.vertices[idx].pos = pos; });
+
+                        // // Fetch and map the NORMAL attribute if present
+                        // if (normAttribute != primitive.attributes.end()) {
+                        //     const auto& normAccessor = asset.accessors[normAttribute->accessorIndex];
+                        //     fastgltf::iterateAccessorWithIndex<glm::vec3>(
+                        //         asset, normAccessor,
+                        //         [&](glm::vec3 norm, size_t idx) { completeMesh.vertices[idx].normal = norm; });
+                        // }
+
+                        // Fetch and map the TEXCOORD_0 (Texture Coordinates) attribute if present
+                        if (uvAttribute != primitive.attributes.end()) {
+                            const auto& uvAccessor = asset.accessors[uvAttribute->accessorIndex];
+                            fastgltf::iterateAccessorWithIndex<glm::vec2>(
+                                asset, uvAccessor,
+                                [&](glm::vec2 uv, size_t idx) { completeMesh.vertices[idx].tex = uv; });
+                        }
+
+                        // Fetch and map the COLOR_0 attribute if present
+                        if (colorAttribute != primitive.attributes.end()) {
+                            const auto& colorAccessor = asset.accessors[colorAttribute->accessorIndex];
+
+                            // glTF colors can be written as either vec3 (RGB) or vec4 (RGBA)
+                            fastgltf::iterateAccessorWithIndex<glm::vec4>(
+                                asset, colorAccessor,
+                                [&](glm::vec4 color, size_t idx) { completeMesh.vertices[idx].col = color; });
+                        }
                     }
 
-                    PrimitiveData currentPrim;
+                    countPrimitive++;
 
-                    const auto* posAttribute = primitive.findAttribute("POSITION");
-                    // const auto* normAttribute = primitive.findAttribute("NORMAL");
-                    const auto* uvAttribute = primitive.findAttribute("TEXCOORD_0");
-                    const auto* colorAttribute = primitive.findAttribute("COLOR_0");
+                    MeshPart meshPart;
 
-                    // --- PROCESS VERTICES ---
-                    // Find the core POSITION attribute accessor to determine the sizing requirement
-                    if (posAttribute == primitive.attributes.end()) {
-                        continue; // Invalid primitive
-                    }
-
-                    const auto& posAccessor = asset.accessors[posAttribute->accessorIndex];
-                    size_t vertexCount = posAccessor.count;
-                    currentPrim.vertices.resize(vertexCount);
-
-                    // Fetch and map the POSITION attribute into GLM vec3
-                    fastgltf::iterateAccessorWithIndex<glm::vec3>(
-                        asset, posAccessor, [&](glm::vec3 pos, size_t idx) { currentPrim.vertices[idx].pos = pos; });
-
-                    // Fetch and map the NORMAL attribute if present
-                    // if (normAttribute != primitive.attributes.end()) {
-                    //     const auto& normAccessor = asset.accessors[normAttribute->accessorIndex];
-                    //     fastgltf::iterateAccessorWithIndex<glm::vec3>(
-                    //         asset, normAccessor,
-                    //         [&](glm::vec3 norm, size_t idx) { currentPrim.vertices[idx].normal = norm; });
-                    // }
-
-                    // Fetch and map the TEXCOORD_0 (Texture Coordinates) attribute if present
-                    if (uvAttribute != primitive.attributes.end()) {
-                        const auto& uvAccessor = asset.accessors[uvAttribute->accessorIndex];
-                        fastgltf::iterateAccessorWithIndex<glm::vec2>(
-                            asset, uvAccessor, [&](glm::vec2 uv, size_t idx) { currentPrim.vertices[idx].tex = uv; });
-                    }
-
-                    // Fetch and map the COLOR_0 attribute if present
-                    if (colorAttribute != primitive.attributes.end()) {
-                        const auto& colorAccessor = asset.accessors[colorAttribute->accessorIndex];
-
-                        // glTF colors can be written as either vec3 (RGB) or vec4 (RGBA)
-                        fastgltf::iterateAccessorWithIndex<glm::vec4>(
-                            asset, colorAccessor,
-                            [&](glm::vec4 color, size_t idx) { currentPrim.vertices[idx].col = color; });
+                    if (primitive.materialIndex.has_value()) {
+                        meshPart.materialIndex = primitive.materialIndex.value();
                     }
 
                     // --- PROCESS INDICES ---
                     // If the primitive is indexed (or has them automatically generated by our option flag)
                     if (primitive.indicesAccessor.has_value()) {
                         const auto& indexAccessor = asset.accessors[primitive.indicesAccessor.value()];
-                        currentPrim.indices.resize(indexAccessor.count);
+                        meshPart.indices.resize(indexAccessor.count);
 
                         // iterateAccessor automatically handles converting uint8, uint16, or uint32 data types up
                         // to standard uint32_t
                         fastgltf::iterateAccessorWithIndex<uint32_t>(
-                            asset, indexAccessor,
-                            [&](uint32_t index, size_t idx) { currentPrim.indices[idx] = index; });
+                            asset, indexAccessor, [&](uint32_t index, size_t idx) { meshPart.indices[idx] = index; });
                     }
 
-                    currentMesh.primitives.push_back(std::move(currentPrim));
+                    completeMesh.parts.push_back(std::move(meshPart));
                 }
 
-                outMeshes.push_back(std::move(currentMesh));
+                outMeshes.push_back(std::move(completeMesh));
             }
 
             return outMeshes;
         }
+
+        // std::vector<MeshData> getMeshs(std::shared_ptr<VulkanContext> ctx) { // NOLINT
+        //     // auto& assetManager = registry->ctx().get<AssetManager>();
+
+        //     std::vector<MeshData> outMeshes;
+
+        //     // 2. Iterate through all meshes within the asset
+        //     for (const auto& mesh : asset.meshes) {
+        //         MeshData currentMesh;
+        //         currentMesh.name = mesh.name;
+
+        //         // 3. Process every primitive (sub-mesh) inside this mesh
+        //         for (const auto& primitive : mesh.primitives) {
+        //             // We only care about rendering triangles
+        //             if (primitive.type != fastgltf::PrimitiveType::Triangles) {
+        //                 continue;
+        //             }
+
+        //             // Verificando compartilhamento de Índices (Indices)
+        //             if (primitive.indicesAccessor.has_value()) {
+        //                 size_t accessorIndex = primitive.indicesAccessor.value();
+        //                 std::cout << "Acessor de Índices: ID " << accessorIndex << "\n";
+        //             }
+
+        //             for (const auto& [attributeName, accessorIndex] : primitive.attributes) {
+        //                 // attributeName geralmente é uma string ou um tipo mapeável estruturado
+        //                 std::cout << " - Nome: " << attributeName << " (Index do Accessor: " << accessorIndex <<
+        //                 ")\n";
+        //             }
+
+        //             PrimitiveData currentPrim;
+
+        //             if (primitive.materialIndex.has_value()) {
+        //                 currentPrim.materialIndex = primitive.materialIndex.value();
+        //             }
+
+        //             const auto* posAttribute = primitive.findAttribute("POSITION");
+        //             // const auto* normAttribute = primitive.findAttribute("NORMAL");
+        //             const auto* uvAttribute = primitive.findAttribute("TEXCOORD_0");
+        //             const auto* colorAttribute = primitive.findAttribute("COLOR_0");
+
+        //             // --- PROCESS VERTICES ---
+        //             // Find the core POSITION attribute accessor to determine the sizing requirement
+        //             if (posAttribute == primitive.attributes.end()) {
+        //                 continue; // Invalid primitive
+        //             }
+
+        //             const auto& posAccessor = asset.accessors[posAttribute->accessorIndex];
+        //             size_t vertexCount = posAccessor.count;
+        //             currentPrim.vertices.resize(vertexCount);
+
+        //             // Fetch and map the POSITION attribute into GLM vec3
+        //             fastgltf::iterateAccessorWithIndex<glm::vec3>(
+        //                 asset, posAccessor, [&](glm::vec3 pos, size_t idx) { currentPrim.vertices[idx].pos = pos; });
+
+        //             // Fetch and map the NORMAL attribute if present
+        //             // if (normAttribute != primitive.attributes.end()) {
+        //             //     const auto& normAccessor = asset.accessors[normAttribute->accessorIndex];
+        //             //     fastgltf::iterateAccessorWithIndex<glm::vec3>(
+        //             //         asset, normAccessor,
+        //             //         [&](glm::vec3 norm, size_t idx) { currentPrim.vertices[idx].normal = norm; });
+        //             // }
+
+        //             // Fetch and map the TEXCOORD_0 (Texture Coordinates) attribute if present
+        //             if (uvAttribute != primitive.attributes.end()) {
+        //                 const auto& uvAccessor = asset.accessors[uvAttribute->accessorIndex];
+        //                 fastgltf::iterateAccessorWithIndex<glm::vec2>(
+        //                     asset, uvAccessor, [&](glm::vec2 uv, size_t idx) { currentPrim.vertices[idx].tex = uv;
+        //                     });
+        //             }
+
+        //             // Fetch and map the COLOR_0 attribute if present
+        //             if (colorAttribute != primitive.attributes.end()) {
+        //                 const auto& colorAccessor = asset.accessors[colorAttribute->accessorIndex];
+
+        //                 // glTF colors can be written as either vec3 (RGB) or vec4 (RGBA)
+        //                 fastgltf::iterateAccessorWithIndex<glm::vec4>(
+        //                     asset, colorAccessor,
+        //                     [&](glm::vec4 color, size_t idx) { currentPrim.vertices[idx].col = color; });
+        //             }
+
+        //             // --- PROCESS INDICES ---
+        //             // If the primitive is indexed (or has them automatically generated by our option flag)
+        //             if (primitive.indicesAccessor.has_value()) {
+        //                 const auto& indexAccessor = asset.accessors[primitive.indicesAccessor.value()];
+        //                 currentPrim.indices.resize(indexAccessor.count);
+
+        //                 // iterateAccessor automatically handles converting uint8, uint16, or uint32 data types up
+        //                 // to standard uint32_t
+        //                 fastgltf::iterateAccessorWithIndex<uint32_t>(
+        //                     asset, indexAccessor,
+        //                     [&](uint32_t index, size_t idx) { currentPrim.indices[idx] = index; });
+        //             }
+
+        //             currentMesh.primitives.push_back(std::move(currentPrim));
+        //         }
+
+        //         outMeshes.push_back(std::move(currentMesh));
+        //     }
+
+        //     return outMeshes;
+        // }
 
         // void getMaterials() {
 

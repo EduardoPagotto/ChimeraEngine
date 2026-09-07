@@ -127,8 +127,7 @@ bool Game::onEvent(const SDL_Event& event) {
                     sendChimeraEvent(EventCE::FLOW_STOP, nullptr, nullptr);
                     break;
                 case SDLK_F1: {
-                    SDL_SetWindowFullscreen(ctx->window, !this->fullscreen);
-                    this->fullscreen = !this->fullscreen;
+                    sendChimeraEvent(EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
                 } break;
                 default:
                     break;
@@ -149,6 +148,7 @@ bool Game::onEvent(const SDL_Event& event) {
             break;
         case SDL_EVENT_WINDOW_MOUSE_LEAVE:
         case SDL_EVENT_WINDOW_MINIMIZED:
+        case SDL_EVENT_WINDOW_FOCUS_LOST:
             sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr);
             break;
 

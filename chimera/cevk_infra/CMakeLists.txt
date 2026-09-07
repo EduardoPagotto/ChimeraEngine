@@ -13,11 +13,7 @@ set (IncludeDirs ${CMAKE_CURRENT_SOURCE_DIR}/include
 
 set(SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/src/Timer.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/StateStack.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/Engine.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/GamePad.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/Joystick.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/Keyboard.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/Mouse.cpp)
+                ${CMAKE_CURRENT_SOURCE_DIR}/src/Engine.cpp)
 
 add_library(${PROJECT_NAME} STATIC ${SourceFiles})
 

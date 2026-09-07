@@ -1,42 +1,102 @@
 #include "cevk_infra/Engine.hpp"
+#include "cevk_infra/InputManager.hpp"
 #include "cevk_infra/event.hpp"
 
 namespace ce {
 
-    Engine::Engine(std::shared_ptr<IScr> screen) : screen(screen) {
+    Engine::Engine(entt::registry& registry, std::shared_ptr<IScr> screen) : registry(registry), screen(screen) {
 
         timerFPS.setElapsedCount(1000);
         timerFPS.start();
 
-        SDL_Log("Engine Register: chimera_engine OK");
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Engine Chimera OK");
     }
 
     void Engine::run() { // NOLINT
 
+        auto& im = registry.ctx().get<InputManager>();
+
         SDL_Event event;
         bool kill{false};
-        bool pause{false};
+        // bool pause{false};
         uint32_t beginCount{0};
         uint32_t countDelta{7};
         double ts{0.0F};
 
+        // if (im.mouse.has_value()) {
+        //     im.mouse->updateBt(event.button);
+        // }
+
         while (!kill) {
             beginCount = SDL_GetTicks();
             while (SDL_PollEvent(&event)) {
-                switch (event.type) {
-                    case SDL_EVENT_USER: {
 
+                bool gottcha = true;
+                switch (event.type) {
+                    // Keyboard
+                    case SDL_EVENT_KEY_DOWN:
+                        if (im.keyboard.has_value()) {
+                            im.keyboard->setDown(event.key);
+                        }
+                        break;
+                    case SDL_EVENT_KEY_UP:
+                        if (im.keyboard.has_value()) {
+                            im.keyboard->setUp(event.key);
+                        }
+                        break;
+                    // Mouse
+                    case SDL_EVENT_MOUSE_BUTTON_DOWN:
+                    case SDL_EVENT_MOUSE_BUTTON_UP:
+                        if (im.mouse.has_value()) {
+                            im.mouse->updateBt(event.button);
+                        }
+                        break;
+                    case SDL_EVENT_MOUSE_MOTION:
+                        if (im.mouse.has_value()) {
+                            im.mouse->updateMv(event.motion);
+                        }
+                        break;
+                    case SDL_EVENT_MOUSE_WHEEL:
+                        if (im.mouse.has_value()) {
+                            im.mouse->updateWl(event.wheel);
+                        }
+                        break;
+                    // Joystick
+                    case SDL_EVENT_JOYSTICK_ADDED:
+                        if (im.joystick.has_value()) {
+                            im.joystick->added();
+                        }
+                        break;
+                    case SDL_EVENT_JOYSTICK_REMOVED:
+                        if (im.joystick.has_value()) {
+                            im.joystick->removed(event.jdevice);
+                        }
+                        break;
+                    // Gamepad
+                    case SDL_EVENT_GAMEPAD_ADDED:
+                        if (im.gamePad.has_value()) {
+                            im.gamePad->added();
+                        }
+                        break;
+                    case SDL_EVENT_GAMEPAD_REMOVED:
+                        if (im.gamePad.has_value()) {
+                            im.gamePad->removed(event.gdevice);
+                        }
+                        break;
+                    // User
+                    case SDL_EVENT_USER: {
                         switch (static_cast<EventCE>(event.user.code)) {
                             case EventCE::FLOW_PAUSE: {
-                                pause = true;
+                                im.paused = true;
                                 SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Paused Receive");
                             } break;
                             case EventCE::FLOW_RESUME: {
-                                pause = false;
+                                im.paused = false;
                                 SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Resume Receive");
                             } break;
                             case EventCE::FLOW_STOP: {
                                 SDL_Event l_eventQuit;
+                                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "QUIT Receive");
                                 l_eventQuit.type = SDL_EVENT_QUIT;
                                 if (!SDL_PushEvent(&l_eventQuit)) {
                                     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Critical SDL_QUIT PushEvent fail: %s",
@@ -44,33 +104,36 @@ namespace ce {
                                 }
                             } break;
                             case EventCE::TOGGLE_FULL_SCREEN:
+                                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Toggle fullscreem received");
                                 screen->toggleFullScreen();
                                 break;
                             default:
-                                break;
+                                gottcha = false;
                         }
-                    }
-
-                    break;
+                    } break;
                     case SDL_EVENT_QUIT:
                         kill = true;
                         break;
                     case SDL_EVENT_WINDOW_RESIZED: {
+                        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Resize screem received");
                         screen->reshape(event.window.data1, event.window.data2);
                     } break;
                     default:
+                        gottcha = false;
                         break;
                 }
 
-                for (auto it = stack.end(); it != stack.begin();) {
-                    if (!(*--it)->onEvent(event)) {
-                        break;
+                if (im.executeEventChild || !gottcha) {
+                    for (auto it = stack.end(); it != stack.begin();) {
+                        if (!(*--it)->onEvent(event)) {
+                            break;
+                        }
                     }
                 }
             }
 
             ts = (double)countDelta / 1000.0F;
-            if (!pause) { // update game
+            if (!im.paused) { // update game
                 for (auto it = stack.begin(); it != stack.end(); it++) {
                     (*it)->onUpdate(ts);
                 }

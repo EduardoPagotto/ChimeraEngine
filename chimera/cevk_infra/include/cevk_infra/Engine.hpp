@@ -3,6 +3,7 @@
 #include "cevk_infra/IScr.hpp"
 #include "cevk_infra/StateStack.hpp"
 #include "cevk_infra/Timer.hpp"
+#include <entt/entt.hpp>
 
 namespace ce {
 
@@ -11,17 +12,18 @@ namespace ce {
     /// @brief Engine
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
-    /// @date 20260708
+    /// @date 20260907
     class Engine {
 
       public:
-        Engine(std::shared_ptr<IScr> screen);
+        Engine(entt::registry& registry, std::shared_ptr<IScr> screen);
         virtual ~Engine() = default;
         void run();
 
         StateStack& getStack() { return stack; }
 
       private:
+        entt::registry& registry;
         std::shared_ptr<IScr> screen;
         uint32_t fps = 140;
         Timer timerFPS;

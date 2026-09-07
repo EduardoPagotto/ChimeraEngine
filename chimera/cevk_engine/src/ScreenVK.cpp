@@ -8,7 +8,10 @@ namespace ce {
     void ScreenVK::before() {}
 
     void ScreenVK::after() {}
-    void ScreenVK::toggleFullScreen() {}
+    void ScreenVK::toggleFullScreen() {
+        SDL_SetWindowFullscreen(ctx->window, !this->fullscreen);
+        this->fullscreen = !this->fullscreen;
+    }
     void ScreenVK::reshape(int _width, int _height) {}
     int ScreenVK::getWidth() const { return 0; }
     int ScreenVK::getHeight() const { return 0; }

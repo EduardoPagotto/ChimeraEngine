@@ -70,6 +70,4 @@ class Game : public ce::IStateMachine {
     float deltaTime{0};
     float lastTime{0};
     size_t helicopter{0};
-
-    bool fullscreen{false};
 };

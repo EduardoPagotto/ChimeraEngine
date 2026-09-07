@@ -7,20 +7,91 @@ namespace ce {
     /// @brief Joystic Interface
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
-    /// @date 20260731
+    /// @date 20260907
     class Joystick {
 
       public:
-        Joystick() noexcept;
-        virtual ~Joystick() noexcept;
+        Joystick() noexcept {
+            SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+            SDL_SetJoystickEventsEnabled(true);
 
-        bool getEvent(const SDL_Event& event) noexcept;
-        SDL_Joystick* get(const SDL_JoystickID& joystick_id) noexcept;
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick init ok");
+        }
 
-      private:
+        virtual ~Joystick() noexcept {
+            for (auto i = joys.begin(); i != joys.end(); i++) {
+                SDL_CloseJoystick(i->second);
+            }
+
+            joys.clear();
+        }
+
+        [[clang::noinline]] bool getEvent(const SDL_Event& event) noexcept {
+            switch (event.type) {
+                case SDL_EVENT_JOYSTICK_ADDED:
+                    this->added();
+                    break;
+                case SDL_EVENT_JOYSTICK_REMOVED:
+                    this->removed(event.jdevice);
+                    break;
+                default:
+                    return false;
+            }
+
+            return true;
+        }
+
+        [[clang::noinline]] SDL_Joystick* get(const SDL_JoystickID& joystick_id) noexcept {
+            if (auto got = joys.find(joystick_id); got != joys.end()) {
+                return got->second;
+            }
+
+            return nullptr;
+        }
+
         // TODO: TESTAR JOYSTICK
-        void added(void);
-        void removed(const SDL_JoyDeviceEvent& device);
+        [[clang::noinline]] void added(void) {
+            int num_joysticks;
+            if (SDL_JoystickID* joysticks = SDL_GetJoysticks(&num_joysticks); joysticks != nullptr) {
+                for (int i = 0; i < num_joysticks; ++i) {
+                    SDL_JoystickID instance_id = joysticks[i];
+
+                    const char* name = SDL_GetJoystickNameForID(instance_id);
+                    const char* path = SDL_GetJoystickPathForID(instance_id);
+
+                    SDL_Log("Joystick %" SDL_PRIu32 ": %s%s%s VID 0x%.4x, PID 0x%.4x", instance_id,
+                            (name != nullptr) ? name : "Unknown", (path != nullptr) ? ", " : "",
+                            (path != nullptr) ? path : "", SDL_GetJoystickVendorForID(instance_id),
+                            SDL_GetJoystickProductForID(instance_id));
+
+                    char guid[64];
+                    SDL_GUIDToString(SDL_GetJoystickGUIDForID(instance_id), guid, sizeof(guid));
+                    SDL_LogInfo(SDL_LOG_CATEGORY_INPUT, " guid: %s", guid);
+
+                    if (joys.contains(instance_id)) {
+                        continue;
+                    }
+
+                    SDL_Joystick* handle = SDL_OpenJoystick(instance_id);
+
+                    SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick id: %d", SDL_GetJoystickID(handle));
+                    SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick axes: %d", SDL_GetNumJoystickAxes(handle));
+                    SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick hats: %d", SDL_GetNumJoystickHats(handle));
+                    SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick buttons:%d", SDL_GetNumJoystickButtons(handle));
+                    SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick trackballs: %d", SDL_GetNumJoystickBalls(handle));
+
+                    this->joys[instance_id] = handle;
+                }
+            }
+        }
+
+        [[clang::noinline]] void removed(const SDL_JoyDeviceEvent& device) {
+            //
+            if (joys.contains(device.which)) {
+                SDL_CloseJoystick(joys[device.which]);
+                joys.erase(device.which);
+            }
+        }
 
         std::map<SDL_JoystickID, SDL_Joystick*> joys;
     };

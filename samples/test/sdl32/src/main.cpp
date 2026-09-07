@@ -2,14 +2,15 @@
 #include "Game.hpp"
 #include "cevk_engine/ScreenVK.hpp"
 #include "cevk_infra/Engine.hpp"
+#include "cevk_infra/InputManager.hpp"
 #include <SDL3/SDL.h>
+#include <entt/entt.hpp>
 #include <memory>
 // #include "cevk/VulkanTexture.hpp"
 //  #include "cevk/TextureBindless.hpp"
 //  #include "cevk_engine/AssetManager.hpp"
 //  #include "cevk_infra/ServiceLocator.hpp"
 //  #include "AssetManager.hpp"
-//  #include <entt/entt.hpp>
 
 void teste(std::shared_ptr<ce::VulkanContext> ctx) {
 
@@ -48,22 +49,29 @@ int main(int argc, char* argv[]) {
 
     // Habilita todas as mensagens em modo Debug
     SDL_SetLogPriority(SDL_LOG_CATEGORY_VIDEO, SDL_LOG_PRIORITY_DEBUG);
+    SDL_SetLogPriority(SDL_LOG_CATEGORY_INPUT, SDL_LOG_PRIORITY_DEBUG);
+    SDL_SetLogPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG);
+    SDL_SetLogPriority(SDL_LOG_CATEGORY_RENDER, SDL_LOG_PRIORITY_DEBUG);
 
     try {
 
         std::shared_ptr<VulkanContext> ctx = std::make_shared<VulkanContext>();
-
         ctx->createWindow("Teste z1");
 
-        // entt::registry registry;
         // auto& assetManager = registry.ctx().emplace<AssetManager>();
-
         // entt::id_type id_textura = entt::hashed_string{"id_tex"};
         // assetManager.texture.load(id_textura, ctx, "assets/player.png");
+        using enum InputEnable;
+
+        entt::registry registry;
+
+        InputEnable in = Mouse | Keyboard;
+        registry.ctx().emplace<InputManager>(in, true);
+        // auto& im = registry.ctx().get<InputManager>();
 
         std::shared_ptr<ce::ScreenVK> scr = std::make_shared<ScreenVK>(ctx);
 
-        Engine engine(scr);
+        Engine engine(registry, scr);
         std::shared_ptr<IStateMachine> game = std::make_shared<Game>(ctx, scr);
 
         teste(ctx);

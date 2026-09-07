@@ -9,7 +9,7 @@ namespace ce {
     /// @brief Canva Interface
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
-    /// @date 20270801
+    /// @date 20260907
     class ScreenVK : public IScr {
 
       public:
@@ -25,24 +25,6 @@ namespace ce {
 
       private:
         std::shared_ptr<VulkanContext> ctx;
-
-        // VkPushConstantRange pushConstantRange;
-
-        // // Scene Settings
-        // struct UboViewProjection {
-        //     glm::mat4 projection;
-        //     glm::mat4 view;
-        // } uboViewProjection;
-
-        // ce::DescriptorPool descriptorPool;
-        // ce::UniformBuffer uniformBufferVP;
-
-        // std::shared_ptr<ce::Textures> textureMng;
-
-        // std::shared_ptr<ce::PipelineLayout> pipelineLayout;
-        // std::shared_ptr<ce::Pipeline> graphicPipeline;
-
-        // // Scene Objects
-        // std::vector<ce::MeshModel> modelList;
+        bool fullscreen{false};
     };
 } // namespace ce

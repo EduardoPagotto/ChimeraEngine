@@ -54,27 +54,27 @@ int main(int argc, char* argv[]) {
     SDL_SetLogPriority(SDL_LOG_CATEGORY_RENDER, SDL_LOG_PRIORITY_DEBUG);
 
     try {
+        std::shared_ptr<entt::registry> registry = std::make_shared<entt::registry>();
 
-        std::shared_ptr<VulkanContext> ctx = std::make_shared<VulkanContext>();
+        using enum InputEnable;
+        InputEnable in = Mouse | Keyboard;
+
+        registry->ctx().emplace<std::shared_ptr<InputManager>>(std::make_shared<InputManager>(in, true));
+        auto& ctx = registry->ctx().emplace<std::shared_ptr<VulkanContext>>(std::make_shared<VulkanContext>());
+
         ctx->createWindow("Teste z1");
 
-        // auto& assetManager = registry.ctx().emplace<AssetManager>();
+        // auto& assetManager = registry->ctx().emplace<AssetManager>();
         // entt::id_type id_textura = entt::hashed_string{"id_tex"};
         // assetManager.texture.load(id_textura, ctx, "assets/player.png");
-        using enum InputEnable;
-
-        entt::registry registry;
-
-        InputEnable in = Mouse | Keyboard;
-        registry.ctx().emplace<InputManager>(in, true);
         // auto& im = registry.ctx().get<InputManager>();
 
         std::shared_ptr<ce::ScreenVK> scr = std::make_shared<ScreenVK>(ctx);
 
         Engine engine(registry, scr);
-        std::shared_ptr<IStateMachine> game = std::make_shared<Game>(ctx, scr);
+        std::shared_ptr<IStateMachine> game = std::make_shared<Game>(registry, scr);
 
-        teste(ctx);
+        // teste(ctx);
 
         engine.getStack().pushState(game);
         engine.run();

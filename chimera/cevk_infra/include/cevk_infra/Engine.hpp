@@ -16,14 +16,14 @@ namespace ce {
     class Engine {
 
       public:
-        Engine(entt::registry& registry, std::shared_ptr<IScr> screen);
+        Engine(std::shared_ptr<entt::registry> registry, std::shared_ptr<IScr> screen);
         virtual ~Engine() = default;
         void run();
 
         StateStack& getStack() { return stack; }
 
       private:
-        entt::registry& registry;
+        std::shared_ptr<entt::registry> registry;
         std::shared_ptr<IScr> screen;
         uint32_t fps = 140;
         Timer timerFPS;

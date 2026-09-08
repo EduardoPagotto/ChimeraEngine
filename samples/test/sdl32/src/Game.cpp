@@ -13,9 +13,12 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <vulkan/vulkan_core.h>
 
-Game::Game(std::shared_ptr<ce::VulkanContext> ctx, std::shared_ptr<ce::ScreenVK> screen) : ctx(ctx), screen(screen) {
+Game::Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::ScreenVK> screen)
+    : registry(registry), screen(screen) {
 
     using namespace ce;
+
+    ctx = registry->ctx().get<std::shared_ptr<VulkanContext>>();
 
     // clear colour
     this->clearValues.resize(2);
@@ -63,6 +66,8 @@ Game::Game(std::shared_ptr<ce::VulkanContext> ctx, std::shared_ptr<ce::ScreenVK>
     // Create our default "no texture" texture
     std::shared_ptr<VulkanTexture> vulkanTex = VulkanTexture::Create(ctx, "./assets/textures/plain.png");
     textureMng->allocTexture(vulkanTex);
+
+    this->inputManager = registry->ctx().get<std::shared_ptr<InputManager>>();
 }
 
 Game::~Game() {

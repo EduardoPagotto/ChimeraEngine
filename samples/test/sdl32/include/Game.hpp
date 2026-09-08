@@ -9,11 +9,13 @@
 #include "cevk/VulkanContext.hpp"
 #include "cevk_engine/ScreenVK.hpp"
 #include "cevk_infra/IStateMachine.hpp"
+#include "cevk_infra/InputManager.hpp"
+#include <entt/entt.hpp>
 #include <memory>
 
 class Game : public ce::IStateMachine {
   public:
-    Game(std::shared_ptr<ce::VulkanContext> ctx, std::shared_ptr<ce::ScreenVK> screen);
+    Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::ScreenVK> screen);
     virtual ~Game();
     virtual void onAttach() override;
     virtual void onDeatach() override;
@@ -62,12 +64,13 @@ class Game : public ce::IStateMachine {
 
     // Scene Objects
     std::vector<ce::MeshModel> modelList;
-
-    //
-    std::shared_ptr<ce::ScreenVK> screen;
     //
     float angle{0.0F};
     float deltaTime{0};
     float lastTime{0};
     size_t helicopter{0};
+
+    std::shared_ptr<entt::registry> registry;
+    std::shared_ptr<ce::ScreenVK> screen;
+    std::shared_ptr<ce::InputManager> inputManager;
 };

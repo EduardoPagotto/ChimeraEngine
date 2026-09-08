@@ -4,7 +4,8 @@
 
 namespace ce {
 
-    Engine::Engine(entt::registry& registry, std::shared_ptr<IScr> screen) : registry(registry), screen(screen) {
+    Engine::Engine(std::shared_ptr<entt::registry> registry, std::shared_ptr<IScr> screen)
+        : registry(registry), screen(screen) {
 
         timerFPS.setElapsedCount(1000);
         timerFPS.start();
@@ -14,7 +15,7 @@ namespace ce {
 
     void Engine::run() { // NOLINT
 
-        auto& im = registry.ctx().get<InputManager>();
+        auto& im = registry->ctx().get<std::shared_ptr<InputManager>>();
 
         SDL_Event event;
         bool kill{false};
@@ -22,10 +23,6 @@ namespace ce {
         uint32_t beginCount{0};
         uint32_t countDelta{7};
         double ts{0.0F};
-
-        // if (im.mouse.has_value()) {
-        //     im.mouse->updateBt(event.button);
-        // }
 
         while (!kill) {
             beginCount = SDL_GetTicks();
@@ -35,63 +32,63 @@ namespace ce {
                 switch (event.type) {
                     // Keyboard
                     case SDL_EVENT_KEY_DOWN:
-                        if (im.keyboard.has_value()) {
-                            im.keyboard->setDown(event.key);
+                        if (im->keyboard.has_value()) {
+                            im->keyboard->setDown(event.key);
                         }
                         break;
                     case SDL_EVENT_KEY_UP:
-                        if (im.keyboard.has_value()) {
-                            im.keyboard->setUp(event.key);
+                        if (im->keyboard.has_value()) {
+                            im->keyboard->setUp(event.key);
                         }
                         break;
                     // Mouse
                     case SDL_EVENT_MOUSE_BUTTON_DOWN:
                     case SDL_EVENT_MOUSE_BUTTON_UP:
-                        if (im.mouse.has_value()) {
-                            im.mouse->updateBt(event.button);
+                        if (im->mouse.has_value()) {
+                            im->mouse->updateBt(event.button);
                         }
                         break;
                     case SDL_EVENT_MOUSE_MOTION:
-                        if (im.mouse.has_value()) {
-                            im.mouse->updateMv(event.motion);
+                        if (im->mouse.has_value()) {
+                            im->mouse->updateMv(event.motion);
                         }
                         break;
                     case SDL_EVENT_MOUSE_WHEEL:
-                        if (im.mouse.has_value()) {
-                            im.mouse->updateWl(event.wheel);
+                        if (im->mouse.has_value()) {
+                            im->mouse->updateWl(event.wheel);
                         }
                         break;
                     // Joystick
                     case SDL_EVENT_JOYSTICK_ADDED:
-                        if (im.joystick.has_value()) {
-                            im.joystick->added();
+                        if (im->joystick.has_value()) {
+                            im->joystick->added();
                         }
                         break;
                     case SDL_EVENT_JOYSTICK_REMOVED:
-                        if (im.joystick.has_value()) {
-                            im.joystick->removed(event.jdevice);
+                        if (im->joystick.has_value()) {
+                            im->joystick->removed(event.jdevice);
                         }
                         break;
                     // Gamepad
                     case SDL_EVENT_GAMEPAD_ADDED:
-                        if (im.gamePad.has_value()) {
-                            im.gamePad->added();
+                        if (im->gamePad.has_value()) {
+                            im->gamePad->added();
                         }
                         break;
                     case SDL_EVENT_GAMEPAD_REMOVED:
-                        if (im.gamePad.has_value()) {
-                            im.gamePad->removed(event.gdevice);
+                        if (im->gamePad.has_value()) {
+                            im->gamePad->removed(event.gdevice);
                         }
                         break;
                     // User
                     case SDL_EVENT_USER: {
                         switch (static_cast<EventCE>(event.user.code)) {
                             case EventCE::FLOW_PAUSE: {
-                                im.paused = true;
+                                im->paused = true;
                                 SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Paused Receive");
                             } break;
                             case EventCE::FLOW_RESUME: {
-                                im.paused = false;
+                                im->paused = false;
                                 SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Resume Receive");
                             } break;
                             case EventCE::FLOW_STOP: {
@@ -123,7 +120,7 @@ namespace ce {
                         break;
                 }
 
-                if (im.executeEventChild || !gottcha) {
+                if (im->executeEventChild || !gottcha) {
                     for (auto it = stack.end(); it != stack.begin();) {
                         if (!(*--it)->onEvent(event)) {
                             break;
@@ -133,7 +130,7 @@ namespace ce {
             }
 
             ts = (double)countDelta / 1000.0F;
-            if (!im.paused) { // update game
+            if (!im->paused) { // update game
                 for (auto it = stack.begin(); it != stack.end(); it++) {
                     (*it)->onUpdate(ts);
                 }

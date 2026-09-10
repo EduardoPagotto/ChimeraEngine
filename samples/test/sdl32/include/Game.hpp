@@ -1,9 +1,6 @@
 #pragma once
 #include "MeshModel.hpp"
-#include "cevk/Frame.hpp"
 #include "cevk/Pipeline.hpp"
-#include "cevk/RenderPass.hpp"
-#include "cevk/SwapChain.hpp"
 #include "cevk/Textures.hpp"
 #include "cevk/UBO.hpp"
 #include "cevk/VulkanContext.hpp"
@@ -35,8 +32,6 @@ class Game : public ce::IStateMachine {
     void updateModel(size_t modelId, glm::mat4 newModel);
     size_t createMeshModel(const std::string& modelFile);
 
-    // int currentFrame{0};
-
     std::shared_ptr<ce::VulkanContext> ctx;
 
     VkPushConstantRange pushConstantRange;
@@ -49,12 +44,6 @@ class Game : public ce::IStateMachine {
 
     ce::DescriptorPool descriptorPool;
     ce::UniformBuffer uniformBufferVP;
-
-    // ce::RenderPass renderPass;
-    // ce::SwapChain swapchain;
-    // std::vector<VkClearValue> clearValues;
-
-    // std::vector<ce::Frame> frames;
 
     std::shared_ptr<ce::Textures> textureMng;
     std::shared_ptr<ce::PipelineLayout> pipelineLayout;

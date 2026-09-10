@@ -19,25 +19,7 @@ Game::Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::ScreenV
 
     ctx = registry->ctx().get<std::shared_ptr<VulkanContext>>();
 
-    // clear colour
-    this->clearValues.resize(2);
-    // this->clearValues[0].color = {{0.6F, 0.65F, 0.4F, 1.0F}};
-    this->clearValues[0].color = {{0.0F, 0.0F, 0.0F, 1.0F}};
-    this->clearValues[1].depthStencil.depth = 1.0F;
-
-    // Get Swap Chain details so we cam pick best setting
-    SwapChainDetails swapchainDetails = VulkanContext::GetSwapChainDetails(ctx->physical, ctx->surface);
-    this->renderPass.init(ctx, SwapChain::ChooseBestSurfaceFormat(swapchainDetails.formats).format);
-
-    this->swapchain.init(ctx, this->renderPass.getRenderPass());
-
-    this->frames.resize(ce::MAX_FRAME_DRAWS);
-    for (size_t i = 0; i < ce::MAX_FRAME_DRAWS; i++) {
-        this->frames[i] = ce::Frame();
-        this->frames[i].init(this->ctx->logical, this->ctx->queueFamilyIndices.graphicsFamily);
-    }
-
-    this->uniformBufferVP.init(ctx->physical, ctx->logical, this->swapchain.getSwapchainResSize(),
+    this->uniformBufferVP.init(ctx->physical, ctx->logical, screen->swapchain.getSwapchainResSize(),
                                sizeof(UboViewProjection));
 
     this->textureMng = std::make_shared<Textures>(ctx);
@@ -56,7 +38,7 @@ Game::Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::ScreenV
     const glm::vec3 camPos = glm::vec3(-100.0F, 150.0F, 200.0F);
     const glm::vec3 camCenter = glm::vec3(0.0F, 0.0F, -2.0F);
     const glm::vec3 camUp = glm::vec3(0.0F, 1.0F, 0.0F);
-    float aspect = (float)this->swapchain.getExtent().width / (float)this->swapchain.getExtent().height;
+    float aspect = static_cast<float>(screen->getWidth()) / static_cast<float>(screen->getHeight());
 
     uboViewProjection.projection = glm::perspective(radixAngle, aspect, near, far);
     uboViewProjection.view = glm::lookAt(camPos, camCenter, camUp);
@@ -85,9 +67,6 @@ Game::~Game() {
 
     graphicPipeline.reset();
     pipelineLayout.reset();
-
-    this->swapchain.destroy();
-    this->renderPass.destroy();
 }
 
 void Game::onAttach() {
@@ -100,7 +79,14 @@ void Game::onAttach() {
 
 void Game::onDeatach() {}
 
-void Game::onRender() {
+void Game::onUpdate(const double& ts) {
+    if (this->inputManager->keyboard->isPressed(SDLK_ESCAPE)) {
+        sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
+    }
+
+    if (this->inputManager->keyboard->isPressed(SDLK_F1)) {
+        sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
+    }
 
     float now = SDL_GetTicks() / 1000.0F; // NOLINT
     deltaTime = now - lastTime;
@@ -116,17 +102,6 @@ void Game::onRender() {
     //  this->modelList[0].setModel(testMat);
 
     this->updateModel(helicopter, testMat);
-    this->draw();
-}
-
-void Game::onUpdate(const double& ts) {
-    if (this->inputManager->keyboard->isPressed(SDLK_ESCAPE)) {
-        sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
-    }
-
-    if (this->inputManager->keyboard->isPressed(SDLK_F1)) {
-        sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
-    }
 }
 
 bool Game::onEvent(const SDL_Event& event) {
@@ -198,16 +173,16 @@ void Game::createGraphicsPipeline() {
     shader->setVertexInput(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_FALSE);
 
     // -- VIEWPORT & SCISSOR
-    const VkViewport viewport{.x = 0.0F,                                           // x start coordinate
-                              .y = 0.0F,                                           // y start coordinate
-                              .width = (float)this->swapchain.getExtent().width,   // width of viewport
-                              .height = (float)this->swapchain.getExtent().height, // height of viewport
-                              .minDepth = 0.0F,                                    // min framebuffer depth
-                              .maxDepth = 1.0F};                                   // max framebuffer depth
+    const VkViewport viewport{.x = 0.0F,                                         // x start coordinate
+                              .y = 0.0F,                                         // y start coordinate
+                              .width = static_cast<float>(screen->getWidth()),   // width of viewport
+                              .height = static_cast<float>(screen->getHeight()), // height of viewport
+                              .minDepth = 0.0F,                                  // min framebuffer depth
+                              .maxDepth = 1.0F};                                 // max framebuffer depth
 
     const VkRect2D scissor{.offset = VkOffset2D{.x = 0, .y = 0}, // Offset to use region from
                            .extent =
-                               this->swapchain.getExtent()}; // Extent to describe region to use, starting at offset
+                               screen->swapchain.getExtent()}; // Extent to describe region to use, starting at offset
 
     // -- PIPELINE LAYOUT --
     this->pipelineLayout = std::make_shared<ce::PipelineLayout>(this->ctx->logical);
@@ -236,7 +211,7 @@ void Game::createGraphicsPipeline() {
     this->graphicPipeline->addColourState(colourState);
 
     // -- GRAPHICS PIPELINE CREATION
-    this->graphicPipeline->create(shader, this->renderPass.getRenderPass(), this->pipelineLayout->get());
+    this->graphicPipeline->create(shader, screen->renderPass.getRenderPass(), this->pipelineLayout->get());
 }
 
 void Game::createDescriptorPool() {
@@ -249,7 +224,7 @@ void Game::createDescriptorPool() {
                              .descriptorCount = static_cast<uint32_t>(this->uniformBufferVP.getBuffers().size())});
 
     // Create Descriptor Pool, Maximum number of descriptor Sets
-    this->descriptorPool.create(this->ctx->logical, static_cast<uint32_t>(this->swapchain.getSwapchainResSize()),
+    this->descriptorPool.create(this->ctx->logical, static_cast<uint32_t>(screen->swapchain.getSwapchainResSize()),
                                 static_cast<VkDescriptorPoolCreateFlagBits>(0));
 }
 
@@ -350,29 +325,20 @@ size_t Game::createMeshModel(const std::string& modelFile) {
 // Loader Models
 //---------------------------------------------
 
-void Game::draw() {
+void Game::onRender() {
+
     // -- GET NEXT IMAGE --
-    ce::Frame& frame = this->frames[this->currentFrame];
+    ce::Frame& frame = screen->frames[screen->currentFrame];
 
     // Get index of next image to be draw to, execute sincronization
-    auto [imageIndex, swapchainRes] =
-        this->swapchain.acquireNextImage(frame.inFlightFence, frame.imageAvailableSemaphore);
-
-    // Copy View Projection data in UBO
-    this->uniformBufferVP.getBuffers()[imageIndex]->mapper(&this->uboViewProjection);
-
-    VkRenderPassBeginInfo renderPassBeginInfo = {
-        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-        .renderPass = this->renderPass.getRenderPass(),               // Render pass to begin
-        .framebuffer = swapchainRes.framebuffer,                      //
-        .renderArea = this->swapchain.getRenderArea(),                //
-        .clearValueCount = static_cast<uint32_t>(clearValues.size()), //
-        .pClearValues = clearValues.data(),                           // List of clear values
-    };
+    auto [imageIndex, renderPassBeginInfo] = screen->nextImageRenderPass();
 
     ce::CmdRender cmd;
     cmd.begin(frame.commandBuffer, VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT, renderPassBeginInfo,
               this->graphicPipeline->get());
+
+    // Copy View Projection data in UBO
+    this->uniformBufferVP.getBuffers()[imageIndex]->mapper(&this->uboViewProjection);
 
     ce::DescriptorSet& vpUboDS = this->uniformBufferVP.getDescriptorSet(imageIndex);
 
@@ -403,23 +369,4 @@ void Game::draw() {
 
     // -- SUBMIT COMMAND BUFFER TO RENDER
     cmd.submitToRender(ctx->graphicsQueue, &frame, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
-
-    // -- PRESENT RENDERED IMAGE TO SCREEN --
-    VkResult result = ce::RenderPass::SendImageToScreen(ctx->presentationQueue, frame.renderFinishedSemaphore,
-                                                        this->swapchain.getSwapchain(), imageIndex);
-
-    if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) { //|| framebufferResized
-        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "resized (%d)...", result);
-        // framebufferResized = false;
-        this->swapchain.recreateSwapchain();
-    } else if (result != VK_SUCCESS) {
-        throw std::runtime_error("Failed to present Swapchain!");
-    }
-
-    // Get next frame
-    this->currentFrame = (this->currentFrame + 1) % ce::MAX_FRAME_DRAWS;
-    // AHHHH!!!!!! ugly!!!!! this is complete wrong, find what missmatch sYncs!!!
-    if (this->currentFrame == (ce::MAX_FRAME_DRAWS - 1)) {
-        vkDeviceWaitIdle(ctx->logical);
-    }
 }

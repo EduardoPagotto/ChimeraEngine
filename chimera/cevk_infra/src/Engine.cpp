@@ -90,16 +90,15 @@ namespace ce {
                     case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED: {
                         SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Pixel change !!");
                     } break;
-                    // case SDL_EVENT_WINDOW_MOUSE_ENTER:
-                    // case SDL_EVENT_WINDOW_MAXIMIZED:
-                    // case SDL_EVENT_WINDOW_RESTORED:
-                    //     sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr);
-                    //     break;
-                    // case SDL_EVENT_WINDOW_MOUSE_LEAVE:
-                    // case SDL_EVENT_WINDOW_MINIMIZED:
-                    // case SDL_EVENT_WINDOW_FOCUS_LOST:
-                    //     sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr);
-                    //     break;
+                    case SDL_EVENT_WINDOW_MAXIMIZED:
+                    case SDL_EVENT_WINDOW_RESTORED: {
+                        sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr);
+                        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Windows restored/maximized");
+                    } break;
+                    case SDL_EVENT_WINDOW_MINIMIZED: {
+                        sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr);
+                        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Windows minimized");
+                    } break;
                     // User
                     case SDL_EVENT_USER: {
                         switch (static_cast<EventCE>(event.user.code)) {

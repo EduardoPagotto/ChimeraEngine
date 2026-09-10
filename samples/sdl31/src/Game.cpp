@@ -121,12 +121,9 @@ bool Game::onEvent(const SDL_Event& event) {
 
     switch (event.type) {
         case SDL_EVENT_WINDOW_MOUSE_ENTER:
-        case SDL_EVENT_WINDOW_MAXIMIZED:
-        case SDL_EVENT_WINDOW_RESTORED:
             sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr);
             break;
         case SDL_EVENT_WINDOW_MOUSE_LEAVE:
-        case SDL_EVENT_WINDOW_MINIMIZED:
         case SDL_EVENT_WINDOW_FOCUS_LOST:
             sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr);
             break;

@@ -12,35 +12,6 @@
 //  #include "cevk_infra/ServiceLocator.hpp"
 //  #include "AssetManager.hpp"
 
-void teste(std::shared_ptr<ce::VulkanContext> ctx) {
-
-    // using namespace ce;
-
-    // auto assetManager = g_loc.getService<AssetManager>();
-    // TextureBindless texBindless(ctx);
-
-    // auto logo = assetManager->load<VulkanTexture>("logo_jogos", "./assets/textures/grid1.png");
-
-    // texBindless.allocTexture(logo);
-
-    // {
-    //     // 3. Entra em uma nova fase (Cria novo escopo)
-    //     assetManager->pushScope();
-
-    //     // Carrega textura específica desta fase
-    //     auto bg = assetManager->load<VulkanTexture>("background", "./assets/textures/grid2.png");
-
-    //     texBindless.allocTexture(bg);
-
-    //     // Se pedir a "logo_jogos" aqui, ele busca e encontra no escopo Global pai
-    //     auto logoMenu = assetManager->load<VulkanTexture>("logo_jogos", "./assets/textures/grid3.png");
-
-    // } // 5. Sai da fase (PopScope deve ser chamado manualmente ou via RAII)
-    // assetManager->popScope();
-    // // Neste ponto, "fase1_bg.png" foi destruído do Vulkan automaticamente.
-    // // "logo.png" continua vivo no escopo global.
-}
-
 int main(int argc, char* argv[]) {
 
     using namespace ce;
@@ -62,7 +33,7 @@ int main(int argc, char* argv[]) {
         registry->ctx().emplace<std::shared_ptr<InputManager>>(std::make_shared<InputManager>(in, true));
         auto& ctx = registry->ctx().emplace<std::shared_ptr<VulkanContext>>(std::make_shared<VulkanContext>());
 
-        ctx->createWindow("Teste z1");
+        ctx->createWindow("Teste SDL32");
 
         // auto& assetManager = registry->ctx().emplace<AssetManager>();
         // entt::id_type id_textura = entt::hashed_string{"id_tex"};

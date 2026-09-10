@@ -15,10 +15,7 @@ find_package(assimp REQUIRED)
 set (IncludeDirs ${CMAKE_CURRENT_SOURCE_DIR}/include
                  ${CMAKE_SOURCE_DIR}/chimera/cevk/include/
                  ${CMAKE_SOURCE_DIR}/chimera/cevk_infra/include/
-                 ${CMAKE_SOURCE_DIR}/chimera/cevk_engine/include/
-
-
-                 )
+                 ${CMAKE_SOURCE_DIR}/chimera/cevk_engine/include/)
 
 set (LIBRARY_DEPS ${CMAKE_SOURCE_DIR}/bin/libcevk.a
                   ${CMAKE_SOURCE_DIR}/bin/libcevk_engine.a

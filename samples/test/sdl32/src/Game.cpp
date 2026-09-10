@@ -147,7 +147,7 @@ bool Game::onEvent(const SDL_Event& event) {
             sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr);
             break;
         default:
-            break;
+            return false;
     }
     return true;
 }

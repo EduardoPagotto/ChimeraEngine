@@ -15,10 +15,7 @@ find_package(fastgltf REQUIRED)
 set (IncludeDirs ${CMAKE_CURRENT_SOURCE_DIR}/include
                  ${CMAKE_SOURCE_DIR}/chimera/cevk/include/
                  ${CMAKE_SOURCE_DIR}/chimera/cevk_infra/include/
-                 ${CMAKE_SOURCE_DIR}/chimera/cevk_engine/include/
-
-
-                 )
+                 ${CMAKE_SOURCE_DIR}/chimera/cevk_engine/include/)
 
 set (LIBRARY_DEPS ${CMAKE_SOURCE_DIR}/bin/libcevk.a
                   ${CMAKE_SOURCE_DIR}/bin/libcevk_engine.a
@@ -40,4 +37,4 @@ target_include_directories (${PROJECT_NAME} PRIVATE ${IncludeDirs})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBRARY_DEPS})
 
-add_dependencies(${PROJECT_NAME} cevk_engine)
+add_dependencies(${PROJECT_NAME} cevk_engine  clean-coverage)

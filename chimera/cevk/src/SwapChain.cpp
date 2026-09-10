@@ -94,14 +94,17 @@ namespace ce {
 
     // Rotina de recriação total da Swapchain
     void SwapChain::recreateSwapchain() {
+        // FIXME: nao esta funcionando corretamente
         // Trata o caso do aplicativo ser minimizado (largura ou altura igual a 0)
         VkSurfaceCapabilitiesKHR capabilities;
         vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx->physical, ctx->surface, &capabilities);
         uint32_t count = 0;
-        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Swapchain recreate (%d x %d)", capabilities.currentExtent.width,
-                     capabilities.currentExtent.height);
 
         while (capabilities.currentExtent.width == 0 || capabilities.currentExtent.height == 0) {
+
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Swapchain recreate (%d x %d)", capabilities.currentExtent.width,
+                         capabilities.currentExtent.height);
+
             vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx->physical, ctx->surface, &capabilities);
             SDL_Delay(1000); // FIXME: signal ??
             SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "waiting (%d)..", count++);

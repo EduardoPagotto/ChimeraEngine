@@ -58,7 +58,10 @@ namespace ce {
         this->fullscreen = !this->fullscreen;
     }
 
-    void ScreenVK::reshape(int _width, int _height) {}
+    void ScreenVK::reshape(int _width, int _height) {
+        eventReShape = true;
+        this->swapchain.recreateSwapchain();
+    }
 
     std::pair<uint32_t, VkRenderPassBeginInfo> ScreenVK::nextImageRenderPass() {
         // -- GET NEXT IMAGE --

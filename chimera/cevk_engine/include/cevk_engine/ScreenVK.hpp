@@ -40,5 +40,7 @@ namespace ce {
 
         int currentFrame{0};
         uint32_t indexFrame{0};
+
+        bool eventReShape{false};
     };
 } // namespace ce

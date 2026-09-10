@@ -101,6 +101,17 @@ void Game::onUpdate(const double& ts) {
     //  testMat = glm::rotate(testMat, glm::radians(-45.0F), glm::vec3(0.0F, 0.0F, 1.0F));
     //  this->modelList[0].setModel(testMat);
 
+    if (screen->eventReShape) {
+        screen->eventReShape = false;
+        float aspect = static_cast<float>(screen->getWidth()) / static_cast<float>(screen->getHeight());
+
+        const float near = 0.1F;
+        const float far = 1000.0F;
+        const float radixAngle = glm::radians(45.F); // 1:15:21
+        uboViewProjection.projection = glm::perspective(radixAngle, aspect, near, far);
+        uboViewProjection.projection[1][1] *= -1; // vulkan inverted of OpenGL
+    }
+
     this->updateModel(helicopter, testMat);
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL3/SDL.h>
 #include <glm/glm.hpp>
-#include <map>
+#include <unordered_map>
 
 namespace ce {
 
@@ -33,25 +33,6 @@ namespace ce {
             return glm::ivec2(0);
         }
 
-        [[clang::noinline]] bool getEvent(const SDL_Event& event) noexcept {
-            switch (event.type) {
-                case SDL_EVENT_MOUSE_BUTTON_DOWN:
-                case SDL_EVENT_MOUSE_BUTTON_UP:
-                    this->updateBt(event.button);
-                    break;
-                case SDL_EVENT_MOUSE_MOTION:
-                    this->updateMv(event.motion);
-                    break;
-                case SDL_EVENT_MOUSE_WHEEL:
-                    this->updateWl(event.wheel);
-                    break;
-                default:
-                    return false;
-            }
-
-            return true;
-        }
-
         void updateBt(const SDL_MouseButtonEvent& bt) noexcept { this->buttonState[bt.button] = bt.down; }
 
         void updateWl(const SDL_MouseWheelEvent& mwe) noexcept { this->wheel = glm::ivec2(mwe.x, mwe.y); }
@@ -62,8 +43,10 @@ namespace ce {
             flag1++;
         }
 
+        void clear() { buttonState.clear(); }
+
       private:
-        std::map<uint8_t, bool> buttonState;
+        std::unordered_map<uint8_t, bool> buttonState;
         glm::ivec2 pos{glm::ivec2(0)};
         glm::ivec2 rel{glm::ivec2(0)};
         glm::ivec2 wheel{glm::ivec2(0)};

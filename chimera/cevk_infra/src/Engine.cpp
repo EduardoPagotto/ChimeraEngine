@@ -80,6 +80,26 @@ namespace ce {
                             im->gamePad->removed(event.gdevice);
                         }
                         break;
+                    // Windows
+                    case SDL_EVENT_WINDOW_RESIZED: {
+                        const int32_t novaWidth = event.window.data1;
+                        const int32_t novaHeight = event.window.data2;
+                        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Resize screem received: %d x %d", novaWidth, novaHeight);
+                        screen->reshape(novaWidth, novaHeight);
+                    } break;
+                    case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED: {
+                        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Pixel change !!");
+                    } break;
+                    // case SDL_EVENT_WINDOW_MOUSE_ENTER:
+                    // case SDL_EVENT_WINDOW_MAXIMIZED:
+                    // case SDL_EVENT_WINDOW_RESTORED:
+                    //     sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr);
+                    //     break;
+                    // case SDL_EVENT_WINDOW_MOUSE_LEAVE:
+                    // case SDL_EVENT_WINDOW_MINIMIZED:
+                    // case SDL_EVENT_WINDOW_FOCUS_LOST:
+                    //     sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr);
+                    //     break;
                     // User
                     case SDL_EVENT_USER: {
                         switch (static_cast<EventCE>(event.user.code)) {
@@ -111,10 +131,6 @@ namespace ce {
                     case SDL_EVENT_QUIT:
                         kill = true;
                         break;
-                    case SDL_EVENT_WINDOW_RESIZED: {
-                        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Resize screem received");
-                        screen->reshape(event.window.data1, event.window.data2);
-                    } break;
                     default:
                         gottcha = false;
                         break;
@@ -147,6 +163,8 @@ namespace ce {
                 fps = timerFPS.getCountStep();
                 sendChimeraEvent(EventCE::NEW_FPS, (void*)&fps, nullptr);
             }
+
+            im->update();
 
             countDelta = SDL_GetTicks() - beginCount; // frame count limit
             if (countDelta < miniumCountDelta) {

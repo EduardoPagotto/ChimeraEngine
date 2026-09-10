@@ -120,33 +120,22 @@ void Game::onRender() {
     this->draw();
 }
 
-void Game::onUpdate(const double& ts) {}
+void Game::onUpdate(const double& ts) {
+
+    if (this->inputManager->keyboard->isPressed(SDLK_ESCAPE)) {
+        sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
+    }
+
+    if (this->inputManager->keyboard->isPressed(SDLK_F1)) {
+        sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
+    }
+}
 
 bool Game::onEvent(const SDL_Event& event) {
 
     using namespace ce;
 
     switch (event.type) {
-        case SDL_EVENT_KEY_DOWN: {
-            switch (event.key.key) {
-                case SDLK_ESCAPE:
-                    sendChimeraEvent(EventCE::FLOW_STOP, nullptr, nullptr);
-                    break;
-                case SDLK_F1: {
-                    sendChimeraEvent(EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
-                } break;
-                default:
-                    break;
-            }
-        } break;
-        case SDL_EVENT_WINDOW_RESIZED: {
-            int32_t novaWidth = event.window.data1;
-            int32_t novaHeight = event.window.data2;
-            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Resize: %d x %d", novaWidth, novaHeight);
-        } break;
-        case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED: {
-            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Pixel change !!");
-        } break;
         case SDL_EVENT_WINDOW_MOUSE_ENTER:
         case SDL_EVENT_WINDOW_MAXIMIZED:
         case SDL_EVENT_WINDOW_RESTORED:

@@ -25,21 +25,6 @@ namespace ce {
             pads.clear();
         }
 
-        [[clang::noinline]] bool getEvent(const SDL_Event& event) noexcept {
-            switch (event.type) {
-                case SDL_EVENT_GAMEPAD_ADDED:
-                    this->added();
-                    break;
-                case SDL_EVENT_GAMEPAD_REMOVED:
-                    this->removed(event.gdevice);
-                    break;
-                default:
-                    return false;
-            }
-
-            return true;
-        }
-
         [[clang::noinline]] SDL_Gamepad* getFirst() noexcept {
             if (pads.begin() != pads.end()) {
                 return pads.begin()->second;

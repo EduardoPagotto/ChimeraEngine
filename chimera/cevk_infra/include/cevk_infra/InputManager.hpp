@@ -57,6 +57,16 @@ namespace ce {
             }
         }
 
+        void update() {
+            if (this->keyboard.has_value()) {
+                this->keyboard->clean();
+            }
+
+            if (this->mouse.has_value()) {
+                this->mouse->clear();
+            }
+        }
+
         std::optional<Mouse> mouse = std::nullopt;
         std::optional<Keyboard> keyboard = std::nullopt;
         std::optional<Joystick> joystick = std::nullopt;

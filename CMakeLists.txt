@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 4.3.0)
 
 PROJECT(ChimeraEngine VERSION 0.1.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_FLAGS "-std=c++20 ${CMAKE_CXX_FLAGS} -g -ftest-coverage -fprofile-arcs -fstandalone-debug")
+set(CMAKE_CXX_FLAGS "-std=c++20 ${CMAKE_CXX_FLAGS} -g -fprofile-instr-generate -fcoverage-mapping -fstandalone-debug")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -26,6 +26,13 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 # make dynamic cfs
 add_subdirectory(configured)
 
+#if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    # Exemplo de comando para limpar os arquivos de cobertura antigos antes de rodar
+    add_custom_target(clean-coverage
+        COMMAND ${CMAKE_COMMAND} -E rm -f "${CMAKE_BINARY_DIR}/**/*.gcda"
+        COMMENT "Limpando arquivos GCDA antigos..."
+    )
+#endif()
 
 # # Locate the clang-tidy executable on the system
 # find_program(CLANG_TIDY_EXE NAMES "clang-tidy")

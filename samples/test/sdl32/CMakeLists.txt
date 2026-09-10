@@ -40,4 +40,4 @@ target_include_directories (${PROJECT_NAME} PRIVATE ${IncludeDirs})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBRARY_DEPS})
 
-add_dependencies(${PROJECT_NAME} cevk_engine)
+add_dependencies(${PROJECT_NAME} cevk_engine clean-coverage)

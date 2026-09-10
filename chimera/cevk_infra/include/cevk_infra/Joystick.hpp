@@ -1,6 +1,6 @@
 #pragma once
 #include <SDL3/SDL.h>
-#include <map>
+#include <unordered_map>
 
 namespace ce {
 
@@ -24,21 +24,6 @@ namespace ce {
             }
 
             joys.clear();
-        }
-
-        [[clang::noinline]] bool getEvent(const SDL_Event& event) noexcept {
-            switch (event.type) {
-                case SDL_EVENT_JOYSTICK_ADDED:
-                    this->added();
-                    break;
-                case SDL_EVENT_JOYSTICK_REMOVED:
-                    this->removed(event.jdevice);
-                    break;
-                default:
-                    return false;
-            }
-
-            return true;
         }
 
         [[clang::noinline]] SDL_Joystick* get(const SDL_JoystickID& joystick_id) noexcept {
@@ -93,6 +78,6 @@ namespace ce {
             }
         }
 
-        std::map<SDL_JoystickID, SDL_Joystick*> joys;
+        std::unordered_map<SDL_JoystickID, SDL_Joystick*> joys;
     };
 } // namespace ce

@@ -1,4 +1,7 @@
 #pragma once
+#include "cevk/Frame.hpp"
+#include "cevk/RenderPass.hpp"
+#include "cevk/SwapChain.hpp"
 #include "cevk/VulkanContext.hpp"
 #include "cevk_infra/IScr.hpp"
 #include <SDL3/SDL.h>
@@ -20,11 +23,19 @@ namespace ce {
         virtual void after() override;
         virtual void toggleFullScreen() override;
         virtual void reshape(int _width, int _height) override;
-        virtual int getWidth() const override;
-        virtual int getHeight() const override;
+        virtual uint32_t getWidth() const override { return this->swapchain.getExtent().width; }
+        virtual uint32_t getHeight() const override { return this->swapchain.getExtent().height; }
 
       private:
         std::shared_ptr<VulkanContext> ctx;
         bool fullscreen{false};
+
+      public:
+        std::vector<VkClearValue> clearValues;
+        RenderPass renderPass;
+        SwapChain swapchain;
+        std::vector<Frame> frames;
+
+        int currentFrame{0};
     };
 } // namespace ce

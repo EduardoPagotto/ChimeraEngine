@@ -15,8 +15,8 @@ namespace ce {
         virtual void after() = 0;
         virtual void toggleFullScreen() = 0;
         virtual void reshape(int _width, int _height) = 0;
-        virtual int getWidth() const = 0;
-        virtual int getHeight() const = 0;
+        virtual uint32_t getWidth() const = 0;
+        virtual uint32_t getHeight() const = 0;
         // FB only
         // virtual uint32_t* getPixels() = 0;
         // virtual SDL_PixelFormat getPixelFormat() = 0;

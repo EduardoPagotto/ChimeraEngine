@@ -35,9 +35,7 @@ class Game : public ce::IStateMachine {
     void updateModel(size_t modelId, glm::mat4 newModel);
     size_t createMeshModel(const std::string& modelFile);
 
-    void draw();
-
-    int currentFrame{0};
+    // int currentFrame{0};
 
     std::shared_ptr<ce::VulkanContext> ctx;
 
@@ -52,11 +50,11 @@ class Game : public ce::IStateMachine {
     ce::DescriptorPool descriptorPool;
     ce::UniformBuffer uniformBufferVP;
 
-    ce::RenderPass renderPass;
-    ce::SwapChain swapchain;
-    std::vector<VkClearValue> clearValues;
+    // ce::RenderPass renderPass;
+    // ce::SwapChain swapchain;
+    // std::vector<VkClearValue> clearValues;
 
-    std::vector<ce::Frame> frames;
+    // std::vector<ce::Frame> frames;
 
     std::shared_ptr<ce::Textures> textureMng;
     std::shared_ptr<ce::PipelineLayout> pipelineLayout;

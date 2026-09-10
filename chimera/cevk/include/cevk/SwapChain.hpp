@@ -154,7 +154,7 @@ namespace ce {
 
         VkFormat& getImageFormat() { return this->surfaceFormat.format; }
         VkSwapchainKHR getSwapchain() const { return this->swapchainData.swapchain; }
-        VkExtent2D& getExtent() { return this->extent; }
+        const VkExtent2D& getExtent() const { return this->extent; }
         size_t getSwapchainResSize() const { return this->swapchainData.images.size(); }
         SwapchainImageResource& getSwapchainRes(size_t index) { return this->swapchainData.images[index]; }
 

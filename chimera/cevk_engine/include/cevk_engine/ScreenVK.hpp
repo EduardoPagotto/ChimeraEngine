@@ -26,6 +26,8 @@ namespace ce {
         virtual uint32_t getWidth() const override { return this->swapchain.getExtent().width; }
         virtual uint32_t getHeight() const override { return this->swapchain.getExtent().height; }
 
+        std::pair<uint32_t, VkRenderPassBeginInfo> nextImageRenderPass();
+
       private:
         std::shared_ptr<VulkanContext> ctx;
         bool fullscreen{false};
@@ -37,5 +39,6 @@ namespace ce {
         std::vector<Frame> frames;
 
         int currentFrame{0};
+        uint32_t indexFrame{0};
     };
 } // namespace ce

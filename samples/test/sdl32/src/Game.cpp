@@ -333,17 +333,7 @@ void Game::onRender() {
     ce::Frame& frame = screen->frames[screen->currentFrame];
 
     // Get index of next image to be draw to, execute sincronization
-    auto [imageIndex, swapchainRes] =
-        screen->swapchain.acquireNextImage(frame.inFlightFence, frame.imageAvailableSemaphore);
-
-    VkRenderPassBeginInfo renderPassBeginInfo = {
-        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-        .renderPass = screen->renderPass.getRenderPass(),                     // Render pass to begin
-        .framebuffer = swapchainRes.framebuffer,                              //
-        .renderArea = screen->swapchain.getRenderArea(),                      //
-        .clearValueCount = static_cast<uint32_t>(screen->clearValues.size()), //
-        .pClearValues = screen->clearValues.data(),                           // List of clear values
-    };
+    auto [imageIndex, renderPassBeginInfo] = screen->nextImageRenderPass();
 
     ce::CmdRender cmd;
     cmd.begin(frame.commandBuffer, VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT, renderPassBeginInfo,
@@ -381,16 +371,4 @@ void Game::onRender() {
 
     // -- SUBMIT COMMAND BUFFER TO RENDER
     cmd.submitToRender(ctx->graphicsQueue, &frame, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
-
-    // -- PRESENT RENDERED IMAGE TO SCREEN --
-    VkResult result = ce::RenderPass::SendImageToScreen(ctx->presentationQueue, frame.renderFinishedSemaphore,
-                                                        screen->swapchain.getSwapchain(), imageIndex);
-
-    if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) { //|| framebufferResized
-        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "resized (%d)...", result);
-        // framebufferResized = false;
-        screen->swapchain.recreateSwapchain();
-    } else if (result != VK_SUCCESS) {
-        throw std::runtime_error("Failed to present Swapchain!");
-    }
 }

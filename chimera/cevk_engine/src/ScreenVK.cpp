@@ -1,5 +1,4 @@
 #include "cevk_engine/ScreenVK.hpp"
-#include "cevk/CmdRender.hpp"
 
 namespace ce {
 
@@ -28,31 +27,24 @@ namespace ce {
         this->renderPass.destroy();
     }
 
-    void ScreenVK::before() {
-        // // -- GET NEXT IMAGE --
-        // ce::Frame& frame = this->frames[this->currentFrame];
-
-        // // Get index of next image to be draw to, execute sincronization
-        // auto [imageIndex, swapchainRes] =
-        //     this->swapchain.acquireNextImage(frame.inFlightFence, frame.imageAvailableSemaphore);
-
-        // VkRenderPassBeginInfo renderPassBeginInfo = {
-        //     .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-        //     .renderPass = this->renderPass.getRenderPass(),               // Render pass to begin
-        //     .framebuffer = swapchainRes.framebuffer,                      //
-        //     .renderArea = this->swapchain.getRenderArea(),                //
-        //     .clearValueCount = static_cast<uint32_t>(clearValues.size()), //
-        //     .pClearValues = clearValues.data(),                           // List of clear values
-        // };
-
-        // ce::CmdRender cmd;
-        // cmd.begin(frame.commandBuffer, VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT, renderPassBeginInfo,
-        //           this->graphicPipeline->get());
-    }
+    void ScreenVK::before() {}
 
     void ScreenVK::after() {
 
-        // final
+        ce::Frame& frame = this->frames[this->currentFrame];
+
+        // -- PRESENT RENDERED IMAGE TO SCREEN --
+        VkResult result = ce::RenderPass::SendImageToScreen(ctx->presentationQueue, frame.renderFinishedSemaphore,
+                                                            this->swapchain.getSwapchain(), this->indexFrame);
+
+        if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) { //|| framebufferResized
+            SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "resized (%d)...", result);
+            // framebufferResized = false;
+            this->swapchain.recreateSwapchain();
+        } else if (result != VK_SUCCESS) {
+            throw std::runtime_error("Failed to present Swapchain!");
+        }
+
         // Get next frame
         this->currentFrame = (this->currentFrame + 1) % ce::MAX_FRAME_DRAWS;
         // AHHHH!!!!!! ugly!!!!! this is complete wrong, find what missmatch sYncs!!!
@@ -67,5 +59,26 @@ namespace ce {
     }
 
     void ScreenVK::reshape(int _width, int _height) {}
+
+    std::pair<uint32_t, VkRenderPassBeginInfo> ScreenVK::nextImageRenderPass() {
+        // -- GET NEXT IMAGE --
+        ce::Frame& frame = this->frames[this->currentFrame];
+
+        // Get index of next image to be draw to, execute sincronization
+        auto [imageIndex, swapchainRes] =
+            this->swapchain.acquireNextImage(frame.inFlightFence, frame.imageAvailableSemaphore);
+
+        this->indexFrame = imageIndex;
+
+        return {imageIndex,
+                {
+                    .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+                    .renderPass = this->renderPass.getRenderPass(),                     // Render pass to begin
+                    .framebuffer = swapchainRes.framebuffer,                            //
+                    .renderArea = this->swapchain.getRenderArea(),                      //
+                    .clearValueCount = static_cast<uint32_t>(this->clearValues.size()), //
+                    .pClearValues = this->clearValues.data(),                           // List of clear values
+                }};
+    }
 
 } // namespace ce

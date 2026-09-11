@@ -27,10 +27,10 @@ int main(int argc, char* argv[]) {
 
         ctx->createWindow("Teste SDL31");
 
-        std::shared_ptr<ce::ScreenVK> scr = std::make_shared<ScreenVK>(ctx);
+        std::shared_ptr<ce::CanvaVK> canva = std::make_shared<CanvaVK>(ctx);
 
-        Engine engine(registry, scr);
-        std::shared_ptr<IStateMachine> game = std::make_shared<Game>(registry, scr);
+        Engine engine(registry, canva);
+        std::shared_ptr<IStateMachine> game = std::make_shared<Game>(registry, canva);
 
         engine.getStack().pushState(game);
         engine.run();

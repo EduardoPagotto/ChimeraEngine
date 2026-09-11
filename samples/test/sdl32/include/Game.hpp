@@ -12,7 +12,7 @@
 
 class Game : public ce::IStateMachine {
   public:
-    Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::ScreenVK> screen);
+    Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::CanvaVK> canva);
     virtual ~Game();
     virtual void onAttach() override;
     virtual void onDeatach() override;
@@ -58,6 +58,6 @@ class Game : public ce::IStateMachine {
     size_t helicopter{0};
 
     std::shared_ptr<entt::registry> registry;
-    std::shared_ptr<ce::ScreenVK> screen;
+    std::shared_ptr<ce::CanvaVK> canva;
     std::shared_ptr<ce::InputManager> inputManager;
 };

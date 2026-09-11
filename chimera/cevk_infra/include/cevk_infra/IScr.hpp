@@ -7,10 +7,10 @@ namespace ce {
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
     /// @date 20270731
-    class IScr {
+    class ICanva {
 
       public:
-        virtual ~IScr() = default;
+        virtual ~ICanva() = default;
         virtual void before() = 0;
         virtual void after() = 0;
         virtual void toggleFullScreen() = 0;

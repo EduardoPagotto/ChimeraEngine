@@ -1,4 +1,3 @@
-// #include "AssetManager.hpp"
 #include "Game.hpp"
 #include "cevk_engine/ScreenVK.hpp"
 #include "cevk_infra/Engine.hpp"
@@ -6,11 +5,6 @@
 #include <SDL3/SDL.h>
 #include <entt/entt.hpp>
 #include <memory>
-// #include "cevk/VulkanTexture.hpp"
-//  #include "cevk/TextureBindless.hpp"
-//  #include "cevk_engine/AssetManager.hpp"
-//  #include "cevk_infra/ServiceLocator.hpp"
-//  #include "AssetManager.hpp"
 
 int main(int argc, char* argv[]) {
 
@@ -40,10 +34,10 @@ int main(int argc, char* argv[]) {
         // assetManager.texture.load(id_textura, ctx, "assets/player.png");
         // auto& im = registry.ctx().get<InputManager>();
 
-        std::shared_ptr<ce::ScreenVK> scr = std::make_shared<ScreenVK>(ctx);
+        std::shared_ptr<ce::CanvaVK> canva = std::make_shared<CanvaVK>(ctx);
 
-        Engine engine(registry, scr);
-        std::shared_ptr<IStateMachine> game = std::make_shared<Game>(registry, scr);
+        Engine engine(registry, canva);
+        std::shared_ptr<IStateMachine> game = std::make_shared<Game>(registry, canva);
 
         // teste(ctx);
 

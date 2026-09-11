@@ -16,7 +16,7 @@ namespace ce {
     class Engine {
 
       public:
-        Engine(std::shared_ptr<entt::registry> registry, std::shared_ptr<IScr> screen);
+        Engine(std::shared_ptr<entt::registry> registry, std::shared_ptr<ICanva> canva);
         virtual ~Engine() = default;
         void run();
 
@@ -24,7 +24,7 @@ namespace ce {
 
       private:
         std::shared_ptr<entt::registry> registry;
-        std::shared_ptr<IScr> screen;
+        std::shared_ptr<ICanva> canva;
         uint32_t fps = 140;
         Timer timerFPS;
         StateStack stack;

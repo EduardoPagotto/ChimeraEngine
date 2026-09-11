@@ -2,7 +2,7 @@
 
 namespace ce {
 
-    ScreenVK::ScreenVK(std::shared_ptr<VulkanContext> ctx) : ctx(ctx) {
+    CanvaVK::CanvaVK(std::shared_ptr<VulkanContext> ctx) : ctx(ctx) {
 
         // clear colour
         this->clearValues.resize(2);
@@ -22,14 +22,14 @@ namespace ce {
             this->frames[i].init(this->ctx->logical, this->ctx->queueFamilyIndices.graphicsFamily);
         }
     }
-    ScreenVK::~ScreenVK() {
+    CanvaVK::~CanvaVK() {
         this->swapchain.destroy();
         this->renderPass.destroy();
     }
 
-    void ScreenVK::before() {}
+    void CanvaVK::before() {}
 
-    void ScreenVK::after() {
+    void CanvaVK::after() {
 
         ce::Frame& frame = this->frames[this->currentFrame];
 
@@ -53,17 +53,17 @@ namespace ce {
         }
     }
 
-    void ScreenVK::toggleFullScreen() {
+    void CanvaVK::toggleFullScreen() {
         SDL_SetWindowFullscreen(ctx->window, !this->fullscreen);
         this->fullscreen = !this->fullscreen;
     }
 
-    void ScreenVK::reshape(int _width, int _height) {
+    void CanvaVK::reshape(int _width, int _height) {
         eventReShape = true;
         this->swapchain.recreateSwapchain();
     }
 
-    std::pair<uint32_t, VkRenderPassBeginInfo> ScreenVK::nextImageRenderPass() {
+    std::pair<uint32_t, VkRenderPassBeginInfo> CanvaVK::nextImageRenderPass() {
         // -- GET NEXT IMAGE --
         ce::Frame& frame = this->frames[this->currentFrame];
 

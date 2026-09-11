@@ -13,11 +13,11 @@ namespace ce {
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
     /// @date 20260907
-    class ScreenVK : public IScr {
+    class CanvaVK : public ICanva {
 
       public:
-        explicit ScreenVK(std::shared_ptr<VulkanContext> ctx);
-        virtual ~ScreenVK();
+        explicit CanvaVK(std::shared_ptr<VulkanContext> ctx);
+        virtual ~CanvaVK();
 
         virtual void before() override;
         virtual void after() override;

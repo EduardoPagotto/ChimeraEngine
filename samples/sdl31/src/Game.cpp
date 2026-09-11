@@ -12,14 +12,14 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <vulkan/vulkan_core.h>
 
-Game::Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::ScreenVK> screen)
-    : registry(registry), screen(screen) {
+Game::Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::CanvaVK> canva)
+    : registry(registry), canva(canva) {
 
     using namespace ce;
 
     ctx = registry->ctx().get<std::shared_ptr<VulkanContext>>();
 
-    this->uniformBufferVP.init(ctx->physical, ctx->logical, screen->swapchain.getSwapchainResSize(),
+    this->uniformBufferVP.init(ctx->physical, ctx->logical, canva->swapchain.getSwapchainResSize(),
                                sizeof(UboViewProjection));
 
     this->textureMng = std::make_shared<Textures>(ctx);
@@ -38,7 +38,7 @@ Game::Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::ScreenV
     const glm::vec3 camPos = glm::vec3(-100.0F, 150.0F, 200.0F);
     const glm::vec3 camCenter = glm::vec3(0.0F, 0.0F, -2.0F);
     const glm::vec3 camUp = glm::vec3(0.0F, 1.0F, 0.0F);
-    float aspect = static_cast<float>(screen->getWidth()) / static_cast<float>(screen->getHeight());
+    float aspect = static_cast<float>(canva->getWidth()) / static_cast<float>(canva->getHeight());
 
     uboViewProjection.projection = glm::perspective(radixAngle, aspect, near, far);
     uboViewProjection.view = glm::lookAt(camPos, camCenter, camUp);
@@ -101,9 +101,9 @@ void Game::onUpdate(const double& ts) {
     //  testMat = glm::rotate(testMat, glm::radians(-45.0F), glm::vec3(0.0F, 0.0F, 1.0F));
     //  this->modelList[0].setModel(testMat);
 
-    if (screen->eventReShape) {
-        screen->eventReShape = false;
-        float aspect = static_cast<float>(screen->getWidth()) / static_cast<float>(screen->getHeight());
+    if (canva->eventReShape) {
+        canva->eventReShape = false;
+        float aspect = static_cast<float>(canva->getWidth()) / static_cast<float>(canva->getHeight());
 
         const float near = 0.1F;
         const float far = 1000.0F;
@@ -181,16 +181,16 @@ void Game::createGraphicsPipeline() {
     shader->setVertexInput(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_FALSE);
 
     // -- VIEWPORT & SCISSOR
-    const VkViewport viewport{.x = 0.0F,                                         // x start coordinate
-                              .y = 0.0F,                                         // y start coordinate
-                              .width = static_cast<float>(screen->getWidth()),   // width of viewport
-                              .height = static_cast<float>(screen->getHeight()), // height of viewport
-                              .minDepth = 0.0F,                                  // min framebuffer depth
-                              .maxDepth = 1.0F};                                 // max framebuffer depth
+    const VkViewport viewport{.x = 0.0F,                                        // x start coordinate
+                              .y = 0.0F,                                        // y start coordinate
+                              .width = static_cast<float>(canva->getWidth()),   // width of viewport
+                              .height = static_cast<float>(canva->getHeight()), // height of viewport
+                              .minDepth = 0.0F,                                 // min framebuffer depth
+                              .maxDepth = 1.0F};                                // max framebuffer depth
 
     const VkRect2D scissor{.offset = VkOffset2D{.x = 0, .y = 0}, // Offset to use region from
                            .extent =
-                               screen->swapchain.getExtent()}; // Extent to describe region to use, starting at offset
+                               canva->swapchain.getExtent()}; // Extent to describe region to use, starting at offset
 
     // -- PIPELINE LAYOUT --
     this->pipelineLayout = std::make_shared<ce::PipelineLayout>(this->ctx->logical);
@@ -219,7 +219,7 @@ void Game::createGraphicsPipeline() {
     this->graphicPipeline->addColourState(colourState);
 
     // -- GRAPHICS PIPELINE CREATION
-    this->graphicPipeline->create(shader, screen->renderPass.getRenderPass(), this->pipelineLayout->get());
+    this->graphicPipeline->create(shader, canva->renderPass.getRenderPass(), this->pipelineLayout->get());
 }
 
 void Game::createDescriptorPool() {
@@ -232,7 +232,7 @@ void Game::createDescriptorPool() {
                              .descriptorCount = static_cast<uint32_t>(this->uniformBufferVP.getBuffers().size())});
 
     // Create Descriptor Pool, Maximum number of descriptor Sets
-    this->descriptorPool.create(this->ctx->logical, static_cast<uint32_t>(screen->swapchain.getSwapchainResSize()),
+    this->descriptorPool.create(this->ctx->logical, static_cast<uint32_t>(canva->swapchain.getSwapchainResSize()),
                                 static_cast<VkDescriptorPoolCreateFlagBits>(0));
 }
 
@@ -336,10 +336,10 @@ size_t Game::createMeshModel(const std::string& modelFile) {
 void Game::onRender() {
 
     // -- GET NEXT IMAGE --
-    ce::Frame& frame = screen->frames[screen->currentFrame];
+    ce::Frame& frame = canva->frames[canva->currentFrame];
 
     // Get index of next image to be draw to, execute sincronization
-    auto [imageIndex, renderPassBeginInfo] = screen->nextImageRenderPass();
+    auto [imageIndex, renderPassBeginInfo] = canva->nextImageRenderPass();
 
     ce::CmdRender cmd;
     cmd.begin(frame.commandBuffer, VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT, renderPassBeginInfo,

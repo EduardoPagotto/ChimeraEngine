@@ -4,8 +4,8 @@
 
 namespace ce {
 
-    Engine::Engine(std::shared_ptr<entt::registry> registry, std::shared_ptr<IScr> screen)
-        : registry(registry), screen(screen) {
+    Engine::Engine(std::shared_ptr<entt::registry> registry, std::shared_ptr<ICanva> canva)
+        : registry(registry), canva(canva) {
 
         timerFPS.setElapsedCount(1000);
         timerFPS.start();
@@ -85,7 +85,7 @@ namespace ce {
                         const int32_t novaWidth = event.window.data1;
                         const int32_t novaHeight = event.window.data2;
                         SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Resize screem received: %d x %d", novaWidth, novaHeight);
-                        screen->reshape(novaWidth, novaHeight);
+                        canva->reshape(novaWidth, novaHeight);
                     } break;
                     case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED: {
                         SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Pixel change !!");
@@ -121,7 +121,7 @@ namespace ce {
                             } break;
                             case EventCE::TOGGLE_FULL_SCREEN:
                                 SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Toggle fullscreem received");
-                                screen->toggleFullScreen();
+                                canva->toggleFullScreen();
                                 break;
                             default:
                                 gottcha = false;
@@ -150,12 +150,12 @@ namespace ce {
                     (*it)->onUpdate(ts);
                 }
 
-                screen->before();
+                canva->before();
                 for (auto it = stack.begin(); it != stack.end(); it++) {
                     (*it)->onRender();
                 }
 
-                screen->after();
+                canva->after();
             }
 
             if (timerFPS.stepCount()) { // count FPS each second

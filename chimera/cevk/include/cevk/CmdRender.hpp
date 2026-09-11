@@ -20,7 +20,7 @@ namespace ce {
         void pushConstants(VkPipelineLayout pipelineLayout, VkShaderStageFlagBits stage, uint32_t offset, size_t size,
                            const void* src);
         void addVertexBuffer(const VkDeviceSize& offset, const VkBuffer& buffer);
-        void bindIndexBuffer(const VkBuffer& indexBuffer, const VkDeviceSize& offset);
+        void bindIndexBuffer(const VkDeviceSize& offset, const VkBuffer& indexBuffer);
         void bindVertexBuffer(uint32_t starts);
         void addDescriptorSet(const VkDescriptorSet& desc);
         void bindDescriptorSets(const VkPipelineLayout& pipelineLayout);

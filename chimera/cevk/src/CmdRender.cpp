@@ -42,7 +42,7 @@ namespace ce {
         this->offsets.push_back(offset);
     }
 
-    void CmdRender::bindIndexBuffer(const VkBuffer& indexBuffer, const VkDeviceSize& offset) { // TODO: offset {0}
+    void CmdRender::bindIndexBuffer(const VkDeviceSize& offset, const VkBuffer& indexBuffer) { // TODO: offset {0}
         // Bind mesh index buffer, with 0 offset and using the uint32_t type
         vkCmdBindIndexBuffer(cmdBuffer, indexBuffer, offset, VK_INDEX_TYPE_UINT32);
     }

@@ -364,7 +364,7 @@ void Game::onRender() {
 
             cmd.addVertexBuffer({0}, thisModel.getMesh(k)->getVertexBuffer());
             cmd.bindVertexBuffer(0);
-            cmd.bindIndexBuffer(thisModel.getMesh(k)->getIndexBuffer(), {0});
+            cmd.bindIndexBuffer({0}, thisModel.getMesh(k)->getIndexBuffer());
             cmd.addDescriptorSet(vpUboDS.get());
             cmd.addDescriptorSet(samplerUboDS.get());
             cmd.bindDescriptorSets(this->pipelineLayout->get());

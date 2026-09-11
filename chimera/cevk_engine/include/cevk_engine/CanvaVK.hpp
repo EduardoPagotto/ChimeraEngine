@@ -3,7 +3,7 @@
 #include "cevk/RenderPass.hpp"
 #include "cevk/SwapChain.hpp"
 #include "cevk/VulkanContext.hpp"
-#include "cevk_infra/ICanva.hpp"
+#include "chimera_base/ICanva.hpp"
 #include <SDL3/SDL.h>
 #include <memory>
 

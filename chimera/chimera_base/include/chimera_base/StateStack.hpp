@@ -1,5 +1,5 @@
 #pragma once
-#include "cevk_infra/IStateMachine.hpp"
+#include "chimera_base/IStateMachine.hpp"
 #include <memory>
 #include <vector>
 

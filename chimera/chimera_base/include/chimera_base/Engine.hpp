@@ -1,8 +1,8 @@
 #pragma once
 
-#include "cevk_infra/ICanva.hpp"
-#include "cevk_infra/StateStack.hpp"
-#include "cevk_infra/Timer.hpp"
+#include "chimera_base/ICanva.hpp"
+#include "chimera_base/StateStack.hpp"
+#include "chimera_base/Timer.hpp"
 #include <entt/entt.hpp>
 
 namespace ce {

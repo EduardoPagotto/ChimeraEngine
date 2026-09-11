@@ -11,7 +11,7 @@ message(STATUS "Current: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 set (IncludeDirs ${CMAKE_CURRENT_SOURCE_DIR}/include
                  ${CMAKE_SOURCE_DIR}/chimera/cevk/include
-                 ${CMAKE_SOURCE_DIR}/chimera/cevk_infra/include)
+                 ${CMAKE_SOURCE_DIR}/chimera/chimera_base/include)
 
 set(SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/src/CanvaVK.cpp)
 
@@ -20,5 +20,5 @@ add_library(${PROJECT_NAME} STATIC ${SourceFiles})
 target_include_directories (${PROJECT_NAME} PRIVATE ${IncludeDirs})
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
-add_dependencies(${PROJECT_NAME} cevk_infra
-                                 cevk)
+add_dependencies(${PROJECT_NAME} cevk
+                                 chimera_base)

@@ -14,12 +14,12 @@ find_package(fastgltf REQUIRED)
 
 set (IncludeDirs ${CMAKE_CURRENT_SOURCE_DIR}/include
                  ${CMAKE_SOURCE_DIR}/chimera/cevk/include/
-                 ${CMAKE_SOURCE_DIR}/chimera/cevk_infra/include/
+                 ${CMAKE_SOURCE_DIR}/chimera/chimera_base/include/
                  ${CMAKE_SOURCE_DIR}/chimera/cevk_engine/include/)
 
 set (LIBRARY_DEPS ${CMAKE_SOURCE_DIR}/bin/libcevk.a
                   ${CMAKE_SOURCE_DIR}/bin/libcevk_engine.a
-                  ${CMAKE_SOURCE_DIR}/bin/libcevk_infra.a
+                  ${CMAKE_SOURCE_DIR}/bin/libchimera_base.a
                   SDL3::SDL3
                   SDL3_image::SDL3_image
                   Vulkan::Vulkan

@@ -5,8 +5,8 @@
 #include "cevk/UBO.hpp"
 #include "cevk/VulkanContext.hpp"
 #include "cevk_engine/CanvaVK.hpp"
-#include "cevk_infra/IStateMachine.hpp"
-#include "cevk_infra/InputManager.hpp"
+#include "chimera_base/IStateMachine.hpp"
+#include "chimera_base/InputManager.hpp"
 #include <entt/entt.hpp>
 #include <memory>
 

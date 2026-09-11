@@ -1,6 +1,6 @@
-#include "cevk_infra/Engine.hpp"
-#include "cevk_infra/InputManager.hpp"
-#include "cevk_infra/event.hpp"
+#include "chimera_base/Engine.hpp"
+#include "chimera_base/InputManager.hpp"
+#include "chimera_base/event.hpp"
 
 namespace ce {
 

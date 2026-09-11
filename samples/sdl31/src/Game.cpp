@@ -1,7 +1,7 @@
 #include "Game.hpp"
 #include "cevk/CmdRender.hpp"
 #include "cevk/Mesh.hpp"
-#include "cevk_infra/event.hpp"
+#include "chimera_base/event.hpp"
 #include <SDL3/SDL_init.h>
 #include <SDL3/SDL_keycode.h>
 #include <SDL3/SDL_log.h>

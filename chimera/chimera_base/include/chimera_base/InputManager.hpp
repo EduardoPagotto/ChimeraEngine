@@ -1,9 +1,9 @@
 #pragma once
 
-#include "cevk_infra/GamePad.hpp"
-#include "cevk_infra/Joystick.hpp"
-#include "cevk_infra/Keyboard.hpp"
-#include "cevk_infra/Mouse.hpp"
+#include "chimera_base/GamePad.hpp"
+#include "chimera_base/Joystick.hpp"
+#include "chimera_base/Keyboard.hpp"
+#include "chimera_base/Mouse.hpp"
 #include <SDL3/SDL_stdinc.h>
 #include <optional>
 namespace ce {

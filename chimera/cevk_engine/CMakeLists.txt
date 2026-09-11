@@ -13,7 +13,7 @@ set (IncludeDirs ${CMAKE_CURRENT_SOURCE_DIR}/include
                  ${CMAKE_SOURCE_DIR}/chimera/cevk/include
                  ${CMAKE_SOURCE_DIR}/chimera/cevk_infra/include)
 
-set(SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/src/ScreenVK.cpp)
+set(SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/src/CanvaVK.cpp)
 
 add_library(${PROJECT_NAME} STATIC ${SourceFiles})
 

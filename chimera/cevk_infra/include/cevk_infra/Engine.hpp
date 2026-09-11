@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cevk_infra/IScr.hpp"
+#include "cevk_infra/ICanva.hpp"
 #include "cevk_infra/StateStack.hpp"
 #include "cevk_infra/Timer.hpp"
 #include <entt/entt.hpp>

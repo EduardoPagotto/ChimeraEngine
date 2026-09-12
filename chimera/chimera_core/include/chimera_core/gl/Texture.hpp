@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/gl/OpenGLDefs.hpp"
+#include "chimera_core/gl/OpenGLDefs.hpp"
 #include <SDL3/SDL.h>
 
 namespace ce {

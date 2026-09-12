@@ -1,6 +1,6 @@
 #pragma once
-#include "chimera/core/visible/Mesh.hpp"
-#include "chimera/space/AABB.hpp"
+#include "chimera_core/visible/Mesh.hpp"
+#include "chimera_space/AABB.hpp"
 #include <vector>
 
 namespace ce {

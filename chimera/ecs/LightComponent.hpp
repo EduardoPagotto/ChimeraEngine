@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/visible/Light.hpp"
+#include "chimera_core/visible/Light.hpp"
 #include "ecs.hpp"
 
 namespace ce {

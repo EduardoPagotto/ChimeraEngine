@@ -1,7 +1,7 @@
 #pragma once
 #include "Collada.hpp"
-#include "chimera/core/gl/Texture.hpp"
 #include "chimera/ecs/Entity.hpp"
+#include "chimera_core/gl/Texture.hpp"
 
 namespace ce {
     class ColladaEffect : public Collada {

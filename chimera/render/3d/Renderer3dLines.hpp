@@ -1,7 +1,7 @@
 #pragma once
 #include "IRenderer3d.hpp"
-#include "chimera/core/gl/DrawLine.hpp"
-#include "chimera/space/Frustum.hpp"
+#include "chimera_core/gl/DrawLine.hpp"
+#include "chimera_space/Frustum.hpp"
 
 namespace ce {
 

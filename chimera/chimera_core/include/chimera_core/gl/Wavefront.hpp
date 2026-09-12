@@ -1,6 +1,6 @@
 #pragma once
-#include "chimera/core/gl/Material.hpp"
-#include "chimera/core/visible/Mesh.hpp"
+#include "chimera_core/gl/Material.hpp"
+#include "chimera_core/visible/Mesh.hpp"
 
 namespace ce {
     void wavefrontObjLoad(const std::string& path, Mesh* mesh, std::string& fileMath);

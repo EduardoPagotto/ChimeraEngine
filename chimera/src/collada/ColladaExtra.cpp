@@ -2,8 +2,8 @@
 #include "chimera/collada/ColladaCam.hpp"
 #include "chimera/collada/ColladaEffect.hpp"
 #include "chimera/collada/RFC3986.hpp"
-#include "chimera/core/gl/FontMng.hpp"
-#include "chimera/core/gl/buffer/FrameBuffer.hpp"
+#include "chimera_core/gl/FontMng.hpp"
+#include "chimera_core/gl/buffer/FrameBuffer.hpp"
 
 namespace ce {
 

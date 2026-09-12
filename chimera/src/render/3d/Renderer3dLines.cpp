@@ -1,5 +1,5 @@
 #include "chimera/render/3d/Renderer3dLines.hpp"
-#include "chimera/space/AABB.hpp"
+#include "chimera_space/AABB.hpp"
 
 namespace ce {
 

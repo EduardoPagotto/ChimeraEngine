@@ -1,6 +1,6 @@
 #pragma once
-#include "chimera/core/gl/OpenGLDefs.hpp"
-#include "chimera/space/AABB.hpp"
+#include "chimera_core/gl/OpenGLDefs.hpp"
+#include "chimera_space/AABB.hpp"
 #include <memory>
 #include <vector>
 

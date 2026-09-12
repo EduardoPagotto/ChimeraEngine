@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/base/Uniform.hpp"
+#include "chimera_base/aux/Uniform.hpp"
 
 namespace ce {
 

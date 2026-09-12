@@ -1,8 +1,8 @@
 #pragma once
 #include "TileLayer.hpp"
-#include "chimera/base/Engine.hpp"
-#include "chimera/base/IStateMachine.hpp"
 #include "chimera/render/2d/Label.hpp"
+#include "chimera_base/Engine.hpp"
+#include "chimera_base/IStateMachine.hpp"
 
 class Game : public ce::IStateMachine {
   public:

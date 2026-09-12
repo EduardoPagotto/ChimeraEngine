@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/base/Transform.hpp"
+#include "chimera_base/Transform.hpp"
 #include "ecs.hpp"
 
 namespace ce {

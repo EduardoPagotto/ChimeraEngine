@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/visible/Mesh.hpp"
+#include "chimera_core/visible/Mesh.hpp"
 #include "ecs.hpp"
 
 namespace ce {

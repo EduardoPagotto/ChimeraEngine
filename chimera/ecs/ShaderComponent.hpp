@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/gl/Shader.hpp"
+#include "chimera_core/gl/Shader.hpp"
 #include "ecs.hpp"
 
 namespace ce {

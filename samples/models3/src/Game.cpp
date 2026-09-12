@@ -1,11 +1,11 @@
 #include "Game.hpp"
-#include "chimera/base/event.hpp"
-#include "chimera/base/utils.hpp"
-#include "chimera/core/gl/FontMng.hpp"
 #include "chimera/ecs/TransComponent.hpp"
 #include "chimera/render/2d/Group.hpp"
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/2d/Tile.hpp"
+#include "chimera_base/event.hpp"
+#include "chimera_base/utils.hpp"
+#include "chimera_core/gl/FontMng.hpp"
 
 Game::Game(ce::Scene* scene) : IStateMachine("Game"), scene(scene), pCorpoRigido(nullptr) {
     using namespace ce;

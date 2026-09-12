@@ -1,9 +1,9 @@
 #include "chimera/collada/ColladaEffect.hpp"
 #include "chimera/collada/ColladaImage.hpp"
-#include "chimera/core/gl/ShaderMng.hpp"
-#include "chimera/core/gl/TextureMng.hpp"
 #include "chimera/ecs/MaterialComponent.hpp"
 #include "chimera/ecs/ShaderComponent.hpp"
+#include "chimera_core/gl/ShaderMng.hpp"
+#include "chimera_core/gl/TextureMng.hpp"
 
 namespace ce {
 

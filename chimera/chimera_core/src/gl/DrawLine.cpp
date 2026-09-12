@@ -1,4 +1,4 @@
-#include "chimera/core/gl/DrawLine.hpp"
+#include "chimera_core/gl/DrawLine.hpp"
 
 namespace ce {
 

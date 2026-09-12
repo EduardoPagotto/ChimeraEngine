@@ -1,6 +1,6 @@
 #pragma once
-#include "chimera/core/visible/Mesh.hpp"
-#include "chimera/space/Triangle.hpp"
+#include "chimera_core/visible/Mesh.hpp"
+#include "chimera_space/Triangle.hpp"
 #include <SDL3/SDL.h>
 #include <string>
 

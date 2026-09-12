@@ -1,5 +1,5 @@
-#include "chimera/core/bullet/PhysicsControl.hpp"
-#include "chimera/base/event.hpp"
+#include "chimera_core/bullet/PhysicsControl.hpp"
+#include "chimera_base/event.hpp"
 
 namespace ce {
 

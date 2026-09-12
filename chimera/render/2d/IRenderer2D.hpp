@@ -1,7 +1,7 @@
 #pragma once
-#include "chimera/base/ICamera.hpp"
-#include "chimera/base/TransformationStack.hpp"
-#include "chimera/core/gl/Font.hpp"
+#include "chimera_base/ICamera.hpp"
+#include "chimera_base/TransformationStack.hpp"
+#include "chimera_core/gl/Font.hpp"
 #include <string>
 
 namespace ce {

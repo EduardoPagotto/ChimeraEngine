@@ -1,7 +1,7 @@
 #include "chimera/render/3d/RenderableArray.hpp"
-#include "chimera/core/gl/RenderCommand.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderableIBO.hpp"
+#include "chimera_core/gl/RenderCommand.hpp"
 #include <SDL3/SDL.h>
 
 namespace ce {

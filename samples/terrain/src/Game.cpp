@@ -1,6 +1,6 @@
 #include "Game.hpp"
-#include "chimera/base/event.hpp"
-#include "chimera/core/gl/OpenGLDefs.hpp"
+#include "chimera_base/event.hpp"
+#include "chimera_core/gl/OpenGLDefs.hpp"
 
 Game::Game() : IStateMachine("Game") {
     keyboard = ce::g_service_locator.getService<ce::Keyboard>();

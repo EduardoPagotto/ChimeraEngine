@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/gl/ParticleEmitter.hpp"
+#include "chimera_core/gl/ParticleEmitter.hpp"
 #include "ecs.hpp"
 
 namespace ce {

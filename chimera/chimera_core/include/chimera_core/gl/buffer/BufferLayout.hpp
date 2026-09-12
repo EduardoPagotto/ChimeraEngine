@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/gl/OpenGLDefs.hpp"
+#include "chimera_core/gl/OpenGLDefs.hpp"
 #include <cstdint>
 #include <vector>
 

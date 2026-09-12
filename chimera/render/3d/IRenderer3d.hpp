@@ -1,12 +1,12 @@
 #pragma once
-#include "chimera/base/ICamera.hpp"
-#include "chimera/base/TransformationStack.hpp"
-#include "chimera/base/Uniform.hpp"
-#include "chimera/base/ViewProjection.hpp"
-#include "chimera/core/gl/RenderCommand.hpp"
-#include "chimera/core/gl/buffer/IndexBuffer.hpp"
-#include "chimera/core/gl/buffer/VertexArray.hpp"
-#include "chimera/space/Octree.hpp"
+#include "chimera_base/ICamera.hpp"
+#include "chimera_base/TransformationStack.hpp"
+#include "chimera_base/Uniform.hpp"
+#include "chimera_base/ViewProjection.hpp"
+#include "chimera_core/gl/RenderCommand.hpp"
+#include "chimera_core/gl/buffer/IndexBuffer.hpp"
+#include "chimera_core/gl/buffer/VertexArray.hpp"
+#include "chimera_space/Octree.hpp"
 #include <vector>
 
 namespace ce {

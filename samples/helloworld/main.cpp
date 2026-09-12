@@ -1,12 +1,12 @@
 #include "Game.hpp"
-#include "chimera/base/Engine.hpp"
-#include "chimera/base/Mouse.hpp"
-#include "chimera/base/ViewProjection.hpp"
 #include "chimera/collada/Collada.hpp"
 #include "chimera/collada/colladaLoad.hpp"
-#include "chimera/core/gl/CanvasGL.hpp"
-#include "chimera/core/gl/FontMng.hpp"
-#include "chimera/core/gl/ShaderMng.hpp"
+#include "chimera_base/Engine.hpp"
+#include "chimera_base/Mouse.hpp"
+#include "chimera_base/ViewProjection.hpp"
+#include "chimera_core/gl/CanvasGL.hpp"
+#include "chimera_core/gl/FontMng.hpp"
+#include "chimera_core/gl/ShaderMng.hpp"
 #include <config_params.hpp>
 #include <iostream>
 

@@ -1,15 +1,15 @@
 #pragma once
-#include "chimera/base/ICamera.hpp"
-#include "chimera/base/IStateMachine.hpp"
-#include "chimera/base/StateStack.hpp"
-#include "chimera/base/Transform.hpp"
-#include "chimera/core/bullet/interfaces.hpp"
-#include "chimera/core/gl/ParticleEmitter.hpp"
-#include "chimera/core/gl/buffer/RenderBuffer.hpp"
 #include "chimera/ecs/Entity.hpp"
 #include "chimera/render/2d/BatchRender2D.hpp"
 #include "chimera/render/3d/Renderer3dLines.hpp"
-#include "chimera/space/Octree.hpp"
+#include "chimera_base/ICamera.hpp"
+#include "chimera_base/IStateMachine.hpp"
+#include "chimera_base/StateStack.hpp"
+#include "chimera_base/Transform.hpp"
+#include "chimera_core/bullet/interfaces.hpp"
+#include "chimera_core/gl/ParticleEmitter.hpp"
+#include "chimera_core/gl/buffer/RenderBuffer.hpp"
+#include "chimera_space/Octree.hpp"
 
 namespace ce {
 

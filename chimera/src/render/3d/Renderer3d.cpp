@@ -1,6 +1,6 @@
 #include "chimera/render/3d/Renderer3d.hpp"
-#include "chimera/core/gl/buffer/VertexArray.hpp"
-#include "chimera/space/AABB.hpp"
+#include "chimera_core/gl/buffer/VertexArray.hpp"
+#include "chimera_space/AABB.hpp"
 #include <SDL3/SDL.h>
 
 namespace ce {

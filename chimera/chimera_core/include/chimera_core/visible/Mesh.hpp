@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/space/Triangle.hpp"
+#include "chimera_space/Triangle.hpp"
 #include <glm/glm.hpp>
 #include <list>
 #include <memory>

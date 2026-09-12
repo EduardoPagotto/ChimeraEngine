@@ -1,4 +1,4 @@
-#include "chimera/core/gl/Font.hpp"
+#include "chimera_core/gl/Font.hpp"
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 

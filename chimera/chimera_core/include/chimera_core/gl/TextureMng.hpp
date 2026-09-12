@@ -1,13 +1,12 @@
 #pragma once
 #include "Texture.hpp"
-#include "chimera/base/ServiceLocator.hpp"
 #include <SDL3_image/SDL_image.h>
 #include <memory>
 #include <unordered_map>
 
 namespace ce {
 
-    class TextureMng : public IService {
+    class TextureMng {
       private:
         std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 
@@ -18,7 +17,7 @@ namespace ce {
         TextureMng(const TextureMng& o) = delete;
         TextureMng& operator=(const TextureMng& o) = delete;
 
-        std::type_index getTypeIndex() const override { return std::type_index(typeid(TextureMng)); }
+        // std::type_index getTypeIndex() const override { return std::type_index(typeid(TextureMng)); }
 
         void clear() noexcept {
             for (auto it = textures.begin(); it != textures.end(); it++) {

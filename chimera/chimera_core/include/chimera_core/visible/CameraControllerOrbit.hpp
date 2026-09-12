@@ -1,9 +1,9 @@
 #pragma once
-#include "chimera/base/ICamera.hpp"
-#include "chimera/base/IStateMachine.hpp"
-#include "chimera/base/Mouse.hpp"
-#include "chimera/base/ViewProjection.hpp"
 #include "chimera/ecs/Entity.hpp"
+#include "chimera_base/ICamera.hpp"
+#include "chimera_base/IStateMachine.hpp"
+#include "chimera_base/Mouse.hpp"
+#include "chimera_base/ViewProjection.hpp"
 
 namespace ce {
 

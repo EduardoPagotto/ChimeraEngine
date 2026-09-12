@@ -1,15 +1,15 @@
 #include "Game.hpp"
-#include "chimera/base/Engine.hpp"
-#include "chimera/base/GamePad.hpp"
-#include "chimera/base/Joystick.hpp"
-#include "chimera/base/Keyboard.hpp"
-#include "chimera/base/ServiceLocator.hpp"
-#include "chimera/base/event.hpp"
 #include "chimera/collada/Collada.hpp"
 #include "chimera/collada/colladaLoad.hpp"
-#include "chimera/core/gl/CanvasGL.hpp"
-#include "chimera/core/gl/ShaderMng.hpp"
 #include "chimera/render/scene/Scene.hpp"
+#include "chimera_base/Engine.hpp"
+#include "chimera_base/GamePad.hpp"
+#include "chimera_base/Joystick.hpp"
+#include "chimera_base/Keyboard.hpp"
+#include "chimera_base/ServiceLocator.hpp"
+#include "chimera_base/event.hpp"
+#include "chimera_core/gl/CanvasGL.hpp"
+#include "chimera_core/gl/ShaderMng.hpp"
 #include <config_params.hpp>
 
 Game::Game() : IStateMachine("Game") { mouse = ce::g_service_locator.getService<ce::Mouse>(); }

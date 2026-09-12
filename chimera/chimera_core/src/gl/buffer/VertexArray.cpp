@@ -1,5 +1,5 @@
-#include "chimera/core/gl/buffer/VertexArray.hpp"
-#include "chimera/core/gl/OpenGLDefs.hpp"
+#include "chimera_core/gl/buffer/VertexArray.hpp"
+#include "chimera_core/gl/OpenGLDefs.hpp"
 
 namespace ce {
 

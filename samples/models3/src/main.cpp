@@ -1,11 +1,11 @@
 #include "Game.hpp"
-#include "chimera/base/Engine.hpp"
 #include "chimera/collada/Collada.hpp"
 #include "chimera/collada/ColladaRender.hpp"
 #include "chimera/collada/colladaLoad.hpp"
-#include "chimera/core/gl/CanvasGL.hpp"
-#include "chimera/core/gl/FontMng.hpp"
-#include "chimera/core/gl/ShaderMng.hpp"
+#include "chimera_base/Engine.hpp"
+#include "chimera_core/gl/CanvasGL.hpp"
+#include "chimera_core/gl/FontMng.hpp"
+#include "chimera_core/gl/ShaderMng.hpp"
 #include <config_params.hpp>
 #include <cstdio>
 #include <iostream>

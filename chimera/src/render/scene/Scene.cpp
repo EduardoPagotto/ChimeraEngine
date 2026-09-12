@@ -1,10 +1,4 @@
 #include "chimera/render/scene/Scene.hpp"
-#include "chimera/base/ICanva.hpp"
-#include "chimera/core/bullet/Solid.hpp"
-#include "chimera/core/gl/RenderCommand.hpp"
-#include "chimera/core/gl/ShaderMng.hpp"
-#include "chimera/core/visible/CameraControllerFPS.hpp"
-#include "chimera/core/visible/CameraControllerOrbit.hpp"
 #include "chimera/ecs/CameraComponent.hpp"
 #include "chimera/ecs/EmitterComponent.hpp"
 #include "chimera/ecs/LightComponent.hpp"
@@ -19,6 +13,12 @@
 #include "chimera/render/3d/RenderableMesh.hpp"
 #include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/3d/Renderer3d.hpp"
+#include "chimera_base/ICanva.hpp"
+#include "chimera_core/bullet/Solid.hpp"
+#include "chimera_core/gl/RenderCommand.hpp"
+#include "chimera_core/gl/ShaderMng.hpp"
+#include "chimera_core/visible/CameraControllerFPS.hpp"
+#include "chimera_core/visible/CameraControllerOrbit.hpp"
 
 namespace ce {
 

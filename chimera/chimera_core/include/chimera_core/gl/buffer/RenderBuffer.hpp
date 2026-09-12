@@ -1,7 +1,7 @@
 #pragma once
 #include "FrameBuffer.hpp"
 #include "VertexBuffer.hpp"
-#include "chimera/core/gl/Shader.hpp"
+#include "chimera_core/gl/Shader.hpp"
 
 namespace ce {
 

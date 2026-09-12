@@ -10,28 +10,30 @@ if (BULLET_SET_TO_USE)
 endif(BULLET_SET_TO_USE)
 
 # define objetos a compilar
-set (SourceFiles gl/CanvasGL.cpp
-				 gl/buffer/IndexBuffer.cpp
-				 gl/buffer/VertexArray.cpp
-				 gl/buffer/FrameBuffer.cpp
-				 gl/buffer/RenderBuffer.cpp
-				 gl/DrawLine.cpp
-				 gl/Shader.cpp
-				 gl/ShaderMng.cpp
-				 gl/Texture.cpp
-				 gl/Font.cpp
-				 gl/Material.cpp
-				 gl/ParticleEmitter.cpp
-				 gl/Wavefront.cpp
-				 visible/Mesh.cpp
-				 visible/CameraControllerFPS.cpp
-				 visible/CameraControllerOrbit.cpp
-				 partition/BSPTree.cpp
-				 partition/LoadHeightMap.cpp
-				 partition/Cube.cpp)
+set (SourceFiles src/gl/CanvasGL.cpp
+				 src/gl/buffer/IndexBuffer.cpp
+				 src/gl/buffer/VertexArray.cpp
+				 src/gl/buffer/FrameBuffer.cpp
+				 src/gl/buffer/RenderBuffer.cpp
+				 src/gl/DrawLine.cpp
+				 src/gl/Shader.cpp
+				 src/gl/ShaderMng.cpp
+				 src/gl/Texture.cpp
+				 src/gl/Font.cpp
+				 src/gl/Material.cpp
+				 src/gl/ParticleEmitter.cpp
+				 src/gl/Wavefront.cpp
+				 src/visible/Mesh.cpp
+				 src/visible/CameraControllerFPS.cpp
+				 src/visible/CameraControllerOrbit.cpp
+				 src/partition/BSPTree.cpp
+				 src/partition/LoadHeightMap.cpp
+				 src/partition/Cube.cpp)
 
 # define os includes
 set (IncludeDirs ${CMAKE_SOURCE_DIR}/chimera/chimera_base/include/
+				 ${CMAKE_SOURCE_DIR}/chimera/chimera_core/include/
+				 ${CMAKE_SOURCE_DIR}/chimera/chimera_space/include/
 				 ${SDL3_INCLUDE_DIR}
 				 ${OPENGL_INCLUDE_DIR}
 				 ${PUGIXML_DIR}
@@ -46,8 +48,8 @@ endif(OVR_SET_TO_USE)
 
 if (BULLET_SET_TO_USE)
 	message(STATUS "Bullet incluido no build ${PROJECT_NAME}")
-	set(SourceFiles ${SourceFiles} bullet/PhysicsControl.cpp
-								   bullet/Solid.cpp)
+	set(SourceFiles ${SourceFiles} src/bullet/PhysicsControl.cpp
+								   src/bullet/Solid.cpp)
 	set(IncludeDirs ${IncludeDirs} ${BULLET_INCLUDE_DIR} )
 endif(BULLET_SET_TO_USE)
 

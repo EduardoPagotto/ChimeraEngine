@@ -1,11 +1,10 @@
 #pragma once
 #include "Font.hpp"
-#include "chimera/base/ServiceLocator.hpp"
 #include <unordered_map>
 
 namespace ce {
 
-    class FontMng : public IService {
+    class FontMng {
       private:
         std::unordered_map<std::string, std::shared_ptr<Font>> fonts;
 
@@ -16,7 +15,7 @@ namespace ce {
         FontMng(const FontMng& o) = delete;
         FontMng& operator=(const FontMng& o) = delete;
 
-        std::type_index getTypeIndex() const override { return std::type_index(typeid(FontMng)); }
+        // std::type_index getTypeIndex() const override { return std::type_index(typeid(FontMng)); }
 
         void clear() noexcept {
             for (auto it = fonts.begin(); it != fonts.end(); it++) {

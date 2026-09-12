@@ -1,8 +1,8 @@
 #pragma once
 #include "Renderable2D.hpp"
-#include "chimera/core/gl/RenderCommand.hpp"
-#include "chimera/core/gl/buffer/IndexBuffer.hpp"
-#include "chimera/core/gl/buffer/VertexArray.hpp"
+#include "chimera_core/gl/RenderCommand.hpp"
+#include "chimera_core/gl/buffer/IndexBuffer.hpp"
+#include "chimera_core/gl/buffer/VertexArray.hpp"
 
 namespace ce {
 

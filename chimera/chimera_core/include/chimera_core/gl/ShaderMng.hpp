@@ -1,10 +1,9 @@
 #pragma once
 #include "Shader.hpp"
-#include "chimera/base/ServiceLocator.hpp"
 
 namespace ce {
 
-    class ShaderMng : public IService {
+    class ShaderMng {
       private:
         std::unordered_map<std::string, std::shared_ptr<Shader>> map_shaders;
 
@@ -15,7 +14,7 @@ namespace ce {
         ShaderMng(const ShaderMng& o) = delete;
         ShaderMng& operator=(const ShaderMng& o) = delete;
 
-        std::type_index getTypeIndex() const override { return std::type_index(typeid(ShaderMng)); }
+        // std::type_index getTypeIndex() const override { return std::type_index(typeid(ShaderMng)); }
 
         void clear() noexcept {
             for (auto it = map_shaders.begin(); it != map_shaders.end(); it++)

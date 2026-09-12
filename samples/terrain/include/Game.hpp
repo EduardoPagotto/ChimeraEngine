@@ -1,7 +1,7 @@
 #pragma once
-#include "chimera/base/IStateMachine.hpp"
-#include "chimera/base/Keyboard.hpp"
-#include "chimera/base/Mouse.hpp"
+#include "chimera_base/IStateMachine.hpp"
+#include "chimera_base/Keyboard.hpp"
+#include "chimera_base/Mouse.hpp"
 
 class Game : public ce::IStateMachine {
   public:

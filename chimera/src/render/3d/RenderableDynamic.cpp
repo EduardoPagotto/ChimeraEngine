@@ -1,6 +1,6 @@
 #include "chimera/render/3d/RenderableDynamic.hpp"
-#include "chimera/core/gl/buffer/VertexArray.hpp"
-#include "chimera/core/gl/buffer/VertexBuffer.hpp"
+#include "chimera_core/gl/buffer/VertexArray.hpp"
+#include "chimera_core/gl/buffer/VertexBuffer.hpp"
 
 namespace ce {
 

@@ -1,5 +1,5 @@
 #pragma once
-#include <SDL3/SDL.h>
+#include <stdint.h>
 
 namespace ce {
 
@@ -17,8 +17,5 @@ namespace ce {
         virtual void reshape(int _width, int _height) = 0;
         virtual uint32_t getWidth() const = 0;
         virtual uint32_t getHeight() const = 0;
-        // FB only
-        // virtual uint32_t* getPixels() = 0;
-        // virtual SDL_PixelFormat getPixelFormat() = 0;
     };
 } // namespace ce

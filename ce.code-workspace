@@ -314,7 +314,7 @@
 				"program": "${workspaceFolder}/bin/raycasting",
 				"args": [],
 				"env": {
-					"SDL_VIDEODRIVER": "x11"
+					// "SDL_VIDEODRIVER": "x11"
 				},
 				"cwd": "${workspaceFolder}"
 			},

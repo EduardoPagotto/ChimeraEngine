@@ -86,7 +86,7 @@ add_subdirectory(samples/sdl31)
 
 #add_subdirectory(samples/loader)
 
-# add_subdirectory(samples/raycasting)
+add_subdirectory(samples/raycasting)
 # add_subdirectory(samples/helloworld)
 # add_subdirectory(samples/simples)
 # add_subdirectory(samples/bsptree)

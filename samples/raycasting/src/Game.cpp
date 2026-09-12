@@ -1,17 +1,16 @@
 #include "Game.hpp"
-#include "chimera/base/event.hpp"
+#include "chimera_base/event.hpp"
+#include <format>
 
-Game::Game() : IStateMachine("Game") {
-    // init framebuffer
-    canvas = ce::g_service_locator.getService<ce::ICanva>();
-    // init keyboard
-    keyboard = ce::g_service_locator.getService<ce::Keyboard>();
+Game::Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::CanvaFB> canva)
+    : registry(registry), canva(canva) {
+
+    this->inputManager = registry->ctx().get<std::shared_ptr<ce::InputManager>>();
 }
 
-Game::~Game() {
-    canvas = nullptr;
-    keyboard = nullptr;
-}
+Game::~Game() {}
+
+std::string Game::getName() const { return "GAME"; }
 
 void Game::onAttach() {
 
@@ -26,44 +25,45 @@ void Game::onAttach() {
 
     world = new World;
 
-    if (!LoadWorld("assets/maps/raycasting_world.txt", world)) {
-        printf("\nError loading world file!");
-        exit(0);
+    const char* file = "assets/maps/raycasting_world.txt";
+
+    if (!LoadWorld(file, world)) {
+        throw std::runtime_error(std::format("File not found: {}", file));
     }
 }
 
 void Game::onDeatach() {}
 
 bool Game::onEvent(const SDL_Event& event) {
-    using namespace ce;
+    // using namespace ce;
 
-    keyboard->getEvent(event);
+    // keyboard->getEvent(event);
 
-    switch (event.type) {
-        case SDL_EVENT_WINDOW_MOUSE_ENTER:
-            ce::sendChimeraEvent(ce::EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
-            break;
-        case SDL_EVENT_WINDOW_MOUSE_LEAVE:
-            ce::sendChimeraEvent(ce::EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
-            break;
-    }
-    return true;
+    // switch (event.type) {
+    //     case SDL_EVENT_WINDOW_MOUSE_ENTER:
+    //         ce::sendChimeraEvent(ce::EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+    //         break;
+    //     case SDL_EVENT_WINDOW_MOUSE_LEAVE:
+    //         ce::sendChimeraEvent(ce::EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+    //         break;
+    // }
+    return false;
 }
 
 void Game::onUpdate(const double& ts) {
     using namespace ce;
 
-    if (keyboard->isPressed(SDLK_ESCAPE)) {
-        ce::sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
+    if (this->inputManager->keyboard->isPressed(SDLK_ESCAPE)) {
+        sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
         return;
     }
 
-    if (keyboard->isPressed(SDLK_F10)) {
-        ce::sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
+    if (this->inputManager->keyboard->isPressed(SDLK_F1)) {
+        sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
         return;
     }
 
-    if (keyboard->isPressed(SDLK_W)) {
+    if (this->inputManager->keyboard->isPressed(SDLK_W)) {
         glm::ivec2 curr = state->pos;
         glm::ivec2 next = state->pos + state->dir * moveSpeed * 2.0f;
 
@@ -76,7 +76,7 @@ void Game::onUpdate(const double& ts) {
         return;
     }
 
-    if (keyboard->isPressed(SDLK_S)) {
+    if (this->inputManager->keyboard->isPressed(SDLK_S)) {
         glm::ivec2 curr = state->pos;
         glm::ivec2 next = state->pos - state->dir * moveSpeed * 2.0f;
 
@@ -89,7 +89,7 @@ void Game::onUpdate(const double& ts) {
         return;
     }
 
-    if (keyboard->isPressed(SDLK_A)) {
+    if (this->inputManager->keyboard->isPressed(SDLK_A)) {
         double oldDirX = state->dir.x;
         state->dir.x = state->dir.x * cos(rotSpeed) - state->dir.y * sin(rotSpeed);
         state->dir.y = oldDirX * sin(rotSpeed) + state->dir.y * cos(rotSpeed);
@@ -100,7 +100,7 @@ void Game::onUpdate(const double& ts) {
         return;
     }
 
-    if (keyboard->isPressed(SDLK_D)) {
+    if (this->inputManager->keyboard->isPressed(SDLK_D)) {
         double oldDirX = state->dir.x;
         state->dir.x = state->dir.x * cos(-rotSpeed) - state->dir.y * sin(-rotSpeed);
         state->dir.y = oldDirX * sin(-rotSpeed) + state->dir.y * cos(-rotSpeed);
@@ -114,14 +114,14 @@ void Game::onUpdate(const double& ts) {
 
 void Game::onRender() {
 
-    // int* gFrameBuffer = (int*)canvas.get()->getPixels();
+    // int* gFrameBuffer = (int*)canva.get()->getPixels();
     // uint64_t aTicks = SDL_GetTicks();
 
-    // for (int i = 0, c = 0; i < canvas->getHeight(); i++) {
-    //     for (int j = 0; j < canvas->getWidth(); j++, c++) {
+    // for (int i = 0, c = 0; i < canva->getHeight(); i++) {
+    //     for (int j = 0; j < canva->getWidth(); j++, c++) {
     //         gFrameBuffer[c] = (int)(i * i + j * j + aTicks) | 0xff000000;
     //     }
     // }
 
-    RenderScene(*state, *world, canvas.get());
+    RenderScene(*state, *world, canva.get());
 }

@@ -12,7 +12,8 @@ set (IncludeDirs ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 set(SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/src/Timer.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/StateStack.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/Engine.cpp)
+                ${CMAKE_CURRENT_SOURCE_DIR}/src/Engine.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/src/CanvaFB.cpp)
 
 add_library(${PROJECT_NAME} STATIC ${SourceFiles})
 

@@ -1,5 +1,5 @@
-#include "cevk_infra/AssetManager.hpp"
-#include "cevk_infra/Loader.hpp"
+#include "cevk_engine/AssetManager.hpp"
+#include "cevk_engine/Loader.hpp"
 
 int main() {
 

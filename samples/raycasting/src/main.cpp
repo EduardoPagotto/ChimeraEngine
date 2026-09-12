@@ -1,46 +1,57 @@
 #include "Game.hpp"
-#include "chimera/base/CanvasFB.hpp"
-#include "chimera/base/Engine.hpp"
-#include "chimera/base/Keyboard.hpp"
-#include "chimera/base/ViewProjection.hpp"
-#include <config_params.hpp>
-#include <iostream>
-#include <string>
+#include "chimera_base/Engine.hpp"
+#include "chimera_base/InputManager.hpp"
+#include <stdexcept>
 
 int main(int argn, char** argv) {
-    using namespace ce;
-    try {
-        SDL_SetAppMetadata(std::string(project_name).c_str(), std::string(project_version).c_str(),
-                           "com.mechanical.engine");
 
-        SDL_SetLogPriorities(SDL_LOG_PRIORITY_DEBUG);
+    auto result = EXIT_SUCCESS;
+
+    using namespace ce;
+
+    try {
+        // SDL_SetAppMetadata(std::string(project_name).c_str(), std::string(project_version).c_str(),
+        //                    "com.mechanical.engine");
+
+        // Habilita todas as mensagens em modo Debug
+        SDL_SetLogPriority(SDL_LOG_CATEGORY_VIDEO, SDL_LOG_PRIORITY_DEBUG);
+        SDL_SetLogPriority(SDL_LOG_CATEGORY_INPUT, SDL_LOG_PRIORITY_DEBUG);
+        SDL_SetLogPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG);
+        SDL_SetLogPriority(SDL_LOG_CATEGORY_RENDER, SDL_LOG_PRIORITY_DEBUG);
+
         SDL_Log("Simple ray-casting Iniciado");
 
-        // Registry to entt
-        // auto reg = std::make_shared<Registry>();
+        std::shared_ptr<entt::registry> registry = std::make_shared<entt::registry>();
 
-        // Services shared inside all parts
-        // Canvas, Mouse, keyboard, Joystick, gamepad, view's
-        g_service_locator.registerService(std::make_shared<Keyboard>());
-        g_service_locator.registerService(std::make_shared<CanvasFB>("BSP Tree", 800, 600, false));
-        g_service_locator.registerService(std::make_shared<ViewProjection>()); // not used but necessary
+        using enum ce::InputEnable;
+        InputEnable in = Mouse | Keyboard;
 
-        // Engine
-        Engine engine;
+        registry->ctx().emplace<std::shared_ptr<InputManager>>(std::make_shared<InputManager>(in, true));
 
-        Game* game = new Game;
+        std::shared_ptr<CanvaFB> canva = std::make_shared<CanvaFB>("Teste Framebuffer SDL3", 800, 600, false);
+
+        // // Engine
+        Engine engine(registry, canva);
+
+        std::shared_ptr<IStateMachine> game = std::make_shared<Game>(registry, canva);
 
         engine.getStack().pushState(game);
         engine.run();
 
         SDL_Log("Loop de Game encerrado!!!!");
-        delete game;
-        SDL_Log("raycasting finalizado com sucesso");
+
         return 0;
 
-    } catch (const std::string& ex) { SDL_Log("Falha grave: %s", ex.c_str()); } catch (...) {
-        SDL_Log("Falha Desconhecida");
+    } catch (const std::runtime_error& e) {
+
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s", e.what());
+        result = EXIT_FAILURE;
+
+    } catch (...) {
+
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha Desconhecida");
+        result = EXIT_FAILURE;
     }
 
-    return -1;
+    return result;
 }

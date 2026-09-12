@@ -1,12 +1,16 @@
 #include "raycasting.hpp"
+#include <SDL3/SDL_log.h>
+#include <SDL3/SDL_pixels.h>
 #include <cmath>
+#include <format>
+#include <stdexcept>
 
 bool LoadWorld(const char filename[], World* world) {
     FILE* file;
     char string[1024];
 
     file = fopen(filename, "rb");
-    if (!file) {
+    if (file == nullptr) {
         return false;
     }
 
@@ -17,8 +21,8 @@ bool LoadWorld(const char filename[], World* world) {
     fgets(string, 1024, file);
     world->height = atoi(string);
 
-    // alocação de mapa
-    world->data = new uint8_t[world->width * world->height];
+    // alocação de mapa // new uint8_t[world->width * world->height];
+    world->data = std::vector<uint8_t>(static_cast<size_t>(world->width) * world->height, 0);
 
     // carregando mapa
     for (uint32_t h = 0; h < world->height; h++) {
@@ -26,7 +30,7 @@ bool LoadWorld(const char filename[], World* world) {
 
         for (uint32_t w = 0; w < world->width; w++) {
 
-            int indice = w + (h * world->width);
+            std::size_t indice = w + (h * world->width);
 
             if (string[w] == 0x20) {
                 // Bloco Vazio
@@ -42,40 +46,53 @@ bool LoadWorld(const char filename[], World* world) {
     return true;
 }
 
-void DrawColumn(RayHit what, World world, ce::ICanva* frame, uint32_t column) {
+void DrawColumn(RayHit what, World world, ce::CanvaFB* canva, uint32_t column) {
     // tipo de bloco detectado
-    uint8_t type = world.data[what.map.x + what.map.y * world.width];
+
+    auto pos = what.map.x + what.map.y * world.width;
+    if (pos > world.data.size()) {
+        throw std::runtime_error(std::format("Poiscao do mapa invalida: {}", pos));
+    }
+
+    uint8_t type = world.data[pos];
+
+    const SDL_PixelFormatDetails* details = SDL_GetPixelFormatDetails(canva->getPixelFormat());
+    // const SDL_PixelFormatDetails* details = SDL_GetPixelFormatDetails(SDL_PIXELFORMAT_BGRA32);
 
     // selecione cor com base no tipo de bloco
-    uint32_t corVal = 0;
+    uint32_t corVal = 0xffffff;
+
     switch (type) {
         case 1:
-            corVal = SDL_MapRGBA(SDL_GetPixelFormatDetails(frame->getPixelFormat()), NULL, 0, 255, 0, 0);
+            corVal = SDL_MapRGBA(details, NULL, 0, 255, 0, 0);
             break;
         case 2:
-            corVal = SDL_MapRGBA(SDL_GetPixelFormatDetails(frame->getPixelFormat()), NULL, 155, 155, 155, 0);
+            corVal = SDL_MapRGBA(details, NULL, 155, 155, 155, 0);
             break;
         case 3:
-            corVal = SDL_MapRGBA(SDL_GetPixelFormatDetails(frame->getPixelFormat()), NULL, 0, 0, 255, 0);
+            corVal = SDL_MapRGBA(details, NULL, 0, 0, 255, 0);
             break;
         case 4:
-            corVal = SDL_MapRGBA(SDL_GetPixelFormatDetails(frame->getPixelFormat()), NULL, 255, 0, 0, 0);
+            corVal = SDL_MapRGBA(details, NULL, 255, 0, 0, 0);
+            break;
+        default:
+            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Pixel incompativel");
             break;
     }
 
     // calcular a altura da coluna
-    uint32_t colh = abs(int(frame->getHeight() / what.distance));
+    uint32_t colh = abs(int(canva->getHeight() / what.distance));
     uint32_t cropup = 0;
     uint32_t cropdown = 0;
     uint32_t index = 0;
 
-    if (colh > frame->getHeight()) // se for maior que a tela, corte
+    if (colh > canva->getHeight()) // se for maior que a tela, corte
     {
         index = column;
-        cropup = (colh - frame->getHeight()) / 2;
+        cropup = (colh - canva->getHeight()) / 2;
         cropdown = cropup + 1;
     } else {
-        index = column + ((frame->getHeight() - colh) / 2) * frame->getWidth();
+        index = column + (((canva->getHeight() - colh) / 2) * canva->getWidth());
         cropup = 0;
         cropdown = 0;
     }
@@ -83,17 +100,17 @@ void DrawColumn(RayHit what, World world, ce::ICanva* frame, uint32_t column) {
     // desenhar coluna
     for (uint32_t c = cropup; c < (colh - cropdown); c++) {
         // desenhe o pixel da cor selecionada
-        frame->getPixels()[index] = corVal;
-        index += frame->getWidth();
+        canva->getPixels()[index] = corVal | 0xfffff; // corVal ; // 0xffffff; //
+        index += canva->getWidth();
     }
 }
 
-void RenderScene(State state, World world, ce::ICanva* frame) {
+void RenderScene(State state, World world, ce::CanvaFB* canva) {
 
-    for (uint32_t column = 0; column < frame->getWidth(); column++) // Para cada coluna
+    for (uint32_t column = 0; column < canva->getWidth(); column++) // Para cada coluna
     {
         // calcular a posição e direção do feixe
-        float cameraX = 2 * column / float(frame->getWidth()) - 1;
+        float cameraX = 2 * column / float(canva->getWidth()) - 1;
         glm::vec2 rayPos = state.pos;
         glm::vec2 rayDir = state.dir + state.cam * cameraX;
 
@@ -127,7 +144,13 @@ void RenderScene(State state, World world, ce::ICanva* frame) {
 
         // vamos lançar o raio
         int side; // face do cubo encontrado (face Norte-Sul ou face Oeste-Leste)
-        while (world.data[map.x + map.y * world.width] == 0) // até nos encontrarmos com uma parede ...
+
+        auto pos = map.x + map.y * world.width;
+        if (pos > world.data.size()) {
+            throw std::runtime_error(std::format("Poiscao do mapa invalida: {}", pos));
+        }
+
+        while (world.data[pos] == 0) // até nos encontrarmos com uma parede ...
         {
             // vamos para o próximo bloco no mapa
             if (sideDist.x < sideDist.y) {
@@ -139,6 +162,8 @@ void RenderScene(State state, World world, ce::ICanva* frame) {
                 map.y += step.y;
                 side = 1;
             }
+
+            pos = map.x + map.y * world.width;
         }
 
         double perpWallDist;
@@ -157,6 +182,6 @@ void RenderScene(State state, World world, ce::ICanva* frame) {
         what.rayDir = rayDir;
 
         // desenhe a coluna
-        DrawColumn(what, world, frame, column);
+        DrawColumn(what, world, canva, column);
     }
 }

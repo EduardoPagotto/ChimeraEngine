@@ -123,5 +123,5 @@ void Game::onRender() {
     //     }
     // }
 
-    RenderScene(*state, *world, canva.get());
+    RenderScene(*state, *world, canva->getPixelsCanvas());
 }

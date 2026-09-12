@@ -29,5 +29,5 @@ struct RayHit {
 };
 
 bool LoadWorld(const char filename[], World* world);
-void DrawColumn(RayHit what, World world, ce::CanvaFB* canva, uint32_t column);
-void RenderScene(State state, World world, ce::CanvaFB* canva);
+void DrawColumn(RayHit what, World world, std::shared_ptr<ce::PixelCanvas> pixelCanvas, uint32_t column);
+void RenderScene(State state, World world, std::shared_ptr<ce::PixelCanvas> pixelCanvas);

@@ -46,7 +46,7 @@ bool LoadWorld(const char filename[], World* world) {
     return true;
 }
 
-void DrawColumn(RayHit what, World world, ce::CanvaFB* canva, uint32_t column) {
+void DrawColumn(RayHit what, World world, std::shared_ptr<ce::PixelCanvas> pixelCanvas, uint32_t column) {
     // tipo de bloco detectado
 
     auto pos = what.map.x + what.map.y * world.width;
@@ -56,7 +56,7 @@ void DrawColumn(RayHit what, World world, ce::CanvaFB* canva, uint32_t column) {
 
     uint8_t type = world.data[pos];
 
-    const SDL_PixelFormatDetails* details = SDL_GetPixelFormatDetails(canva->getPixelFormat());
+    const SDL_PixelFormatDetails* details = SDL_GetPixelFormatDetails(pixelCanvas->getPixelFormat());
     // const SDL_PixelFormatDetails* details = SDL_GetPixelFormatDetails(SDL_PIXELFORMAT_BGRA32);
 
     // selecione cor com base no tipo de bloco
@@ -81,18 +81,18 @@ void DrawColumn(RayHit what, World world, ce::CanvaFB* canva, uint32_t column) {
     }
 
     // calcular a altura da coluna
-    uint32_t colh = abs(int(canva->getHeight() / what.distance));
+    uint32_t colh = abs(int(pixelCanvas->getHeight() / what.distance));
     uint32_t cropup = 0;
     uint32_t cropdown = 0;
     uint32_t index = 0;
 
-    if (colh > canva->getHeight()) // se for maior que a tela, corte
+    if (colh > pixelCanvas->getHeight()) // se for maior que a tela, corte
     {
         index = column;
-        cropup = (colh - canva->getHeight()) / 2;
+        cropup = (colh - pixelCanvas->getHeight()) / 2;
         cropdown = cropup + 1;
     } else {
-        index = column + (((canva->getHeight() - colh) / 2) * canva->getWidth());
+        index = column + (((pixelCanvas->getHeight() - colh) / 2) * pixelCanvas->getWidth());
         cropup = 0;
         cropdown = 0;
     }
@@ -100,17 +100,17 @@ void DrawColumn(RayHit what, World world, ce::CanvaFB* canva, uint32_t column) {
     // desenhar coluna
     for (uint32_t c = cropup; c < (colh - cropdown); c++) {
         // desenhe o pixel da cor selecionada
-        canva->getPixels()[index] = corVal | 0xfffff; // corVal ; // 0xffffff; //
-        index += canva->getWidth();
+        pixelCanvas->getPixels()[index] = corVal | 0xfffff; // corVal ; // 0xffffff; //
+        index += pixelCanvas->getWidth();
     }
 }
 
-void RenderScene(State state, World world, ce::CanvaFB* canva) {
+void RenderScene(State state, World world, std::shared_ptr<ce::PixelCanvas> pixelCanvas) {
 
-    for (uint32_t column = 0; column < canva->getWidth(); column++) // Para cada coluna
+    for (uint32_t column = 0; column < pixelCanvas->getWidth(); column++) // Para cada coluna
     {
         // calcular a posição e direção do feixe
-        float cameraX = 2 * column / float(canva->getWidth()) - 1;
+        float cameraX = 2 * column / float(pixelCanvas->getWidth()) - 1;
         glm::vec2 rayPos = state.pos;
         glm::vec2 rayDir = state.dir + state.cam * cameraX;
 
@@ -182,6 +182,6 @@ void RenderScene(State state, World world, ce::CanvaFB* canva) {
         what.rayDir = rayDir;
 
         // desenhe a coluna
-        DrawColumn(what, world, canva, column);
+        DrawColumn(what, world, pixelCanvas, column);
     }
 }

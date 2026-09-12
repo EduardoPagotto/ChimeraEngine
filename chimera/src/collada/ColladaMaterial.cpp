@@ -1,6 +1,6 @@
 #include "chimera/collada/ColladaMaterial.hpp"
 #include "chimera/collada/ColladaEffect.hpp"
-#include "chimera/ecs/MaterialComponent.hpp"
+#include "chimera_ecs/MaterialComponent.hpp"
 
 namespace ce {
     void ColladaMaterial::create(Entity& entity, const pugi::xml_node& node) {

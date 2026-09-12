@@ -1,10 +1,10 @@
 #include "chimera/collada/ColladaPhysicScene.hpp"
-#include "chimera/ecs/Entity.hpp"
-#include "chimera/ecs/MeshComponent.hpp"
-#include "chimera/ecs/TransComponent.hpp"
 #include "chimera_base/utils.hpp"
 #include "chimera_core/bullet/PhysicsControl.hpp"
 #include "chimera_core/bullet/Solid.hpp"
+#include "chimera_ecs/Entity.hpp"
+#include "chimera_ecs/MeshComponent.hpp"
+#include "chimera_ecs/TransComponent.hpp"
 #include <SDL3/SDL.h>
 
 namespace ce {

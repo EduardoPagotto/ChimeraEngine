@@ -1,8 +1,8 @@
 #include "chimera/collada/ColladaWaveFront.hpp"
 #include "chimera/collada/ColladaEffect.hpp"
-#include "chimera/ecs/MaterialComponent.hpp"
-#include "chimera/ecs/MeshComponent.hpp"
 #include "chimera_core/gl/Wavefront.hpp"
+#include "chimera_ecs/MaterialComponent.hpp"
+#include "chimera_ecs/MeshComponent.hpp"
 
 namespace ce {
     void ColladaWaveFront::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node geo) {

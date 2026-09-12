@@ -1,5 +1,5 @@
 #include "chimera_core/gl/Wavefront.hpp"
-#include "chimera_base/utils.hpp"
+#include "chimera_base/aux/utils.hpp"
 #include "chimera_core/gl/TextureMng.hpp"
 #include <fstream>
 

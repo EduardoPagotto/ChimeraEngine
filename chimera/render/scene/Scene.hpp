@@ -1,5 +1,4 @@
 #pragma once
-#include "chimera/ecs/Entity.hpp"
 #include "chimera/render/2d/BatchRender2D.hpp"
 #include "chimera/render/3d/Renderer3dLines.hpp"
 #include "chimera_base/ICamera.hpp"
@@ -9,6 +8,7 @@
 #include "chimera_core/bullet/interfaces.hpp"
 #include "chimera_core/gl/ParticleEmitter.hpp"
 #include "chimera_core/gl/buffer/RenderBuffer.hpp"
+#include "chimera_ecs/Entity.hpp"
 #include "chimera_space/Octree.hpp"
 
 namespace ce {

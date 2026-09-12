@@ -1,8 +1,8 @@
 #include "chimera/collada/ColladaRender.hpp"
 #include "chimera/collada/ColladaCam.hpp"
 #include "chimera/collada/ColladaEffect.hpp"
-#include "chimera/ecs/CameraComponent.hpp"
-#include "chimera/ecs/ShaderComponent.hpp"
+#include "chimera_ecs/CameraComponent.hpp"
+#include "chimera_ecs/ShaderComponent.hpp"
 
 namespace ce {
 

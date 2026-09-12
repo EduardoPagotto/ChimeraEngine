@@ -1,5 +1,5 @@
 #include "chimera_core/gl/ShaderMng.hpp"
-#include "chimera_base/utils.hpp"
+#include "chimera_base/aux/utils.hpp"
 #include "chimera_core/gl/OpenGLDefs.hpp"
 
 namespace ce {

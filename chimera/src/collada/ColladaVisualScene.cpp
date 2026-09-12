@@ -3,8 +3,8 @@
 #include "chimera/collada/ColladaGeometry.hpp"
 #include "chimera/collada/ColladaLight.hpp"
 #include "chimera/collada/ColladaMaterial.hpp"
-#include "chimera/ecs/Entity.hpp"
-#include "chimera/ecs/TransComponent.hpp"
+#include "chimera_ecs/Entity.hpp"
+#include "chimera_ecs/TransComponent.hpp"
 
 namespace ce {
 

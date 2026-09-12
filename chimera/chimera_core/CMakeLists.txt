@@ -34,6 +34,7 @@ set (SourceFiles src/gl/CanvasGL.cpp
 set (IncludeDirs ${CMAKE_SOURCE_DIR}/chimera/chimera_base/include/
 				 ${CMAKE_SOURCE_DIR}/chimera/chimera_core/include/
 				 ${CMAKE_SOURCE_DIR}/chimera/chimera_space/include/
+				 ${CMAKE_SOURCE_DIR}/chimera/chimera_ecs/include/
 				 ${SDL3_INCLUDE_DIR}
 				 ${OPENGL_INCLUDE_DIR}
 				 ${PUGIXML_DIR}

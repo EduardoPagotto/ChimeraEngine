@@ -1,5 +1,5 @@
 #include "chimera/collada/ColladaLight.hpp"
-#include "chimera/ecs/LightComponent.hpp"
+#include "chimera_ecs/LightComponent.hpp"
 
 namespace ce {
     void ColladaLight::create(Entity& entity, pugi::xml_node nodeLight) { // FIXME: preciso mesmo da entidade ???

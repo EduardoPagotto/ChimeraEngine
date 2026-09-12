@@ -1,11 +1,11 @@
 #pragma once
-#include "chimera/ecs/Entity.hpp"
 #include "chimera/render/2d/Label.hpp"
 #include "chimera/render/scene/Scene.hpp"
 #include "chimera_base/GamePad.hpp"
 #include "chimera_base/IStateMachine.hpp"
 #include "chimera_base/Mouse.hpp"
 #include "chimera_core/bullet/Solid.hpp"
+#include "chimera_ecs/Entity.hpp"
 
 class Game : public ce::IStateMachine {
   public:

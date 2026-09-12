@@ -1,11 +1,11 @@
 #pragma once
-#include "chimera/ecs/Entity.hpp"
 #include "chimera_base/GamePad.hpp"
-#include "chimera_base/ICamera.hpp"
 #include "chimera_base/IStateMachine.hpp"
 #include "chimera_base/Keyboard.hpp"
 #include "chimera_base/Mouse.hpp"
-#include "chimera_base/ViewProjection.hpp"
+#include "chimera_base/aux/ICamera.hpp"
+#include "chimera_base/aux/ViewProjection.hpp"
+#include "chimera_ecs/Entity.hpp"
 
 namespace ce {
 
@@ -31,7 +31,7 @@ namespace ce {
         bool onEvent(const SDL_Event& event) override {
 
             // FIXME: tem merda aqui!!!
-            return gameControl->getEvent(event);
+            // return gameControl->getEvent(event);
         }
 
       private:

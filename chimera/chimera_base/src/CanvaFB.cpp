@@ -1,6 +1,5 @@
 #include "chimera_base/CanvasFB.hpp"
-#include <cstddef>
-#include <cstring>
+#include <SDL3/SDL_pixels.h>
 #include <format>
 #include <memory>
 #include <stdexcept>
@@ -23,7 +22,7 @@ namespace ce {
             throw std::runtime_error(std::format("Couldn't create window: {}", SDL_GetError()));
         }
 
-        this->renderer = SDL_CreateRenderer(window, NULL);
+        this->renderer = SDL_CreateRenderer(window, nullptr);
         if (renderer == nullptr) {
             throw std::runtime_error(std::format("Couldn't create renderer: {})", SDL_GetError()));
         }
@@ -33,22 +32,43 @@ namespace ce {
             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "render present: %s", SDL_GetError());
         }
 
-        this->texture = SDL_CreateTexture(renderer, this->pixelFormat, SDL_TEXTUREACCESS_STREAMING, width, height);
+        SDL_PropertiesID props = SDL_CreateProperties();
+        SDL_SetNumberProperty(props, SDL_PROP_TEXTURE_CREATE_FORMAT_NUMBER, pixelFormat);
+        SDL_SetNumberProperty(props, SDL_PROP_TEXTURE_CREATE_ACCESS_NUMBER, SDL_TEXTUREACCESS_STREAMING);
+        SDL_SetNumberProperty(props, SDL_PROP_TEXTURE_CREATE_WIDTH_NUMBER, width);
+        SDL_SetNumberProperty(props, SDL_PROP_TEXTURE_CREATE_HEIGHT_NUMBER, height);
+
+        // Forçar o espaço de cores correto (sRGB) para evitar o tom desbotado
+        SDL_SetNumberProperty(props, SDL_PROP_TEXTURE_CREATE_COLORSPACE_NUMBER, SDL_COLORSPACE_SRGB);
+
+        // Criar a textura a partir das propriedades
+        this->texture = SDL_CreateTextureWithProperties(renderer, props);
+        // this->texture = SDL_CreateTexture(renderer, this->pixelFormat, SDL_TEXTUREACCESS_STREAMING, width, height);
         if (this->texture == nullptr) {
             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "create texture: %s", SDL_GetError());
         }
 
+        SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+
+        // Limpar as propriedades da memória após o uso (a textura já foi criada)
+        SDL_DestroyProperties(props);
+
         this->pixelCanvas = std::make_shared<PixelCanvas>(width, height, 0, this->pixelFormat);
     }
 
-    void CanvaFB::before() { this->pixelCanvas->clear(0); }
-
-    void CanvaFB::after() {
+    void CanvaFB::before() {
+        // limpa framebuffer
+        this->pixelCanvas->clear(0);
 
         //  Limpa a tela atual
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
         if (!SDL_RenderClear(renderer)) {
             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "render clear: %s", SDL_GetError());
         }
+    }
+
+    void CanvaFB::after() {
 
         // TODO: Colocar no CMAKE este def
 #define FRAMEBUFFER_GPU_SET 1
@@ -61,26 +81,21 @@ namespace ce {
         }
 #else
         // Copia pela CPU
-        char* pix{nullptr};
+        char* pixel{nullptr};
         int pitch{0};
-        SDL_LockTexture(texture, NULL, (void**)&pix, &pitch);
+        SDL_LockTexture(texture, nullptr, (void**)&pixel, &pitch);
 
         for (std::size_t i = 0, sp = 0, dp = 0; i < this->pixelCanvas->getHeight();
              i++, dp += this->pixelCanvas->getWidth(), sp += pitch) {
 
-            std::memcpy(pix + sp, this->pixelCanvas->getPixelsView().data() + dp, this->pixelCanvas->getWithSize());
+            std::memcpy(pixel + sp, this->pixelCanvas->getPixelsView().data() + dp, this->pixelCanvas->getWithSize());
         }
 
         SDL_UnlockTexture(texture);
         // fim copia
 #endif
-        // //  Limpa a tela atual
-        // if (!SDL_RenderClear(renderer)) {
-        //     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "render clear: %s", SDL_GetError());
-        // }
-
         // Copia a textura
-        if (!SDL_RenderTexture(renderer, texture, NULL, NULL)) {
+        if (!SDL_RenderTexture(renderer, texture, nullptr, nullptr)) {
             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "render texture: %s", SDL_GetError());
         }
 

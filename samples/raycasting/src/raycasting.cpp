@@ -57,23 +57,22 @@ void DrawColumn(RayHit what, World world, std::shared_ptr<ce::PixelCanvas> pixel
     uint8_t type = world.data[pos];
 
     const SDL_PixelFormatDetails* details = SDL_GetPixelFormatDetails(pixelCanvas->getPixelFormat());
-    // const SDL_PixelFormatDetails* details = SDL_GetPixelFormatDetails(SDL_PIXELFORMAT_BGRA32);
 
     // selecione cor com base no tipo de bloco
-    uint32_t corVal = 0xffffff;
+    uint32_t corVal = 0;
 
     switch (type) {
         case 1:
-            corVal = SDL_MapRGBA(details, NULL, 0, 255, 0, 0);
+            corVal = SDL_MapRGBA(details, nullptr, 0, 255, 0, 255); // green
             break;
         case 2:
-            corVal = SDL_MapRGBA(details, NULL, 155, 155, 155, 0);
+            corVal = SDL_MapRGBA(details, nullptr, 155, 155, 155, 255); // gray
             break;
         case 3:
-            corVal = SDL_MapRGBA(details, NULL, 0, 0, 255, 0);
+            corVal = SDL_MapRGBA(details, nullptr, 0, 0, 255, 255); // blue
             break;
         case 4:
-            corVal = SDL_MapRGBA(details, NULL, 255, 0, 0, 0);
+            corVal = SDL_MapRGBA(details, nullptr, 255, 0, 0, 255); // red
             break;
         default:
             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Pixel incompativel");
@@ -100,7 +99,7 @@ void DrawColumn(RayHit what, World world, std::shared_ptr<ce::PixelCanvas> pixel
     // desenhar coluna
     for (uint32_t c = cropup; c < (colh - cropdown); c++) {
         // desenhe o pixel da cor selecionada
-        pixelCanvas->getPixels()[index] = corVal | 0xfffff; // corVal ; // 0xffffff; //
+        pixelCanvas->getPixels()[index] = corVal;
         index += pixelCanvas->getWidth();
     }
 }

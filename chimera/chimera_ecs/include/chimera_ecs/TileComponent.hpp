@@ -1,6 +1,6 @@
 #pragma once
-#include "chimera/render/2d/Tile.hpp"
-#include "ecs.hpp"
+// #include "chimera/render/2d/Tile.hpp"
+// #include "ecs.hpp"
 
 // TODO: implementar
 //  namespace ce {

@@ -1,6 +1,7 @@
 #pragma once
 #include "chimera_core/visible/Light.hpp"
 #include "ecs.hpp"
+#include <memory>
 
 namespace ce {
 

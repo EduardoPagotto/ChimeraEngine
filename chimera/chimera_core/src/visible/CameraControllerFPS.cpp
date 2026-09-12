@@ -1,5 +1,5 @@
 #include "chimera_core/visible/CameraControllerFPS.hpp"
-#include "chimera_base/utils.hpp"
+#include "chimera_base/aux/utils.hpp"
 #include "chimera_ecs/CameraComponent.hpp"
 
 namespace ce {

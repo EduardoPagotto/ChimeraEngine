@@ -1,6 +1,6 @@
 #pragma once
 #include "chimera_base/aux/ICamera.hpp"
-#include "chimera_ecs/ecs.hpp"
+#include "ecs.hpp"
 #include <memory>
 
 namespace ce {

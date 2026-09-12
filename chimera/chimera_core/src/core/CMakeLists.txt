@@ -31,7 +31,7 @@ set (SourceFiles gl/CanvasGL.cpp
 				 partition/Cube.cpp)
 
 # define os includes
-set (IncludeDirs ${CMAKE_SOURCE_DIR}
+set (IncludeDirs ${CMAKE_SOURCE_DIR}/chimera/chimera_base/include/
 				 ${SDL3_INCLUDE_DIR}
 				 ${OPENGL_INCLUDE_DIR}
 				 ${PUGIXML_DIR}

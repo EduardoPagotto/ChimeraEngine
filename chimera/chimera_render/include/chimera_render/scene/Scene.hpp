@@ -33,6 +33,7 @@ namespace ce {
         virtual void onRender() override;
         virtual void onUpdate(const double& ts) override;
         virtual bool onEvent(const SDL_Event& event) override;
+        std::string getName() const override { return "SCENE"; }
 
       private:
         void onViewportResize(const uint32_t& width, const uint32_t& height);

@@ -8,43 +8,53 @@ find_package(PUGIXML REQUIRED)
 
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
+message(STATUS "Compiling: ${PROJECT_NAME}")
+message(STATUS "Base: ${CMAKE_SOURCE_DIR}")
+message(STATUS "Current: ${CMAKE_CURRENT_SOURCE_DIR}")
+
 #define os includes
 set (IncludeDirs ${CMAKE_CURRENT_SOURCE_DIR}/include
-                     ${CMAKE_BINARY_DIR}/configured_files/include
-                     ${PUGIXML_DIR}
-					 ${CMAKE_SOURCE_DIR}
-					 ${OPENGL_INCLUDE_DIR}
-					 ${SDL3_INCLUDE_DIR}
-					 ${BULLET_INCLUDE_DIR})
+                 ${CMAKE_SOURCE_DIR}/chimera/chimera_base/include/
+				 ${CMAKE_SOURCE_DIR}/chimera/chimera_core/include/
+				 ${CMAKE_SOURCE_DIR}/chimera/chimera_space/include/
+				 ${CMAKE_SOURCE_DIR}/chimera/chimera_ecs/include/
+				 ${CMAKE_SOURCE_DIR}/chimera/chimera_collada/include/
+				 ${CMAKE_SOURCE_DIR}/chimera/chimera_render/include/
+                 ${CMAKE_BINARY_DIR}/configured_files/include
+				 ${PUGIXML_DIR}
+				 ${CMAKE_SOURCE_DIR}
+				 ${OPENGL_INCLUDE_DIR}
+				 ${SDL3_INCLUDE_DIR}
+				 ${BULLET_INCLUDE_DIR})
 
-set (SourceFiles src/main.cpp)
+set (SourceFiles src/Game.cpp
+                 src/main.cpp)
 
 #define os Lib's a serem usados
-set (LIBRARY_DEPS ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
-				 ${CMAKE_SOURCE_DIR}/bin/libChimeraCollada.a
-                 ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
-				 ${OPENGL_LIBRARIES}
-				 ${SDL3_IBRARIES}
-				 ${BULLET_LIBRARIES}
-				 -lGL
-				 -lGLU
-				 -lglut
-				 -lSDL3
-				 -lSDL3_image
-				 -lSDL3_ttf
-				 -lGLEW
-				 -lpugixml
-				 -lpthread)
-
-
+set (LIBRARY_DEPS ${CMAKE_SOURCE_DIR}/bin/libchimera_render.a
+				  ${CMAKE_SOURCE_DIR}/bin/libchimera_collada.a
+                  ${CMAKE_SOURCE_DIR}/bin/libchimera_core.a
+                  ${CMAKE_SOURCE_DIR}/bin/libchimera_base.a
+				  ${OPENGL_LIBRARIES}
+				  ${SDL3_IBRARIES}
+				  ${BULLET_LIBRARIES}
+				  -lGL
+				  -lGLU
+				  -lglut
+				  -lSDL3
+				  -lSDL3_image
+				  -lSDL3_ttf
+				  -lGLEW
+				  -lpugixml
+				  -lpthread)
 
 add_executable (${PROJECT_NAME} ${SourceFiles})
 
+target_include_directories (${PROJECT_NAME} PRIVATE ${IncludeDirs})
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
+
 target_link_libraries(${PROJECT_NAME} ${LIBRARY_DEPS})
 
-target_include_directories (${PROJECT_NAME} PRIVATE ${IncludeDirs})
-
-add_dependencies(${PROJECT_NAME} ChimeraCore
-						         ChimeraRender)
+add_dependencies(${PROJECT_NAME} chimera_render)
 
 INSTALL(FILES ${CMAKE_SOURCE_DIR}/bin/${PROJECT_NAME} DESTINATION bin)

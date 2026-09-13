@@ -18,6 +18,7 @@ int main(int argn, char** argv) {
         SDL_SetLogPriority(SDL_LOG_CATEGORY_INPUT, SDL_LOG_PRIORITY_DEBUG);
         SDL_SetLogPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG);
         SDL_SetLogPriority(SDL_LOG_CATEGORY_RENDER, SDL_LOG_PRIORITY_DEBUG);
+        SDL_SetLogPriorities(SDL_LOG_PRIORITY_DEBUG);
 
         SDL_Log("Simple ray-casting Iniciado");
 
@@ -39,8 +40,6 @@ int main(int argn, char** argv) {
         engine.run();
 
         SDL_Log("Loop de Game encerrado!!!!");
-
-        return 0;
 
     } catch (const std::runtime_error& e) {
 

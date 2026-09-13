@@ -62,7 +62,7 @@ add_library (${PROJECT_NAME} STATIC ${SourceFiles})
 target_include_directories (${PROJECT_NAME} PUBLIC ${IncludeDirs})
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
-add_dependencies(${PROJECT_NAME} clean-coverage chimera_base chimera_core)
+add_dependencies(${PROJECT_NAME} chimera_core)
 
 #INSTALL(FILES ${CMAKE_SOURCE_DIR}/bin/${PROJECT_NAME} DESTINATION lib)
 #INSTALL(DIRECTORY ${CMAKE_SOURCE_DIR}/chimera/core DESTINATION ${CMAKE_INSTALL_PREFIX}/include/chimera/core FILES_MATCHING PATTERN "*.h*")

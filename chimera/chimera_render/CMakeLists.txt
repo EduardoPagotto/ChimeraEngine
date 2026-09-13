@@ -1,4 +1,4 @@
-PROJECT(ChimeraRender LANGUAGES CXX)
+PROJECT(chimera_render LANGUAGES CXX)
 
 find_package(OpenGL REQUIRED)
 find_package(SDL3 REQUIRED)
@@ -10,25 +10,34 @@ endif(BULLET_SET_TO_USE)
 
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
-#define objetos a compilar
-set (SourceFiles 	2d/BatchRender2D.cpp
-					2d/Layer.cpp
-					3d/Renderer3d.cpp
-					3d/Renderer3dLines.cpp
-					3d/RenderableMesh.cpp
-					3d/RenderableIBO.cpp
-					3d/RenderableArray.cpp
-					3d/RenderableBsp.cpp
-					3d/RenderableDynamic.cpp
-					3d/RenderableParticles.cpp
-					scene/Scene.cpp)
+message(STATUS "Compiling: ${PROJECT_NAME}")
+message(STATUS "Base: ${CMAKE_SOURCE_DIR}")
+message(STATUS "Current: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 #define os includes
-set (IncludeDirs 	${CMAKE_SOURCE_DIR}
-					${SDL3_INCLUDE_DIR}
-					${OPENGL_INCLUDE_DIR}
-					${GLEW_INCLUDE_DIRS}
-					/usr/local/include/) # Raiz do projeto
+set (IncludeDirs ${CMAKE_SOURCE_DIR}/chimera/chimera_base/include/
+				 ${CMAKE_SOURCE_DIR}/chimera/chimera_core/include/
+				 ${CMAKE_SOURCE_DIR}/chimera/chimera_space/include/
+				 ${CMAKE_SOURCE_DIR}/chimera/chimera_ecs/include/
+				 ${CMAKE_SOURCE_DIR}/chimera/chimera_collada/include/
+				 ${CMAKE_SOURCE_DIR}/chimera/chimera_render/include/
+			     ${SDL3_INCLUDE_DIR}
+				 ${OPENGL_INCLUDE_DIR}
+				 ${GLEW_INCLUDE_DIRS}
+				 /usr/local/include/) # Raiz do projeto
+
+#define objetos a compilar
+set (SourceFiles 	src/2d/BatchRender2D.cpp
+					src/2d/Layer.cpp
+					src/3d/Renderer3d.cpp
+					src/3d/Renderer3dLines.cpp
+					src/3d/RenderableMesh.cpp
+					src/3d/RenderableIBO.cpp
+					src/3d/RenderableArray.cpp
+					src/3d/RenderableBsp.cpp
+					src/3d/RenderableDynamic.cpp
+					src/3d/RenderableParticles.cpp
+					src/scene/Scene.cpp)
 
 # Adiciona objetos e includes do OVR ao SourceFiles e IncludeDirs
 if (OVR_SET_TO_USE)
@@ -41,13 +50,13 @@ if (BULLET_SET_TO_USE)
 	set(IncludeDirs ${IncludeDirs} ${BULLET_INCLUDE_DIR} )
 endif(BULLET_SET_TO_USE)
 
-# Define o Target
+
 add_library (${PROJECT_NAME} STATIC ${SourceFiles})
 
-# Define os includes privados para este target
 target_include_directories (${PROJECT_NAME} PUBLIC ${IncludeDirs})
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
-add_dependencies(${PROJECT_NAME} ChimeraCollada)
+add_dependencies(${PROJECT_NAME} chimera_collada)
 
 #INSTALL(FILES ${${PROJECT_NAME}_BINARY_DIR}/libChimeraRender.a DESTINATION lib)
 #INSTALL(DIRECTORY ${IncludeDirs}/chimera/node DESTINATION ${CMAKE_INSTALL_PREFIX}/include/chimera FILES_MATCHING PATTERN "*.h*")

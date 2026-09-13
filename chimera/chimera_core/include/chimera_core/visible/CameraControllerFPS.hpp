@@ -19,7 +19,9 @@ namespace ce {
 
             // FIXME: tem merda aqui!!!
             // return gameControl->getEvent(event);
+            return false;
         }
+        std::string getName() const override { return "CameraControllerFPS"; }
 
       private:
         void updateVP();

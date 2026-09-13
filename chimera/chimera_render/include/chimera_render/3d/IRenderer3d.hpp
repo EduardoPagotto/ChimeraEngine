@@ -1,8 +1,8 @@
 #pragma once
-#include "chimera_base/ICamera.hpp"
-#include "chimera_base/TransformationStack.hpp"
-#include "chimera_base/Uniform.hpp"
-#include "chimera_base/ViewProjection.hpp"
+#include "chimera_base/aux/ICamera.hpp"
+#include "chimera_base/aux/TransformationStack.hpp"
+#include "chimera_base/aux/Uniform.hpp"
+#include "chimera_base/aux/ViewProjection.hpp"
 #include "chimera_core/gl/RenderCommand.hpp"
 #include "chimera_core/gl/buffer/IndexBuffer.hpp"
 #include "chimera_core/gl/buffer/VertexArray.hpp"

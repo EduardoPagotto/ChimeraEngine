@@ -74,9 +74,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 add_subdirectory(chimera/chimera_base/)
 add_subdirectory(chimera/chimera_core/)
 add_subdirectory(chimera/chimera_collada/)
-
-# add_subdirectory(chimera/src/collada)
-# add_subdirectory(chimera/src/render)
+add_subdirectory(chimera/chimera_render/)
 
 # Simple testes app
 

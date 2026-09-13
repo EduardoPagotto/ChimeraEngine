@@ -1,7 +1,7 @@
 #pragma once
 #include "Renderable2D.hpp"
-#include "chimera_base/ICamera.hpp"
 #include "chimera_base/IStateMachine.hpp"
+#include "chimera_base/aux/ICamera.hpp"
 #include "chimera_core/gl/Shader.hpp"
 
 namespace ce {

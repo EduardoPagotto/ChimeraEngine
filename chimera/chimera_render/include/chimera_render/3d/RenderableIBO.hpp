@@ -1,7 +1,7 @@
 #pragma once
-#include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera_core/gl/buffer/IndexBuffer.hpp"
 #include "chimera_core/gl/buffer/VertexArray.hpp"
+#include "chimera_render/3d/IRenderer3d.hpp"
 #include "chimera_space/AABB.hpp"
 
 namespace ce {

@@ -1,4 +1,4 @@
-#include "chimera/render/3d/Renderer3dLines.hpp"
+#include "chimera_render/3d/Renderer3dLines.hpp"
 #include "chimera_space/AABB.hpp"
 
 namespace ce {

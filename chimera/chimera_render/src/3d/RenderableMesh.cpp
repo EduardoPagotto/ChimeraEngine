@@ -1,7 +1,7 @@
-#include "chimera/render/3d/RenderableMesh.hpp"
-#include "chimera/render/3d/IRenderer3d.hpp"
-#include "chimera/render/3d/RenderableIBO.hpp"
+#include "chimera_render/3d/RenderableMesh.hpp"
 #include "chimera_core/gl/RenderCommand.hpp"
+#include "chimera_render/3d/IRenderer3d.hpp"
+#include "chimera_render/3d/RenderableIBO.hpp"
 
 namespace ce {
 

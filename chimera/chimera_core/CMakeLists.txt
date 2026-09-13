@@ -63,7 +63,7 @@ add_library (${PROJECT_NAME} STATIC ${SourceFiles})
 target_include_directories (${PROJECT_NAME} PUBLIC ${IncludeDirs})
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
-add_dependencies(${PROJECT_NAME} clean-coverage chimera_base)
+add_dependencies(${PROJECT_NAME} chimera_base)
 # Lista os Includes
 # get_property(dirs DIRECTORY ${IncludeDirs}/chimera/core PROPERTY INCLUDE_DIRECTORIES)
 # foreach(dir ${dirs})

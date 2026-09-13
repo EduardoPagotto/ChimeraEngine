@@ -1,10 +1,10 @@
 #include "Game.hpp"
-#include "chimera/render/scene/Scene.hpp"
 #include "chimera_base/Engine.hpp"
 #include "chimera_collada/Collada.hpp"
 #include "chimera_collada/colladaLoad.hpp"
 #include "chimera_core/gl/CanvasGL.hpp"
 #include "chimera_core/gl/ShaderMng.hpp"
+#include "chimera_render/scene/Scene.hpp"
 #include <config_params.hpp>
 
 int main(int argn, char** argv) {

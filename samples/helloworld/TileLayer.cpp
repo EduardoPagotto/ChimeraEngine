@@ -1,5 +1,5 @@
 #include "TileLayer.hpp"
-#include "chimera/render/2d/BatchRender2D.hpp"
+#include "chimera_render/2d/BatchRender2D.hpp"
 #include <glm/gtx/transform.hpp>
 
 TileLayer::TileLayer(std::shared_ptr<ce::Shader> shader)

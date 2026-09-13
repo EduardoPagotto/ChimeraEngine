@@ -1,6 +1,6 @@
 #pragma once
-#include "chimera_base/ICamera.hpp"
-#include "chimera_base/TransformationStack.hpp"
+#include "chimera_base/aux/ICamera.hpp"
+#include "chimera_base/aux/TransformationStack.hpp"
 #include "chimera_core/gl/Font.hpp"
 #include <string>
 

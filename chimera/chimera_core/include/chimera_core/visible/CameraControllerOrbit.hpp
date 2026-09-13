@@ -16,6 +16,7 @@ namespace ce {
         void onUpdate(const double& ts) override;
         void onRender() override {}
         bool onEvent(const SDL_Event& event) override { return true; }
+        std::string getName() const override { return "CameraControllerOrbit"; }
 
       private:
         void updateVP();

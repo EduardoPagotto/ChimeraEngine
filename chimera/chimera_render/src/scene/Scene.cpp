@@ -1,10 +1,4 @@
-#include "chimera/render/scene/Scene.hpp"
-#include "chimera/render/2d/Tile.hpp"
-#include "chimera/render/3d/RenderableArray.hpp"
-#include "chimera/render/3d/RenderableBsp.hpp"
-#include "chimera/render/3d/RenderableMesh.hpp"
-#include "chimera/render/3d/RenderableParticles.hpp"
-#include "chimera/render/3d/Renderer3d.hpp"
+#include "chimera_render/scene/Scene.hpp"
 #include "chimera_base/ICanva.hpp"
 #include "chimera_core/bullet/Solid.hpp"
 #include "chimera_core/gl/RenderCommand.hpp"
@@ -19,10 +13,17 @@
 #include "chimera_ecs/Renderable3dComponent.hpp"
 #include "chimera_ecs/ShaderComponent.hpp"
 #include "chimera_ecs/TransComponent.hpp"
+#include "chimera_render/2d/Tile.hpp"
+#include "chimera_render/3d/RenderableArray.hpp"
+#include "chimera_render/3d/RenderableBsp.hpp"
+#include "chimera_render/3d/RenderableMesh.hpp"
+#include "chimera_render/3d/RenderableParticles.hpp"
+#include "chimera_render/3d/Renderer3d.hpp"
+#include <memory>
 
 namespace ce {
 
-    Scene::Scene() : IStateMachine("Scene"), origem(nullptr), verbose(0) {}
+    Scene::Scene(std::shared_ptr<entt::registry> registry) : origem(nullptr), verbose(0), registry(registry) {}
 
     Scene::~Scene() {
         if (shadowData.shadowBuffer) {
@@ -75,8 +76,8 @@ namespace ce {
 
     void Scene::onAttach() {
         // Pega o ViewProjection do ECS antes da camera por caussa do vpo
-        vpo = g_service_locator.getService<ViewProjection>();
-        phyCrt = g_service_locator.getServiceOrNull<IPhysicsControl>();
+        vpo = registry->ctx().get<std::shared_ptr<ViewProjection>>();
+        phyCrt = registry->ctx().get<std::shared_ptr<IPhysicsControl>>(); // FIXME: ver se nao existir o que retorna
 
         // Totalizadores de area
         glm::vec3 tot_min, tot_max;
@@ -92,9 +93,9 @@ namespace ce {
                 CameraComponent& cCam = entity.getComponent<CameraComponent>();
                 auto& sc = entity.getComponent<ShaderComponent>();
                 // TileComponent& tc = entity.addComponent<TileComponent>();
-                Tile* tile = new Tile("TileText", &batchRender2D, sc.shader,
-                                      cCam.camera); // TODO: passar tile camera para smart
-                layers.pushState(tile);
+
+                // TODO: passar tile camera para smart
+                layers.pushState(std::make_shared<Tile>("TileText", &batchRender2D, sc.shader, cCam.camera));
             }
 
             // Se for um mesh inicializar componente
@@ -180,7 +181,9 @@ namespace ce {
         }
 
         // Pega icanvas depois de camera definida!!!
-        auto canvas = g_service_locator.getService<ICanva>();
+        // FIXME: ver se existe la mesmo
+        auto canvas = registry->ctx().get<std::shared_ptr<ICanva>>();
+
         this->onViewportResize(canvas->getWidth(), canvas->getHeight());
 
         { // Registra Camera controllers ViewProjection deve ser localizado acima
@@ -190,11 +193,10 @@ namespace ce {
 
                 auto& cc = e.getComponent<CameraComponent>();
                 if (cc.camKind == CamKind::FPS) {
-                    // CameraControllerFPS* ccFps = new CameraControllerFPS(e);
-                    layers.pushState(new CameraControllerFPS(e));
+                    layers.pushState(std::make_shared<CameraControllerFPS>(registry, e));
                 } else if (cc.camKind == CamKind::ORBIT) {
                     // CameraControllerOrbit* ccOrb = new CameraControllerOrbit(e);
-                    layers.pushState(new CameraControllerOrbit(e));
+                    layers.pushState(std::make_shared<CameraControllerOrbit>(registry, e));
                 } else if (cc.camKind == CamKind::STATIC) {
                     // e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
                 }
@@ -411,7 +413,8 @@ namespace ce {
                         shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
                         shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
 
-                        auto mng = g_service_locator.getService<ShaderMng>();
+                        auto mng = registry->ctx().get<std::shared_ptr<ShaderMng>>();
+
                         dl.create(mng->load("DrawLine", shadeData), 40000);
                     }
 
@@ -439,7 +442,8 @@ namespace ce {
                         shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
                         shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
 
-                        auto mng = g_service_locator.getService<ShaderMng>();
+                        auto mng = registry->ctx().get<std::shared_ptr<ShaderMng>>();
+
                         renderLines.create(mng->load("DrawLine", shadeData), 10000);
                     }
 

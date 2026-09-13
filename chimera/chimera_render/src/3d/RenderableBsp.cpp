@@ -1,7 +1,7 @@
-#include "chimera/render/3d/RenderableBsp.hpp"
-#include "chimera/render/3d/IRenderer3d.hpp"
-#include "chimera/render/3d/RenderableIBO.hpp"
+#include "chimera_render/3d/RenderableBsp.hpp"
 #include "chimera_core/partition/BSPTree.hpp"
+#include "chimera_render/3d/IRenderer3d.hpp"
+#include "chimera_render/3d/RenderableIBO.hpp"
 
 namespace ce {
 

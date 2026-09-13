@@ -1,5 +1,4 @@
 #include "Game.hpp"
-#include "chimera/render/scene/Scene.hpp"
 #include "chimera_base/Engine.hpp"
 #include "chimera_base/GamePad.hpp"
 #include "chimera_base/Joystick.hpp"
@@ -10,6 +9,7 @@
 #include "chimera_collada/colladaLoad.hpp"
 #include "chimera_core/gl/CanvasGL.hpp"
 #include "chimera_core/gl/ShaderMng.hpp"
+#include "chimera_render/scene/Scene.hpp"
 #include <config_params.hpp>
 
 Game::Game() : IStateMachine("Game") { mouse = ce::g_service_locator.getService<ce::Mouse>(); }

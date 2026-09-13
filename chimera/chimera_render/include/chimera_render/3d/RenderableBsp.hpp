@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/render/3d/IRenderer3d.hpp"
+#include "IRenderer3d.hpp"
 #include "chimera_core/gl/RenderCommand.hpp"
 #include "chimera_core/gl/buffer/VertexArray.hpp"
 #include "chimera_core/visible/Mesh.hpp"

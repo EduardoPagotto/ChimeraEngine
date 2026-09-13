@@ -1,6 +1,6 @@
 #pragma once
 // #pragma clang diagnostic ignored "-Wunused-private-field"
-#include "chimera/render/3d/IRenderer3d.hpp"
+#include "IRenderer3d.hpp"
 #include "chimera_core/visible/Mesh.hpp"
 
 namespace ce {

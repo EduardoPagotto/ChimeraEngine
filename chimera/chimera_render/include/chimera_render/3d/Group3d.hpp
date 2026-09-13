@@ -1,6 +1,6 @@
 #pragma once
 #include "IRenderer3d.hpp"
-#include "chimera_core/TransformationStack.hpp"
+#include "chimera_base/aux/TransformationStack.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 

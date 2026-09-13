@@ -6,7 +6,8 @@
 namespace ce {
     class ColladaImage : public Collada {
       public:
-        ColladaImage(ColladaDom& dom, const std::string& url) : Collada(dom, url) {}
+        ColladaImage(std::shared_ptr<entt::registry> registry, ColladaDom& dom, const std::string& url)
+            : Collada(registry, dom, url) {}
         virtual ~ColladaImage() = default;
         void create(Entity entity, TexParam& tp, const pugi::xml_node& node);
     };

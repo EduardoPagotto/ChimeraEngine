@@ -5,7 +5,8 @@
 namespace ce {
     class ColladaHeightMap : public Collada {
       public:
-        ColladaHeightMap(ColladaDom& dom, const std::string& url) : Collada(dom, url) {}
+        ColladaHeightMap(std::shared_ptr<entt::registry> registry, ColladaDom& dom, const std::string& url)
+            : Collada(registry, dom, url) {}
         virtual ~ColladaHeightMap() {}
         void create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node geo);
     };

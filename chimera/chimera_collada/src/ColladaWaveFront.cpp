@@ -20,10 +20,12 @@ namespace ce {
         eMaterial.tag.name = eMesh.tag.name + "_mat";
         eMaterial.material = std::make_shared<Material>();
 
+        WaveFront wf(registry);
+
         std::string matFile;
-        wavefrontObjLoad(target, eMesh.mesh, matFile);
+        wf.wavefrontObjLoad(target, eMesh.mesh, matFile);
         if (matFile.size() > 0) {
-            wavefrontMtlLoad(matFile, eMaterial.material);
+            wf.wavefrontMtlLoad(matFile, eMaterial.material);
         }
 
         if (pugi::xml_node nShade = geo.next_sibling(); nShade) {
@@ -31,7 +33,7 @@ namespace ce {
                 if (std::string(technique_hint.attribute("profile").value()) == "GLSL") {
                     std::string refName = technique_hint.attribute("ref").value();
                     std::string url = nShade.attribute("url").value();
-                    ColladaEffect cf(colladaDom, url);
+                    ColladaEffect cf(registry, colladaDom, url);
 
                     cf.create(refName, entity, cf.getLibrary("library_effects"));
                 }

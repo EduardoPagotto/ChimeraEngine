@@ -3,6 +3,7 @@
 #include "chimera_core/gl/ShaderMng.hpp"
 #include "chimera_core/gl/TextureMng.hpp"
 #include "chimera_ecs/MaterialComponent.hpp"
+#include "chimera_ecs/Registry.hpp"
 #include "chimera_ecs/ShaderComponent.hpp"
 
 namespace ce {
@@ -78,7 +79,8 @@ namespace ce {
         }
 
         if (shadeData.size() > 1) {
-            auto mng = g_service_locator.getService<ShaderMng>();
+            auto mng = registry->ctx().get<std::shared_ptr<ce::ShaderMng>>();
+
             ShaderComponent& sc = entity.addComponent<ShaderComponent>();
             sc.tag.name = refName;
             sc.shader = mng->load(refName, shadeData);
@@ -102,7 +104,7 @@ namespace ce {
             else if (sParam == "instance_image") {
 
                 std::string url = ntPara.attribute("url").value();
-                ColladaImage ci(colladaDom, url);
+                ColladaImage ci(registry, colladaDom, url);
                 ci.create(entity, tp, ci.getLibrary("library_images"));
                 return true;
             }
@@ -148,10 +150,11 @@ namespace ce {
                     std::string texId = first.attribute("texture").value();
                     std::string idTex = mapaTex[mapa2D[texId]];
 
-                    ColladaImage ci(colladaDom, idTex);
+                    ColladaImage ci(registry, colladaDom, idTex);
                     ci.create(entity, tp, ci.getLibrary("library_images"));
 
-                    auto texMng = g_service_locator.getService<TextureMng>();
+                    auto texMng = registry->ctx().get<std::shared_ptr<ce::TextureMng>>();
+
                     pMat->addTexture(SHADE_TEXTURE_DIFFUSE, texMng->get(idTex));
                     pMat->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)); // FIXME: Arquivo do blender nao tem!!
                 }
@@ -219,7 +222,7 @@ namespace ce {
             } else if (nameProf == "extra") {
                 if (const pugi::xml_node nFX = getExtra(nProf, "instance_effect"); nFX != nullptr) {
                     std::string url = nFX.attribute("url").value();
-                    ColladaEffect cf(colladaDom, url);
+                    ColladaEffect cf(registry, colladaDom, url);
                     cf.create("", entity, cf.getLibrary("library_effects"));
                 }
             }

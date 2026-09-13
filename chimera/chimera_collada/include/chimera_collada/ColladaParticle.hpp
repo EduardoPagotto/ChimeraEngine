@@ -5,7 +5,8 @@
 namespace ce {
     class ColladaParticle : public Collada {
       public:
-        ColladaParticle(ColladaDom& dom, const std::string& url) : Collada(dom, url) {}
+        ColladaParticle(std::shared_ptr<entt::registry> registry, ColladaDom& dom, const std::string& url)
+            : Collada(registry, dom, url) {}
         virtual ~ColladaParticle() = default;
         void create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node nParticle);
     };

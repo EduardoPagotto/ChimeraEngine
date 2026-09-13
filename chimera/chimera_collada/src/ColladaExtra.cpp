@@ -17,7 +17,8 @@ namespace ce {
                 float scaleX = std::stod(nFont.attribute("scaleX").value());
                 float scaleY = std::stod(nFont.attribute("scaleY").value());
 
-                auto fontMng = g_service_locator.getService<FontMng>();
+                auto fontMng = registry->ctx().get<std::shared_ptr<ce::FontMng>>();
+
                 auto font = fontMng->load(rfc.getFragment(), rfc.getPath(), size);
                 font->setScale(glm::vec2(scaleX, scaleY));
             }
@@ -38,12 +39,12 @@ namespace ce {
                     if (name == "instance_effect") {
 
                         std::string refName = next.child("technique_hint").attribute("ref").value();
-                        ColladaEffect cf(colladaDom, url);
+                        ColladaEffect cf(registry, colladaDom, url);
                         cf.create(refName, entity, cf.getLibrary("library_effects"));
 
                     } else if (name == "instance_camera") {
 
-                        ColladaCam cc(colladaDom, url);
+                        ColladaCam cc(registry, colladaDom, url);
                         cc.create(entity, cc.getLibrary("library_cameras"));
                         cc.createExtra(entity, next.first_child());
                     }

@@ -27,7 +27,7 @@ namespace ce {
         std::string name = node.attribute("name").value();
 
         auto pc = std::make_shared<PhysicsControl>();
-        g_service_locator.registerService(pc);
+        registry->ctx().emplace<std::shared_ptr<PhysicsControl>>(pc);
 
         pugi::xml_node nTec = node.child("technique_common");
         std::string sGrav = nTec.child("gravity").text().as_string();

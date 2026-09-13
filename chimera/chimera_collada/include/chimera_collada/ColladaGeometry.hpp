@@ -5,7 +5,8 @@
 namespace ce {
     class ColladaGeometry : public Collada {
       public:
-        ColladaGeometry(ColladaDom& dom, const std::string& url) : Collada(dom, url) {};
+        ColladaGeometry(std::shared_ptr<entt::registry> registry, ColladaDom& dom, const std::string& url)
+            : Collada(registry, dom, url) {};
         virtual ~ColladaGeometry() = default;
         void create(Entity& entity, pugi::xml_node geo);
     };

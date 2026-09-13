@@ -45,7 +45,8 @@ namespace ce {
 
     //--
 
-    Collada::Collada(ColladaDom& dom, const std::string& url) {
+    Collada::Collada(std::shared_ptr<entt::registry> registry, ColladaDom& dom, const std::string& url)
+        : registry(registry) {
 
         RFC3986 rfc(url);
         if (rfc.isInvalid() == true)

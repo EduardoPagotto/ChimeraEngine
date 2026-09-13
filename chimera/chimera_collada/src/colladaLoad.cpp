@@ -26,7 +26,7 @@ namespace ce {
         return dom;
     }
 
-    void colladaRegistryLoad(ColladaDom& dom) {
+    void colladaRegistryLoad(std::shared_ptr<entt::registry> registry, ColladaDom& dom) {
 
         const pugi::xml_node vs = dom.root.child("scene");
         for (pugi::xml_node n = vs.first_child(); n; n = n.next_sibling()) {
@@ -35,17 +35,17 @@ namespace ce {
 
             if (instance == "extra") {
 
-                ColladaExtra ce(dom, "#vazio");
+                ColladaExtra ce(registry, dom, "#vazio");
                 ce.create(n);
 
             } else if (instance == "instance_visual_scene") {
 
-                ColladaVisualScene vs(dom, url);
+                ColladaVisualScene vs(registry, dom, url);
                 vs.loadAll(vs.getLibrary("library_visual_scenes"));
 
             } else if (instance == "instance_physics_scene") {
 
-                ColladaPhysicScene ps(dom, url);
+                ColladaPhysicScene ps(registry, dom, url);
                 ps.loadAll(ps.getLibrary("library_physics_scenes"));
             }
         }

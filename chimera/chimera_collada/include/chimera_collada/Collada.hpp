@@ -1,13 +1,15 @@
 #pragma once
 #include "ColladaDom.hpp"
+#include <entt/entt.hpp>
 #include <glm/glm.hpp>
+#include <memory>
 #include <vector>
 
 namespace ce {
 
     class Collada {
       public:
-        Collada(ColladaDom& dom, const std::string& url);
+        Collada(std::shared_ptr<entt::registry> registry, ColladaDom& dom, const std::string& url);
         virtual ~Collada() = default;
         const pugi::xml_node getLibraryUrl(const std::string& libraryName, const std::string& url);
         const pugi::xml_node getLibrary(const std::string& libraryName);
@@ -16,6 +18,7 @@ namespace ce {
         inline static std::vector<ColladaDom> vColladaDom;
 
       protected:
+        std::shared_ptr<entt::registry> registry;
         ColladaDom colladaDom;
         inline static uint32_t serial;
         std::string fragment;

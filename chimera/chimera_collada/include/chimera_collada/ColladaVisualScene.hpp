@@ -5,7 +5,8 @@
 namespace ce {
     class ColladaVisualScene : public Collada {
       public:
-        ColladaVisualScene(ColladaDom& dom, const std::string& url) : Collada(dom, url) {}
+        ColladaVisualScene(std::shared_ptr<entt::registry> registry, ColladaDom& dom, const std::string& url)
+            : Collada(registry, dom, url) {}
         virtual ~ColladaVisualScene() = default;
         void loadNode(pugi::xml_node node);
         void loadAll(pugi::xml_node node);

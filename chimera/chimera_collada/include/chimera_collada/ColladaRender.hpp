@@ -1,6 +1,7 @@
 #pragma once
 #include "ColladaDom.hpp"
+#include <entt/entt.hpp>
 
 namespace ce {
-    void colladaRenderLoad(ColladaDom& dom);
+    void colladaRenderLoad(std::shared_ptr<entt::registry> registry, ColladaDom& dom);
 }

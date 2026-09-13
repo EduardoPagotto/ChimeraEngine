@@ -6,7 +6,9 @@
 namespace ce {
     class ColladaEffect : public Collada {
       public:
-        ColladaEffect(ColladaDom& dom, const std::string& url) : Collada(dom, url) {};
+        ColladaEffect(std::shared_ptr<entt::registry> registry, ColladaDom& dom, const std::string& url)
+            : Collada(registry, dom, url) {};
+
         virtual ~ColladaEffect() {
             mapaTex.clear();
             mapa2D.clear();

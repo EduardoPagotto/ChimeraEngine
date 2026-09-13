@@ -5,7 +5,8 @@
 namespace ce {
     class ColladaLight : public Collada {
       public:
-        ColladaLight(ColladaDom& dom, const std::string& url) : Collada(dom, url) {}
+        ColladaLight(std::shared_ptr<entt::registry> registry, ColladaDom& dom, const std::string& url)
+            : Collada(registry, dom, url) {}
         virtual ~ColladaLight() = default;
         void create(Entity& entity, pugi::xml_node nodeLight);
     };

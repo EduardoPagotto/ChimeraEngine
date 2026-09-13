@@ -77,7 +77,9 @@ namespace ce {
                 if (pugi::xml_text pathFile = nImg.text(); pathFile != nullptr) {
                     std::string f = pathFile.as_string();
                     SDL_Log("Nova textura %s, Key: %s", f.c_str(), id.c_str());
-                    auto texMng = g_service_locator.getService<TextureMng>();
+
+                    auto texMng = registry->ctx().get<std::shared_ptr<ce::TextureMng>>();
+
                     texMng->loadFromFile(id, f, tp);
                     return;
                 }

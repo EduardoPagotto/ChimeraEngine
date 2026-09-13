@@ -6,7 +6,7 @@
 
 namespace ce {
 
-    void colladaRenderLoad(ColladaDom& dom) {
+    void colladaRenderLoad(std::shared_ptr<entt::registry> registry, ColladaDom& dom) {
 
         pugi::xml_node vs = dom.root.child("scene");
         if (const pugi::xml_node extra = vs.child("extra"); extra != nullptr) {
@@ -22,14 +22,14 @@ namespace ce {
                         std::string url = node.attribute("url").value();
                         if (std::string name = node.name(); name == "instance_camera") {
 
-                            ColladaCam cc(dom, url);
+                            ColladaCam cc(registry, dom, url);
                             cc.create(entity, cc.getLibrary("library_cameras"));
                             cc.createExtra(entity, node.first_child());
 
                         } else if (name == "instance_effect") {
 
                             std::string refName = node.child("technique_hint").attribute("ref").value();
-                            ColladaEffect cs(dom, url);
+                            ColladaEffect cs(registry, dom, url);
                             cs.create(refName, entity, cs.getLibrary("library_effects"));
                         }
                     }

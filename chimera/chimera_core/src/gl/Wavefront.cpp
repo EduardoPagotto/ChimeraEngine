@@ -40,7 +40,7 @@ namespace ce {
         return glm::vec2(arrayFloat[0], arrayFloat[1]);
     }
 
-    void wavefrontMtlLoad(const std::string& path, std::shared_ptr<Material> material) {
+    void WaveFront::wavefrontMtlLoad(const std::string& path, std::shared_ptr<Material> material) {
         std::ifstream file(path);
 
         if (!file.is_open())
@@ -65,7 +65,9 @@ namespace ce {
             } else if (textData[0] == "Ks") {
                 material->setSpecular(tokensToVec4(textData));
             } else if (textData[0] == "map_Kd") {
-                auto texMng = g_service_locator.getService<TextureMng>();
+
+                auto texMng = this->registry->ctx().get<std::shared_ptr<TextureMng>>();
+
                 material->addTexture(SHADE_TEXTURE_DIFFUSE, texMng->loadFromFile(textData[1], textData[1], TexParam()));
             } else if (textData[0] == "sharpness") {
                 material->setShine(std::stod(textData[1]));
@@ -73,7 +75,7 @@ namespace ce {
         }
     }
 
-    void wavefrontObjLoad(const std::string& path, Mesh* mesh, std::string& fileMath) {
+    void WaveFront::wavefrontObjLoad(const std::string& path, Mesh* mesh, std::string& fileMath) {
         std::ifstream file(path);
 
         if (!file.is_open())

@@ -1,12 +1,11 @@
 #pragma once
 #pragma clang diagnostic ignored "-Wunused-but-set-variable"
-#include "chimera_base/aux/ServiceLocator.hpp"
 #include <LinearMath/btVector3.h>
 #include <btBulletDynamicsCommon.h>
 
 namespace ce {
 
-    class IPhysicsControl : public IService {
+    class IPhysicsControl {
       public:
         virtual ~IPhysicsControl() = default;
         virtual void clearAllShapes(void) = 0;

@@ -1,5 +1,4 @@
 #pragma once
-#include "ServiceLocator.hpp"
 #include <array>
 #include <glm/glm.hpp>
 
@@ -15,10 +14,10 @@ namespace ce {
         }
     };
 
-    class ViewProjection : public IService {
+    class ViewProjection {
 
       private:
-        float noze{0.0f};
+        float noze{0.0F};
         uint8_t indice{0};
         uint8_t size{1};
         std::array<ViewProjectionMatrixs, 2> vpm;
@@ -34,9 +33,9 @@ namespace ce {
 
         virtual ~ViewProjection() = default;
 
-        std::type_index getTypeIndex() const override { return std::type_index(typeid(ViewProjection)); }
+        // std::type_index getTypeIndex() const override { return std::type_index(typeid(ViewProjection)); }
 
-        const float getNoze() const { return noze; }
+        float getNoze() const { return noze; }
 
         void setNoze(const float& noze) {
             this->noze = noze;
@@ -45,7 +44,7 @@ namespace ce {
 
         void setIndex(const uint8_t s) { indice = (s >= 0 && s < 2) ? s : 0; }
 
-        const uint8_t getSize() const { return size; }
+        uint8_t getSize() const { return size; }
 
         ViewProjectionMatrixs& getSel() { return vpm[indice]; }
 

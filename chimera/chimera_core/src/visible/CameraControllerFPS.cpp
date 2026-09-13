@@ -4,19 +4,16 @@
 
 namespace ce {
 
-    CameraControllerFPS::CameraControllerFPS(Entity entity) : IStateMachine("FPS"), entity(entity) {
+    CameraControllerFPS::CameraControllerFPS(std::shared_ptr<entt::registry> registry, Entity entity)
+        : entity(entity), registry(registry) {
 
-        vp = g_service_locator.getService<ViewProjection>();
-        mouse = g_service_locator.getService<Mouse>();
-        keyboard = g_service_locator.getService<Keyboard>();
-        gameControl = g_service_locator.getService<GamePad>();
+        this->inputManager = registry->ctx().get<std::shared_ptr<InputManager>>();
+
+        // FIXME: ATENCAO!!!!! ainda nao existe no main!!!!!
+        this->vp = registry->ctx().get<std::shared_ptr<ViewProjection>>();
     }
 
-    CameraControllerFPS::~CameraControllerFPS() {
-        mouse = nullptr;
-        keyboard = nullptr;
-        gameControl = nullptr;
-    }
+    CameraControllerFPS::~CameraControllerFPS() {}
 
     void CameraControllerFPS::onAttach() {
 
@@ -82,32 +79,32 @@ namespace ce {
 
     void CameraControllerFPS::onUpdate(const double& ts) {
         // Movement speed
-        if (keyboard->isPressed(SDLK_LSHIFT)) // acelerar mover
+        if (inputManager->keyboard->isPressed(SDLK_LSHIFT)) // acelerar mover
             movementSpeed = fsp_camera_max_speed * 4.0f;
-        else if (keyboard->isPressed(SDLK_LALT)) //  desacelerar mover
+        else if (inputManager->keyboard->isPressed(SDLK_LALT)) //  desacelerar mover
             movementSpeed = fsp_camera_max_speed / 4.0f;
         else
             movementSpeed = fsp_camera_max_speed;
 
         // CameraFPS movement
         glm::vec3 direction = glm::vec3(0.0f);
-        if (keyboard->isPressed(SDLK_W)) // to foward
+        if (inputManager->keyboard->isPressed(SDLK_W)) // to foward
             direction += front;
-        if (keyboard->isPressed(SDLK_S)) // to backward
+        if (inputManager->keyboard->isPressed(SDLK_S)) // to backward
             direction -= front;
-        if (keyboard->isPressed(SDLK_A)) // to left
+        if (inputManager->keyboard->isPressed(SDLK_A)) // to left
             direction -= right;
-        if (keyboard->isPressed(SDLK_D)) //  to right
+        if (inputManager->keyboard->isPressed(SDLK_D)) //  to right
             direction += right;
-        if (keyboard->isPressed(SDLK_SPACE)) // to up
+        if (inputManager->keyboard->isPressed(SDLK_SPACE)) // to up
             direction += worldUp;
-        if (keyboard->isPressed(SDLK_LCTRL)) //  to booton
+        if (inputManager->keyboard->isPressed(SDLK_LCTRL)) //  to booton
             direction -= worldUp;
 
         float mouseXDelta{0.0f};
         float mouseYDelta{0.0f};
 
-        if (SDL_Gamepad* pJoy = gameControl->getFirst(); pJoy != nullptr) {
+        if (SDL_Gamepad* pJoy = inputManager->gamePad->getFirst(); pJoy != nullptr) {
 
             // Game control ratation and move
             const int16_t deadZone = 128;
@@ -143,7 +140,7 @@ namespace ce {
 
         } else {
             // Mouse Camera rotation
-            glm::ivec2 mouseMove = mouse->getMoveRel();
+            glm::ivec2 mouseMove = inputManager->mouse->getMoveRel();
             mouseXDelta = -(float)mouseMove.x * fsp_camera_rotation_sensitivity;
             mouseYDelta = (float)mouseMove.y * fsp_camera_rotation_sensitivity;
         }

@@ -3,13 +3,15 @@
 
 namespace ce {
 
-    CameraControllerOrbit::CameraControllerOrbit(Entity entity) : IStateMachine("Orbit"), entity(entity) {
+    CameraControllerOrbit::CameraControllerOrbit(std::shared_ptr<entt::registry> registry, Entity entity)
+        : entity(entity), registry(registry) {
 
-        vp = g_service_locator.getService<ViewProjection>();
-        mouse = g_service_locator.getService<Mouse>();
+        // FIXME: ATENCAO!!!!! ainda nao existe no main!!!!!
+        this->vp = registry->ctx().get<std::shared_ptr<ViewProjection>>();
+        this->inputManager = registry->ctx().get<std::shared_ptr<InputManager>>();
     }
 
-    CameraControllerOrbit::~CameraControllerOrbit() { mouse = nullptr; }
+    CameraControllerOrbit::~CameraControllerOrbit() {}
 
     void CameraControllerOrbit::onAttach() {
         auto& cc = entity.getComponent<CameraComponent>();
@@ -98,12 +100,12 @@ namespace ce {
     }
 
     void CameraControllerOrbit::onUpdate(const double& ts) {
-        if (mouse->getButtonState(1)) {
-            glm::ivec2 mouseMove = mouse->getMoveRel();
+        if (inputManager->mouse->getButtonState(1)) {
+            glm::ivec2 mouseMove = inputManager->mouse->getMoveRel();
             this->processCameraRotation(mouseMove.x, mouseMove.y);
 
-        } else if (mouse->getButtonState(3)) {
-            glm::ivec2 mouseMove = mouse->getMoveRel();
+        } else if (inputManager->mouse->getButtonState(3)) {
+            glm::ivec2 mouseMove = inputManager->mouse->getMoveRel();
             this->processDistance(mouseMove.y);
         }
 

@@ -1,5 +1,5 @@
-#include "chimera/collada/ColladaWaveFront.hpp"
-#include "chimera/collada/ColladaEffect.hpp"
+#include "chimera_collada/ColladaWaveFront.hpp"
+#include "chimera_collada/ColladaEffect.hpp"
 #include "chimera_core/gl/Wavefront.hpp"
 #include "chimera_ecs/MaterialComponent.hpp"
 #include "chimera_ecs/MeshComponent.hpp"

@@ -1,4 +1,4 @@
-#include "chimera/collada/ColladaCam.hpp"
+#include "chimera_collada/ColladaCam.hpp"
 #include "chimera_ecs/CameraComponent.hpp"
 #include "chimera_ecs/TransComponent.hpp"
 

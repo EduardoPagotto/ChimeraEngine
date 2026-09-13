@@ -1,8 +1,8 @@
-#include "chimera/collada/ColladaVisualScene.hpp"
-#include "chimera/collada/ColladaCam.hpp"
-#include "chimera/collada/ColladaGeometry.hpp"
-#include "chimera/collada/ColladaLight.hpp"
-#include "chimera/collada/ColladaMaterial.hpp"
+#include "chimera_collada/ColladaVisualScene.hpp"
+#include "chimera_collada/ColladaCam.hpp"
+#include "chimera_collada/ColladaGeometry.hpp"
+#include "chimera_collada/ColladaLight.hpp"
+#include "chimera_collada/ColladaMaterial.hpp"
 #include "chimera_ecs/Entity.hpp"
 #include "chimera_ecs/TransComponent.hpp"
 

@@ -1,7 +1,7 @@
-#include "chimera/collada/ColladaExtra.hpp"
-#include "chimera/collada/ColladaCam.hpp"
-#include "chimera/collada/ColladaEffect.hpp"
-#include "chimera/collada/RFC3986.hpp"
+#include "chimera_collada/ColladaExtra.hpp"
+#include "chimera_collada/ColladaCam.hpp"
+#include "chimera_collada/ColladaEffect.hpp"
+#include "chimera_collada/RFC3986.hpp"
 #include "chimera_core/gl/FontMng.hpp"
 #include "chimera_core/gl/buffer/FrameBuffer.hpp"
 

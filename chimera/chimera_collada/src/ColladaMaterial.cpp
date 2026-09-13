@@ -1,5 +1,5 @@
-#include "chimera/collada/ColladaMaterial.hpp"
-#include "chimera/collada/ColladaEffect.hpp"
+#include "chimera_collada/ColladaMaterial.hpp"
+#include "chimera_collada/ColladaEffect.hpp"
 #include "chimera_ecs/MaterialComponent.hpp"
 
 namespace ce {

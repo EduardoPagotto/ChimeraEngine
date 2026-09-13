@@ -1,4 +1,4 @@
-#include "chimera/collada/ColladaLight.hpp"
+#include "chimera_collada/ColladaLight.hpp"
 #include "chimera_ecs/LightComponent.hpp"
 
 namespace ce {

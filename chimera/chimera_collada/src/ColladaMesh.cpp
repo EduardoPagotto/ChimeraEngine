@@ -1,5 +1,5 @@
-#include "chimera/collada/ColladaMesh.hpp"
-#include "chimera_base/utils.hpp"
+#include "chimera_collada/ColladaMesh.hpp"
+#include "chimera_base/aux/utils.hpp"
 #include "chimera_ecs/MeshComponent.hpp"
 
 namespace ce {

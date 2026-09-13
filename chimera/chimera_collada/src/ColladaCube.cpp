@@ -1,4 +1,4 @@
-#include "chimera/collada/ColladaCube.hpp"
+#include "chimera_collada/ColladaCube.hpp"
 #include "chimera_core/partition/Cube.hpp"
 #include "chimera_ecs/MeshComponent.hpp"
 

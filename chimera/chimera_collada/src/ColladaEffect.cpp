@@ -1,5 +1,5 @@
-#include "chimera/collada/ColladaEffect.hpp"
-#include "chimera/collada/ColladaImage.hpp"
+#include "chimera_collada/ColladaEffect.hpp"
+#include "chimera_collada/ColladaImage.hpp"
 #include "chimera_core/gl/ShaderMng.hpp"
 #include "chimera_core/gl/TextureMng.hpp"
 #include "chimera_ecs/MaterialComponent.hpp"

@@ -1,7 +1,7 @@
-#include "chimera/collada/colladaLoad.hpp"
-#include "chimera/collada/ColladaExtra.hpp"
-#include "chimera/collada/ColladaPhysicScene.hpp"
-#include "chimera/collada/ColladaVisualScene.hpp"
+#include "chimera_collada/colladaLoad.hpp"
+#include "chimera_collada/ColladaExtra.hpp"
+#include "chimera_collada/ColladaPhysicScene.hpp"
+#include "chimera_collada/ColladaVisualScene.hpp"
 #include <SDL3/SDL.h>
 
 namespace ce {

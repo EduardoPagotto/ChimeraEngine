@@ -1,6 +1,4 @@
 #include "Game.hpp"
-#include "chimera/collada/Collada.hpp"
-#include "chimera/collada/colladaLoad.hpp"
 #include "chimera/render/scene/Scene.hpp"
 #include "chimera_base/Engine.hpp"
 #include "chimera_base/GamePad.hpp"
@@ -8,6 +6,8 @@
 #include "chimera_base/Keyboard.hpp"
 #include "chimera_base/ServiceLocator.hpp"
 #include "chimera_base/event.hpp"
+#include "chimera_collada/Collada.hpp"
+#include "chimera_collada/colladaLoad.hpp"
 #include "chimera_core/gl/CanvasGL.hpp"
 #include "chimera_core/gl/ShaderMng.hpp"
 #include <config_params.hpp>

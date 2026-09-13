@@ -1,5 +1,6 @@
 #include "chimera_core/gl/CanvasGL.hpp"
 #include "chimera_core/gl/OpenGLDefs.hpp"
+#include <format>
 #include <glm/gtc/matrix_transform.hpp>
 #include <stdexcept>
 
@@ -8,11 +9,14 @@ namespace ce {
     CanvasGL::CanvasGL(const std::string& title, int width, int height, bool fullScreen)
         : title(title), width(width), height(height), fullScreen(fullScreen), window(nullptr) {
 
-        if (!SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11")) {
-            throw std::runtime_error("SDL X11 Failed:" + std::string(SDL_GetError()));
-        }
+        // if (!SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11")) {
+        //     throw std::runtime_error("SDL X11 Failed:" + std::string(SDL_GetError()));
+        // }
+        // if (!SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "wayland")) {
+        //     throw std::runtime_error(std::format("SDL wayland Failed driver: {}", SDL_GetError()));
+        // }
 
-        if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS)) {
+        if (!SDL_Init(SDL_INIT_VIDEO)) {
             throw std::runtime_error("Falha SDL_Init:" + std::string(SDL_GetError()));
         }
 

@@ -293,6 +293,7 @@
 				"args": [],
 				"env": {
 					"SDL_VIDEODRIVER": "x11"
+					//  "SDL_VIDEODRIVER": "wayland"
 				},
 				"cwd": "${workspaceFolder}"
 			},

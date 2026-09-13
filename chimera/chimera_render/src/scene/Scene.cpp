@@ -1,6 +1,7 @@
 #include "chimera_render/scene/Scene.hpp"
 #include "chimera_base/ICanva.hpp"
 #include "chimera_core/bullet/Solid.hpp"
+#include "chimera_core/gl/CanvasGL.hpp"
 #include "chimera_core/gl/RenderCommand.hpp"
 #include "chimera_core/gl/ShaderMng.hpp"
 #include "chimera_core/visible/CameraControllerFPS.hpp"
@@ -61,8 +62,8 @@ namespace ce {
     }
 
     void Scene::onDeatach() {
-        vpo = nullptr;
-        phyCrt = nullptr;
+        // vpo = nullptr;
+        // phyCrt = nullptr;
     }
 
     void Scene::createOctree(const AABB& aabb) {
@@ -77,7 +78,13 @@ namespace ce {
     void Scene::onAttach() {
         // Pega o ViewProjection do ECS antes da camera por caussa do vpo
         vpo = registry->ctx().get<std::shared_ptr<ViewProjection>>();
-        phyCrt = registry->ctx().get<std::shared_ptr<IPhysicsControl>>(); // FIXME: ver se nao existir o que retorna
+        auto* ph = registry->ctx().find<std::shared_ptr<IPhysicsControl>>(); // FIXME: ver se nao existir o que retorna
+
+        if (ph != nullptr) {
+            phyCrt.reset(ph->get());
+        } else {
+            phyCrt = nullptr;
+        }
 
         // Totalizadores de area
         glm::vec3 tot_min, tot_max;
@@ -182,7 +189,7 @@ namespace ce {
 
         // Pega icanvas depois de camera definida!!!
         // FIXME: ver se existe la mesmo
-        auto canvas = registry->ctx().get<std::shared_ptr<ICanva>>();
+        auto canvas = registry->ctx().get<std::shared_ptr<CanvasGL>>();
 
         this->onViewportResize(canvas->getWidth(), canvas->getHeight());
 

@@ -10,7 +10,9 @@ Game::~Game() {}
 
 void Game::onAttach() {
 
-    glClearColor(0.F, 0.F, 0.F, 1.F); // Initialize clear color
+    // glClearColor(0.F, 0.F, 0.F, 1.F); // Initialize clear color
+    glClearColor(0.1F, 0.2F, 0.4F, 1.0F); // Initialize clear color
+
     // Habilita o depth buffer/culling face
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);

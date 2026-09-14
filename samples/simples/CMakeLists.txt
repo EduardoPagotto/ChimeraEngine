@@ -1,9 +1,7 @@
 PROJECT(simples_cubo LANGUAGES CXX)
 
-find_package(OpenGL REQUIRED)
 find_package(SDL3 REQUIRED)
 find_package(Bullet REQUIRED)
-find_package(GLEW REQUIRED)
 find_package(PUGIXML REQUIRED)
 
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
@@ -23,7 +21,6 @@ set (IncludeDirs ${CMAKE_CURRENT_SOURCE_DIR}/include
                  ${CMAKE_BINARY_DIR}/configured_files/include
 				 ${PUGIXML_DIR}
 				 ${CMAKE_SOURCE_DIR}
-				 ${OPENGL_INCLUDE_DIR}
 				 ${SDL3_INCLUDE_DIR}
 				 ${BULLET_INCLUDE_DIR})
 
@@ -35,16 +32,11 @@ set (LIBRARY_DEPS ${CMAKE_SOURCE_DIR}/bin/libchimera_render.a
 				  ${CMAKE_SOURCE_DIR}/bin/libchimera_collada.a
                   ${CMAKE_SOURCE_DIR}/bin/libchimera_core.a
                   ${CMAKE_SOURCE_DIR}/bin/libchimera_base.a
-				  ${OPENGL_LIBRARIES}
 				  ${SDL3_IBRARIES}
 				  ${BULLET_LIBRARIES}
-				  -lGL
-				  -lGLU
-				  -lglut
 				  -lSDL3
 				  -lSDL3_image
 				  -lSDL3_ttf
-				  -lGLEW
 				  -lpugixml
 				  -lpthread)
 

@@ -1,5 +1,4 @@
 #pragma once
-#include "chimera_core/gl/OpenGLDefs.hpp"
 #include "chimera_space/AABB.hpp"
 #include <memory>
 #include <vector>
@@ -23,7 +22,7 @@ namespace ce {
         int lastUsed = 0;
         int particlesCount = 0;
         glm::vec4* posData = nullptr;
-        GLubyte* colorData = nullptr;
+        unsigned char* colorData = nullptr;
         glm::vec3 cameraPos = glm::vec3(0.0f);
         std::vector<ParticleZ> container;
         ParticleContainer() = default;

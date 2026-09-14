@@ -1,8 +1,6 @@
 PROJECT(chimera_render LANGUAGES CXX)
 
-find_package(OpenGL REQUIRED)
 find_package(SDL3 REQUIRED)
-find_package(GLEW REQUIRED)
 
 if (BULLET_SET_TO_USE)
 	find_package(Bullet REQUIRED)
@@ -22,8 +20,6 @@ set (IncludeDirs ${CMAKE_SOURCE_DIR}/chimera/chimera_base/include/
 				 ${CMAKE_SOURCE_DIR}/chimera/chimera_collada/include/
 				 ${CMAKE_SOURCE_DIR}/chimera/chimera_render/include/
 			     ${SDL3_INCLUDE_DIR}
-				 ${OPENGL_INCLUDE_DIR}
-				 ${GLEW_INCLUDE_DIRS}
 				 /usr/local/include/) # Raiz do projeto
 
 #define objetos a compilar

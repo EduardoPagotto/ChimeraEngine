@@ -1,5 +1,4 @@
 #include "chimera_core/gl/ParticleEmitter.hpp"
-#include "chimera_core/gl/TextureMng.hpp"
 #include <algorithm>
 #include <glm/gtx/norm.hpp>
 

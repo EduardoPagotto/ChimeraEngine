@@ -56,20 +56,10 @@ namespace ce {
             throw std::runtime_error("SetSwapInterval:" + std::string(SDL_GetError()));
         }
 
+        CarregarOpenGL();
+
         if (not SDL_GL_MakeCurrent(this->window, this->context)) {
             throw std::runtime_error("MakeCurrent:" + std::string(SDL_GetError()));
-        }
-
-        // iniciala GLEW
-        glewExperimental = GL_TRUE;
-        if (GLenum err = glewInit(); err != GLEW_OK) {
-
-            if (err == GLEW_ERROR_NO_GLX_DISPLAY) {
-                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "GLEW init fail maybe wayland");
-            } else {
-                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "GLEW init: %s", glewGetErrorString(err));
-                throw std::runtime_error("GLEW Init fail");
-            }
         }
 
         // SDL_GetWindowSize(window, &width, &height);

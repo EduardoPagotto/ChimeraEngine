@@ -1,9 +1,7 @@
 PROJECT(chimera_core LANGUAGES CXX)
 
-find_package(OpenGL REQUIRED)
 find_package(SDL3 REQUIRED)
 find_package(PUGIXML REQUIRED)
-find_package(GLEW REQUIRED)
 
 if (BULLET_SET_TO_USE)
 	find_package(Bullet REQUIRED)
@@ -19,9 +17,7 @@ set (IncludeDirs ${CMAKE_SOURCE_DIR}/chimera/chimera_base/include/
 				 ${CMAKE_SOURCE_DIR}/chimera/chimera_space/include/
 				 ${CMAKE_SOURCE_DIR}/chimera/chimera_ecs/include/
 				 ${SDL3_INCLUDE_DIR}
-				 ${OPENGL_INCLUDE_DIR}
-				 ${PUGIXML_DIR}
-				 ${GLEW_INCLUDE_DIRS})
+				 ${PUGIXML_DIR})
 
 # define objetos a compilar
 set (SourceFiles src/gl/CanvasGL.cpp

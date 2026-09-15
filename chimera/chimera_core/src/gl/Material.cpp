@@ -50,8 +50,8 @@ namespace ce {
         // copy prop material
         uniforms.insert(listMaterial.begin(), listMaterial.end());
 
-        // seletorr de tipo ???
-        uniforms[SHADE_TEXTURE_SELETOR_TIPO_VALIDO] = Uniform(tipoTexturasDisponiveis);
+        // FIXME: seletorr de tipo ???
+        // uniforms[SHADE_TEXTURE_SELETOR_TIPO_VALIDO] = Uniform(tipoTexturasDisponiveis);
 
         // indice de textura
         int indexTex = 0;

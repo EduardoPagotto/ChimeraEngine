@@ -1,5 +1,6 @@
 #include "chimera_core/visible/CameraControllerOrbit.hpp"
 #include "chimera_ecs/CameraComponent.hpp"
+#include <glm/geometric.hpp>
 
 namespace ce {
 
@@ -17,12 +18,20 @@ namespace ce {
         auto& cc = entity.getComponent<CameraComponent>();
         camera = cc.camera;
         up = cc.up;
-        pitch = cc.pitch;
-        yaw = cc.yaw;
+        // pitch = cc.pitch;
+        // yaw = cc.yaw;
         min = cc.min;
         max = cc.max;
-        front = glm::vec3(0, 0, 0);
+        front = {0.0F, 0.0F, 0.0F}; // TODO: melhorar!!
         distance = glm::distance(camera->getPosition(), this->front);
+
+        glm::vec3 direction = glm::normalize(camera->getPosition() - front);
+        pitch = glm::degrees(std::asin(direction.y));
+        yaw = glm::degrees(std::atan2(direction.z, direction.x));
+
+        cc.pitch = pitch;
+        cc.yaw = yaw;
+
         this->updateVectors();
     }
 
@@ -32,35 +41,50 @@ namespace ce {
         if (vp->getSize() == 1) {
             vp->getLeft().update(glm::lookAt(camera->getPosition(), front, up), camera->getProjection());
         } else {
-            glm::vec3 novaPositionL, novaFrontL, novaPositionR, novaFrontR;
-            glm::vec3 left_p = front - camera->getPosition(); // front and position as points
-            glm::vec3 cross1 = glm::cross(up, left_p);
-            glm::vec3 norm1 = glm::normalize(cross1);
-            glm::vec3 final_norm1 = norm1 * vp->getNoze();
 
-            novaPositionL = camera->getPosition() + final_norm1;
-            novaFrontL = front + final_norm1;
-            vp->getLeft().update(glm::lookAt(novaPositionL, novaFrontL, up), camera->getProjection()); // Left
+            glm::vec3 direcao = glm::normalize(front - camera->getPosition());
+            const glm::vec3 direita = glm::normalize(glm::cross(direcao, up));
 
-            novaPositionR = camera->getPosition() - final_norm1;
-            novaFrontR = front - final_norm1;
-            vp->getRight().update(glm::lookAt(novaPositionR, novaFrontR, up), camera->getProjection()); // Right
+            const float distancia = vp->getNoze();
+            const glm::vec3 deslocamento = direita * distancia;
+
+            glm::vec3 posDireita = camera->getPosition() + deslocamento;
+            glm::vec3 origemDireita = front + deslocamento;
+
+            glm::vec3 posEsquerda = camera->getPosition() - deslocamento;
+            glm::vec3 origemEsquerda = front - deslocamento;
+
+            vp->getLeft().update(glm::lookAt(posEsquerda, origemEsquerda, up), camera->getProjection()); // Left
+            vp->getRight().update(glm::lookAt(posDireita, origemDireita, up), camera->getProjection());  // Right
+
+            // const glm::vec3 left_p = front - camera->getPosition(); // front and position as points
+            // const glm::vec3 cross1 = glm::cross(up, left_p);
+            // const glm::vec3 norm1 = glm::normalize(cross1);
+            // const glm::vec3 final_norm1 = norm1 * vp->getNoze();
+
+            // const glm::vec3 novaPositionL = camera->getPosition() + final_norm1;
+            // const glm::vec3 novaFrontL = front + final_norm1;
+            // vp->getLeft().update(glm::lookAt(posEsquerda, novaFrontL, up), camera->getProjection()); // Left
+
+            // const glm::vec3 novaPositionR = camera->getPosition() - final_norm1;
+            // const glm::vec3 novaFrontR = front - final_norm1;
+            // vp->getRight().update(glm::lookAt(posDireita, novaFrontR, up), camera->getProjection()); // Right
         }
     }
 
     void CameraControllerOrbit::updateVectors() {
 
-        float theta = glm::radians(yaw); // yaw * 0.017453293f; ( yaw * (PI/180) )
-        float phi = glm::radians(pitch); // pitch * 0.017453293f;
+        const float theta = glm::radians(yaw); // yaw * 0.017453293f; ( yaw * (PI/180) )
+        const float phi = glm::radians(pitch); // pitch * 0.017453293f;
         glm::vec3 pos;
         if (this->up.y == 1) {
-            pos.x = distance * sin(phi) * sin(theta);
-            pos.y = distance * cos(phi);
-            pos.z = distance * sin(phi) * cos(theta);
+            pos.x = distance * static_cast<float>(sin(phi) * sin(theta));
+            pos.y = distance * static_cast<float>(cos(phi));
+            pos.z = distance * static_cast<float>(sin(phi) * cos(theta));
         } else { // this->up.z == 1 ou -1
-            pos.x = distance * cos(theta) * sin(phi);
-            pos.y = distance * cos(theta) * cos(phi);
-            pos.z = distance * sin(theta);
+            pos.x = distance * static_cast<float>(cos(theta) * sin(phi));
+            pos.y = distance * static_cast<float>(cos(theta) * cos(phi));
+            pos.z = distance * static_cast<float>(sin(theta));
         }
 
         camera->setPosition(pos);

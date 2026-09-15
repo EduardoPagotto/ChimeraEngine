@@ -1,13 +1,9 @@
 #pragma once
 #include <SDL3/SDL.h>
-// #include <cmath>
-#include <iostream>
-// #include <vector>
-
-// Inclusões da biblioteca GLM para matemática 3D
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
 
 // ============================================================================
 // 1. TODAS AS DEFINIÇÕES DE TIPOS E CONSTANTES EXIGIDAS PELO OPENGL (MANUAL)
@@ -23,6 +19,7 @@ typedef unsigned char GLboolean;
 typedef uint64_t GLuint64;
 typedef unsigned char GLubyte;
 typedef double GLdouble;
+typedef float GLclampf;
 
 #define GL_TRUE                        1
 #define GL_FALSE                       0
@@ -79,7 +76,8 @@ typedef double GLdouble;
 #define GL_TEXTURE_WRAP_T              0x2803
 #define GL_LINEAR                      0x2601
 #define GL_LINEAR_MIPMAP_LINEAR        0x2703
-#define GL_CLAMP                       0x2900
+#define GL_CLAMP_TO_EDGE               0x812F
+#define GL_CLAMP_TO_BORDER             0x812D
 #define GL_REPEAT                      0x2901
 #define GL_COLOR_ATTACHMENT0           0x8CE0
 #define GL_COLOR_ATTACHMENT1           0x8CE1
@@ -95,6 +93,18 @@ typedef double GLdouble;
 #define GL_ONE_MINUS_SRC_ALPHA         0x0303
 #define GL_PERSPECTIVE_CORRECTION_HINT 0x0C50
 #define GL_NICEST                      0x1102
+#define GL_CONTEXT_FLAGS               0x821E
+#define GL_CONTEXT_FLAG_DEBUG_BIT      0x00000002
+#define GL_DEBUG_OUTPUT                0x92E0
+#define GL_DEBUG_OUTPUT_SYNCHRONOUS    0x8242
+#define GL_DEBUG_SEVERITY_HIGH         0x9146
+#define GL_DEBUG_SEVERITY_MEDIUM       0x9147
+#define GL_DEBUG_SEVERITY_LOW          0x9148
+#define GL_DEBUG_SEVERITY_NOTIFICATION 0x826B
+#define GL_VENDOR                      0x1F00
+#define GL_RENDERER                    0x1F01
+#define GL_VERSION                     0x1F02
+#define APIENTRY
 
 // ============================================================================
 // 2. ASSINATURAS DE FUNÇÕES DO OPENGL UTILIZADAS NO PIPELINE
@@ -198,7 +208,11 @@ typedef void (*PFNGLCLEARDEPTHPROC)(GLdouble depth);
 typedef void (*PFNGLDRAWARRAYSINSTANCEDPROC)(GLenum mode, GLint first, GLsizei count, GLsizei instancecount);
 typedef void (*PFNGLHINTPROC)(GLenum target, GLenum mode);
 
-// --
+// DEBUG
+typedef void(APIENTRY* GLDEBUGPROC)(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
+                                    const GLchar* message, const void* userParam);
+typedef void(APIENTRY* PFNGLDEBUGMESSAGECALLBACKPROC)(GLDEBUGPROC callback, const void* userParam);
+//  --
 inline PFNGLBINDFRAMEBUFFERPROC glBindFramebuffer;
 inline PFNGLDELETERENDERBUFFERSPROC glDeleteRenderbuffers;
 inline PFNGLFRAMEBUFFERTEXTUREPROC glFramebufferTexture;
@@ -278,6 +292,7 @@ inline PFNGLDISABLEVERTEXATTRIBARRAYPROC glDisableVertexAttribArray;
 inline PFNGLCLEARDEPTHPROC glClearDepth;
 inline PFNGLDRAWARRAYSINSTANCEDPROC glDrawArraysInstanced;
 inline PFNGLHINTPROC glHint;
+inline PFNGLDEBUGMESSAGECALLBACKPROC glDebugMessageCallback_ptr;
 
 // Mecanismo de resolução em runtime do SDL3 para carregar o Driver EGL do Wayland
 inline void CarregarOpenGL() { // NOLINT
@@ -319,18 +334,13 @@ inline void CarregarOpenGL() { // NOLINT
     LOAD_PROC(PFNGLTEXIMAGE2DPROC, glTexImage2D);
     LOAD_PROC(PFNGLGENERATEMIPMAPPROC, glGenerateMipmap);
     LOAD_PROC(PFNGLGETSTRINGPROC, glGetString);
-
     LOAD_PROC(PFNGLDELETEBUFFERSPROC, glDeleteBuffers);
     LOAD_PROC(PFNGLUNMAPBUFFERPROC, glUnmapBuffer);
     LOAD_PROC(PFNGLDELETETEXTURESPROC, glDeleteTextures);
-
     LOAD_PROC(PFNGLBUFFERSUBDATAPROC, glBufferSubData);
     LOAD_PROC(PFNGLMAPBUFFERPROC, glMapBuffer);
-
     LOAD_PROC(PFNGLGETERRORPROC, glGetError);
-
     LOAD_PROC(PFNGLDRAWARRAYSPROC, glDrawArrays);
-
     LOAD_PROC(PFNGLDELETEFRAMEBUFFERSPROC, glDeleteFramebuffers);
     LOAD_PROC(PFNGLGENFRAMEBUFFERSPROC, glGenFramebuffers);
     LOAD_PROC(PFNGLDRAWBUFFERSPROC, glDrawBuffers);
@@ -338,7 +348,6 @@ inline void CarregarOpenGL() { // NOLINT
     LOAD_PROC(PFNGLGENRENDERBUFFERSPROC, glGenRenderbuffers);
     LOAD_PROC(PFNGLVIEWPORTPROC, glViewport);
     LOAD_PROC(PFNGLDELETEVERTEXARRAYSPROC, glDeleteVertexArrays);
-
     LOAD_PROC(PFNGLBINDFRAMEBUFFERPROC, glBindFramebuffer);
     LOAD_PROC(PFNGLDELETERENDERBUFFERSPROC, glDeleteRenderbuffers);
     LOAD_PROC(PFNGLFRAMEBUFFERTEXTUREPROC, glFramebufferTexture);
@@ -354,7 +363,6 @@ inline void CarregarOpenGL() { // NOLINT
     LOAD_PROC(PFNGLUNIFORM1FVPROC, glUniform1fv);
     LOAD_PROC(PFNGLUNIFORMMATRIX3FVPROC, glUniformMatrix3fv);
     LOAD_PROC(PFNGLUNIFORMMATRIX4FVPROC, glUniformMatrix4fv);
-
     LOAD_PROC(PFNGLUNIFORM2FVPROC, glUniform2fv);
     LOAD_PROC(PFNGLUNIFORM4FVPROC, glUniform4fv);
     LOAD_PROC(PFNGLDELETEPROGRAMPROC, glDeleteProgram);
@@ -362,23 +370,43 @@ inline void CarregarOpenGL() { // NOLINT
     LOAD_PROC(PFNGLDETACHSHADERPROC, glDetachShader);
     LOAD_PROC(PFNGLREADPIXELSPROC, glReadPixels);
     LOAD_PROC(PFNGLCLEARTEXIMAGEPROC, glClearTexImage);
-
     LOAD_PROC(PFNGLFRAMEBUFFERTEXTURE2DPROC, glFramebufferTexture2D);
     LOAD_PROC(PFNGLTEXPARAMETERFVPROC, glTexParameterfv);
-
     LOAD_PROC(PFNGLDEPTHFUNCPROC, glDepthFunc);
     LOAD_PROC(PFNGLGETBOOLEANVPROC, glGetBooleanv);
     LOAD_PROC(PFNGLDISABLEPROC, glDisable);
-
     LOAD_PROC(PFNGLGETINTEGERVPROC, glGetIntegerv);
     LOAD_PROC(PFNGLBLENDFUNCPROC, glBlendFunc);
-
     LOAD_PROC(PFNGLVERTEXATTRIBDIVISORPROC, glVertexAttribDivisor);
     LOAD_PROC(PFNGLDISABLEVERTEXATTRIBARRAYPROC, glDisableVertexAttribArray);
     LOAD_PROC(PFNGLCLEARDEPTHPROC, glClearDepth);
-
     LOAD_PROC(PFNGLDRAWARRAYSINSTANCEDPROC, glDrawArraysInstanced);
     LOAD_PROC(PFNGLHINTPROC, glHint);
+    LOAD_PROC(PFNGLDEBUGMESSAGECALLBACKPROC, glDebugMessageCallback_ptr);
+}
+
+// --- Implementação do Callback de Debug do OpenGL ---
+inline void OpenGLDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
+                                const GLchar* message, const void* userParam) {
+
+    // Ignorar notificações comuns de performance para não poluir o terminal
+    if (severity == GL_DEBUG_SEVERITY_NOTIFICATION) {
+        return;
+    }
+
+    std::cerr << "[OpenGL Debug] ";
+    switch (severity) {
+        case GL_DEBUG_SEVERITY_HIGH:
+            std::cerr << "CRÍTICO: ";
+            break;
+        case GL_DEBUG_SEVERITY_MEDIUM:
+            std::cerr << "AVISO IMPORTANTE: ";
+            break;
+        case GL_DEBUG_SEVERITY_LOW:
+            std::cerr << "AVISO: ";
+            break;
+    }
+    std::cerr << message << " (ID: " << id << ")\n";
 }
 
 namespace ce {

@@ -2,6 +2,7 @@
 #include "FrameBuffer.hpp"
 #include "VertexBuffer.hpp"
 #include "chimera_core/gl/Shader.hpp"
+#include "chimera_core/gl/buffer/VertexArray.hpp"
 
 namespace ce {
 
@@ -10,6 +11,7 @@ namespace ce {
         uint32_t posX, posY;
         std::shared_ptr<Shader> shader;
         std::shared_ptr<VertexBuffer> vbo;
+        std::shared_ptr<VertexArray> vao;
         std::shared_ptr<FrameBuffer> frameBuffer;
 
       public:

@@ -16,11 +16,17 @@ namespace ce {
         BufferLayout b;
         b.Push<float>(3, false);
 
+        vao = std::make_shared<VertexArray>();
+        vao->bind();
+
         vbo = std::make_shared<VertexBuffer>(BufferType::STATIC);
         vbo->bind();
         vbo->setLayout(b);
         vbo->setData(quad, 6);
         vbo->unbind();
+
+        vao->push(vbo);
+        vao->unbind();
     }
 
     void RenderBuffer::bind() {
@@ -40,10 +46,13 @@ namespace ce {
         // Set our "renderedTexture" sampler to user Texture Unit 0
         shader->setUniformU("renderedTexture", Uniform(0));
 
-        vbo->bind();
-        // Draw the triangles !
+        vao->bind();
+
+        // vbo->bind();
+        //  Draw the triangles !
         glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
-        vbo->unbind();
+        // vbo->unbind();
+        vao->unbind();
         glUseProgram(0);
     }
 } // namespace ce

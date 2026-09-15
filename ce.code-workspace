@@ -294,6 +294,8 @@
 				"env": {
 					// "SDL_VIDEODRIVER": "x11"
 					//  "SDL_VIDEODRIVER": "wayland"
+					"MESA_DEBUG" : "1",
+					"TENDER_DEBUG" : "1"
 				},
 				"cwd": "${workspaceFolder}"
 			},

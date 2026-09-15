@@ -6,7 +6,7 @@ namespace ce {
     enum class TexWrap {
         NONE = 0,
         REPEAT = GL_REPEAT,
-        CLAMP = GL_CLAMP,
+        CLAMP = GL_CLAMP_TO_EDGE,
         MIRRORED = GL_MIRRORED_REPEAT,
         CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
         CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER

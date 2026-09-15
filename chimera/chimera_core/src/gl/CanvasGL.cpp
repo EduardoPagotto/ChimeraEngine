@@ -9,9 +9,6 @@ namespace ce {
     CanvasGL::CanvasGL(const std::string& title, int width, int height, bool fullScreen)
         : title(title), width(width), height(height), fullScreen(fullScreen), window(nullptr) {
 
-        // if (!SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11")) {
-        //     throw std::runtime_error("SDL X11 Failed:" + std::string(SDL_GetError()));
-        // }
         if (!SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "wayland")) {
             throw std::runtime_error(std::format("SDL wayland Failed driver: {}", SDL_GetError()));
         }
@@ -21,9 +18,9 @@ namespace ce {
         }
 
         int paramOk = 0;
-        if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3)) {
+        if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4)) {
             paramOk++;
-            if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3)) {
+            if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6)) {
                 paramOk++;
                 if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE)) {
                     paramOk++;
@@ -40,6 +37,8 @@ namespace ce {
         if (paramOk != 5) {
             throw std::runtime_error(std::format("Parametro: {}  erro: {}", paramOk, std::string(SDL_GetError())));
         }
+
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 
         this->window = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
         if (this->window == nullptr) {
@@ -58,6 +57,16 @@ namespace ce {
 
         CarregarOpenGL();
 
+        if (glGetIntegerv != nullptr) {
+            GLint flags = 0;
+            glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
+            if (flags & GL_CONTEXT_FLAG_DEBUG_BIT) {
+                std::cout << "[Sucesso] O Driver confirmou um contexto com suporte a DEBUG nativo.\n";
+            } else {
+                std::cout << "[Aviso] O Driver IGNOROU o pedido de contexto de Debug.\n";
+            }
+        }
+
         if (not SDL_GL_MakeCurrent(this->window, this->context)) {
             throw std::runtime_error("MakeCurrent:" + std::string(SDL_GetError()));
         }
@@ -68,17 +77,15 @@ namespace ce {
         SDL_Log("Renderer: %s", glGetString(GL_RENDERER));
         SDL_Log("OpenGL Version: %s", glGetString(GL_VERSION));
 
-        // #ifdef WIN32
-        //     // Here we initialize our multi-texturing functions
-        //     glActiveTextureARB = (PFNGLACTIVETEXTUREARBPROC)wglGetProcAddress("glActiveTextureARB");
-        //     glMultiTexCoord2fARB = (PFNGLMULTITEXCOORD2FARBPROC)wglGetProcAddress("glMultiTexCoord2fARB");
-
-        //     // Make sure our multi-texturing extensions were loaded correctly
-        //     if (!glActiveTextureARB || !glMultiTexCoord2fARB) {
-        //         throw ExceptionSDL(ExceptionCode::ALLOC, std::string("Your current setup does not support
-        //         multitexturing"));
-        //     }
-        // #endif
+        if (glDebugMessageCallback_ptr != nullptr) {
+            glEnable(GL_DEBUG_OUTPUT);
+            // Garante que o callback rode na mesma Thread permitindo breakpoints fáceis
+            glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+            glDebugMessageCallback_ptr(OpenGLDebugCallback, nullptr);
+            std::cout << "OpenGL Debug Callback configurado com sucesso!\n";
+        } else {
+            std::cerr << "Não foi possível configurar o Debug Callback (Função indisponível).\n";
+        }
     }
 
     CanvasGL::~CanvasGL() {
@@ -98,14 +105,7 @@ namespace ce {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void CanvasGL::after() {
-
-        if (GLenum erro = glGetError(); erro != GL_NO_ERROR) {
-            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "OpenGL Erro: %d", erro);
-        }
-
-        SDL_GL_SwapWindow(window);
-    }
+    void CanvasGL::after() { SDL_GL_SwapWindow(window); }
 
     void CanvasGL::reshape(int _width, int _height) {
         width = _width;

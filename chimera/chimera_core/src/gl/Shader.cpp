@@ -1,12 +1,17 @@
 #include "chimera_core/gl/Shader.hpp"
 #include "chimera_core/gl/OpenGLDefs.hpp"
 #include <SDL3/SDL_log.h>
+#include <SDL3/SDL_stdinc.h>
+#include <glm/ext/matrix_float4x4.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/string_cast.hpp> // Cabeçalho necessário
 
 namespace ce {
 
     void Shader::setUniformU(const char* name, const Uniform& uv) noexcept {
 
         int32_t loc = getUniform(name);
+        // SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Uniform: %s", name);
         if (loc == -1) {
             SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%d\"", name, progID);
             return;
@@ -58,6 +63,19 @@ namespace ce {
                 SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Uniform \"%s\" invalid in Program \"%d\"", name, progID);
                 break;
         }
+
+        // while (true) {
+        //     // FIXME: o que ha de errado aqui ??
+        //     GLenum erro = glGetError();
+        //     if (erro != GL_NO_ERROR) {
+        //         glm::mat4* aa = static_cast<glm::mat4*>(uv.ptr.get());
+        //         // std::cout << glm::to_string(*aa) << std::endl;
+        //         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Uniform OpenGL Erro: %s Code %d -> %s", name, erro,
+        //                      glm::to_string(*aa).c_str());
+        //     } else {
+        //         break;
+        //     }
+        // }
     }
 
     Shader::~Shader() noexcept {

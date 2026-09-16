@@ -7,9 +7,10 @@ namespace ce {
     /// @brief Pad Interface
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
-    /// @date 20260907
+    /// @date 20260915
     class GamePad {
       public:
+        friend struct InputManager;
         explicit GamePad() {
             SDL_InitSubSystem(SDL_INIT_GAMEPAD);
             SDL_SetGamepadEventsEnabled(true);
@@ -41,6 +42,23 @@ namespace ce {
             return nullptr;
         }
 
+        [[clang::noinline]] bool getEvent(const SDL_Event& event) noexcept {
+
+            switch (event.type) {
+                case SDL_EVENT_GAMEPAD_ADDED:
+                    this->added();
+                    break;
+                case SDL_EVENT_GAMEPAD_REMOVED:
+                    this->removed(event.gdevice);
+                    break;
+                default:
+                    return false;
+            }
+
+            return true;
+        }
+
+      private:
         [[clang::noinline]] void added(void) {
             // TODO: TESTA GAMEPAD
             int num_joysticks;

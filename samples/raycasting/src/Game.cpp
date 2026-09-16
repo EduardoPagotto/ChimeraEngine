@@ -34,7 +34,7 @@ void Game::onAttach() {
 
 void Game::onDeatach() {}
 
-bool Game::onEvent(const SDL_Event& event) {
+void Game::onEvent(const SDL_Event& event) {
     // using namespace ce;
 
     // keyboard->getEvent(event);
@@ -47,23 +47,24 @@ bool Game::onEvent(const SDL_Event& event) {
     //         ce::sendChimeraEvent(ce::EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
     //         break;
     // }
-    return false;
 }
 
 void Game::onUpdate(const double& ts) {
     using namespace ce;
 
-    if (this->inputManager->keyboard->isPressed(SDLK_ESCAPE)) {
+    SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "%.3f", ts);
+
+    if (this->inputManager->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
         sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
         return;
     }
 
-    if (this->inputManager->keyboard->isPressed(SDLK_F1)) {
+    if (this->inputManager->isKeyPressed(SDL_SCANCODE_F1)) {
         sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
         return;
     }
 
-    if (this->inputManager->keyboard->isPressed(SDLK_W)) {
+    if (this->inputManager->isKeyDown(SDL_SCANCODE_W)) {
         glm::ivec2 curr = state->pos;
         glm::ivec2 next = state->pos + state->dir * moveSpeed * 2.0f;
 
@@ -72,11 +73,9 @@ void Game::onUpdate(const double& ts) {
 
         if (world->data[curr.x + next.y * world->width] == 0)
             state->pos.y += state->dir.y * moveSpeed;
-
-        return;
     }
 
-    if (this->inputManager->keyboard->isPressed(SDLK_S)) {
+    if (this->inputManager->isKeyDown(SDL_SCANCODE_S)) {
         glm::ivec2 curr = state->pos;
         glm::ivec2 next = state->pos - state->dir * moveSpeed * 2.0f;
 
@@ -85,30 +84,24 @@ void Game::onUpdate(const double& ts) {
 
         if (world->data[curr.x + next.y * world->width] == 0)
             state->pos.y -= state->dir.y * moveSpeed;
-
-        return;
     }
 
-    if (this->inputManager->keyboard->isPressed(SDLK_A)) {
+    if (this->inputManager->isKeyDown(SDL_SCANCODE_A)) {
         double oldDirX = state->dir.x;
         state->dir.x = state->dir.x * cos(rotSpeed) - state->dir.y * sin(rotSpeed);
         state->dir.y = oldDirX * sin(rotSpeed) + state->dir.y * cos(rotSpeed);
         double oldcamx = state->cam.x;
         state->cam.x = state->cam.x * cos(rotSpeed) - state->cam.y * sin(rotSpeed);
         state->cam.y = oldcamx * sin(rotSpeed) + state->cam.y * cos(rotSpeed);
-
-        return;
     }
 
-    if (this->inputManager->keyboard->isPressed(SDLK_D)) {
+    if (this->inputManager->isKeyDown(SDL_SCANCODE_D)) {
         double oldDirX = state->dir.x;
         state->dir.x = state->dir.x * cos(-rotSpeed) - state->dir.y * sin(-rotSpeed);
         state->dir.y = oldDirX * sin(-rotSpeed) + state->dir.y * cos(-rotSpeed);
         double oldcamx = state->cam.x;
         state->cam.x = state->cam.x * cos(-rotSpeed) - state->cam.y * sin(-rotSpeed);
         state->cam.y = oldcamx * sin(-rotSpeed) + state->cam.y * cos(-rotSpeed);
-
-        return;
     }
 }
 

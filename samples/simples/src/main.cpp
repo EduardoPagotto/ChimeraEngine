@@ -31,10 +31,10 @@ int main(int argn, char** argv) {
         // Registry to entt
         std::shared_ptr<entt::registry> registry = std::make_shared<entt::registry>();
 
-        using enum ce::InputEnable;
-        InputEnable in = Mouse | Keyboard;
+        // using enum ce::InputEnable;
+        // InputEnable in = Mouse | Keyboard;
 
-        registry->ctx().emplace<std::shared_ptr<InputManager>>(std::make_shared<InputManager>(in, true));
+        registry->ctx().emplace<std::shared_ptr<InputManager>>(std::make_shared<InputManager>());
         registry->ctx().emplace<std::shared_ptr<CanvasGL>>(std::make_shared<CanvasGL>("BSP Tree", 1800, 600, false));
         registry->ctx().emplace<std::shared_ptr<ViewProjection>>(std::make_shared<ViewProjection>(0.5F));
         registry->ctx().emplace<std::shared_ptr<ShaderMng>>(std::make_shared<ShaderMng>());

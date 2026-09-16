@@ -8,8 +8,9 @@ namespace ce {
     /// @brief Mouse Interface
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
-    /// @date 20260907
+    /// @date 20260915
     class Mouse {
+        friend struct InputManager;
 
       public:
         Mouse() noexcept { SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Mouse init ok"); };
@@ -33,9 +34,28 @@ namespace ce {
             return glm::ivec2(0);
         }
 
-        void updateBt(const SDL_MouseButtonEvent& bt) noexcept { this->buttonState[bt.button] = bt.down; }
+        void clear() { buttonState.clear(); }
 
-        void updateWl(const SDL_MouseWheelEvent& mwe) noexcept { this->wheel = glm::ivec2(mwe.x, mwe.y); }
+        bool getEvent(const SDL_Event& event) noexcept {
+            switch (event.type) {
+                case SDL_EVENT_MOUSE_BUTTON_DOWN:
+                case SDL_EVENT_MOUSE_BUTTON_UP:
+                    this->updateBt(event.button);
+                    break;
+                case SDL_EVENT_MOUSE_MOTION:
+                    this->updateMv(event.motion);
+                    break;
+                case SDL_EVENT_MOUSE_WHEEL:
+                    this->updateWl(event.wheel);
+                    break;
+                default:
+                    return false;
+            }
+            return true;
+        }
+
+      private:
+        void updateBt(const SDL_MouseButtonEvent& bt) noexcept { this->buttonState[bt.button] = bt.down; }
 
         [[clang::noinline]] void updateMv(const SDL_MouseMotionEvent& mv) noexcept {
             this->pos = glm::ivec2(mv.x, mv.y);
@@ -43,9 +63,8 @@ namespace ce {
             flag1++;
         }
 
-        void clear() { buttonState.clear(); }
+        void updateWl(const SDL_MouseWheelEvent& mwe) noexcept { this->wheel = glm::ivec2(mwe.x, mwe.y); }
 
-      private:
         std::unordered_map<uint8_t, bool> buttonState;
         glm::ivec2 pos{glm::ivec2(0)};
         glm::ivec2 rel{glm::ivec2(0)};

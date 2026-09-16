@@ -79,71 +79,71 @@ namespace ce {
 
     void CameraControllerFPS::onUpdate(const double& ts) {
         // Movement speed
-        if (inputManager->keyboard->isPressed(SDLK_LSHIFT)) // acelerar mover
+        if (inputManager->isKeyDown(SDL_SCANCODE_LSHIFT)) // acelerar mover
             movementSpeed = fsp_camera_max_speed * 4.0f;
-        else if (inputManager->keyboard->isPressed(SDLK_LALT)) //  desacelerar mover
+        else if (inputManager->isKeyDown(SDL_SCANCODE_LALT)) //  desacelerar mover
             movementSpeed = fsp_camera_max_speed / 4.0f;
         else
             movementSpeed = fsp_camera_max_speed;
 
         // CameraFPS movement
         glm::vec3 direction = glm::vec3(0.0f);
-        if (inputManager->keyboard->isPressed(SDLK_W)) // to foward
+        if (inputManager->isKeyDown(SDL_SCANCODE_W)) // to foward
             direction += front;
-        if (inputManager->keyboard->isPressed(SDLK_S)) // to backward
+        if (inputManager->isKeyDown(SDL_SCANCODE_S)) // to backward
             direction -= front;
-        if (inputManager->keyboard->isPressed(SDLK_A)) // to left
+        if (inputManager->isKeyDown(SDL_SCANCODE_A)) // to left
             direction -= right;
-        if (inputManager->keyboard->isPressed(SDLK_D)) //  to right
+        if (inputManager->isKeyDown(SDL_SCANCODE_D)) //  to right
             direction += right;
-        if (inputManager->keyboard->isPressed(SDLK_SPACE)) // to up
+        if (inputManager->isKeyDown(SDL_SCANCODE_SPACE)) // to up
             direction += worldUp;
-        if (inputManager->keyboard->isPressed(SDLK_LCTRL)) //  to booton
+        if (inputManager->isKeyDown(SDL_SCANCODE_LCTRL)) //  to booton
             direction -= worldUp;
 
         float mouseXDelta{0.0f};
         float mouseYDelta{0.0f};
 
-        if (SDL_Gamepad* pJoy = inputManager->gamePad->getFirst(); pJoy != nullptr) {
+        // if (SDL_Gamepad* pJoy = inputManager->gamePad->getFirst(); pJoy != nullptr) {
 
-            // Game control ratation and move
-            const int16_t deadZone = 128;
+        //     // Game control ratation and move
+        //     const int16_t deadZone = 128;
 
-            const float lefty = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTY), deadZone, 0x8000);
-            const float leftx = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTX), deadZone, 0x8000);
-            const float rightx = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTX), deadZone, 0x8000);
-            const float righty = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTY), deadZone, 0x8000);
-            // SDL_Log("Left X:%f, Left Y:%f, RightY:%f, RightX:%f", leftx, lefty, rightx, righty);
+        //     const float lefty = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTY), deadZone, 0x8000);
+        //     const float leftx = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTX), deadZone, 0x8000);
+        //     const float rightx = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTX), deadZone, 0x8000);
+        //     const float righty = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTY), deadZone, 0x8000);
+        //     // SDL_Log("Left X:%f, Left Y:%f, RightY:%f, RightX:%f", leftx, lefty, rightx, righty);
 
-            direction += front * lefty * 1.5f; // mov FB
-            direction -= right * leftx * 1.5f; // mov RL
-            mouseXDelta = -rightx * 1.5f;      // rot RL
-            mouseYDelta = righty * 1.5f;       // rot UD
+        //     direction += front * lefty * 1.5f; // mov FB
+        //     direction -= right * leftx * 1.5f; // mov RL
+        //     mouseXDelta = -rightx * 1.5f;      // rot RL
+        //     mouseYDelta = righty * 1.5f;       // rot UD
 
-            if (SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_DPAD_UP) == true)
-                direction += (worldUp * 0.5f); // mov U<->D
+        //     if (SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_DPAD_UP) == true)
+        //         direction += (worldUp * 0.5f); // mov U<->D
 
-            if (SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_DPAD_DOWN) == true)
-                direction -= worldUp * 0.5f; // mov D<->U
+        //     if (SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_DPAD_DOWN) == true)
+        //         direction -= worldUp * 0.5f; // mov D<->U
 
-            const bool north = SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_NORTH);
-            const bool south = SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_SOUTH);
+        //     const bool north = SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_NORTH);
+        //     const bool south = SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_SOUTH);
 
-            if (north || south) {
+        //     if (north || south) {
 
-                const float v1 = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFT_TRIGGER), deadZone, 0x8000);
-                // SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, " V1: %f", v1);
-                const float v2 = v1 * 4.0 + north - south * 2.0f;
-                const float scrollDelta = glm::clamp(v2 * 4.0f, -4.0f, 4.0f);
-                processCameraFOV(scrollDelta); // TODO: injetar o novo FOV na camera, passar ele para perspective
-            }
+        //         const float v1 = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFT_TRIGGER), deadZone, 0x8000);
+        //         // SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, " V1: %f", v1);
+        //         const float v2 = v1 * 4.0 + north - south * 2.0f;
+        //         const float scrollDelta = glm::clamp(v2 * 4.0f, -4.0f, 4.0f);
+        //         processCameraFOV(scrollDelta); // TODO: injetar o novo FOV na camera, passar ele para perspective
+        //     }
 
-        } else {
-            // Mouse Camera rotation
-            glm::ivec2 mouseMove = inputManager->mouse->getMoveRel();
-            mouseXDelta = -(float)mouseMove.x * fsp_camera_rotation_sensitivity;
-            mouseYDelta = (float)mouseMove.y * fsp_camera_rotation_sensitivity;
-        }
+        // } else {
+        //     // Mouse Camera rotation
+        //     glm::ivec2 mouseMove = inputManager->mouse->getMoveRel();
+        //     mouseXDelta = -(float)mouseMove.x * fsp_camera_rotation_sensitivity;
+        //     mouseYDelta = (float)mouseMove.y * fsp_camera_rotation_sensitivity;
+        // }
 
         processCameraMovement(direction, ts);
 

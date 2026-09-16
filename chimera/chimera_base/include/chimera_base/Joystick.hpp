@@ -7,8 +7,10 @@ namespace ce {
     /// @brief Joystic Interface
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
-    /// @date 20260907
+    /// @date 20260915
     class Joystick {
+
+        friend struct InputManager;
 
       public:
         Joystick() noexcept {
@@ -34,6 +36,23 @@ namespace ce {
             return nullptr;
         }
 
+        bool getEvent(const SDL_Event& event) noexcept {
+
+            switch (event.type) {
+                case SDL_EVENT_JOYSTICK_ADDED:
+                    this->added();
+                    break;
+                case SDL_EVENT_JOYSTICK_REMOVED:
+                    this->removed(event.jdevice);
+                    break;
+                default:
+                    return false;
+            }
+
+            return true;
+        }
+
+      private:
         // TODO: TESTAR JOYSTICK
         [[clang::noinline]] void added(void) {
             int num_joysticks;

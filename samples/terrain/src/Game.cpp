@@ -26,7 +26,7 @@ void Game::onAttach() {
 
 void Game::onDeatach() {}
 
-bool Game::onEvent(const SDL_Event& event) {
+void Game::onEvent(const SDL_Event& event) {
     using namespace ce;
 
     mouse->getEvent(event);

@@ -24,10 +24,10 @@ int main(int argn, char** argv) {
 
         std::shared_ptr<entt::registry> registry = std::make_shared<entt::registry>();
 
-        using enum ce::InputEnable;
-        InputEnable in = Mouse | Keyboard;
+        // using enum ce::InputEnable;
+        // InputEnable in = Mouse | Keyboard;
 
-        registry->ctx().emplace<std::shared_ptr<InputManager>>(std::make_shared<InputManager>(in, true));
+        registry->ctx().emplace<std::shared_ptr<InputManager>>(std::make_shared<InputManager>());
 
         std::shared_ptr<CanvaFB> canva = std::make_shared<CanvaFB>("Teste Framebuffer SDL3", 800, 600, false);
 

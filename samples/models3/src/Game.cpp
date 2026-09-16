@@ -20,7 +20,7 @@ Game::~Game() {
     mouse = nullptr;
 }
 
-bool Game::onEvent(const SDL_Event& event) {
+void Game::onEvent(const SDL_Event& event) {
     using namespace ce;
 
     gameControl->getEvent(event);

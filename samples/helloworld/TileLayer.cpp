@@ -14,7 +14,7 @@ TileLayer::TileLayer(std::shared_ptr<ce::Shader> shader)
 
 TileLayer::~TileLayer() {}
 
-bool TileLayer::onEvent(const SDL_Event& event) {
+void TileLayer::onEvent(const SDL_Event& event) {
     using namespace ce;
     switch (event.type) {
         case SDL_EVENT_MOUSE_BUTTON_DOWN:

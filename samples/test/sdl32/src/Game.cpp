@@ -117,7 +117,7 @@ void Game::onUpdate(const double& ts) {
     this->updateModel(helicopter, testMat);
 }
 
-bool Game::onEvent(const SDL_Event& event) {
+void Game::onEvent(const SDL_Event& event) {
 
     using namespace ce;
 

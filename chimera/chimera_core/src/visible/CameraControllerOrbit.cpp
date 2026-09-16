@@ -124,14 +124,14 @@ namespace ce {
     }
 
     void CameraControllerOrbit::onUpdate(const double& ts) {
-        if (inputManager->mouse->getButtonState(1)) {
-            glm::ivec2 mouseMove = inputManager->mouse->getMoveRel();
-            this->processCameraRotation(mouseMove.x, mouseMove.y);
+        // if (inputManager->mouse->getButtonState(1)) {
+        //     glm::ivec2 mouseMove = inputManager->mouse->getMoveRel();
+        //     this->processCameraRotation(mouseMove.x, mouseMove.y);
 
-        } else if (inputManager->mouse->getButtonState(3)) {
-            glm::ivec2 mouseMove = inputManager->mouse->getMoveRel();
-            this->processDistance(mouseMove.y);
-        }
+        // } else if (inputManager->mouse->getButtonState(3)) {
+        //     glm::ivec2 mouseMove = inputManager->mouse->getMoveRel();
+        //     this->processDistance(mouseMove.y);
+        // }
 
         this->updateVectors();
         this->updateVP();

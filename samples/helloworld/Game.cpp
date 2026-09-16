@@ -75,7 +75,7 @@ void Game::onRender() {
     // ApplicationGL::onRender();
 }
 
-bool Game::onEvent(const SDL_Event& event) {
+void Game::onEvent(const SDL_Event& event) {
     using namespace ce;
 
     // if (ApplicationGL::onEvent(event) == false)

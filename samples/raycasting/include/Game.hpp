@@ -15,7 +15,7 @@ class Game : public ce::IStateMachine {
     virtual void onDeatach() override;
     virtual void onRender() override;
     virtual void onUpdate(const double& ts) override;
-    virtual bool onEvent(const SDL_Event& event) override;
+    virtual void onEvent(const SDL_Event& event) override;
     virtual std::string getName() const override;
 
   private:

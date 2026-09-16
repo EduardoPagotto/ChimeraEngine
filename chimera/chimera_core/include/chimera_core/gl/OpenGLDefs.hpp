@@ -143,18 +143,13 @@ typedef void (*PFNGLTEXIMAGE2DPROC)(GLenum target, GLint level, GLint internalfo
                                     GLint border, GLenum format, GLenum type, const void* pixels);
 typedef void (*PFNGLGENERATEMIPMAPPROC)(GLenum target);
 typedef const unsigned char* (*PFNGLGETSTRINGPROC)(GLenum name);
-
 typedef void (*PFNGLDELETEBUFFERSPROC)(GLsizei n, const GLuint* buffers);
 typedef GLboolean (*PFNGLUNMAPBUFFERPROC)(GLenum target);
 typedef void (*PFNGLDELETETEXTURESPROC)(GLsizei n, const GLuint* textures);
-
 typedef void (*PFNGLBUFFERSUBDATAPROC)(GLenum target, ptrdiff_t offset, ptrdiff_t size, const void* data);
 typedef void* (*PFNGLMAPBUFFERPROC)(GLenum target, GLenum access);
-
 typedef GLenum (*PFNGLGETERRORPROC)(void);
-
 typedef void (*PFNGLDRAWARRAYSPROC)(GLenum mode, GLint first, GLsizei count);
-
 typedef void (*PFNGLDELETEFRAMEBUFFERSPROC)(GLsizei n, const GLuint* framebuffers);
 typedef void (*PFNGLGENFRAMEBUFFERSPROC)(GLsizei n, GLuint* framebuffers);
 typedef void (*PFNGLDRAWBUFFERSPROC)(GLsizei n, const GLenum* bufs);
@@ -162,7 +157,6 @@ typedef void (*PFNGLDRAWBUFFERPROC)(GLenum buf);
 typedef void (*PFNGLGENRENDERBUFFERSPROC)(GLsizei n, GLuint* renderbuffers);
 typedef void (*PFNGLVIEWPORTPROC)(GLint x, GLint y, GLsizei width, GLsizei height);
 typedef void (*PFNGLDELETEVERTEXARRAYSPROC)(GLsizei n, const GLuint* arrays);
-// ---
 typedef void (*PFNGLBINDFRAMEBUFFERPROC)(GLenum target, GLuint framebuffer);
 typedef void (*PFNGLDELETERENDERBUFFERSPROC)(GLsizei n, const GLuint* renderbuffers);
 typedef void (*PFNGLFRAMEBUFFERTEXTUREPROC)(GLenum target, GLenum attachment, GLuint texture, GLint level);
@@ -179,7 +173,6 @@ typedef void (*PFNGLUNIFORM4IVPROC)(GLint location, GLsizei count, const GLint* 
 typedef void (*PFNGLUNIFORM1FVPROC)(GLint location, GLsizei count, const GLfloat* value);
 typedef void (*PFNGLUNIFORMMATRIX3FVPROC)(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value);
 typedef void (*PFNGLUNIFORMMATRIX4FVPROC)(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value);
-
 typedef void (*PFNGLUNIFORM2FVPROC)(GLint location, GLsizei count, const GLfloat* value);
 typedef void (*PFNGLUNIFORM4FVPROC)(GLint location, GLsizei count, const GLfloat* value);
 typedef void (*PFNGLDELETEPROGRAMPROC)(GLuint program);
@@ -188,23 +181,17 @@ typedef void (*PFNGLDETACHSHADERPROC)(GLuint program, GLuint shader);
 typedef void (*PFNGLREADPIXELSPROC)(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type,
                                     void* pixels);
 typedef void (*PFNGLCLEARTEXIMAGEPROC)(GLuint texture, GLint level, GLenum format, GLenum type, const void* data);
-
 typedef void (*PFNGLFRAMEBUFFERTEXTURE2DPROC)(GLenum target, GLenum attachment, GLenum textarget, GLuint texture,
                                               GLint level);
-
 typedef void (*PFNGLTEXPARAMETERFVPROC)(GLenum target, GLenum pname, const GLfloat* params);
 typedef void (*PFNGLDEPTHFUNCPROC)(GLenum func);
 typedef void (*PFNGLGETBOOLEANVPROC)(GLenum pname, GLboolean* data);
 typedef void (*PFNGLDISABLEPROC)(GLenum cap);
-
 typedef void (*PFNGLGETINTEGERVPROC)(GLenum pname, GLint* data);
-
 typedef void (*PFNGLBLENDFUNCPROC)(GLenum sfactor, GLenum dfactor);
-//
 typedef void (*PFNGLVERTEXATTRIBDIVISORPROC)(GLuint index, GLuint divisor);
 typedef void (*PFNGLDISABLEVERTEXATTRIBARRAYPROC)(GLuint index);
 typedef void (*PFNGLCLEARDEPTHPROC)(GLdouble depth);
-// ---
 typedef void (*PFNGLDRAWARRAYSINSTANCEDPROC)(GLenum mode, GLint first, GLsizei count, GLsizei instancecount);
 typedef void (*PFNGLHINTPROC)(GLenum target, GLenum mode);
 

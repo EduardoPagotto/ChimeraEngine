@@ -50,7 +50,7 @@ namespace ce {
             throw std::runtime_error("create context:" + std::string(SDL_GetError()));
         }
 
-        // Opcional: Ativar VSync (1) ou desativar (0)
+        // 0 = Desativado (máximo de FPS), 1 = Sincronizado, -1 = Adaptive VSync
         if (!SDL_GL_SetSwapInterval(1)) {
             throw std::runtime_error("SetSwapInterval:" + std::string(SDL_GetError()));
         }

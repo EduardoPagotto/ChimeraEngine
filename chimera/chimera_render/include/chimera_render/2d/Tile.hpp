@@ -15,7 +15,7 @@ namespace ce {
         virtual void onAttach() override {}
         virtual void onDeatach() override {}
         virtual void onUpdate(const double& ts) override {}
-        virtual bool onEvent(const SDL_Event& event) override { return true; }
+        virtual void onEvent(const SDL_Event& event) override {}
         virtual void onRender() override { Layer::onRender(); }
 
         std::string getName() const override { return "Tile"; }

@@ -249,28 +249,34 @@ namespace ce {
         }
     }
 
-    bool Scene::onEvent(const SDL_Event& event) {
-        switch (event.type) {
+    void Scene::onEvent(const SDL_Event& event) {
 
+        bool gotcha{true};
+
+        switch (event.type) {
             case SDL_EVENT_WINDOW_RESIZED: {
                 onViewportResize(event.window.data1, event.window.data2);
             } break;
-            case SDL_EVENT_KEY_DOWN: {
+            case SDL_EVENT_KEY_DOWN: { // TODO: removar daqui para update!
                 switch (event.key.key) {
                     case SDLK_F9: {
                         verbose++;
                         if (verbose > 2)
                             verbose = 0;
-
                     } break;
+                    default:
+                        gotcha = false;
+                        break;
                 }
             } break;
+            default:
+                gotcha = false;
+                break;
         }
 
-        for (auto it = layers.begin(); it != layers.end(); it++)
-            (*it)->onEvent(event);
-
-        return true;
+        for (auto layer : layers) {
+            layer->onEvent(event);
+        }
     }
 
     void Scene::renderShadow(IRenderer3d& renderer) {

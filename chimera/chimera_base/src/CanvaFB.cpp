@@ -17,7 +17,7 @@ namespace ce {
             throw std::runtime_error("Falha SDL_Init:" + std::string(SDL_GetError()));
         }
 
-        this->window = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_VULKAN);
+        this->window = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
         if (this->window == nullptr) {
             throw std::runtime_error(std::format("Couldn't create window: {}", SDL_GetError()));
         }
@@ -26,6 +26,8 @@ namespace ce {
         if (renderer == nullptr) {
             throw std::runtime_error(std::format("Couldn't create renderer: {})", SDL_GetError()));
         }
+
+        SDL_SetRenderVSync(renderer, 1); // Ativa o Vsync no SDL3
 
         // Necessario pelo wayland
         if (!SDL_RenderPresent(renderer)) {

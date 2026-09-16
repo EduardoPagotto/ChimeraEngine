@@ -15,11 +15,10 @@ namespace ce {
         void onDeatach() override;
         void onRender() override {}
         void onUpdate(const double& ts) override;
-        bool onEvent(const SDL_Event& event) override {
+        void onEvent(const SDL_Event& event) override {
 
             // FIXME: tem merda aqui!!!
             // return gameControl->getEvent(event);
-            return false;
         }
         std::string getName() const override { return "CameraControllerFPS"; }
 

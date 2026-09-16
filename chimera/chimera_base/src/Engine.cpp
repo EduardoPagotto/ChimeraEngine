@@ -19,67 +19,19 @@ namespace ce {
 
         SDL_Event event;
         bool kill{false};
-        // bool pause{false};
         uint32_t beginCount{0};
         uint32_t countDelta{7};
         double ts{0.0F};
 
         while (!kill) {
+
             beginCount = SDL_GetTicks();
+
+            im->startFrame();
+
             while (SDL_PollEvent(&event)) {
 
-                bool gottcha = true;
                 switch (event.type) {
-                    // Keyboard
-                    case SDL_EVENT_KEY_DOWN:
-                        if (im->keyboard.has_value()) {
-                            im->keyboard->setDown(event.key);
-                        }
-                        break;
-                    case SDL_EVENT_KEY_UP:
-                        if (im->keyboard.has_value()) {
-                            im->keyboard->setUp(event.key);
-                        }
-                        break;
-                    // Mouse
-                    case SDL_EVENT_MOUSE_BUTTON_DOWN:
-                    case SDL_EVENT_MOUSE_BUTTON_UP:
-                        if (im->mouse.has_value()) {
-                            im->mouse->updateBt(event.button);
-                        }
-                        break;
-                    case SDL_EVENT_MOUSE_MOTION:
-                        if (im->mouse.has_value()) {
-                            im->mouse->updateMv(event.motion);
-                        }
-                        break;
-                    case SDL_EVENT_MOUSE_WHEEL:
-                        if (im->mouse.has_value()) {
-                            im->mouse->updateWl(event.wheel);
-                        }
-                        break;
-                    // Joystick
-                    case SDL_EVENT_JOYSTICK_ADDED:
-                        if (im->joystick.has_value()) {
-                            im->joystick->added();
-                        }
-                        break;
-                    case SDL_EVENT_JOYSTICK_REMOVED:
-                        if (im->joystick.has_value()) {
-                            im->joystick->removed(event.jdevice);
-                        }
-                        break;
-                    // Gamepad
-                    case SDL_EVENT_GAMEPAD_ADDED:
-                        if (im->gamePad.has_value()) {
-                            im->gamePad->added();
-                        }
-                        break;
-                    case SDL_EVENT_GAMEPAD_REMOVED:
-                        if (im->gamePad.has_value()) {
-                            im->gamePad->removed(event.gdevice);
-                        }
-                        break;
                     // Windows
                     case SDL_EVENT_WINDOW_RESIZED: {
                         const int32_t novaWidth = event.window.data1;
@@ -88,7 +40,10 @@ namespace ce {
                         canva->reshape(novaWidth, novaHeight);
                     } break;
                     case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED: {
-                        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Pixel change !!");
+                        int newWidth = event.window.data1;
+                        int newHeight = event.window.data2;
+
+                        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Pixel change (%d x %d)", newWidth, newHeight);
                     } break;
                     case SDL_EVENT_WINDOW_MAXIMIZED:
                     case SDL_EVENT_WINDOW_RESTORED: {
@@ -103,11 +58,11 @@ namespace ce {
                     case SDL_EVENT_USER: {
                         switch (static_cast<EventCE>(event.user.code)) {
                             case EventCE::FLOW_PAUSE: {
-                                im->paused = true;
+                                im->setStatusPause(true);
                                 SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Paused Receive");
                             } break;
                             case EventCE::FLOW_RESUME: {
-                                im->paused = false;
+                                im->setStatusPause(false);
                                 SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Resume Receive");
                             } break;
                             case EventCE::FLOW_STOP: {
@@ -124,35 +79,37 @@ namespace ce {
                                 canva->toggleFullScreen();
                                 break;
                             default:
-                                gottcha = false;
+                                break;
                         }
                     } break;
                     case SDL_EVENT_QUIT:
                         kill = true;
                         break;
                     default:
-                        gottcha = false;
                         break;
                 }
 
-                if (im->executeEventChild || !gottcha) {
-                    for (auto it = stack.end(); it != stack.begin();) {
-                        if (!(*--it)->onEvent(event)) {
-                            break;
-                        }
-                    }
+                im->handleEvent(event);
+
+                for (auto& ev : stack) {
+                    ev->onEvent(event);
                 }
             }
 
+            // Atualiza o estado das teclas que continuam pressionadas
+            im->updateContinuousInput();
+
             ts = (double)countDelta / 1000.0F;
-            if (!im->paused) { // update game
-                for (auto it = stack.begin(); it != stack.end(); it++) {
-                    (*it)->onUpdate(ts);
+            if (!im->getStatusPause()) { // update game
+
+                for (auto iten : stack) {
+                    iten->onUpdate(ts);
                 }
 
                 canva->before();
-                for (auto it = stack.begin(); it != stack.end(); it++) {
-                    (*it)->onRender();
+
+                for (auto iten : stack) {
+                    iten->onRender();
                 }
 
                 canva->after();
@@ -162,8 +119,6 @@ namespace ce {
                 fps = timerFPS.getCountStep();
                 sendChimeraEvent(EventCE::NEW_FPS, (void*)&fps, nullptr);
             }
-
-            im->update();
 
             countDelta = SDL_GetTicks() - beginCount; // frame count limit
             if (countDelta < miniumCountDelta) {

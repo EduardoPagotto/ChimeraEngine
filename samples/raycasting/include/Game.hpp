@@ -19,6 +19,8 @@ class Game : public ce::IStateMachine {
     virtual std::string getName() const override;
 
   private:
+    void testeGamePad();
+
     State* state{nullptr};
     World* world{nullptr};
     float moveSpeed{0.0F};
@@ -26,4 +28,6 @@ class Game : public ce::IStateMachine {
     std::shared_ptr<entt::registry> registry;
     std::shared_ptr<ce::CanvaFB> canva;
     std::shared_ptr<ce::InputManager> inputManager;
+
+    ce::Gamepad::AxixConfig player0Config{0.18F, 0.18F, 0.18F}; // Deadzones customizadas
 };

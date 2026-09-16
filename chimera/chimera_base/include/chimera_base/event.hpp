@@ -3,6 +3,9 @@
 
 namespace ce {
 
+    // Define um ID único em um escopo global/namespace para o seu tipo de evento
+    inline Uint32 CHIMERA_EVENT01{0};
+
     /// @brief EventsME
     enum class EventCE : int32_t {
         TOGGLE_FULL_SCREEN = 0x0001, // FullScreem
@@ -26,7 +29,7 @@ namespace ce {
     inline void sendChimeraEvent(const EventCE& user_event, void* _paramA, void* _paramB) {
         SDL_Event event;
         SDL_zero(event);
-        event.type = SDL_EVENT_USER;
+        event.type = CHIMERA_EVENT01;
         event.user.code = static_cast<Sint32>(user_event);
         event.user.data1 = _paramA;
         event.user.data2 = _paramB;

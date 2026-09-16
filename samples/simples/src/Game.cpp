@@ -51,17 +51,15 @@ void Game::onEvent(const SDL_Event& event) {
 void Game::onUpdate(const double& ts) {
     using namespace ce;
 
-    // SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "%.3f", 1 / ts);
+    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
+        sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
+        return;
+    }
 
-    // if (this->inputManager->keyboard->isPressed(SDLK_ESCAPE)) {
-    //     sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
-    //     return;
-    // }
-
-    // if (this->inputManager->keyboard->isPressed(SDLK_F1)) {
-    //     sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
-    //     return;
-    // }
+    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_F1)) {
+        sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
+        return;
+    }
 }
 
 void Game::onRender() {}

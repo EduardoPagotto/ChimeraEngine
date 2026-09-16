@@ -1,189 +1,98 @@
 #pragma once
 
+#include "chimera_base/GamePad.hpp"
+#include "chimera_base/Keyboard.hpp"
+#include "chimera_base/Mouse.hpp"
+#include "chimera_base/event.hpp"
 #include <SDL3/SDL.h>
-#include <algorithm>
-#include <cstdint>
-#include <span>
-#include <vector>
+#include <format>
+#include <memory>
 
 namespace ce {
 
+    /// @brief Input central
+    /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
+    /// @since 20260915
+    /// @date 20260910
     class InputManager {
       public:
-        enum MouseButton : uint8_t {
-            Left = SDL_BUTTON_LEFT - 1,
-            Middle = SDL_BUTTON_MIDDLE - 1,
-            Right = SDL_BUTTON_RIGHT - 1,
-            TotalButtons = 3
+        explicit InputManager() {
+            this->keyboard = std::make_shared<Keyboard>();
+            this->mouse = std::make_shared<Mouse>();
+            this->gamepad = std::make_shared<Gamepad>();
         };
 
-        InputManager()
-            : m_mouseX(0.0f), m_mouseY(0.0f), m_deltaX(0.0f), m_deltaY(0.0f), m_scrollX(0.0f), m_scrollY(0.0f) {
-
-            // teclado
-            int numKeys = 0;
-            SDL_GetKeyboardState(&numKeys);
-
-            m_keyboardState.resize(numKeys, 0);
-            m_pressedKeys.resize(numKeys, 0);
-            m_releasedKeys.resize(numKeys, 0);
-
-            // mouse
-            m_continuousButtons.fill(false);
-            m_pressedButtons.fill(false);
-            m_releasedButtons.fill(false);
+        virtual ~InputManager() {
+            this->keyboard.reset();
+            this->mouse.reset();
+            this->gamepad.reset();
         }
 
         // Limpa os gatilhos rápidos do frame anterior. Chame no INÍCIO do loop principal.
         void startFrame() {
-            // teclado
-            std::fill(m_pressedKeys.begin(), m_pressedKeys.end(), 0);
-            std::fill(m_releasedKeys.begin(), m_releasedKeys.end(), 0);
-
-            // mouse
-            m_pressedButtons.fill(false);
-            m_releasedButtons.fill(false);
-            m_deltaX = 0.0f;
-            m_deltaY = 0.0f;
-            m_scrollX = 0.0f;
-            m_scrollY = 0.0f;
+            this->keyboard->startFrame();
+            this->mouse->startFrame();
         }
 
         // Processa os eventos de clique único vindos do SDL_PollEvent (Garante 100% de detecção)
-        void handleEvent(const SDL_Event& event) {
-            // if (event.type == SDL_EVENT_KEY_DOWN) {
-            //     size_t scancode = static_cast<size_t>(event.key.scancode);
-            //     if (scancode < m_pressedKeys.size() && !event.key.repeat) {
-            //         m_pressedKeys[scancode] = 1; // Registra o exato momento do clique
-            //     }
-            // } else if (event.type == SDL_EVENT_KEY_UP) {
-            //     size_t scancode = static_cast<size_t>(event.key.scancode);
-            //     if (scancode < m_releasedKeys.size()) {
-            //         m_releasedKeys[scancode] = 1; // Registra o exato momento em que soltou
-            //     }
-            // }
+        bool handleEvent(const SDL_Event& event) {
 
-            // mouse
-            switch (event.type) {
-                case SDL_EVENT_KEY_DOWN: {
-                    size_t scancode = static_cast<size_t>(event.key.scancode);
-                    if (scancode < m_pressedKeys.size() && !event.key.repeat) {
-                        m_pressedKeys[scancode] = 1; // Registra o exato momento do clique
-                    }
-                } break;
-                case SDL_EVENT_KEY_UP: {
-                    size_t scancode = static_cast<size_t>(event.key.scancode);
-                    if (scancode < m_releasedKeys.size()) {
-                        m_releasedKeys[scancode] = 1; // Registra o exato momento em que soltou
-                    }
-                } break;
-                case SDL_EVENT_MOUSE_MOTION:
-                    // No SDL3, coordenadas e deltas de movimento usam floats
-                    m_mouseX = event.motion.x;
-                    m_mouseY = event.motion.y;
-                    m_deltaX += event.motion.xrel; // Acumula caso ocorram múltiplos sub-frames
-                    m_deltaY += event.motion.yrel;
-                    break;
-
-                case SDL_EVENT_MOUSE_BUTTON_DOWN: {
-                    uint8_t buttonIndex = event.button.button - 1;
-                    if (buttonIndex < TotalButtons) {
-                        m_pressedButtons[buttonIndex] = true;
-                    }
-                    break;
-                }
-
-                case SDL_EVENT_MOUSE_BUTTON_UP: {
-                    uint8_t buttonIndex = event.button.button - 1;
-                    if (buttonIndex < TotalButtons) {
-                        m_releasedButtons[buttonIndex] = true;
-                    }
-                    break;
-                }
-
-                case SDL_EVENT_MOUSE_WHEEL:
-                    // SDL3 usa floats para o roller para suportar scrolls de precisão livre
-                    m_scrollX += event.wheel.x;
-                    m_scrollY += event.wheel.y; // Geralmente o scroll vertical padrão
-                    break;
-                default:
-                    break;
+            bool doneHere = this->keyboard->handleEvent(event);
+            if (!doneHere) {
+                doneHere = this->mouse->handleEvent(event);
             }
+
+            if (!doneHere) {
+                doneHere = this->gamepad->handleEvent(event);
+            }
+
+            if (!doneHere && event.type == CHIMERA_EVENT01) {
+                auto c = static_cast<EventCE>(event.user.code);
+                if (c == EventCE::FLOW_PAUSE) {
+
+                    this->paused = true;
+                    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Paused Receive");
+                    doneHere = true;
+
+                } else if (c == EventCE::FLOW_RESUME) {
+
+                    this->paused = false;
+                    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Resume Receive");
+                    doneHere = true;
+
+                } else if (c == EventCE::FLOW_STOP) {
+
+                    SDL_Event l_eventQuit;
+                    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "QUIT Receive");
+                    l_eventQuit.type = SDL_EVENT_QUIT;
+                    if (!SDL_PushEvent(&l_eventQuit)) {
+                        throw std::runtime_error(std::format("Critical SDL_QUIT PushEvent fail: {}", SDL_GetError()));
+                    }
+                }
+
+                doneHere = true;
+            }
+
+            return doneHere;
         }
 
         // Atualiza o estado contínuo do teclado (Para movimentação simultânea sem delay)
         void updateContinuousInput() {
-            int numKeys = 0;
-            const bool* keyboardState = SDL_GetKeyboardState(&numKeys);
-
-            if ((keyboardState != nullptr) && numKeys > 0) {
-                std::span<const bool> stateSpan(keyboardState, numKeys);
-                std::copy(stateSpan.begin(), stateSpan.end(), m_keyboardState.begin());
-            }
-
-            uint32_t buttonMask = SDL_GetMouseState(nullptr, nullptr);
-            m_continuousButtons[Left] = (buttonMask & SDL_BUTTON_MASK(SDL_BUTTON_LEFT)) != 0;
-            m_continuousButtons[Middle] = (buttonMask & SDL_BUTTON_MASK(SDL_BUTTON_MIDDLE)) != 0;
-            m_continuousButtons[Right] = (buttonMask & SDL_BUTTON_MASK(SDL_BUTTON_RIGHT)) != 0;
+            this->keyboard->updateContinuousInput();
+            this->mouse->updateContinuousInput();
+            this->gamepad->updateContinuousInput();
         }
 
-        // [CONTINUAMENTE PRESSIONADA]: Perfeito para andar/correr com múltiplas teclas ao mesmo tempo
-        [[nodiscard]] bool isKeyDown(SDL_Scancode scancode) const {
-            if (static_cast<size_t>(scancode) >= m_keyboardState.size()) {
-                return false;
-            }
-
-            return m_keyboardState[static_cast<size_t>(scancode)] != 0;
-        }
-
-        // [PRESSIONADA NESTE FRAME]: Pega cliques instantâneos, sem falhas (Pular, Atirar, Abrir Menu)
-        [[nodiscard]] bool isKeyPressed(SDL_Scancode scancode) const {
-            if (static_cast<size_t>(scancode) >= m_pressedKeys.size()) {
-                return false;
-            }
-
-            return m_pressedKeys[static_cast<size_t>(scancode)] != 0;
-        }
-
-        // [LIBERADA NESTE FRAME]: Detecta o momento exato em que a tecla foi solta
-        [[nodiscard]] bool isKeyReleased(SDL_Scancode scancode) const {
-            if (static_cast<size_t>(scancode) >= m_releasedKeys.size()) {
-                return false;
-            }
-
-            return m_releasedKeys[static_cast<size_t>(scancode)] != 0;
-        }
+        std::shared_ptr<Keyboard> getKeyboard() { return this->keyboard; }
+        std::shared_ptr<Mouse> getMouse() { return this->mouse; }
+        std::shared_ptr<Gamepad> getGamepad() { return this->gamepad; }
 
         bool getStatusPause() const { return this->paused; }
-        void setStatusPause(const bool& val) { this->paused = val; }
-
-        // --- GETTERS ---
-        [[nodiscard]] float getMouseX() const { return m_mouseX; }
-        [[nodiscard]] float getMouseY() const { return m_mouseY; }
-
-        // Retorna o deslocamento (Delta) ocorrido neste frame
-        [[nodiscard]] float getDeltaX() const { return m_deltaX; }
-        [[nodiscard]] float getDeltaY() const { return m_deltaY; }
-
-        // Retorna o scroll da rodinha ocorrido neste frame (Positivo = Cima/Direita, Negativo = Baixo/Esquerda)
-        [[nodiscard]] float getScrollX() const { return m_scrollX; }
-        [[nodiscard]] float getScrollY() const { return m_scrollY; }
-
-        [[nodiscard]] bool isButtonDown(MouseButton button) const { return m_continuousButtons[button]; }
-        [[nodiscard]] bool isButtonKeyPressed(MouseButton button) const { return m_pressedButtons[button]; }
-        [[nodiscard]] bool isButtonKeyReleased(MouseButton button) const { return m_releasedButtons[button]; }
 
       private:
         bool paused{false};
-        std::vector<uint8_t> m_keyboardState;
-        std::vector<uint8_t> m_pressedKeys;
-        std::vector<uint8_t> m_releasedKeys;
-        // Nouse
-        float m_mouseX, m_mouseY;
-        float m_deltaX, m_deltaY;
-        float m_scrollX, m_scrollY;
-        std::array<bool, TotalButtons> m_continuousButtons{};
-        std::array<bool, TotalButtons> m_pressedButtons{};
-        std::array<bool, TotalButtons> m_releasedButtons{};
+        std::shared_ptr<Mouse> mouse;
+        std::shared_ptr<Keyboard> keyboard;
+        std::shared_ptr<Gamepad> gamepad;
     };
 } // namespace ce

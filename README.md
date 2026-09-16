@@ -51,6 +51,12 @@ sudo clone https://github.com/spnda/fastgltf
 
 # HDM
 sudo dnf install monado
+
+# Gamepad
+sudo dnf install evtest
+
+# to test gamepad
+sudo evtest
 ```
 
 ## Switch Link and toolchain to Clang

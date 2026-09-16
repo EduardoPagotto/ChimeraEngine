@@ -1,4 +1,5 @@
 #include "chimera_core/visible/CameraControllerOrbit.hpp"
+#include "chimera_base/Mouse.hpp"
 #include "chimera_ecs/CameraComponent.hpp"
 #include <glm/geometric.hpp>
 
@@ -91,11 +92,16 @@ namespace ce {
     }
 
     void CameraControllerOrbit::processDistance(const int& _mz) {
-        distance += _mz;
-        if (distance < min)
+
+        distance += static_cast<float>(_mz);
+
+        if (distance < min) { // NOLINT
             distance = min;
-        if (distance > max)
+        }
+
+        if (distance > max) { // NOLINT
             distance = max;
+        }
     }
 
     void CameraControllerOrbit::processCameraRotation(const int& xOffset, const int& yOffset, bool constrainPitch) {
@@ -106,10 +112,13 @@ namespace ce {
 
             // Constrain the pitch
             if (constrainPitch) {
-                if (pitch < 1.0f)
-                    pitch = 1.0f;
-                if (pitch > 179.0f)
-                    pitch = 179.0f;
+                if (pitch < 1.0F) { // NOLINT
+                    pitch = 1.0F;
+                }
+
+                if (pitch > 179.0F) { // NOLINT
+                    pitch = 179.0F;
+                }
             }
 
         } else { // this->->up.z == 1 ou -1
@@ -124,14 +133,17 @@ namespace ce {
     }
 
     void CameraControllerOrbit::onUpdate(const double& ts) {
-        // if (inputManager->mouse->getButtonState(1)) {
-        //     glm::ivec2 mouseMove = inputManager->mouse->getMoveRel();
-        //     this->processCameraRotation(mouseMove.x, mouseMove.y);
 
-        // } else if (inputManager->mouse->getButtonState(3)) {
-        //     glm::ivec2 mouseMove = inputManager->mouse->getMoveRel();
-        //     this->processDistance(mouseMove.y);
-        // }
+        if (inputManager->getMouse()->isButtonDown(Mouse::MouseButton::Left)) {
+
+            const glm::ivec2 mouseMove = inputManager->getMouse()->getDeltaXY();
+            this->processCameraRotation(mouseMove.x, mouseMove.y);
+
+        } else if (inputManager->getMouse()->isButtonDown(Mouse::MouseButton::Right)) {
+
+            const glm::ivec2 mouseMove = inputManager->getMouse()->getDeltaXY();
+            this->processDistance(mouseMove.y);
+        }
 
         this->updateVectors();
         this->updateVP();

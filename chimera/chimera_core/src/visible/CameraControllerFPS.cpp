@@ -1,5 +1,4 @@
 #include "chimera_core/visible/CameraControllerFPS.hpp"
-#include "chimera_base/aux/utils.hpp"
 #include "chimera_ecs/CameraComponent.hpp"
 
 namespace ce {
@@ -64,10 +63,10 @@ namespace ce {
 
         // Constrain the pitch
         if (constrainPitch) {
-            if (pitch > 89.0f) {
-                pitch = 89.0f;
-            } else if (pitch < -89.0f) {
-                pitch = -89.0f;
+            if (pitch > 89.0F) {
+                pitch = 89.0F;
+            } else if (pitch < -89.0F) {
+                pitch = -89.0F;
             }
         }
     }
@@ -79,30 +78,45 @@ namespace ce {
 
     void CameraControllerFPS::onUpdate(const double& ts) {
         // Movement speed
-        if (inputManager->isKeyDown(SDL_SCANCODE_LSHIFT)) // acelerar mover
-            movementSpeed = fsp_camera_max_speed * 4.0f;
-        else if (inputManager->isKeyDown(SDL_SCANCODE_LALT)) //  desacelerar mover
-            movementSpeed = fsp_camera_max_speed / 4.0f;
-        else
+        if (inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_LSHIFT)) { // acelerar mover
+
+            movementSpeed = fsp_camera_max_speed * 4.0F;
+        } else if (inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_LALT)) { //  desacelerar mover
+
+            movementSpeed = fsp_camera_max_speed / 4.0F;
+        } else {
+
             movementSpeed = fsp_camera_max_speed;
+        }
 
         // CameraFPS movement
-        glm::vec3 direction = glm::vec3(0.0f);
-        if (inputManager->isKeyDown(SDL_SCANCODE_W)) // to foward
+        glm::vec3 direction = glm::vec3(0.0F);
+        if (inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_W)) { // to foward
             direction += front;
-        if (inputManager->isKeyDown(SDL_SCANCODE_S)) // to backward
-            direction -= front;
-        if (inputManager->isKeyDown(SDL_SCANCODE_A)) // to left
-            direction -= right;
-        if (inputManager->isKeyDown(SDL_SCANCODE_D)) //  to right
-            direction += right;
-        if (inputManager->isKeyDown(SDL_SCANCODE_SPACE)) // to up
-            direction += worldUp;
-        if (inputManager->isKeyDown(SDL_SCANCODE_LCTRL)) //  to booton
-            direction -= worldUp;
+        }
 
-        float mouseXDelta{0.0f};
-        float mouseYDelta{0.0f};
+        if (inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_S)) { // to backward
+            direction -= front;
+        }
+
+        if (inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_A)) { // to left
+            direction -= right;
+        }
+
+        if (inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_D)) { //  to right
+            direction += right;
+        }
+
+        if (inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_SPACE)) { // to up
+            direction += worldUp;
+        }
+
+        if (inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_LCTRL)) { //  to booton
+            direction -= worldUp;
+        }
+
+        float mouseXDelta{0.0F};
+        float mouseYDelta{0.0F};
 
         // if (SDL_Gamepad* pJoy = inputManager->gamePad->getFirst(); pJoy != nullptr) {
 

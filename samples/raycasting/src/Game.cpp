@@ -1,5 +1,8 @@
 #include "Game.hpp"
+#include "chimera_base/GamePad.hpp"
 #include "chimera_base/event.hpp"
+#include <SDL3/SDL_gamepad.h>
+#include <SDL3/SDL_log.h>
 #include <format>
 
 Game::Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::CanvaFB> canva)
@@ -49,22 +52,62 @@ void Game::onEvent(const SDL_Event& event) {
     // }
 }
 
+void Game::testeGamePad() {
+
+    using namespace ce;
+
+    auto gp = this->inputManager->getGamepad();
+    Gamepad::ButtonState bt = gp->getButtonState(0, SDL_GAMEPAD_BUTTON_NORTH);
+
+    if (bt == Gamepad::ButtonState::Pressed) {
+
+        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Botao precionado");
+
+    } else if (bt == Gamepad::ButtonState::Held) {
+
+        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Botao segurando");
+
+    } else if (bt == Gamepad::ButtonState::Released) {
+
+        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Botao liberado");
+    }
+
+    glm::vec2 leftStick = gp->getLeftStick(0, player0Config);
+    if (glm::length(leftStick) > 0.0F) {
+        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick Esquerdo -> X: %f | Y: %f", leftStick.x,
+                     leftStick.y);
+    }
+
+    glm::vec2 rightStick = gp->getRightStick(0, player0Config);
+    if (glm::length(rightStick) > 0.0F) {
+        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick Direito -> X: %f | Y: %f", rightStick.x,
+                     rightStick.y);
+    }
+
+    glm::vec2 trigerStick = gp->getTriggerStick(0, player0Config);
+    if (glm::length(trigerStick) > 0.0F) {
+        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick trigerStick -> X: %f | Y: %f", trigerStick.x,
+                     trigerStick.y);
+    }
+}
+
 void Game::onUpdate(const double& ts) {
     using namespace ce;
 
-    SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "%.3f", ts);
+    // SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "%.3f", ts);
+    testeGamePad();
 
-    if (this->inputManager->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
+    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
         sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
         return;
     }
 
-    if (this->inputManager->isKeyPressed(SDL_SCANCODE_F1)) {
+    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_F1)) {
         sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
         return;
     }
 
-    if (this->inputManager->isKeyDown(SDL_SCANCODE_W)) {
+    if (this->inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_W)) {
         glm::ivec2 curr = state->pos;
         glm::ivec2 next = state->pos + state->dir * moveSpeed * 2.0f;
 
@@ -75,7 +118,7 @@ void Game::onUpdate(const double& ts) {
             state->pos.y += state->dir.y * moveSpeed;
     }
 
-    if (this->inputManager->isKeyDown(SDL_SCANCODE_S)) {
+    if (this->inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_S)) {
         glm::ivec2 curr = state->pos;
         glm::ivec2 next = state->pos - state->dir * moveSpeed * 2.0f;
 
@@ -86,7 +129,7 @@ void Game::onUpdate(const double& ts) {
             state->pos.y -= state->dir.y * moveSpeed;
     }
 
-    if (this->inputManager->isKeyDown(SDL_SCANCODE_A)) {
+    if (this->inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_A)) {
         double oldDirX = state->dir.x;
         state->dir.x = state->dir.x * cos(rotSpeed) - state->dir.y * sin(rotSpeed);
         state->dir.y = oldDirX * sin(rotSpeed) + state->dir.y * cos(rotSpeed);
@@ -95,7 +138,7 @@ void Game::onUpdate(const double& ts) {
         state->cam.y = oldcamx * sin(rotSpeed) + state->cam.y * cos(rotSpeed);
     }
 
-    if (this->inputManager->isKeyDown(SDL_SCANCODE_D)) {
+    if (this->inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_D)) {
         double oldDirX = state->dir.x;
         state->dir.x = state->dir.x * cos(-rotSpeed) - state->dir.y * sin(-rotSpeed);
         state->dir.y = oldDirX * sin(-rotSpeed) + state->dir.y * cos(-rotSpeed);

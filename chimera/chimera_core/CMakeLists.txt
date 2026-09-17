@@ -28,7 +28,6 @@ set (SourceFiles src/gl/CanvasGL.cpp
 				 src/gl/DrawLine.cpp
 				 src/gl/Shader.cpp
 				 src/gl/ShaderMng.cpp
-				 #src/gl/Texture.cpp
 				 src/gl/Font.cpp
 				 src/gl/Material.cpp
 				 src/gl/ParticleEmitter.cpp

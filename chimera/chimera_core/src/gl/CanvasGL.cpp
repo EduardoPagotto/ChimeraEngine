@@ -1,5 +1,6 @@
 #include "chimera_core/gl/CanvasGL.hpp"
 #include "chimera_core/gl/OpenGLDefs.hpp"
+#include <SDL3/SDL_log.h>
 #include <format>
 #include <glm/gtc/matrix_transform.hpp>
 #include <stdexcept>
@@ -82,9 +83,10 @@ namespace ce {
             // Garante que o callback rode na mesma Thread permitindo breakpoints fáceis
             glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
             glDebugMessageCallback_ptr(OpenGLDebugCallback, nullptr);
-            std::cout << "OpenGL Debug Callback configurado com sucesso!\n";
+            SDL_Log("OpenGL Debug Callback configurado com sucesso!");
         } else {
-            std::cerr << "Não foi possível configurar o Debug Callback (Função indisponível).\n";
+            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+                         "Não foi possível configurar o Debug Callback (Função indisponível).");
         }
     }
 

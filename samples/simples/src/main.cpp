@@ -2,9 +2,9 @@
 #include "chimera_base/Engine.hpp"
 #include "chimera_base/aux/ViewProjection.hpp"
 #include "chimera_collada/colladaLoad.hpp"
+#include "chimera_core/gl/AssetManager.hpp"
 #include "chimera_core/gl/CanvasGL.hpp"
 #include "chimera_core/gl/ShaderMng.hpp"
-#include "chimera_core/gl/TextureMng.hpp"
 #include "chimera_render/scene/Scene.hpp"
 #include <config_params.hpp>
 #include <memory>
@@ -38,7 +38,7 @@ int main(int argn, char** argv) {
         registry->ctx().emplace<std::shared_ptr<CanvasGL>>(std::make_shared<CanvasGL>("BSP Tree", 1800, 600, false));
         registry->ctx().emplace<std::shared_ptr<ViewProjection>>(std::make_shared<ViewProjection>(0.5F));
         registry->ctx().emplace<std::shared_ptr<ShaderMng>>(std::make_shared<ShaderMng>());
-        registry->ctx().emplace<std::shared_ptr<TextureMng>>(std::make_shared<TextureMng>());
+        registry->ctx().emplace<std::shared_ptr<AssetManager>>(std::make_shared<AssetManager>());
 
         // Engine
         std::shared_ptr<CanvasGL> canva = registry->ctx().get<std::shared_ptr<CanvasGL>>();

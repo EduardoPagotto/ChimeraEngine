@@ -1,4 +1,5 @@
 #include "chimera_collada/ColladaImage.hpp"
+#include "chimera_core/gl/AssetManager.hpp"
 #include "chimera_core/gl/TextureMng.hpp"
 #include "chimera_core/gl/buffer/FrameBuffer.hpp"
 
@@ -78,9 +79,9 @@ namespace ce {
                     std::string f = pathFile.as_string();
                     SDL_Log("Nova textura %s, Key: %s", f.c_str(), id.c_str());
 
-                    auto texMng = registry->ctx().get<std::shared_ptr<ce::TextureMng>>();
+                    auto assets = this->registry->ctx().get<std::shared_ptr<AssetManager>>();
 
-                    texMng->loadFromFile(id, f, tp);
+                    assets->loadTexture(id, f, tp);
                     return;
                 }
                 throw std::string("Textura nao encontrada: " + id);

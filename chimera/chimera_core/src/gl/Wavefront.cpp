@@ -1,5 +1,7 @@
 #include "chimera_core/gl/Wavefront.hpp"
 #include "chimera_base/aux/utils.hpp"
+#include "chimera_core/gl/AssetManager.hpp"
+#include "chimera_core/gl/Texture.hpp"
 #include "chimera_core/gl/TextureMng.hpp"
 #include <fstream>
 
@@ -66,9 +68,11 @@ namespace ce {
                 material->setSpecular(tokensToVec4(textData));
             } else if (textData[0] == "map_Kd") {
 
-                auto texMng = this->registry->ctx().get<std::shared_ptr<TextureMng>>();
+                auto assets = this->registry->ctx().get<std::shared_ptr<AssetManager>>();
 
-                material->addTexture(SHADE_TEXTURE_DIFFUSE, texMng->loadFromFile(textData[1], textData[1], TexParam()));
+                TexParam tp;
+                material->addTexture(SHADE_TEXTURE_DIFFUSE, assets->loadTexture(textData[1], textData[1], tp).handle());
+
             } else if (textData[0] == "sharpness") {
                 material->setShine(std::stod(textData[1]));
             }

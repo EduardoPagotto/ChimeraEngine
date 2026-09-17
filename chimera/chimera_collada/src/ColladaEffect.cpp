@@ -1,5 +1,6 @@
 #include "chimera_collada/ColladaEffect.hpp"
 #include "chimera_collada/ColladaImage.hpp"
+#include "chimera_core/gl/AssetManager.hpp"
 #include "chimera_core/gl/ShaderMng.hpp"
 #include "chimera_core/gl/TextureMng.hpp"
 #include "chimera_ecs/MaterialComponent.hpp"
@@ -118,8 +119,9 @@ namespace ce {
         if (entity.hasComponent<MaterialComponent>()) {
             MaterialComponent& mc = entity.getComponent<MaterialComponent>();
             pMat = mc.material;
-        } else
+        } else {
             return;
+        }
 
         pugi::xml_node phong = node.child("phong");
         for (pugi::xml_node prop = phong.first_child(); prop; prop = prop.next_sibling()) {
@@ -128,24 +130,24 @@ namespace ce {
             if (p == "emission") {
 
                 pugi::xml_node first = prop.first_child();
-                if (std::string(first.name()) == "color")
+                if (std::string(first.name()) == "color") {
                     pMat->setEmission(textToVec4(first.text().as_string()));
-                else if (std::string(first.name()) == "texture") {
+                } else if (std::string(first.name()) == "texture") {
                     // TODO: implementar
                 }
 
             } else if (p == "ambient") {
                 pugi::xml_node first = prop.first_child();
-                if (std::string(first.name()) == "color")
+                if (std::string(first.name()) == "color") {
                     pMat->setAmbient(textToVec4(first.text().as_string()));
-                else if (std::string(first.name()) == "texture") {
+                } else if (std::string(first.name()) == "texture") {
                     // TODO: implementar
                 }
             } else if (p == "diffuse") {
                 pugi::xml_node first = prop.first_child();
-                if (std::string(first.name()) == "color")
+                if (std::string(first.name()) == "color") {
                     pMat->setDiffuse(textToVec4(first.text().as_string()));
-                else if (std::string(first.name()) == "texture") {
+                } else if (std::string(first.name()) == "texture") {
 
                     std::string texId = first.attribute("texture").value();
                     std::string idTex = mapaTex[mapa2D[texId]];
@@ -153,16 +155,16 @@ namespace ce {
                     ColladaImage ci(registry, colladaDom, idTex);
                     ci.create(entity, tp, ci.getLibrary("library_images"));
 
-                    auto texMng = registry->ctx().get<std::shared_ptr<ce::TextureMng>>();
+                    auto assets = this->registry->ctx().get<std::shared_ptr<AssetManager>>();
 
-                    pMat->addTexture(SHADE_TEXTURE_DIFFUSE, texMng->get(idTex));
-                    pMat->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)); // FIXME: Arquivo do blender nao tem!!
+                    pMat->addTexture(SHADE_TEXTURE_DIFFUSE, assets->getTexture(idTex).handle());
+                    pMat->setDiffuse(glm::vec4(1.0F, 1.0F, 1.0F, 1.0F)); // FIXME: Arquivo do blender nao tem!!
                 }
             } else if (p == "specular") {
                 pugi::xml_node first = prop.first_child();
-                if (std::string(first.name()) == "color")
+                if (std::string(first.name()) == "color") {
                     pMat->setSpecular(textToVec4(first.text().as_string()));
-                else if (std::string(first.name()) == "texture") {
+                } else if (std::string(first.name()) == "texture") {
                     // TODO: implementar
                 }
             } else if (p == "shininess") {

@@ -150,12 +150,12 @@ void Game::onUpdate(const double& ts) {
 
 void Game::onRender() {
 
-    // int* gFrameBuffer = (int*)canva.get()->getPixels();
+    // auto gFrameBuffer = canva->getPixelsCanvas()->getPixels();
     // uint64_t aTicks = SDL_GetTicks();
 
     // for (int i = 0, c = 0; i < canva->getHeight(); i++) {
     //     for (int j = 0; j < canva->getWidth(); j++, c++) {
-    //         gFrameBuffer[c] = (int)(i * i + j * j + aTicks) | 0xff000000;
+    //         gFrameBuffer[c] = (uint32_t)(i * i + j * j + aTicks) | 0xff000000;
     //     }
     // }
 

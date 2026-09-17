@@ -4,35 +4,42 @@
 
 namespace ce {
 
-    Font::Font(const std::string& pathFile, const int& size) : scale(glm::vec2(10.0f)), texture(nullptr) {
+    Font::Font(const std::string& pathFile, const int& size) : scale(glm::vec2(10.0F)), texture(nullptr) {
 
         if (!TTF_Init()) { // TODO: tratar erros
             SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "TTF Erros: %s", SDL_GetError());
             return;
         }
 
-        TTF_Font* sFont = TTF_OpenFont(pathFile.c_str(), size);
+        TTF_Font* sFont = TTF_OpenFont(pathFile.c_str(), static_cast<float>(size));
 
-        int style;
-        style = TTF_GetFontStyle(sFont);
-        if (style == TTF_STYLE_NORMAL)
+        uint32_t style = TTF_GetFontStyle(sFont);
+        if (style == TTF_STYLE_NORMAL) {
             SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The font style is: normal");
-        else {
-            if (style & TTF_STYLE_BOLD)
+
+        } else {
+            if ((style & TTF_STYLE_BOLD) != 0U) {
                 SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The font style is: bold");
-            if (style & TTF_STYLE_ITALIC)
+            }
+
+            if ((style & TTF_STYLE_ITALIC) != 0U) {
                 SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The font style is: italic");
-            if (style & TTF_STYLE_UNDERLINE)
+            }
+
+            if ((style & TTF_STYLE_UNDERLINE) != 0U) {
                 SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The font style is: underline");
+            }
         }
 
         // SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The number of faces in the font is: %ld\n", TTF_FontFaces(sFont));
 
-        if (const char* stylename = TTF_GetFontStyleName(sFont); stylename)
+        if (const char* stylename = TTF_GetFontStyleName(sFont); stylename) {
             SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The name of the face in the font is: %s\n", stylename);
+        }
 
-        if (const char* familyname = TTF_GetFontFamilyName(sFont); familyname)
+        if (const char* familyname = TTF_GetFontFamilyName(sFont); familyname) {
             SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The family name of the face in the font is: %s\n", familyname);
+        }
 
         // int val = TTF_GetFontKerning(sFont);
 
@@ -54,23 +61,25 @@ namespace ce {
 
             // SDL_Surface* glyph_cache = TTF_RenderGlyph_Shaded(sFont, c, fg, bg);
             SDL_Surface* glyph_cache = TTF_RenderGlyph_Solid(sFont, c, fg);
-            if (glyph_cache == nullptr)
+            if (glyph_cache == nullptr) {
                 continue;
+            }
 
             totW += glyph_cache->w;
 
-            if (glyph_cache->h > maxH)
+            if (glyph_cache->h > maxH) { // NOLINT
                 maxH = glyph_cache->h;
+            }
 
             // Now store character for later use
             GlyphData* pGlyp = new GlyphData;
             pGlyp->size = glm::ivec2(glyph_cache->w, glyph_cache->h);
             pGlyp->offset = glm::ivec2(minx, glyph_cache->h);
             pGlyp->advance = advance;
-            pGlyp->square.x = 0.0f;
-            pGlyp->square.y = 0.0f;
-            pGlyp->square.w = 0.0f;
-            pGlyp->square.h = 0.0f;
+            pGlyp->square.x = 0.0F;
+            pGlyp->square.y = 0.0F;
+            pGlyp->square.w = 0.0F;
+            pGlyp->square.h = 0.0F;
 
             glyphs.insert(std::pair<uint16_t, GlyphData*>(c, pGlyp));
             mapGlyphCache.insert(std::pair<uint16_t, SDL_Surface*>(c, glyph_cache));
@@ -128,10 +137,10 @@ namespace ce {
         p.wrap_t = TexWrap::CLAMP_TO_EDGE;
         p.minFilter = TexFilter::LINEAR;
         p.magFilter = TexFilter::LINEAR;
-        Texture::invert_image_texture(bigSurface->pitch, bigSurface->h, bigSurface->pixels);
-        texture = std::make_shared<Texture>(bigSurface, p);
+        Invert_image_texture(bigSurface->pitch, bigSurface->h, bigSurface->pixels);
+        texture = TextureLoader::CreateFromSurface(bigSurface, p);
 
-        if (sFont) {
+        if (sFont != nullptr) {
             TTF_CloseFont(sFont);
         }
 

@@ -28,8 +28,9 @@ namespace ce {
             std::queue<uint32_t> qIndexes;
             octree->visible(frustum, qIndexes);
 
-            if (logData == true)
+            if (logData) {
                 SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Octree Visible Indexes: %ld", qIndexes.size());
+            }
 
             while (!qIndexes.empty()) {
                 qRenderableIndexes.push(qIndexes.front());
@@ -40,8 +41,9 @@ namespace ce {
 
     void Renderer3d::submit(const RenderCommand& command, Renderable3D* renderable, const uint32_t& count) {
 
-        if (count == 0)
+        if (count == 0) {
             vRenderCommand.push_back(command);
+        }
 
         renderable->setIndexAuxCommand(vRenderCommand.size() - 1);
 
@@ -53,7 +55,7 @@ namespace ce {
             this->octree->insertAABB(nova, vRenderable.size());
         } else {
             // adicione apenas o que esta no clip-space
-            if (nova.visible(frustum) == true) {
+            if (nova.visible(frustum)) {
                 qRenderableIndexes.push(vRenderable.size());
             }
         }
@@ -92,24 +94,29 @@ namespace ce {
                 }
 
                 // generic bind in each draw call camera, light, etc
-                for (const auto& kv : uniformsQueue)
+                for (const auto& kv : uniformsQueue) {
                     activeShader->setUniformU(kv.first.c_str(), kv.second);
+                }
 
                 // bind dos uniforms from model
-                for (const auto& kv : command.uniforms)
+                for (const auto& kv : command.uniforms) {
                     activeShader->setUniformU(kv.first.c_str(), kv.second);
+                }
 
                 // libera textura antes de passar as novas
-                if (command.vTex.size() == 0)
-                    Texture::unbind(0);
+                if (command.vTex.size() == 0) {
+                    Texture::Unbind(0);
+                }
 
                 // bind de texturas
-                for (uint8_t i = 0; i < command.vTex.size(); i++)
+                for (uint8_t i = 0; i < command.vTex.size(); i++) {
                     command.vTex[i]->bind(i);
+                }
 
                 // bind de texturas globais
-                for (uint8_t i = 0; i < textureQueue.size(); i++)
+                for (uint8_t i = 0; i < textureQueue.size(); i++) {
                     textureQueue[i]->bind(command.vTex.size() + i);
+                }
             }
 
             r->draw(logData); // aqui

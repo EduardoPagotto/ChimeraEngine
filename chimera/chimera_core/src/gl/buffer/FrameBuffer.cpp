@@ -1,5 +1,6 @@
 #include "chimera_core/gl/buffer/FrameBuffer.hpp"
 #include "chimera_core/gl/OpenGLDefs.hpp"
+#include "chimera_core/gl/TextureMng.hpp"
 
 namespace ce {
 
@@ -28,14 +29,15 @@ namespace ce {
 
         for (const TexParam& texParm : spec.attachments) {
 
-            if (!Aux::isDepthFormat(texParm.format))
+            if (!Aux::isDepthFormat(texParm.format)) {
                 colorTexSpecs.emplace_back(texParm); // color only
-            else {
+            } else {
                 // if has filter parameters them is a texture
                 if ((texParm.minFilter != TexFilter::NONE) && (texParm.magFilter != TexFilter::NONE)) {
                     depthTexSpec = texParm; // depth texture
-                } else                      // else
+                } else {                    //
                     rboSpec = texParm;      // is a rbo
+                }
             }
         }
 
@@ -46,7 +48,7 @@ namespace ce {
 
     void FrameBuffer::destroy() {
 
-        if (framBufferID) {
+        if (framBufferID != 0U) {
             glDeleteFramebuffers(1, &framBufferID);
             framBufferID = 0;
 
@@ -82,10 +84,10 @@ namespace ce {
             for (const TexParam& textureParam : colorTexSpecs) {
                 // const TexParam& textureParam = cas.textureParameters;
 
-                std::shared_ptr<Texture> tex = std::make_shared<Texture>(spec.width, spec.height, textureParam);
+                std::shared_ptr<Texture> tex = TextureLoader::CreateEmpty(spec.width, spec.height, textureParam);
                 colorAttachments.emplace_back(tex);
 
-                const uint32_t tId = tex->getTextureID();
+                const uint32_t tId = tex->id;
 
                 glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, tId, 0);
 
@@ -106,13 +108,12 @@ namespace ce {
         // depth Texture
         if (!Aux::textureParameterIsUndefined(depthTexSpec)) {
 
-            depthAttachment = std::make_shared<Texture>(spec.width, spec.height, depthTexSpec);
+            depthAttachment = TextureLoader::CreateEmpty(spec.width, spec.height, depthTexSpec);
 
             GLfloat borderColor[] = {1.0, 1.0, 1.0, 1.0};
             glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthAttachment->getTextureID(),
-                                   0);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthAttachment->id, 0);
             glDrawBuffer(GL_NONE);
             glReadBuffer(GL_NONE);
         }
@@ -130,8 +131,9 @@ namespace ce {
         }
 
         // Always check that our framebuffer is ok
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
             throw std::string("Falha em instanciar o Frame Buffer");
+        }
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
@@ -141,11 +143,13 @@ namespace ce {
         glBindFramebuffer(GL_FRAMEBUFFER, framBufferID);
 
         GLbitfield mask = 0;
-        if (!Aux::textureParameterIsUndefined(rboSpec) || !Aux::textureParameterIsUndefined(depthTexSpec))
+        if (!Aux::textureParameterIsUndefined(rboSpec) || !Aux::textureParameterIsUndefined(depthTexSpec)) {
             mask |= GL_DEPTH_BUFFER_BIT;
+        }
 
-        if (colorAttachments.size() > 1)
+        if (colorAttachments.size() > 1) {
             mask |= GL_COLOR_BUFFER_BIT;
+        }
 
         glClear(mask);
     }
@@ -178,6 +182,6 @@ namespace ce {
         const TexParam& tp = colorTexSpecs[attachmentIndex];
         const TexFormat& tf = tp.format;
 
-        glClearTexImage(colorAttachments[attachmentIndex]->getTextureID(), 0, (GLenum)tf, GL_INT, &value);
+        glClearTexImage(colorAttachments[attachmentIndex]->id, 0, (GLenum)tf, GL_INT, &value);
     }
 } // namespace ce

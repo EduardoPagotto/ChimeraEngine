@@ -6,10 +6,6 @@
 namespace ce {
 
     class AssetManager {
-      private:
-        using TextureCache = entt::resource_cache<Texture, TextureLoader>;
-        TextureCache m_textureCache;
-
       public:
         AssetManager() = default;
 
@@ -56,5 +52,9 @@ namespace ce {
         }
 
         void clear() { m_textureCache.clear(); }
+
+      private:
+        using TextureCache = entt::resource_cache<Texture, TextureLoader>;
+        TextureCache m_textureCache;
     };
 } // namespace ce

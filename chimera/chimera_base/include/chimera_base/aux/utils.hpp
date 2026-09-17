@@ -22,6 +22,7 @@ namespace ce {
         return scale16(dead16(vIn, deadzone), limit);
     }
 
+    // TODO: REMOVER
     inline void utilsReadFile(const std::string& filepath, std::string& result) {
         std::ifstream in(filepath, std::ios::in | std::ios::binary);
         if (in) {

@@ -8,12 +8,12 @@
 
 namespace ce {
 
-    void Shader::setUniformU(const char* name, const Uniform& uv) noexcept {
+    void Shader::setUniformU(const char* name, const Uniform& uv) const noexcept {
 
         int32_t loc = getUniform(name);
         // SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Uniform: %s", name);
         if (loc == -1) {
-            SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%d\"", name, progID);
+            SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%d\"", name, this->id);
             return;
         }
 
@@ -25,8 +25,8 @@ namespace ce {
                 glUniform1iv(loc, 1, static_cast<int*>(uv.ptr.get()));
                 break;
             case UniformType::INT_VEC: {
-                auto lst = static_cast<std::vector<int>*>(uv.ptr.get());
-                glUniform1iv(loc, lst->size(), &(*lst)[0]);
+                auto* lst = static_cast<std::vector<int>*>(uv.ptr.get());
+                glUniform1iv(loc, static_cast<GLsizei>(lst->size()), lst->data());
             } break;
             case UniformType::IVEC2: // glUniform2iv(loc, 1, glm::value_ptr(uv.u.vivec2));
                 glUniform2iv(loc, 1, static_cast<int*>(uv.ptr.get()));
@@ -41,8 +41,8 @@ namespace ce {
                 glUniform1fv(loc, 1, static_cast<float*>(uv.ptr.get()));
                 break;
             case UniformType::FLOAT_VEC: {
-                auto lst = static_cast<std::vector<float>*>(uv.ptr.get());
-                glUniform1fv(loc, lst->size(), &(*lst)[0]);
+                auto* lst = static_cast<std::vector<float>*>(uv.ptr.get());
+                glUniform1fv(loc, static_cast<GLsizei>(lst->size()), lst->data());
             } break;
             case UniformType::VEC2:
                 glUniform2fv(loc, 1, static_cast<float*>(uv.ptr.get()));
@@ -60,7 +60,7 @@ namespace ce {
                 glUniformMatrix4fv(loc, 1, GL_FALSE, static_cast<float*>(uv.ptr.get()));
                 break;
             case UniformType::INVALID:
-                SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Uniform \"%s\" invalid in Program \"%d\"", name, progID);
+                SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Uniform \"%s\" invalid in Program \"%d\"", name, this->id);
                 break;
         }
 
@@ -79,17 +79,18 @@ namespace ce {
     }
 
     Shader::~Shader() noexcept {
-        glDeleteProgram(progID);
-        progID = 0;
+        glDeleteProgram(this->id);
+        this->id = 0;
         uniformLocationCache.clear();
     }
 
-    const int32_t Shader::getUniform(const std::string& name) const noexcept {
+    int32_t Shader::getUniform(const std::string& name) const noexcept {
 
-        if (uniformLocationCache.find(name) != uniformLocationCache.end())
+        if (uniformLocationCache.contains(name)) {
             return uniformLocationCache[name];
+        }
 
-        int32_t loc = glGetUniformLocation(progID, name.c_str());
+        int32_t loc = glGetUniformLocation(this->id, name.c_str());
         uniformLocationCache[name] = loc;
 
         return loc;

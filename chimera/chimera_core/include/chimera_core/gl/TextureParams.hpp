@@ -75,28 +75,4 @@ namespace ce {
         }
     } // namespace Aux
 
-    inline void Invert_image_texture(int pitch, int height, void* image_pixels) {
-
-        int index;
-        void* temp_row;
-        int height_div_2;
-
-        temp_row = malloc(pitch);
-        if (nullptr == temp_row) {
-            throw std::string("Not enough memory for image inversion");
-        }
-
-        // if height is odd, don't need to swap middle row
-        height_div_2 = (int)(height * .5);
-        for (index = 0; index < height_div_2; index++) {
-            // uses string.h
-            std::memcpy((Uint8*)temp_row, (Uint8*)(image_pixels) + pitch * index, pitch);
-
-            std::memcpy((Uint8*)(image_pixels) + pitch * index, (Uint8*)(image_pixels) + pitch * (height - index - 1),
-                        pitch);
-            std::memcpy((Uint8*)(image_pixels) + pitch * (height - index - 1), temp_row, pitch);
-        }
-        free(temp_row);
-    }
-
 } // namespace ce

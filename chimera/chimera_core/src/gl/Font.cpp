@@ -138,7 +138,9 @@ namespace ce {
         p.wrap_t = TexWrap::CLAMP_TO_EDGE;
         p.minFilter = TexFilter::LINEAR;
         p.magFilter = TexFilter::LINEAR;
-        Invert_image_texture(bigSurface->pitch, bigSurface->h, bigSurface->pixels);
+
+        // FIXME: precido disto abaixo ?
+        // Invert_image_texture(bigSurface->pitch, bigSurface->h, bigSurface->pixels);
         texture = TextureLoader::CreateFromSurface(bigSurface, p);
 
         if (sFont != nullptr) {

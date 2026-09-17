@@ -55,6 +55,9 @@ int main(int argn, char** argv) {
         engine.getStack().pushState(game);
 
         engine.run();
+
+        // registry->clear();
+
         SDL_Log("Loop de Game encerrado!!!!");
 
     } catch (const std::runtime_error& e) {

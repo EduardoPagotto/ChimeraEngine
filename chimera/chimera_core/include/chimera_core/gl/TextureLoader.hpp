@@ -4,8 +4,10 @@
 #include "chimera_core/gl/TextureParams.hpp"
 #include <SDL3/SDL_log.h>
 #include <SDL3_image/SDL_image.h>
+#include <cstddef>
 #include <format>
 #include <memory>
+#include <stdexcept>
 
 namespace ce {
 
@@ -22,7 +24,8 @@ namespace ce {
             // Carrega a imagem do disco usando a nova API do SDL3
             SDL_Surface* surface = IMG_Load(filepath.c_str());
             if (surface == nullptr) {
-                throw std::runtime_error("Falha ao carregar imagem via SDL3_image: " + std::string(SDL_GetError()));
+                throw std::runtime_error("[TextureLoader] Falha ao carregar imagem via SDL3_image: " +
+                                         std::string(SDL_GetError()));
             }
 
             auto tex = CreateFromSurface(surface, tp);
@@ -46,7 +49,8 @@ namespace ce {
             // Garante o formato RGBA32 exigido pelo OpenGL
             SDL_Surface* converted = SDL_ConvertSurface(surface, SDL_PIXELFORMAT_RGBA32);
             if (converted == nullptr) {
-                throw std::runtime_error("Falha ao converter superfície no SDL3: " + std::string(SDL_GetError()));
+                throw std::runtime_error("[TextureLoader] Falha ao converter superfície no SDL3: " +
+                                         std::string(SDL_GetError()));
             }
 
             // const SDL_PixelFormatDetails* formatDetail = SDL_GetPixelFormatDetails(surface->format);
@@ -96,18 +100,20 @@ namespace ce {
 
             temp_row = malloc(pitch);
             if (nullptr == temp_row) {
-                throw std::string("Not enough memory for image inversion");
+                throw std::runtime_error("[TextureLoader] Not enough memory for image inversion");
             }
 
             // if height is odd, don't need to swap middle row
             height_div_2 = (int)(height * .5);
             for (index = 0; index < height_div_2; index++) {
                 // uses string.h
-                std::memcpy((Uint8*)temp_row, (Uint8*)(image_pixels) + pitch * index, pitch);
+                std::memcpy((Uint8*)temp_row, (Uint8*)(image_pixels) + (static_cast<ptrdiff_t>(pitch * index)), pitch);
 
-                std::memcpy((Uint8*)(image_pixels) + pitch * index,
-                            (Uint8*)(image_pixels) + pitch * (height - index - 1), pitch);
-                std::memcpy((Uint8*)(image_pixels) + pitch * (height - index - 1), temp_row, pitch);
+                std::memcpy((Uint8*)(image_pixels) + (static_cast<ptrdiff_t>(pitch * index)),
+                            (Uint8*)(image_pixels) + (static_cast<ptrdiff_t>(pitch * (height - index - 1))), pitch);
+
+                std::memcpy((Uint8*)(image_pixels) + (static_cast<ptrdiff_t>(pitch * (height - index - 1))), temp_row,
+                            pitch);
             }
             free(temp_row);
         }
@@ -152,27 +158,3 @@ namespace ce {
     };
 
 } // namespace ce
-
-//     std::shared_ptr<Texture> loadFromSurface(const std::string& name, SDL_Surface* surface,
-//                                              TexParam textureParameters) noexcept {
-
-//         Invert_image_texture(surface->pitch, surface->h, surface->pixels);
-
-//         std::shared_ptr<Texture> tex = std::make_shared<Texture>(surface, textureParameters);
-//         textures[name] = tex;
-//         return tex;
-//     }
-
-//     std::shared_ptr<Texture> loadFromFile(const std::string& name, const std::string& pathfile,
-//                                           TexParam textureParameters) {
-//         SDL_Surface* pImage = IMG_Load(pathfile.c_str());
-//         if (pImage == nullptr) {
-//             throw std::string("Falha ao ler arquivo:" + pathfile);
-//         }
-
-//         std::shared_ptr<Texture> tex = this->loadFromSurface(name, pImage, textureParameters);
-
-//         SDL_DestroySurface(pImage);
-
-//         return tex;
-//     }

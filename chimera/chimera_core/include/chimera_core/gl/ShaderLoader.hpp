@@ -13,8 +13,8 @@ namespace ce {
     struct ShaderLoader {
         using result_type = std::shared_ptr<Shader>;
 
-        result_type operator()(const std::string& name, const std::unordered_map<uint32_t, std::string>& mFiles) const {
-            return ShaderLoader::LoadFromFile(name, mFiles);
+        result_type operator()(const std::unordered_map<uint32_t, std::string>& mFiles) const {
+            return ShaderLoader::LoadFromFiles(mFiles);
         }
 
       private:
@@ -58,7 +58,7 @@ namespace ce {
             return ProgramID;
         }
 
-        static uint32_t CompileShader(const std::string& fileName, const std::string& shaderCode, uint16_t kindShade) {
+        static uint32_t CompileShader(const std::string& shaderCode, uint16_t kindShade) {
 
             int32_t Result = GL_FALSE;
             int InfoLogLength;
@@ -78,12 +78,8 @@ namespace ce {
                 if (InfoLogLength > 0) {
 
                     std::vector<char> shaderErrorMessage(InfoLogLength + 1);
-                    glGetShaderInfoLog(shaderID, InfoLogLength, NULL, shaderErrorMessage.data());
-
-                    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "[ShaderLoader] Shader %s compile error: %s",
-                                 fileName.c_str(), std::string(shaderErrorMessage.data()).c_str());
-
-                    throw std::runtime_error(std::format("[ShaderLoader] Shader compile fail: {}", shaderCode).c_str());
+                    glGetShaderInfoLog(shaderID, InfoLogLength, nullptr, shaderErrorMessage.data());
+                    throw std::runtime_error(std::format("[ShaderLoader] Compile fail: {}", shaderCode).c_str());
                 }
             }
 
@@ -103,14 +99,15 @@ namespace ce {
             }
         }
 
-        static result_type LoadFromFile(const std::string& name,
-                                        const std::unordered_map<uint32_t, std::string>& mFiles) {
+        static result_type LoadFromFiles(const std::unordered_map<uint32_t, std::string>& mFiles) {
 
             std::vector<uint32_t> vecShaderID;
             for (const auto& kv : mFiles) {
                 std::string source;
                 ShaderLoader::ReadFile(kv.second, source);
-                vecShaderID.push_back(ShaderLoader::CompileShader(name, source, kv.first)); // compile shader
+                vecShaderID.push_back(ShaderLoader::CompileShader(source, kv.first)); // compile shader
+
+                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "[ShaderLoader] Load %s", kv.second.c_str());
             }
 
             std::shared_ptr<Shader> shader =
@@ -118,8 +115,6 @@ namespace ce {
 
             vecShaderID.clear();
 
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "[ShaderLoader] Load %s id: %d", name.c_str(),
-                         (int)shader->getID());
             return shader;
         }
     };

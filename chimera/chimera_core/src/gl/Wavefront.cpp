@@ -1,8 +1,6 @@
 #include "chimera_core/gl/Wavefront.hpp"
 #include "chimera_base/aux/utils.hpp"
 #include "chimera_core/gl/AssetManager.hpp"
-#include "chimera_core/gl/Texture.hpp"
-#include "chimera_core/gl/TextureMng.hpp"
 #include <fstream>
 
 namespace ce {

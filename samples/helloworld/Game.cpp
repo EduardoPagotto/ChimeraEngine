@@ -3,7 +3,7 @@
 #include "chimera_base/event.hpp"
 #include "chimera_core/gl/FontMng.hpp"
 #include "chimera_core/gl/ShaderMng.hpp"
-#include "chimera_core/gl/TextureMng.hpp"
+#include "chimera_core/gl/TextureLoader.hpp"
 #include "chimera_render/2d/Group.hpp"
 #include "chimera_render/2d/Sprite.hpp"
 #include <time.h>

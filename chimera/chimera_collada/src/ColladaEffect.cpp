@@ -2,7 +2,7 @@
 #include "chimera_collada/ColladaImage.hpp"
 #include "chimera_core/gl/AssetManager.hpp"
 #include "chimera_core/gl/ShaderMng.hpp"
-#include "chimera_core/gl/TextureMng.hpp"
+#include "chimera_core/gl/TextureLoader.hpp"
 #include "chimera_ecs/MaterialComponent.hpp"
 #include "chimera_ecs/Registry.hpp"
 #include "chimera_ecs/ShaderComponent.hpp"

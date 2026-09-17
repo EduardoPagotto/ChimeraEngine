@@ -1,6 +1,6 @@
 #include "chimera_core/gl/buffer/FrameBuffer.hpp"
 #include "chimera_core/gl/OpenGLDefs.hpp"
-#include "chimera_core/gl/TextureMng.hpp"
+#include "chimera_core/gl/TextureLoader.hpp"
 
 namespace ce {
 

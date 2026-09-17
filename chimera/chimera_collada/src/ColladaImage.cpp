@@ -1,6 +1,6 @@
 #include "chimera_collada/ColladaImage.hpp"
 #include "chimera_core/gl/AssetManager.hpp"
-#include "chimera_core/gl/TextureMng.hpp"
+#include "chimera_core/gl/TextureLoader.hpp"
 #include "chimera_core/gl/buffer/FrameBuffer.hpp"
 
 namespace ce {

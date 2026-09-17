@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TextureMng.hpp"
+#include "TextureLoader.hpp"
 #include <entt/entt.hpp>
 
 namespace ce {

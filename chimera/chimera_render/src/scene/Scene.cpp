@@ -1,9 +1,8 @@
 #include "chimera_render/scene/Scene.hpp"
-#include "chimera_base/ICanva.hpp"
 #include "chimera_core/bullet/Solid.hpp"
+#include "chimera_core/gl/AssetManager.hpp"
 #include "chimera_core/gl/CanvasGL.hpp"
 #include "chimera_core/gl/RenderCommand.hpp"
-#include "chimera_core/gl/ShaderMng.hpp"
 #include "chimera_core/visible/CameraControllerFPS.hpp"
 #include "chimera_core/visible/CameraControllerOrbit.hpp"
 #include "chimera_ecs/CameraComponent.hpp"
@@ -34,8 +33,9 @@ namespace ce {
 
     std::shared_ptr<RenderBuffer> Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width,
                                                 const uint32_t& height) {
-        if (!eRenderBuferSpec)
+        if (!eRenderBuferSpec) {
             throw std::string("RenderBuffer nao encontrado");
+        }
 
         // Define o framebuffer de desenho
         FrameBufferSpecification& fbSpec = eRenderBuferSpec.getComponent<FrameBufferSpecification>();
@@ -426,9 +426,9 @@ namespace ce {
                         shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
                         shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
 
-                        auto mng = registry->ctx().get<std::shared_ptr<ShaderMng>>();
+                        auto assets = this->registry->ctx().get<std::shared_ptr<AssetManager>>();
 
-                        dl.create(mng->load("DrawLine", shadeData), 40000);
+                        dl.create(assets->loadShader("DrawLine", shadeData).handle(), 40000);
                     }
 
                     if (octree != nullptr) {
@@ -450,14 +450,14 @@ namespace ce {
 
                 } else if (verbose == 2) { // DEBUG AABB
 
-                    if (renderLines.valid() == false) {
+                    if (!renderLines.valid()) {
                         std::unordered_map<GLenum, std::string> shadeData;
                         shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
                         shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
 
-                        auto mng = registry->ctx().get<std::shared_ptr<ShaderMng>>();
+                        auto assets = this->registry->ctx().get<std::shared_ptr<AssetManager>>();
 
-                        renderLines.create(mng->load("DrawLine", shadeData), 10000);
+                        renderLines.create(assets->loadShader("DrawLine", shadeData).handle(), 10000);
                     }
 
                     renderLines.begin(activeCam, vpo, nullptr);

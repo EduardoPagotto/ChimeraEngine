@@ -1,34 +1,34 @@
 #include "chimera_collada/ColladaEffect.hpp"
 #include "chimera_collada/ColladaImage.hpp"
 #include "chimera_core/gl/AssetManager.hpp"
-#include "chimera_core/gl/ShaderMng.hpp"
-#include "chimera_core/gl/TextureLoader.hpp"
 #include "chimera_ecs/MaterialComponent.hpp"
-#include "chimera_ecs/Registry.hpp"
 #include "chimera_ecs/ShaderComponent.hpp"
 
 namespace ce {
 
     static TexFilter setFilter(const std::string& sParamVal) {
-        if (sParamVal == "NEAREST")
+        if (sParamVal == "NEAREST") {
             return TexFilter::NEAREST;
-        else if (sParamVal == "LINEAR")
+        }
+        if (sParamVal == "LINEAR") {
             return TexFilter::LINEAR;
+        }
 
         return TexFilter::NONE;
     }
 
     static TexWrap setWrap(const std::string& sParamVal) {
-        if (sParamVal == "WRAP")
+        if (sParamVal == "WRAP") {
             return TexWrap::REPEAT;
-        else if (sParamVal == "MIRROR")
+        } else if (sParamVal == "MIRROR") {
             return TexWrap::MIRRORED;
-        else if (sParamVal == "CLAMP")
+        } else if (sParamVal == "CLAMP") {
             return TexWrap::CLAMP_TO_EDGE;
-        else if (sParamVal == "CLAMP2")
+        } else if (sParamVal == "CLAMP2") {
             return TexWrap::CLAMP;
-        else if (sParamVal == "BORDER")
+        } else if (sParamVal == "BORDER") {
             return TexWrap::CLAMP_TO_BORDER;
+        }
 
         return TexWrap::NONE;
     }
@@ -80,11 +80,13 @@ namespace ce {
         }
 
         if (shadeData.size() > 1) {
-            auto mng = registry->ctx().get<std::shared_ptr<ce::ShaderMng>>();
+            auto assets = this->registry->ctx().get<std::shared_ptr<AssetManager>>();
 
             ShaderComponent& sc = entity.addComponent<ShaderComponent>();
             sc.tag.name = refName;
-            sc.shader = mng->load(refName, shadeData);
+
+            // FIXME: mudar a forma para fazer a carga real no attachment do scene
+            sc.shader = assets->loadShader(refName, shadeData).handle();
         }
     }
 

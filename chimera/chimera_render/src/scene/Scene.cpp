@@ -1,7 +1,6 @@
 #include "chimera_render/scene/Scene.hpp"
 #include "chimera_core/bullet/Solid.hpp"
 #include "chimera_core/gl/AssetManager.hpp"
-#include "chimera_core/gl/CanvasGL.hpp"
 #include "chimera_core/gl/RenderCommand.hpp"
 #include "chimera_core/visible/CameraControllerFPS.hpp"
 #include "chimera_core/visible/CameraControllerOrbit.hpp"
@@ -23,7 +22,12 @@
 
 namespace ce {
 
-    Scene::Scene(std::shared_ptr<entt::registry> registry) : origem(nullptr), verbose(0), registry(registry) {}
+    Scene::Scene(std::shared_ptr<entt::registry> registry) : origem(nullptr), verbose(0), registry(registry) {
+        this->canvas = std::dynamic_pointer_cast<ce::CanvasGL>(registry->ctx().get<std::shared_ptr<ce::ICanva>>());
+        if (this->canvas == nullptr) {
+            throw std::runtime_error("Canva not found in CTX");
+        }
+    }
 
     Scene::~Scene() {
         if (shadowData.shadowBuffer) {
@@ -87,7 +91,8 @@ namespace ce {
         }
 
         // Totalizadores de area
-        glm::vec3 tot_min, tot_max;
+        glm::vec3 tot_min;
+        glm::vec3 tot_max;
         int tot_mesh = 0;
 
         // lista as tags nas entidades registradas
@@ -112,8 +117,9 @@ namespace ce {
                 // Inicializa Materiais
                 if (entity.hasComponent<MaterialComponent>()) {
                     MaterialComponent& material = entity.getComponent<MaterialComponent>();
-                    if (!material.material->isValid())
+                    if (!material.material->isValid()) {
                         material.material->init();
+                    }
                 } else {
                     MaterialComponent& material = entity.addComponent<MaterialComponent>();
                     material.material = std::make_shared<Material>();
@@ -123,12 +129,13 @@ namespace ce {
 
                 // Cria componentes renderizaveis
                 Renderable3dComponent& rc = entity.addComponent<Renderable3dComponent>();
-                if (mesh.type == MeshType::SIMPLE)
+                if (mesh.type == MeshType::SIMPLE) {
                     rc.renderable = new RenderableMesh(mesh.mesh);
-                else if (mesh.type == MeshType::ARRAY)
+                } else if (mesh.type == MeshType::ARRAY) {
                     rc.renderable = new RenderableArray(mesh.vTrisIndex, mesh.mesh);
-                else if (mesh.type == MeshType::BSTREE)
+                } else if (mesh.type == MeshType::BSTREE) {
                     rc.renderable = new RenderableBsp(*mesh.mesh);
+                }
 
                 auto [min, max, size] = vertexBoundaries(mesh.mesh->vertex);
 
@@ -139,7 +146,7 @@ namespace ce {
                         // Cria rigidBody iniciaza transformacao e inicializa shape se ele nao existir
                         Solid* solid = (Solid*)tc.trans;
                         // TODO: Era half size ??
-                        solid->init(size / 2.0f);
+                        solid->init(size / 2.0F);
                     }
                 }
 
@@ -187,10 +194,6 @@ namespace ce {
             }
         }
 
-        // Pega icanvas depois de camera definida!!!
-        // FIXME: ver se existe la mesmo
-        auto canvas = registry->ctx().get<std::shared_ptr<CanvasGL>>();
-
         this->onViewportResize(canvas->getWidth(), canvas->getHeight());
 
         { // Registra Camera controllers ViewProjection deve ser localizado acima
@@ -221,8 +224,9 @@ namespace ce {
             phyCrt->checkCollisions();
         }
 
-        for (auto emissor : emitters)
+        for (auto* emissor : emitters) {
             emissor->recycleLife(ts);
+        }
 
         for (auto it = layers.begin(); it != layers.end(); it++)
             (*it)->onUpdate(ts);
@@ -241,7 +245,7 @@ namespace ce {
 
                 for (auto renderBuffer : vRB) { // altera a matrix de projecao apenas na troca de resolucao
                     cameraComponent.camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
-                    if (cameraComponent.primary == true) {
+                    if (cameraComponent.primary) {
                         activeCam = cameraComponent.camera;
                     }
                 }

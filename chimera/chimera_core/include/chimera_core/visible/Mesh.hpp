@@ -6,6 +6,39 @@
 
 namespace ce {
 
+    // TODO: subistituir no futuro
+    // // Auxiliar triângulo na CPU para ler indices
+    // glm::ivec3 getTriangle(size_t faceIndex, uint32_t* indices) {
+    //     const uint32_t a = faceIndex * 3;
+    //     return {indices[a], indices[a + 1], indices[a + 2]};
+    // }
+
+    // // Auxiliar triângulo na CPU para gravar indices
+    // void setTriangle(glm::ivec3 face, size_t faceIndex, uint32_t* indices) {
+    //     const uint32_t a = faceIndex * 3;
+    //     indices[a] = face.x;
+    //     indices[a + 1] = face.y;
+    //     indices[a + 2] = face.z;
+    // }
+    //
+    // struct Vertex3D {
+    //     glm::vec3 pos{0.0};
+    //     glm::vec3 nor{0.0};
+    //     glm::vec2 tex{0.0};
+    // };
+
+    // struct MeshPart {
+    //     AABB aabb;
+    //     std::vector<uint32_t> indices;
+    //     std::optional<size_t> materialIndex;
+    // };
+
+    // struct CompleteMesh {
+    //     std::string name;
+    //     std::vector<Vertex3D> vertices;
+    //     std::vector<MeshPart> parts; // Each part represents a glTF primitive
+    // };
+
     struct VertexData {
         glm::vec3 point;  // 3 * 4 = 12 ( 0 - 11)
         glm::vec3 normal; // 3 * 4 = 12 (12 - 23)

@@ -7,7 +7,7 @@
 
 class Game : public ce::IStateMachine {
   public:
-    Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::CanvaFB> canva);
+    Game(std::shared_ptr<entt::registry> registry);
     virtual ~Game();
 
     // Inherited via IEvents

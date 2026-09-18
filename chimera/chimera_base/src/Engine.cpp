@@ -4,8 +4,9 @@
 
 namespace ce {
 
-    Engine::Engine(std::shared_ptr<entt::registry> registry, std::shared_ptr<ICanva> canva)
-        : registry(registry), canva(canva) {
+    Engine::Engine(std::shared_ptr<entt::registry> registry) : registry(registry) {
+
+        canva = registry->ctx().get<std::shared_ptr<ICanva>>();
 
         timerFPS.setElapsedCount(1000);
         timerFPS.start();

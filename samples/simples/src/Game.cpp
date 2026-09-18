@@ -4,6 +4,12 @@
 #include <SDL3/SDL_log.h>
 
 Game::Game(std::shared_ptr<entt::registry> registry) : registry(registry) {
+
+    this->canva = std::dynamic_pointer_cast<ce::CanvasGL>(registry->ctx().get<std::shared_ptr<ce::ICanva>>());
+    if (this->canva == nullptr) {
+        throw std::runtime_error("Canva not found in CTX");
+    }
+
     this->inputManager = registry->ctx().get<std::shared_ptr<ce::InputManager>>();
 }
 

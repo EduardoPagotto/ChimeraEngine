@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include "chimera_base/Engine.hpp"
+#include "chimera_base/ICanva.hpp"
 #include "chimera_base/InputManager.hpp"
 #include <stdexcept>
 
@@ -20,21 +21,16 @@ int main(int argn, char** argv) {
         SDL_SetLogPriority(SDL_LOG_CATEGORY_RENDER, SDL_LOG_PRIORITY_DEBUG);
         SDL_SetLogPriorities(SDL_LOG_PRIORITY_DEBUG);
 
-        SDL_Log("Simple ray-casting Iniciado");
+        SDL_Log("Ray-casting Iniciado");
 
         std::shared_ptr<entt::registry> registry = std::make_shared<entt::registry>();
-
-        // using enum ce::InputEnable;
-        // InputEnable in = Mouse | Keyboard;
-
+        registry->ctx().emplace<std::shared_ptr<ICanva>>(std::make_shared<CanvaFB>("Ray-casting", 800, 600, false));
         registry->ctx().emplace<std::shared_ptr<InputManager>>(std::make_shared<InputManager>());
 
-        std::shared_ptr<CanvaFB> canva = std::make_shared<CanvaFB>("Teste Framebuffer SDL3", 800, 600, false);
-
         // // Engine
-        Engine engine(registry, canva);
+        Engine engine(registry);
 
-        std::shared_ptr<IStateMachine> game = std::make_shared<Game>(registry, canva);
+        std::shared_ptr<IStateMachine> game = std::make_shared<Game>(registry);
 
         engine.getStack().pushState(game);
         engine.run();

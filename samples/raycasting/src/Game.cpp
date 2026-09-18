@@ -1,12 +1,18 @@
 #include "Game.hpp"
 #include "chimera_base/GamePad.hpp"
+#include "chimera_base/ICanva.hpp"
 #include "chimera_base/event.hpp"
 #include <SDL3/SDL_gamepad.h>
 #include <SDL3/SDL_log.h>
 #include <format>
+#include <stdexcept>
 
-Game::Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::CanvaFB> canva)
-    : registry(registry), canva(canva) {
+Game::Game(std::shared_ptr<entt::registry> registry) : registry(registry) {
+
+    this->canva = std::dynamic_pointer_cast<ce::CanvaFB>(registry->ctx().get<std::shared_ptr<ce::ICanva>>());
+    if (this->canva == nullptr) {
+        throw std::runtime_error("Canva not found in CTX");
+    }
 
     this->inputManager = registry->ctx().get<std::shared_ptr<ce::InputManager>>();
 }

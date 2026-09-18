@@ -12,11 +12,11 @@ namespace ce {
     /// @brief Engine
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
-    /// @date 20260907
+    /// @date 20260917
     class Engine {
 
       public:
-        Engine(std::shared_ptr<entt::registry> registry, std::shared_ptr<ICanva> canva);
+        Engine(std::shared_ptr<entt::registry> registry);
         virtual ~Engine() = default;
         void run();
 

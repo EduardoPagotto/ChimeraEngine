@@ -15,6 +15,39 @@ namespace ce {
 #define SHADE_TEXTURE_SPECULA             "material.tSpecular"
 #define SHADE_TEXTURE_EMISSIVE            "material.tEmissive"
 
+    // FIXME: implementação futura
+    // // Tipo alternativo para ID de textura (geralmente gerado por um Hash da string do caminho do arquivo)
+    // using TextureId = uint32_t;
+
+    // // Estrutura que define os parâmetros numéricos e vetoriais do material
+    // struct MaterialProperties {
+    //     float albedoColor[4] = {1.0f, 1.0f, 1.0f, 1.0f}; // Cor base (RGBA)
+    //     float metallic = 0.0f;                           // Grau de metalicidade (0 a 1)
+    //     float roughness = 0.5f;                          // Rugosidade da superfície (0 a 1)
+    //     float ao = 1.0f;                                 // Oclusão ambiental padrão
+    //     float emissiveColor[3] = {0.0f, 0.0f, 0.0f};     // Cor de emissão de luz
+    // };
+
+    // // Estrutura principal do Material
+    // struct Material {
+    //     std::string name;  // Nome do material para debug e editor
+    //     uint32_t shaderId; // ID do Shader/Pipeline que este material utiliza
+
+    //     // Propriedades físicas básicas
+    //     MaterialProperties properties;
+
+    //     // IDs das texturas (0 ou um ID específico se não houver textura atribuída)
+    //     TextureId albedoMapId = 0;
+    //     TextureId normalMapId = 0;
+    //     TextureId metallicMapId = 0;
+    //     TextureId roughnessMapId = 0;
+    //     TextureId aoMapId = 0;
+
+    //     // Flags de renderização (Metadados de estado)
+    //     bool isTransparent = false;
+    //     bool isDoubleSided = false;
+    //     bool castsShadows = true;
+
     class Material {
       public:
         Material();

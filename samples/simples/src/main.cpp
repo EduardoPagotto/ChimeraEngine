@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include "chimera_base/Engine.hpp"
+#include "chimera_base/ICanva.hpp"
 #include "chimera_base/aux/ViewProjection.hpp"
 #include "chimera_collada/colladaLoad.hpp"
 #include "chimera_core/gl/AssetManager.hpp"
@@ -25,22 +26,17 @@ int main(int argn, char** argv) {
         SDL_SetLogPriority(SDL_LOG_CATEGORY_RENDER, SDL_LOG_PRIORITY_DEBUG);
         SDL_SetLogPriorities(SDL_LOG_PRIORITY_DEBUG);
 
-        SDL_Log("Simnples Iniciado");
+        SDL_Log("Simples Iniciado");
 
         // Registry to entt
         std::shared_ptr<entt::registry> registry = std::make_shared<entt::registry>();
-
-        // using enum ce::InputEnable;
-        // InputEnable in = Mouse | Keyboard;
-
+        registry->ctx().emplace<std::shared_ptr<ICanva>>(std::make_shared<CanvasGL>("Simples", 1800, 600, false));
         registry->ctx().emplace<std::shared_ptr<InputManager>>(std::make_shared<InputManager>());
-        registry->ctx().emplace<std::shared_ptr<CanvasGL>>(std::make_shared<CanvasGL>("BSP Tree", 1800, 600, false));
         registry->ctx().emplace<std::shared_ptr<ViewProjection>>(std::make_shared<ViewProjection>(0.5F));
         registry->ctx().emplace<std::shared_ptr<AssetManager>>(std::make_shared<AssetManager>());
 
         // Engine
-        std::shared_ptr<CanvasGL> canva = registry->ctx().get<std::shared_ptr<CanvasGL>>();
-        Engine engine(registry, canva);
+        Engine engine(registry);
 
         ColladaDom dom = loadFileCollada("./samples/simples/level.xml");
 

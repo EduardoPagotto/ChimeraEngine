@@ -4,6 +4,7 @@
 #include "chimera_base/aux/ICamera.hpp"
 #include "chimera_base/aux/Transform.hpp"
 #include "chimera_core/bullet/interfaces.hpp"
+#include "chimera_core/gl/CanvasGL.hpp"
 #include "chimera_core/gl/ParticleEmitter.hpp"
 #include "chimera_core/gl/buffer/RenderBuffer.hpp"
 #include "chimera_ecs/Entity.hpp"
@@ -49,6 +50,7 @@ namespace ce {
         std::shared_ptr<IPhysicsControl> phyCrt;
         std::shared_ptr<Camera> activeCam;
         std::shared_ptr<Octree> octree;
+        std::shared_ptr<ce::CanvasGL> canvas;
 
         StateStack layers;
         ITrans* origem;

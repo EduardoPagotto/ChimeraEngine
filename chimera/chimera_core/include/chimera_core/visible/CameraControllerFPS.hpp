@@ -15,11 +15,7 @@ namespace ce {
         void onDeatach() override;
         void onRender() override {}
         void onUpdate(const double& ts) override;
-        void onEvent(const SDL_Event& event) override {
-
-            // FIXME: tem merda aqui!!!
-            // return gameControl->getEvent(event);
-        }
+        void onEvent(const SDL_Event& event) override {}
         std::string getName() const override { return "CameraControllerFPS"; }
 
       private:
@@ -35,11 +31,9 @@ namespace ce {
         Entity entity;
         std::shared_ptr<Camera> camera;
         std::shared_ptr<ViewProjection> vp;
-        // std::shared_ptr<GamePad> gameControl;
-        // std::shared_ptr<Keyboard> keyboard;
-        // std::shared_ptr<Mouse> mouse;
-
         std::shared_ptr<entt::registry> registry;
         std::shared_ptr<InputManager> inputManager;
+
+        ce::Gamepad::AxixConfig player0Config{0.18F, 0.18F, 0.18F}; // Deadzones customizadas
     };
 } // namespace ce

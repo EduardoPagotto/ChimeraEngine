@@ -1,5 +1,7 @@
 #include "chimera_core/visible/CameraControllerFPS.hpp"
+#include "chimera_base/GamePad.hpp"
 #include "chimera_ecs/CameraComponent.hpp"
+#include <SDL3/SDL_gamepad.h>
 
 namespace ce {
 
@@ -7,8 +9,6 @@ namespace ce {
         : entity(entity), registry(registry) {
 
         this->inputManager = registry->ctx().get<std::shared_ptr<InputManager>>();
-
-        // FIXME: ATENCAO!!!!! ainda nao existe no main!!!!!
         this->vp = registry->ctx().get<std::shared_ptr<ViewProjection>>();
     }
 
@@ -118,46 +118,68 @@ namespace ce {
         float mouseXDelta{0.0F};
         float mouseYDelta{0.0F};
 
-        // if (SDL_Gamepad* pJoy = inputManager->gamePad->getFirst(); pJoy != nullptr) {
+        auto gp = this->inputManager->getGamepad();
+        auto ms = this->inputManager->getMouse();
 
-        //     // Game control ratation and move
-        //     const int16_t deadZone = 128;
+        glm::vec2 leftStick = gp->getLeftStick(0, player0Config);
+        if (glm::length(leftStick) > 0.0F) {
 
-        //     const float lefty = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTY), deadZone, 0x8000);
-        //     const float leftx = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTX), deadZone, 0x8000);
-        //     const float rightx = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTX), deadZone, 0x8000);
-        //     const float righty = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTY), deadZone, 0x8000);
-        //     // SDL_Log("Left X:%f, Left Y:%f, RightY:%f, RightX:%f", leftx, lefty, rightx, righty);
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick Esquerdo -> X: %f | Y: %f", leftStick.x,
+                         leftStick.y);
 
-        //     direction += front * lefty * 1.5f; // mov FB
-        //     direction -= right * leftx * 1.5f; // mov RL
-        //     mouseXDelta = -rightx * 1.5f;      // rot RL
-        //     mouseYDelta = righty * 1.5f;       // rot UD
+            direction += front * leftStick.y * 1.5F; // mov FB
+            direction -= right * leftStick.x * 1.5F; // mov RL
+        }
 
-        //     if (SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_DPAD_UP) == true)
-        //         direction += (worldUp * 0.5f); // mov U<->D
+        glm::vec2 rightStick = gp->getRightStick(0, player0Config);
+        if (glm::length(rightStick) > 0.0F) {
 
-        //     if (SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_DPAD_DOWN) == true)
-        //         direction -= worldUp * 0.5f; // mov D<->U
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick Direito -> X: %f | Y: %f", rightStick.x,
+                         rightStick.y);
 
-        //     const bool north = SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_NORTH);
-        //     const bool south = SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_SOUTH);
+            mouseXDelta = -rightStick.x * 1.5F; // rot RL
+            mouseYDelta = rightStick.y * 1.5F;  // rot UD
+        } else {
+            // Mouse Camera rotation
+            glm::ivec2 mouseMove = ms->getDeltaXY(); //  ->getMoveRel();
+            mouseXDelta = -(float)mouseMove.x * fsp_camera_rotation_sensitivity;
+            mouseYDelta = (float)mouseMove.y * fsp_camera_rotation_sensitivity;
+        }
 
-        //     if (north || south) {
+        Gamepad::ButtonState pad_up = gp->getButtonState(0, SDL_GAMEPAD_BUTTON_DPAD_UP);
+        if (pad_up == Gamepad::ButtonState::Pressed || pad_up == Gamepad::ButtonState::Held) {
+            direction += (worldUp * 0.5F); // mov U<->D
+        }
 
-        //         const float v1 = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFT_TRIGGER), deadZone, 0x8000);
-        //         // SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, " V1: %f", v1);
-        //         const float v2 = v1 * 4.0 + north - south * 2.0f;
-        //         const float scrollDelta = glm::clamp(v2 * 4.0f, -4.0f, 4.0f);
-        //         processCameraFOV(scrollDelta); // TODO: injetar o novo FOV na camera, passar ele para perspective
-        //     }
+        Gamepad::ButtonState pad_down = gp->getButtonState(0, SDL_GAMEPAD_BUTTON_DPAD_DOWN);
+        if (pad_down == Gamepad::ButtonState::Pressed || pad_down == Gamepad::ButtonState::Held) {
+            direction -= worldUp * 0.5F; // mov D<->U
+        }
 
-        // } else {
-        //     // Mouse Camera rotation
-        //     glm::ivec2 mouseMove = inputManager->mouse->getMoveRel();
-        //     mouseXDelta = -(float)mouseMove.x * fsp_camera_rotation_sensitivity;
-        //     mouseYDelta = (float)mouseMove.y * fsp_camera_rotation_sensitivity;
-        // }
+        glm::vec2 triggerStick = gp->getTriggerStick(0, player0Config);
+        if (glm::length(triggerStick) > 0.0F) {
+
+            // Gamepad::ButtonState north = gp->getButtonState(0, SDL_GAMEPAD_BUTTON_NORTH);
+            // Gamepad::ButtonState south = gp->getButtonState(0, SDL_GAMEPAD_BUTTON_SOUTH);
+
+            // axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFT_TRIGGER), deadZone, 0x8000);
+            const float v1 = triggerStick.x;
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, " V1: %f", v1);
+
+            // if (north == Gamepad::ButtonState::Pressed) {
+
+            //     const float v2 = v1 * 4.0;
+            //     const float scrollDelta = glm::clamp(v2 * 4.0F, -4.0F, 4.0F);
+            //     processCameraFOV(scrollDelta); // TODO: injetar o novo FOV na camera, passar ele para perspective
+            // }
+
+            // if (south == Gamepad::ButtonState::Pressed) {
+
+            //     const float v2 = -v1 * 4.0;
+            //     const float scrollDelta = glm::clamp(v2 * 4.0F, -4.0F, 4.0F);
+            //     processCameraFOV(scrollDelta); // TODO: injetar o novo FOV na camera, passar ele para perspective
+            // }
+        }
 
         processCameraMovement(direction, ts);
 

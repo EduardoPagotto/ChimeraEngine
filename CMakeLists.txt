@@ -89,7 +89,7 @@ add_subdirectory(samples/raycasting)
 # add_subdirectory(samples/helloworld)
 add_subdirectory(samples/simples)
 add_subdirectory(samples/bsptree)
-# add_subdirectory(samples/terrain)
+add_subdirectory(samples/terrain)
 # add_subdirectory(samples/models3)
 
 # clean

@@ -1,11 +1,13 @@
 #pragma once
 #include "chimera_base/IStateMachine.hpp"
-#include "chimera_base/Keyboard.hpp"
-#include "chimera_base/Mouse.hpp"
+#include "chimera_base/InputManager.hpp"
+#include "chimera_core/gl/CanvasGL.hpp"
+#include <entt/entt.hpp>
+#include <memory>
 
 class Game : public ce::IStateMachine {
   public:
-    Game();
+    explicit Game(std::shared_ptr<entt::registry> registry);
     virtual ~Game();
     // Inherited via IEvents
     virtual void onAttach() override;
@@ -13,8 +15,10 @@ class Game : public ce::IStateMachine {
     virtual void onRender() override;
     virtual void onUpdate(const double& ts) override;
     virtual void onEvent(const SDL_Event& event) override;
+    std::string getName() const override { return "GAME"; }
 
   private:
-    std::shared_ptr<ce::Mouse> mouse;
-    std::shared_ptr<ce::Keyboard> keyboard;
+    std::shared_ptr<entt::registry> registry;
+    std::shared_ptr<ce::CanvasGL> canva;
+    std::shared_ptr<ce::InputManager> inputManager;
 };

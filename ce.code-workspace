@@ -270,7 +270,7 @@
 				"program": "${workspaceFolder}/bin/models3",
 				"args": [],
 				"env": {
-					"SDL_VIDEODRIVER": "x11"
+					//"SDL_VIDEODRIVER": "x11"
 				},
 				"cwd": "${workspaceFolder}"
 			},
@@ -281,7 +281,7 @@
 				"program": "${workspaceFolder}/bin/helloworld",
 				"args": [],
 				"env": {
-					"SDL_VIDEODRIVER": "x11"
+					//"SDL_VIDEODRIVER": "x11"
 				},
 				"cwd": "${workspaceFolder}"
 			},
@@ -318,6 +318,8 @@
 				"args": [],
 				"env": {
 					// "SDL_VIDEODRIVER": "x11"
+					"MESA_DEBUG" : "1",
+					"TENDER_DEBUG" : "1"
 				},
 				"cwd": "${workspaceFolder}"
 			},
@@ -328,7 +330,9 @@
 				"program": "${workspaceFolder}/bin/terrain",
 				"args": [],
 				"env": {
-					"SDL_VIDEODRIVER": "x11"
+					//"SDL_VIDEODRIVER": "x11"
+					"MESA_DEBUG" : "1",
+					"TENDER_DEBUG" : "1"
 				},
 				"cwd": "${workspaceFolder}"
 			},

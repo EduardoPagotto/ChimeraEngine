@@ -1,6 +1,8 @@
 #include "chimera_core/partition/LoadHeightMap.hpp"
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
+#include <algorithm>
+#include <cstddef>
 
 namespace ce {
 
@@ -28,7 +30,8 @@ namespace ce {
         const SDL_PixelFormatDetails* detail = SDL_GetPixelFormatDetails(pImage->format);
         const int bpp{detail->bytes_per_pixel};
 
-        uint8_t* p{(uint8_t*)pImage->pixels + h * pImage->pitch + w * bpp};
+        uint8_t* p{(uint8_t*)pImage->pixels + (static_cast<size_t>(h * pImage->pitch)) +
+                   (static_cast<size_t>(w * bpp))};
 
         switch (bpp) {
             case 1:
@@ -40,10 +43,11 @@ namespace ce {
                 break;
 
             case 3:
-                if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+                if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
                     return p[0] << 16 | p[1] << 8 | p[2];
-                else
+                } else {
                     return p[0] | p[1] << 8 | p[2] << 16;
+                }
                 break;
 
             case 4:
@@ -62,10 +66,8 @@ namespace ce {
             for (uint32_t x{0}; x < pImage->w; x++) {
                 const uint32_t val{getHeight(x, z)};
 
-                if (val > max)
-                    max = val;
-                if (val < minimal)
-                    minimal = val;
+                max = std::max(val, max);
+                minimal = std::min(val, minimal);
             }
         }
         return glm::vec3(_size.x / (float)pImage->w, _size.y / (float)(max - minimal), _size.z / (float)pImage->h);
@@ -85,18 +87,21 @@ namespace ce {
             return false;
         }
 
-        const float halfH{(float)pImage->h / 2.0f};
-        const float haldW{(float)pImage->w / 2.0f};
-        const float v{1.0f / (pImage->h - 1)};
-        const float u{1.0f / (pImage->w - 1)};
+        const float halfH{static_cast<float>(pImage->h) / 2.0F};
+        const float haldW{static_cast<float>(pImage->w) / 2.0F};
+        const float v{1.0F / static_cast<float>(pImage->h - 1)};
+        const float u{1.0F / static_cast<float>(pImage->w - 1)};
         const glm::vec3 scale = defineScale(_size);
 
         for (uint32_t z = 0; z < pImage->h; z++) {
             for (uint32_t x = 0; x < pImage->w; x++) {
 
-                _mesh.vertex.push_back({glm::vec3(x - haldW, getHeight(x, z) - minimal, halfH - z) * scale, // point
-                                        glm::vec3(0.0f),                                                    // normal
-                                        glm::vec2(u * x, v * z)});                                          // uv TEX
+                // point, normal, UV
+                _mesh.vertex.push_back({glm::vec3(static_cast<float>(x) - haldW, getHeight(x, z) - minimal,
+                                                  halfH - static_cast<float>(z)) *
+                                            scale,
+                                        glm::vec3(0.0F),
+                                        glm::vec2(u * static_cast<float>(x), v * static_cast<float>(z))});
             }
         }
 
@@ -137,30 +142,31 @@ namespace ce {
         return true;
     }
 
-    void LoadHeightMap::split(TrisIndex& vertexIndexIn, std::vector<TrisIndex>& vTrisIndexOut) {
+    void LoadHeightMap::split(TrisIndex& vertexIndexIn, std::vector<TrisIndex>& vTrisIndexOut) const {
 
         bool done{false};
-        uint32_t startHeight{0}, startWidth{0}, contador{0};
-        const uint32_t totalHeight{(height - 1) * 2}, totalWidth{(width - 1) * 2};
-        const uint32_t squareHeight{squareZ}, squareWidth{squareX * 2};
+        uint32_t startHeight{0};
+        uint32_t startWidth{0};
+        uint32_t contador{0};
+        const uint32_t totalHeight{(height - 1) * 2};
+        const uint32_t totalWidth{(width - 1) * 2};
+        const uint32_t squareHeight{squareZ};
+        const uint32_t squareWidth{squareX * 2};
         const uint32_t thresholdWidht{totalHeight * squareZ};
 
         while (!done) {
 
             uint32_t endHeight = startHeight + squareHeight;
             uint32_t endWidth = startWidth + squareWidth;
-            const uint32_t testeA = startHeight * totalHeight + startWidth;
+            const uint32_t testeA = (startHeight * totalHeight) + startWidth;
 
             if (testeA >= vertexIndexIn.size()) { // all faces
                 done = true;
                 continue;
             }
 
-            if (endHeight > (height - 1))
-                endHeight = (height - 1);
-
-            if (endWidth > totalWidth)
-                endWidth = totalWidth;
+            endHeight = std::min(endHeight, height - 1);
+            endWidth = std::min(endWidth, totalWidth);
 
             TrisIndex node;
 
@@ -182,13 +188,12 @@ namespace ce {
                 startWidth = endWidth;
             }
 
-            if (node.size() != 0)
+            if (node.size() != 0) {
                 vTrisIndexOut.push_back(node);
-            else
+            } else {
                 done = true;
-
+            }
             // node.debugDados();
         }
     }
-
 } // namespace ce

@@ -53,7 +53,7 @@ namespace ce {
         uniforms.insert(listMaterial.begin(), listMaterial.end());
 
         // FIXME: seletorr de tipo ???
-        // uniforms[SHADE_TEXTURE_SELETOR_TIPO_VALIDO] = Uniform(tipoTexturasDisponiveis);
+        uniforms[SHADE_TEXTURE_SELETOR_TIPO_VALIDO] = Uniform(tipoTexturasDisponiveis);
 
         // indice de textura
         int indexTex = 0;

@@ -64,18 +64,11 @@ namespace ce {
                 break;
         }
 
-        // while (true) {
-        //     // FIXME: o que ha de errado aqui ??
-        //     GLenum erro = glGetError();
-        //     if (erro != GL_NO_ERROR) {
-        //         glm::mat4* aa = static_cast<glm::mat4*>(uv.ptr.get());
-        //         // std::cout << glm::to_string(*aa) << std::endl;
-        //         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Uniform OpenGL Erro: %s Code %d -> %s", name, erro,
-        //                      glm::to_string(*aa).c_str());
-        //     } else {
-        //         break;
-        //     }
-        // }
+        GLenum erro = glGetError();
+        while (erro != GL_NO_ERROR) {
+            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Uniform OpenGL Erro: %s Code %d", name, erro);
+            erro = glGetError();
+        }
     }
 
     Shader::~Shader() noexcept {

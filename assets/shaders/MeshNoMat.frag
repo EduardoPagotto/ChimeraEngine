@@ -25,11 +25,16 @@ vs_in;
 
 uniform vec3 viewPos;
 uniform Material material;
-//uniform int tipo; // not used
+uniform int tipo; // FIXME: refazer depois, desnecessario
 
 void main() {
     // color and texture
-    // FragColor = vec4(texture(material.tDiffuse, TexCoords)) * vec4(ourColor, 1.0);
-    FragColor = vec4(texture(material.tDiffuse, vs_in.TexCoords));
+    //FragColor = vec4(texture(material.tDiffuse, vs_in.TexCoords));
     // color2 = 50 + tipo;
+
+    if (tipo == 0) { // Sem Textura
+        FragColor = (material.ambient + (material.diffuse + material.specular));
+    } else if (tipo == 1) { // Apenas Diffuse
+        FragColor = vec4(texture(material.tDiffuse, vs_in.TexCoords));
+    }
 }

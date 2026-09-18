@@ -115,6 +115,8 @@ namespace ce {
 
             vecShaderID.clear();
 
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "[ShaderLoader] Link %d", shader->getID());
+
             return shader;
         }
     };

@@ -11,6 +11,7 @@ struct Material {
     vec4 ambient; // not used
     vec4 diffuse; // not used
     vec4 specular; // not used
+    vec4 emissive; // not used
     sampler2D tDiffuse;
     float shininess; // not used
 };

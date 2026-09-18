@@ -1,58 +1,72 @@
 #include "Game.hpp"
 #include "chimera_base/Engine.hpp"
-#include "chimera_collada/Collada.hpp"
+#include "chimera_base/ICanva.hpp"
+#include "chimera_base/aux/ViewProjection.hpp"
 #include "chimera_collada/colladaLoad.hpp"
+#include "chimera_core/gl/AssetManager.hpp"
 #include "chimera_core/gl/CanvasGL.hpp"
-#include "chimera_core/gl/ShaderMng.hpp"
 #include "chimera_render/scene/Scene.hpp"
 #include <config_params.hpp>
+#include <memory>
 
 int main(int argn, char** argv) {
+
+    auto result = EXIT_SUCCESS;
+
     using namespace ce;
+
     try {
         SDL_SetAppMetadata(std::string(project_name).c_str(), std::string(project_version).c_str(),
                            "com.mechanical.engine");
 
+        // Habilita todas as mensagens em modo Debug
+        SDL_SetLogPriority(SDL_LOG_CATEGORY_VIDEO, SDL_LOG_PRIORITY_DEBUG);
+        SDL_SetLogPriority(SDL_LOG_CATEGORY_INPUT, SDL_LOG_PRIORITY_DEBUG);
+        SDL_SetLogPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG);
+        SDL_SetLogPriority(SDL_LOG_CATEGORY_RENDER, SDL_LOG_PRIORITY_DEBUG);
         SDL_SetLogPriorities(SDL_LOG_PRIORITY_DEBUG);
+
         SDL_Log("BSPTree Iniciado");
 
         // Registry to entt
-        auto reg = std::make_shared<Registry>();
+        std::shared_ptr<entt::registry> registry = std::make_shared<entt::registry>();
+        registry->ctx().emplace<std::shared_ptr<ICanva>>(std::make_shared<CanvasGL>("Simples", 1800, 600, false));
+        registry->ctx().emplace<std::shared_ptr<InputManager>>(std::make_shared<InputManager>());
+        registry->ctx().emplace<std::shared_ptr<ViewProjection>>(std::make_shared<ViewProjection>(0.5F));
+        registry->ctx().emplace<std::shared_ptr<AssetManager>>(std::make_shared<AssetManager>());
 
-        // Services shared inside all parts
-        // Canvas, Mouse, keyboard, Joystick, gamepad, view's
-        g_service_locator.registerService(std::make_shared<CanvasGL>("BSP Tree", 1800, 600, false));
-        g_service_locator.registerService(std::make_shared<Mouse>());
-        g_service_locator.registerService(std::make_shared<ViewProjection>(0.5f)); // View projection
-        g_service_locator.registerService(std::make_shared<ShaderMng>());
-        g_service_locator.registerService(std::make_shared<TextureMng>());
         // Engine
-        Engine engine;
+        Engine engine(registry);
 
         ColladaDom dom = loadFileCollada("./samples/bsptree/bsp_level.xml");
-        colladaRegistryLoad(dom);
 
-        Scene scene;
-        Game game;
+        colladaRegistryLoad(registry, dom);
 
-        engine.getStack().pushState(&scene);
-        engine.getStack().pushState(&game);
+        std::shared_ptr<Scene> scene = std::make_shared<Scene>(registry);
+        std::shared_ptr<IStateMachine> game = std::make_shared<Game>(registry);
 
-        Collada::destroy(); // clean loader
+        engine.getStack().pushState(scene);
+        engine.getStack().pushState(game);
+
+        engine.run();
+
+        // Collada::destroy(); // clean loader
 
         engine.run();
 
         SDL_Log("Loop de Game encerrado!!!!");
-        SDL_Log("BSPTree finalizado com sucesso");
         return 0;
 
-    } catch (const std::string& ex) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha grave: %s", ex.c_str());
-
     } catch (const std::runtime_error& e) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "runtime error: %s", e.what());
 
-    } catch (...) { SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha Desconhecida"); }
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s", e.what());
+        result = EXIT_FAILURE;
 
-    return -1;
+    } catch (...) {
+
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha Desconhecida");
+        result = EXIT_FAILURE;
+    }
+
+    return result;
 }

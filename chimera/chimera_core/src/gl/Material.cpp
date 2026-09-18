@@ -6,17 +6,18 @@ namespace ce {
     Material::~Material() {}
 
     void Material::setDefaultEffect() {
-        setDiffuse(glm::vec4(0.6f, 0.6f, 0.6f, 1.0f));
-        setEmission(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
-        setAmbient(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
-        setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+        setDiffuse(glm::vec4(0.6F, 0.6F, 0.6F, 1.0F));
+        setEmission(glm::vec4(0.1F, 0.1F, 0.1F, 1.0F));
+        setAmbient(glm::vec4(0.1F, 0.1F, 0.1F, 1.0F));
+        setSpecular(glm::vec4(0.5F, 0.5F, 0.5F, 1.0F));
         // setShine(50.0f);
     }
 
     void Material::init() {
 
-        if (valid)
+        if (valid) {
             return;
+        }
 
         valid = true;
         bool hasDifuse = false;
@@ -26,11 +27,11 @@ namespace ce {
         tipoTexturasDisponiveis = 0;
         for (const auto& kv : mapTex) {
 
-            if (kv.first.compare(SHADE_TEXTURE_DIFFUSE) == 0) {
+            if (kv.first == SHADE_TEXTURE_DIFFUSE) {
                 hasDifuse = true;
-            } else if (kv.first.compare(SHADE_TEXTURE_SPECULA) == 0) {
+            } else if (kv.first == SHADE_TEXTURE_SPECULA) {
                 hasEspecular = true;
-            } else if (kv.first.compare(SHADE_TEXTURE_EMISSIVE) == 0) {
+            } else if (kv.first == SHADE_TEXTURE_EMISSIVE) {
                 hasEmissive = true;
             }
 
@@ -38,12 +39,13 @@ namespace ce {
             // kv.second->init();
         }
 
-        if ((hasDifuse == true) && (hasEspecular == false) && (hasEmissive == false))
+        if ((hasDifuse) && (!hasEspecular) && (!hasEmissive)) {
             tipoTexturasDisponiveis = 1;
-        else if ((hasDifuse == true) && (hasEspecular == true) && (hasEmissive == false))
+        } else if ((hasDifuse) && (hasEspecular) && (!hasEmissive)) {
             tipoTexturasDisponiveis = 2;
-        else if ((hasDifuse == true) && (hasEspecular == true) && (hasEmissive == true))
+        } else if ((hasDifuse) && (hasEspecular) && (hasEmissive)) {
             tipoTexturasDisponiveis = 3;
+        }
     }
 
     void Material::bindMaterialInformation(MapUniform& uniforms, std::vector<std::shared_ptr<Texture>>& vTex) {

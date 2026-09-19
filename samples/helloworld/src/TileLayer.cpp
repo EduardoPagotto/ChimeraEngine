@@ -24,7 +24,6 @@ void TileLayer::onEvent(const SDL_Event& event) {
             y = event.motion.y;
         } break;
     }
-    return true;
 }
 
 // FIXME: IMPORTANTE!!! E necessario para movimentacao de matrizes em 2D!!!!!!!!!!!!

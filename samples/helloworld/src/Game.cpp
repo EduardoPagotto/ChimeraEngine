@@ -1,14 +1,18 @@
 #include "Game.hpp"
-#include "chimera_base/Transform.hpp"
-#include "chimera_base/event.hpp"
-#include "chimera_core/gl/FontMng.hpp"
-#include "chimera_core/gl/ShaderMng.hpp"
-#include "chimera_core/gl/TextureLoader.hpp"
-#include "chimera_render/2d/Group.hpp"
-#include "chimera_render/2d/Sprite.hpp"
-#include <time.h>
+#include "chimera_base/ICanva.hpp"
+#include "chimera_base/InputManager.hpp"
+#include "chimera_core/gl/AssetManager.hpp"
+// #include "chimera_base/Transform.hpp"
+// #include "chimera_base/event.hpp"
+// #include "chimera_core/gl/AssetManager.hpp"
+// #include "chimera_core/gl/FontMng.hpp"
+// #include "chimera_core/gl/ShaderMng.hpp"
+// #include "chimera_core/gl/TextureLoader.hpp"
+// #include "chimera_render/2d/Group.hpp"
+// #include "chimera_render/2d/Sprite.hpp"
+// #include <time.h>
 
-Game::Game(ce::Engine* engine) : IStateMachine("Game"), engine(engine) {
+Game::Game(std::shared_ptr<entt::registry> registry) {
 
     using namespace ce;
     srand(time(nullptr));
@@ -19,19 +23,25 @@ Game::Game(ce::Engine* engine) : IStateMachine("Game"), engine(engine) {
     // button->add(new Sprite(0.5f, 0.5f, 3.0f, 1.0f, glm::vec4(0.2f, 0.3f, 0.8f, 1)));
     // group->add(button);
     // layer->add(group);
-    auto texMng = g_service_locator.getService<TextureMng>();
-    texMng->loadFromFile("t01", "./assets/textures/grid1.png", TexParam());
-    texMng->loadFromFile("t02", "./assets/textures/grid2.png", TexParam());
-    texMng->loadFromFile("t03", "./assets/textures/grid3.png", TexParam());
 
-    canvas = g_service_locator.getService<ICanva>();
+    this->inputManager = registry->ctx().get<std::shared_ptr<ce::InputManager>>();
+    this->canvas = std::dynamic_pointer_cast<ce::CanvasGL>(registry->ctx().get<std::shared_ptr<ce::ICanva>>());
+    if (this->canvas == nullptr) {
+        throw std::runtime_error("Canva not found in CTX");
+    }
+
+    auto asset = registry->ctx().get<std::shared_ptr<ce::AssetManager>>();
+    TexParam tp;
+
+    asset->loadTexture("t01", "./assets/textures/grid1.png", tp);
+    asset->loadTexture("t02", "./assets/textures/grid2.png", tp);
+    asset->loadTexture("t03", "./assets/textures/grid3.png", tp);
 
     std::unordered_map<GLenum, std::string> shadeData;
     shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Basic2D.frag";
     shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Basic2D.vert";
 
-    auto mng = g_service_locator.getService<ShaderMng>();
-    shader = mng->load("Basic2D", shadeData);
+    asset->loadShader("Basic2D", shadeData);
 }
 
 Game::~Game() {}
@@ -47,7 +57,7 @@ void Game::onAttach() {
 
     layer = new TileLayer(shader);
     layer->getCamera()->setViewportSize(canvas->getWidth(), canvas->getHeight());
-    auto texMng = g_service_locator.getService<TextureMng>();
+    // auto texMng = g_service_locator.getService<TextureMng>();
 
     for (float y = -8.0f; y < 8.0f; y++) {
         for (float x = -14.0f; x < 14.0f; x++) {

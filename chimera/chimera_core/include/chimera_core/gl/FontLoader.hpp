@@ -125,11 +125,11 @@ namespace ce {
                 rect.w = nextX + glyph_cache->w;
                 rect.h = glyph_cache->h;
 
-                Font::GlyphData lglyp = glyphs[characher];
-                lglyp.square.x = ((float)rect.x) / (float)totW;
-                lglyp.square.y = 0.0;
-                lglyp.square.w = ((float)rect.w) / (float)totW;
-                lglyp.square.h = ((float)rect.h) / (float)maxH;
+                Font::GlyphData* lglyp = &glyphs[characher];
+                lglyp->square.x = ((float)rect.x) / (float)totW;
+                lglyp->square.y = 0.0;
+                lglyp->square.w = ((float)rect.w) / (float)totW;
+                lglyp->square.h = ((float)rect.h) / (float)maxH;
 
                 SDL_BlitSurface(glyph_cache, nullptr, bigSurface, &rect);
 

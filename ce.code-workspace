@@ -282,6 +282,8 @@
 				"args": [],
 				"env": {
 					//"SDL_VIDEODRIVER": "x11"
+					"MESA_DEBUG" : "1",
+					"TENDER_DEBUG" : "1"
 				},
 				"cwd": "${workspaceFolder}"
 			},

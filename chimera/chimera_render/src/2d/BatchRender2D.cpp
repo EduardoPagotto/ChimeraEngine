@@ -59,7 +59,7 @@ namespace ce {
     }
 
     float BatchRender2D::submitTexture(std::shared_ptr<Texture> texture) {
-        float result = 0.0f;
+        float result = 0.0F;
         bool found = false;
         for (uint i = 0; i < textures.size(); i++) {
             if (textures[i] == texture) {
@@ -89,9 +89,10 @@ namespace ce {
         const glm::vec4& color = prop.color;
         const std::vector<glm::vec2>& uv = prop.uv;
 
-        float textureSlot = 0.0f; // float ts = 0.0f;
-        if (prop.texture != nullptr)
+        float textureSlot = 0.0F; // float ts = 0.0f;
+        if (prop.texture != nullptr) {
             textureSlot = this->submitTexture(prop.texture);
+        }
 
         buffer->point =
             stack.multiplVec3(position); //  glm::vec3(transformationStack.back() * glm::vec4(position, 1.0f));
@@ -124,17 +125,17 @@ namespace ce {
     void BatchRender2D::drawString(std::shared_ptr<Font> font, const std::string& text, const glm::vec3& pos,
                                    const glm::vec4& color) {
 
-        float textureSlot = 0.0f; // float ts = 0.0f;
-        if (font->getTexture() != nullptr)
-            textureSlot = this->submitTexture(font->getTexture());
+        // float textureSlot = 0.0F; // float ts = 0.0f;
+        const float textureSlot = this->submitTexture(font->texture);
 
-        const glm::vec2& scale = font->getScale();
+        const glm::vec2& scale = font->scale;
         float x = pos.x;
 
-        for (int i = 0; i < text.size(); i++) {
+        for (auto c : text) {
 
-            uint16_t c = text[i];
-            if (GlyphData* glyph = font->glyphs[c]; glyph != nullptr) {
+            if (c < font->glyphs.size()) {
+
+                const Font::GlyphData glyph = font->glyphs[c];
 
                 // FIXME: encontrar o kering!!!!!!
                 // if (i > 0) {
@@ -142,35 +143,35 @@ namespace ce {
                 //     x += kering * scale.x;
                 // }
 
-                float x0 = x + glyph->offset.x * scale.x;
-                float x1 = x0 + glyph->size.x * scale.x;
-                float y1 = pos.y + glyph->offset.y * scale.y;
-                float y0 = y1 - glyph->size.y * scale.y;
+                const float x0 = x + (static_cast<float>(glyph.offset.x) * scale.x);
+                const float x1 = x0 + (static_cast<float>(glyph.size.x) * scale.x);
+                const float y1 = pos.y + (static_cast<float>(glyph.offset.y) * scale.y);
+                const float y0 = y1 - (static_cast<float>(glyph.size.y) * scale.y);
 
-                float u0 = glyph->square.x;
-                float v0 = glyph->square.y;
-                float u1 = glyph->square.w;
-                float v1 = glyph->square.h;
+                const float u0 = glyph.square.x;
+                const float v0 = glyph.square.y;
+                const float u1 = glyph.square.w;
+                const float v1 = glyph.square.h;
 
-                buffer->point = stack.multiplVec3(glm::vec3(x0, y0, 0.0f));
+                buffer->point = stack.multiplVec3(glm::vec3(x0, y0, 0.0F));
                 buffer->uv = glm::vec2(u0, v0);
                 buffer->tid = textureSlot;
                 buffer->color = color;
                 buffer++;
 
-                buffer->point = stack.multiplVec3(glm::vec3(x0, y1, 0.0f));
+                buffer->point = stack.multiplVec3(glm::vec3(x0, y1, 0.0F));
                 buffer->uv = glm::vec2(u0, v1); // glm::vec2(u0, v1);
                 buffer->tid = textureSlot;
                 buffer->color = color;
                 buffer++;
 
-                buffer->point = stack.multiplVec3(glm::vec3(x1, y1, 0.0f));
+                buffer->point = stack.multiplVec3(glm::vec3(x1, y1, 0.0F));
                 buffer->uv = glm::vec2(u1, v1);
                 buffer->tid = textureSlot;
                 buffer->color = color;
                 buffer++;
 
-                buffer->point = stack.multiplVec3(glm::vec3(x1, y0, 0.0f));
+                buffer->point = stack.multiplVec3(glm::vec3(x1, y0, 0.0F));
                 buffer->uv = glm::vec2(u1, v0);
                 buffer->tid = textureSlot;
                 buffer->color = color;
@@ -178,7 +179,7 @@ namespace ce {
 
                 indexCount += 6;
 
-                x += glyph->advance * scale.x;
+                x += static_cast<float>(glyph.advance) * scale.x;
             }
         }
     }
@@ -196,11 +197,13 @@ namespace ce {
         BinaryStateEnable cull(GL_CULL_FACE, GL_FALSE);
         // bind shader and uniforms from model
         glUseProgram(renderComando->shader->getID());
-        for (const auto& kv : renderComando->uniforms)
+        for (const auto& kv : renderComando->uniforms) {
             renderComando->shader->setUniformU(kv.first.c_str(), kv.second);
+        }
 
-        for (uint8_t i = 0; i < textures.size(); i++)
+        for (auto i = 0; i < textures.size(); i++) {
             textures[i]->bind(i);
+        }
 
         pVao->bind();
         ibo->bind();

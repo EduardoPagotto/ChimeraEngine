@@ -2,7 +2,7 @@
 #include "chimera_collada/ColladaCam.hpp"
 #include "chimera_collada/ColladaEffect.hpp"
 #include "chimera_collada/RFC3986.hpp"
-#include "chimera_core/gl/FontMng.hpp"
+#include "chimera_core/gl/AssetManager.hpp"
 #include "chimera_core/gl/buffer/FrameBuffer.hpp"
 
 namespace ce {
@@ -17,10 +17,10 @@ namespace ce {
                 float scaleX = std::stod(nFont.attribute("scaleX").value());
                 float scaleY = std::stod(nFont.attribute("scaleY").value());
 
-                auto fontMng = registry->ctx().get<std::shared_ptr<ce::FontMng>>();
+                auto asset = registry->ctx().get<std::shared_ptr<ce::AssetManager>>();
 
-                auto font = fontMng->load(rfc.getFragment(), rfc.getPath(), size);
-                font->setScale(glm::vec2(scaleX, scaleY));
+                auto font = asset->loadFont(rfc.getFragment(), rfc.getPath(), size);
+                font->scale = glm::vec2(scaleX, scaleY);
             }
         }
 

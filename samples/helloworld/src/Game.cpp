@@ -1,7 +1,10 @@
 #include "Game.hpp"
+#include "TileLayer.hpp"
 #include "chimera_base/ICanva.hpp"
 #include "chimera_base/InputManager.hpp"
 #include "chimera_core/gl/AssetManager.hpp"
+#include "chimera_render/2d/Label.hpp"
+#include "chimera_render/2d/Sprite.hpp"
 // #include "chimera_base/Transform.hpp"
 // #include "chimera_base/event.hpp"
 // #include "chimera_core/gl/AssetManager.hpp"
@@ -9,10 +12,9 @@
 // #include "chimera_core/gl/ShaderMng.hpp"
 // #include "chimera_core/gl/TextureLoader.hpp"
 // #include "chimera_render/2d/Group.hpp"
-// #include "chimera_render/2d/Sprite.hpp"
 // #include <time.h>
 
-Game::Game(std::shared_ptr<entt::registry> registry) {
+Game::Game(std::shared_ptr<entt::registry> registry, ce::Engine* engine) : registry(registry), engine(engine) {
 
     using namespace ce;
     srand(time(nullptr));
@@ -41,7 +43,7 @@ Game::Game(std::shared_ptr<entt::registry> registry) {
     shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Basic2D.frag";
     shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Basic2D.vert";
 
-    asset->loadShader("Basic2D", shadeData);
+    shader = asset->loadShader("Basic2D", shadeData).handle();
 }
 
 Game::~Game() {}
@@ -55,24 +57,32 @@ void Game::onAttach() {
                         // (video 96) video 103 finaliza o pick mouse colocar para rodar o scene como
                         // renderbuffer!!!!!!!!!
 
-    layer = new TileLayer(shader);
-    layer->getCamera()->setViewportSize(canvas->getWidth(), canvas->getHeight());
-    // auto texMng = g_service_locator.getService<TextureMng>();
+    layer = std::make_shared<TileLayer>(shader);
 
-    for (float y = -8.0f; y < 8.0f; y++) {
-        for (float x = -14.0f; x < 14.0f; x++) {
-            if (rand() % 4 == 0)
-                layer->add(new Sprite(x, y, 1.0f, 1.0f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
-            else
-                layer->add(new Sprite(x, y, 1.0f, 1.0f, texMng->getIndex(rand() % 3)));
+    layer->getCamera()->setViewportSize(canvas->getWidth(), canvas->getHeight());
+
+    auto asset = registry->ctx().get<std::shared_ptr<ce::AssetManager>>();
+
+    for (float y = -8.0F; y < 8.0F; y++) {
+
+        for (float x = -14.0F; x < 14.0F; x++) {
+
+            if (rand() % 4 == 0) {
+                layer->add(new Sprite(x, y, 1.0F, 1.0F, glm::vec4(rand() % 1000 / 1000.0F, 0, 1, 1)));
+            } else {
+                layer->add(new Sprite(x, y, 1.0F, 1.0F, asset->getTextureFromIndex(rand() % 3).handle()));
+            }
         }
     }
 
-    auto fontMng = g_service_locator.getService<FontMng>();
-    auto font = fontMng->load("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22);
-    font->setScale(glm::vec2(0.04, 0.04));
+    auto font = asset->loadFont("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22).handle();
+
+    font->scale = glm::vec2(0.04, 0.04);
+
     lFPS = new Label("None", 0, 0, font, glm::vec4(1.0, 1.0, 1.0, 1.0));
+
     layer->add(lFPS);
+
     engine->getStack().pushState(layer);
 }
 
@@ -88,55 +98,26 @@ void Game::onRender() {
 void Game::onEvent(const SDL_Event& event) {
     using namespace ce;
 
-    // if (ApplicationGL::onEvent(event) == false)
-    //     return false;
-
-    switch (event.type) {
-        case SDL_EVENT_USER: {
-#pragma clang diagnostic ignored "-Wswitch"
-            switch (static_cast<EventCE>(event.user.code)) {
-                case EventCE::NEW_FPS: {
-                    uint32_t* pFps = (uint32_t*)event.user.data1;
-                    fps = *pFps;
-                    SDL_Log("FPS: %d", fps);
-                } break;
-            }
-
-        } break;
-        case SDL_EVENT_KEY_DOWN: {
-            switch (event.key.key) {
-                case SDLK_ESCAPE:
-                    sendChimeraEvent(EventCE::FLOW_STOP, nullptr, nullptr);
-                    break;
-                case SDLK_F10:
-                    sendChimeraEvent(EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
-                    break;
-            }
-        } break;
-        case SDL_EVENT_WINDOW_MOUSE_ENTER:
-            sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
-            break;
-        case SDL_EVENT_WINDOW_MOUSE_LEAVE:
-            sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
-            break;
-
-            // case SDL_WINDOWEVENT: {
-            //     switch (event.window.event) {
-            //         case SDL_EVENT_WINDOW_MOUSE_ENTER:
-            //             sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
-            //             break;
-            //         case SDL_EVENT_WINDOW_MOUSE_LEAVE:
-            //             sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
-            //             break;
-            //     }
-            // } break;
+    if (event.type == CHIMERA_EVENT01) {
+        if (static_cast<EventCE>(event.user.code) == EventCE::NEW_FPS) {
+            uint32_t* pFps = (uint32_t*)event.user.data1;
+            fps = *pFps;
+            SDL_Log("FPS: %d", fps);
+        }
     }
-    return true;
 }
 
 void Game::onUpdate(const double& ts) {
 
-    // ApplicationGL::onUpdate();
-
     lFPS->setText(std::string("FPS: ") + std::to_string(fps));
+
+    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
+        sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
+        return;
+    }
+
+    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_F1)) {
+        sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
+        return;
+    }
 }

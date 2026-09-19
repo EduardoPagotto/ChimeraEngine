@@ -44,9 +44,9 @@ int main(int argn, char** argv) {
         colladaRegistryLoad(registry, dom);
 
         std::shared_ptr<Scene> scene = std::make_shared<Scene>(registry);
-        std::shared_ptr<IStateMachine> game = std::make_shared<Game>(registry);
+        std::shared_ptr<IStateMachine> game = std::make_shared<Game>(registry, &engine);
 
-        engine.getStack().pushState(scene);
+        // engine.getStack().pushState(scene);
         engine.getStack().pushState(game);
 
         engine.run();

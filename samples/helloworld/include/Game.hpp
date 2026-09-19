@@ -1,15 +1,15 @@
 #pragma once
 #include "TileLayer.hpp"
+#include "chimera_base/Engine.hpp"
 #include "chimera_base/IStateMachine.hpp"
 #include "chimera_base/InputManager.hpp"
 #include "chimera_core/gl/CanvasGL.hpp"
 #include "chimera_render/2d/Label.hpp"
 #include <entt/entt.hpp>
-// #include "chimera_base/Engine.hpp"
 
 class Game : public ce::IStateMachine {
   public:
-    Game(std::shared_ptr<entt::registry> registry);
+    Game(std::shared_ptr<entt::registry> registry, ce::Engine* engine);
     virtual ~Game();
     virtual void onAttach() override;
     virtual void onDeatach() override;
@@ -23,9 +23,10 @@ class Game : public ce::IStateMachine {
     std::shared_ptr<ce::CanvasGL> canvas;
     std::shared_ptr<ce::InputManager> inputManager;
     std::shared_ptr<ce::Shader> shader;
+    std::shared_ptr<TileLayer> layer;
 
-    // ce::Engine* engine;
+    ce::Engine* engine;
     ce::Label* lFPS;
-    TileLayer* layer;
+
     int fps;
 };

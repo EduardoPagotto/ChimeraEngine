@@ -1,9 +1,12 @@
 #pragma once
 
 #include "TextureLoader.hpp"
+#include "chimera_core/gl/Font.hpp"
+#include "chimera_core/gl/FontLoader.hpp"
 #include "chimera_core/gl/ShaderLoader.hpp"
 #include <entt/entt.hpp>
 #include <entt/resource/cache.hpp>
+#include <ranges>
 
 namespace ce {
 
@@ -14,6 +17,7 @@ namespace ce {
         void clearAll() {
             this->clearTexture();
             this->clearShaders();
+            this->clearFonts();
         }
 
         // Carrega a textura a partir de uma chave string ID e o caminho do arquivo
@@ -58,6 +62,12 @@ namespace ce {
             m_textureCache.erase(hashedId);
         }
 
+        entt::resource<Texture> getTextureFromIndex(int indice) {
+            auto [key, val] = *(m_textureCache | std::ranges::views::drop(indice)).begin();
+
+            return val;
+        }
+
         void clearTexture() { m_textureCache.clear(); }
 
         // -- SHADERS
@@ -89,10 +99,24 @@ namespace ce {
 
         void clearShaders() { m_shaderCache.clear(); }
 
+        // -- Font
+        entt::resource<Font> loadFont(std::string_view stringId, const std::string& filepath, int size) {
+
+            auto hashedId = entt::hashed_string(std::string(stringId).c_str()).value();
+
+            auto [it, inserted] = m_fontCache.load(hashedId, filepath, size);
+            return it->second;
+        }
+
+        void clearFonts() { m_fontCache.clear(); }
+
       private:
         using TextureCache = entt::resource_cache<Texture, TextureLoader>;
         using ShaderCache = entt::resource_cache<Shader, ShaderLoader>;
+        using FontCache = entt::resource_cache<Font, FontLoader>;
+
         TextureCache m_textureCache;
         ShaderCache m_shaderCache;
+        FontCache m_fontCache;
     };
 } // namespace ce

@@ -12,7 +12,7 @@ namespace ce {
 
       public:
         Label(const std::string& text, float x, float y, std::shared_ptr<Font> font, const glm::vec4& color)
-            : Renderable2D(glm::vec3(x, y, 0.0), glm::vec2(0.0f), color), text(text), font(font) {}
+            : Renderable2D(glm::vec3(x, y, 0.0), glm::vec2(0.0F), color), text(text), font(font) {}
 
         virtual ~Label() = default;
 
@@ -21,6 +21,6 @@ namespace ce {
             renderer.drawString(font, text, prop2d.position, prop2d.color); // passar o obj Prop2D
         }
 
-        inline void setText(const std::string& text) { this->text = text; }
+        void setText(const std::string& text) { this->text = text; }
     };
 } // namespace ce

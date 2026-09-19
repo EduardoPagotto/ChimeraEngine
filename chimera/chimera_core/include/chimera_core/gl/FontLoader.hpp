@@ -133,9 +133,7 @@ namespace ce {
 
                 SDL_BlitSurface(glyph_cache, nullptr, bigSurface, &rect);
 
-                // char buff[50];
-                // snprintf(buff, sizeof(buff), (const char*)"./tst/caracter_%d.png", characher);
-                // SDL_SaveBMP(glyph_cache, buff);
+                // TextureLoader::CreateFileFromSurface(glyph_cache, "./c.png");
 
                 nextX += glyph_cache->w;
             }
@@ -148,9 +146,9 @@ namespace ce {
             p.minFilter = TexFilter::LINEAR;
             p.magFilter = TexFilter::LINEAR;
 
-            // FIXME: precido disto abaixo ?
-            // Invert_image_texture(bigSurface->pitch, bigSurface->h, bigSurface->pixels);
             std::shared_ptr<Texture> texture = TextureLoader::CreateFromSurface(bigSurface, p);
+
+            // TextureLoader::CreateFileFromTextureGL(texture->id, texture->width, texture->height, "mapaGP.png");
 
             if (sFont != nullptr) {
                 TTF_CloseFont(sFont);
@@ -163,7 +161,7 @@ namespace ce {
                 it = mapGlyphCache.begin();
             }
 
-            // delete bigSurface;
+            // TextureLoader::CreateFileFromSurface(bigSurface, "./mapa.png");
             SDL_DestroySurface(bigSurface);
 
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "[FontLoader] glyphs: %zu", glyphs.size());

@@ -8,6 +8,7 @@
 #include <format>
 #include <memory>
 #include <stdexcept>
+#include <vector>
 
 namespace ce {
 
@@ -89,6 +90,73 @@ namespace ce {
                          std::format("[TextureLoader] Empty id: {} size({} x {})", textureId, width, height).c_str());
 
             return std::make_shared<Texture>(textureId, width, height);
+        }
+
+        static void CreateFileFromSurface(SDL_Surface* surface, const std::string& pathfile) {
+
+            if (IMG_SavePNG(surface, pathfile.c_str())) {
+                SDL_Log("[TextureLoader] Saved: %s (%d x %d)", pathfile.c_str(), surface->w, surface->h);
+            } else {
+                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[TextureLoader] Fail to save: %s, erro: %s ",
+                             pathfile.c_str(), SDL_GetError());
+            }
+        }
+
+        static bool CreateFileFromTextureGL(GLuint textureID, uint32_t width, uint32_t height,
+                                            const std::string& pathfile) {
+            // 1. Alocar buffer para receber os pixels da GPU (RGBA8888 -> 4 bytes por pixel)
+            std::vector<uint8_t> pixels(static_cast<size_t>(width * height * 4));
+
+            // 2. Criar e vincular um Framebuffer temporário para ler a textura
+            GLuint fbo = 0;
+            glGenFramebuffers(1, &fbo);
+            glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureID, 0);
+
+            // Verificar se o FBO foi criado corretamente
+            if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+
+                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[TextureLoader] Falha ao vincular textura ao Framebuffer.");
+
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                glDeleteFramebuffers(1, &fbo);
+                return false;
+            }
+
+            // 3. Ler os pixels da textura para o vetor na RAM
+            glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
+
+            // Limpar o FBO da memória
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glDeleteFramebuffers(1, &fbo);
+
+            // 4. Inverter o buffer verticalmente (OpenGL é Bottom-Up, SDL é Top-Down)
+            std::vector<uint8_t> pixelsInvertidos(width * height * 4);
+            int rowSize = width * 4;
+            for (int y = 0; y < height; ++y) {
+                // Copia a linha de baixo do original para a linha de cima do invertido
+                std::copy(pixels.begin() + (y * rowSize), pixels.begin() + ((y + 1) * rowSize),
+                          pixelsInvertidos.begin() + ((height - 1 - y) * rowSize));
+            }
+
+            // 5. Criar uma SDL_Surface a partir dos pixels invertidos usando a API do SDL3
+            // Nota: O pitch é a largura em bytes (width * 4)
+            SDL_Surface* surface =
+                SDL_CreateSurfaceFrom(width, height, SDL_PIXELFORMAT_RGBA8888, pixelsInvertidos.data(), rowSize);
+
+            if (surface == nullptr) {
+
+                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[TextureLoader] Erro ao criar SDL_Surface: %s",
+                             SDL_GetError());
+
+                return false;
+            }
+
+            TextureLoader::CreateFileFromSurface(surface, pathfile);
+
+            SDL_DestroySurface(surface);
+
+            return true;
         }
 
       private:

@@ -97,10 +97,10 @@ typedef float GLclampf;
 #define GL_CONTEXT_FLAG_DEBUG_BIT      0x00000002
 #define GL_DEBUG_OUTPUT                0x92E0
 #define GL_DEBUG_OUTPUT_SYNCHRONOUS    0x8242
-#define GL_DEBUG_SEVERITY_HIGH         0x9146
-#define GL_DEBUG_SEVERITY_MEDIUM       0x9147
+#define GL_DEBUG_SEVERITY_NOTIFICATION 0x826B // INFO
+#define GL_DEBUG_SEVERITY_HIGH         0x9146 // CRITICAL ERROR
+#define GL_DEBUG_SEVERITY_MEDIUM       0x9147 // WARNING
 #define GL_DEBUG_SEVERITY_LOW          0x9148
-#define GL_DEBUG_SEVERITY_NOTIFICATION 0x826B
 #define GL_VENDOR                      0x1F00
 #define GL_RENDERER                    0x1F01
 #define GL_VERSION                     0x1F02
@@ -370,30 +370,6 @@ inline void CarregarOpenGL() { // NOLINT
     LOAD_PROC(PFNGLDRAWARRAYSINSTANCEDPROC, glDrawArraysInstanced);
     LOAD_PROC(PFNGLHINTPROC, glHint);
     LOAD_PROC(PFNGLDEBUGMESSAGECALLBACKPROC, glDebugMessageCallback_ptr);
-}
-
-// --- Implementação do Callback de Debug do OpenGL ---
-inline void OpenGLDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
-                                const GLchar* message, const void* userParam) {
-
-    // Ignorar notificações comuns de performance para não poluir o terminal
-    if (severity == GL_DEBUG_SEVERITY_NOTIFICATION) {
-        return;
-    }
-
-    std::cerr << "[OpenGL Debug] ";
-    switch (severity) {
-        case GL_DEBUG_SEVERITY_HIGH:
-            std::cerr << "CRÍTICO: ";
-            break;
-        case GL_DEBUG_SEVERITY_MEDIUM:
-            std::cerr << "AVISO IMPORTANTE: ";
-            break;
-        case GL_DEBUG_SEVERITY_LOW:
-            std::cerr << "AVISO: ";
-            break;
-    }
-    std::cerr << message << " (ID: " << id << ")\n";
 }
 
 namespace ce {

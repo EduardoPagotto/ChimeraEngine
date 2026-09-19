@@ -7,7 +7,38 @@
 
 namespace ce {
 
-    CanvasGL::CanvasGL(const std::string& title, int width, int height, bool fullScreen)
+    inline void OpenGLDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
+                                    const GLchar* message, const void* userParam) {
+
+        std::string sev;
+        switch (severity) {
+            case GL_DEBUG_SEVERITY_HIGH:
+                sev = "CRITICAL:";
+                break;
+            case GL_DEBUG_SEVERITY_MEDIUM:
+                sev = "WARN:";
+                break;
+            case GL_DEBUG_SEVERITY_LOW:
+                sev = "INFO:";
+                break;
+            case GL_DEBUG_SEVERITY_NOTIFICATION:
+                sev = "NOTIFICATION:";
+                break;
+            default:
+                sev = "UNKNOWN:";
+                break;
+        }
+
+        SDL_Log("[OpenGL Debug] %s (ID: %d)", sev.c_str(), id);
+
+        // Se for um erro crítico, você pode forçar um breakpoint no debugger
+        if (severity == GL_DEBUG_SEVERITY_HIGH) {
+            __builtin_trap(); // Para Linux/GCC/Clang
+            // __debugbreak();   // Para Windows/MSVC
+        }
+    }
+
+    CanvasGL::CanvasGL(const std::string& title, int width, int height, bool fullScreen) // NOLINT
         : title(title), width(width), height(height), fullScreen(fullScreen), window(nullptr) {
 
         if (!SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "wayland")) {
@@ -61,10 +92,10 @@ namespace ce {
         if (glGetIntegerv != nullptr) {
             GLint flags = 0;
             glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
-            if (flags & GL_CONTEXT_FLAG_DEBUG_BIT) {
-                std::cout << "[Sucesso] O Driver confirmou um contexto com suporte a DEBUG nativo.\n";
+            if ((flags & GL_CONTEXT_FLAG_DEBUG_BIT) != 0) {
+                SDL_Log("[Sucesso] O Driver confirmou um contexto com suporte a DEBUG nativo.");
             } else {
-                std::cout << "[Aviso] O Driver IGNOROU o pedido de contexto de Debug.\n";
+                SDL_Log("[Aviso] O Driver IGNOROU o pedido de contexto de Debug.");
             }
         }
 

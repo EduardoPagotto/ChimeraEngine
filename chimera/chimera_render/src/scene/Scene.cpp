@@ -82,7 +82,7 @@ namespace ce {
     void Scene::onAttach() {
         // Pega o ViewProjection do ECS antes da camera por caussa do vpo
         vpo = registry->ctx().get<std::shared_ptr<ViewProjection>>();
-        auto* ph = registry->ctx().find<std::shared_ptr<IPhysicsControl>>(); // FIXME: ver se nao existir o que retorna
+        auto* ph = registry->ctx().find<std::shared_ptr<PhysicsControl>>(); // FIXME: ver se nao existir o que retorna
 
         if (ph != nullptr) {
             phyCrt.reset(ph->get());

@@ -1,15 +1,14 @@
 #pragma once
-#include "chimera_base/GamePad.hpp"
 #include "chimera_base/IStateMachine.hpp"
-#include "chimera_base/Mouse.hpp"
+#include "chimera_base/InputManager.hpp"
 #include "chimera_core/bullet/Solid.hpp"
-#include "chimera_ecs/Entity.hpp"
+#include "chimera_core/gl/AssetManager.hpp"
 #include "chimera_render/2d/Label.hpp"
 #include "chimera_render/scene/Scene.hpp"
 
 class Game : public ce::IStateMachine {
   public:
-    Game(ce::Scene* scene);
+    Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::Scene> scene);
     virtual ~Game();
 
     virtual void onAttach() override;
@@ -17,12 +16,14 @@ class Game : public ce::IStateMachine {
     virtual void onRender() override;
     virtual void onUpdate(const double& ts) override;
     virtual void onEvent(const SDL_Event& event) override;
+    std::string getName() const override { return "GAME"; }
 
   private:
-    std::shared_ptr<ce::Mouse> mouse;
-    std::shared_ptr<ce::GamePad> gameControl;
+    std::shared_ptr<entt::registry> registry;
+    std::shared_ptr<ce::Scene> scene;
+    std::shared_ptr<ce::InputManager> inputManager;
+    std::shared_ptr<ce::AssetManager> assets;
 
-    ce::Scene* scene;
     ce::Solid* pCorpoRigido;
     ce::Label* lFPS;
     int fps;

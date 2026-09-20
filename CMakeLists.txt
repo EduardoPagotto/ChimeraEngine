@@ -90,7 +90,7 @@ add_subdirectory(samples/helloworld)
 add_subdirectory(samples/simples)
 add_subdirectory(samples/bsptree)
 add_subdirectory(samples/terrain)
-# add_subdirectory(samples/models3)
+add_subdirectory(samples/models3)
 
 # clean
 add_custom_target (clean-all COMMAND rm -rf ${CMAKE_BINARY_DIR}/*

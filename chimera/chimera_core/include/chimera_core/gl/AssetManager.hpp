@@ -108,6 +108,12 @@ namespace ce {
             return it->second;
         }
 
+        entt::resource<Font> getFontFromIndex(int indice) {
+            auto [key, val] = *(m_fontCache | std::ranges::views::drop(indice)).begin();
+
+            return val;
+        }
+
         void clearFonts() { m_fontCache.clear(); }
 
       private:

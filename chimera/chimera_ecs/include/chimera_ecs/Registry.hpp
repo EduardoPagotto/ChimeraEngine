@@ -30,11 +30,13 @@ namespace ce {
             for (auto ent : view) {
                 TagInfo& ee = eRegistry.get<TagInfo>(ent);
                 if (isName) {
-                    if (ee.name == tag)
+                    if (ee.name == tag) {
                         return ent;
+                    }
                 } else {
-                    if (ee.id == tag)
+                    if (ee.id == tag) {
                         return ent;
+                    }
                 }
             }
 
@@ -47,19 +49,21 @@ namespace ce {
             for (auto ent : view) {
                 TagInfo& ee = eRegistry.get<TagInfo>(ent);
                 if (isName) {
-                    if (ee.name == tag)
+                    if (ee.name == tag) {
                         return eRegistry.get<T>(ent);
+                    }
                 } else {
-                    if (ee.id == tag)
+                    if (ee.id == tag) {
                         return eRegistry.get<T>(ent);
+                    }
                 }
             }
 
             if (isName) {
                 throw std::invalid_argument(std::string("name not found: ") + tag);
-            } else {
-                throw std::invalid_argument(std::string("id not found: ") + tag);
             }
+
+            throw std::invalid_argument(std::string("id not found: ") + tag);
         }
     };
 

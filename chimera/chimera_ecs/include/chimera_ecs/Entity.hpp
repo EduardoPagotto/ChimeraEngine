@@ -29,7 +29,7 @@ namespace ce {
         }
 
         template <typename T>
-        const bool hasComponent() const {
+        bool hasComponent() const {
             return g_registry.get().all_of<T>(handle);
         }
 

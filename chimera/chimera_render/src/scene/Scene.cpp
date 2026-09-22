@@ -42,10 +42,10 @@ namespace ce {
         }
 
         // Define o framebuffer de desenho
-        FrameBufferSpecification& fbSpec = eRenderBuferSpec.getComponent<FrameBufferSpecification>();
+        FrameBufferSpecification& fbSpec = eRenderBuferSpec.getComponent<FrameBufferSpecification>(registry.get());
         fbSpec.width = width;
         fbSpec.height = height;
-        auto& sc = eRenderBuferSpec.getComponent<ShaderComponent>();
+        auto& sc = eRenderBuferSpec.getComponent<ShaderComponent>(registry.get());
         return make_shared<RenderBuffer>(initW, initH, std::make_shared<FrameBuffer>(fbSpec), sc.shader);
     }
 
@@ -96,14 +96,14 @@ namespace ce {
         int tot_mesh = 0;
 
         // lista as tags nas entidades registradas
-        for (auto entityID : g_registry.get().view<entt::entity>()) {
+        for (auto entityID : registry.get()->view<entt::entity>()) {
             Entity entity(entityID);
-            auto& tc = entity.getComponent<TagInfo>();
+            auto& tc = entity.getComponent<TagInfo>(registry.get());
             SDL_Log("Tag: %s Id: %s", tc.name.c_str(), tc.id.c_str());
 
             if (tc.name == "TileText") {
-                CameraComponent& cCam = entity.getComponent<CameraComponent>();
-                auto& sc = entity.getComponent<ShaderComponent>();
+                CameraComponent& cCam = entity.getComponent<CameraComponent>(registry.get());
+                auto& sc = entity.getComponent<ShaderComponent>(registry.get());
                 // TileComponent& tc = entity.addComponent<TileComponent>();
 
                 // TODO: passar tile camera para smart
@@ -111,24 +111,24 @@ namespace ce {
             }
 
             // Se for um mesh inicializar componente
-            if (entity.hasComponent<MeshComponent>()) {
-                MeshComponent& mesh = entity.getComponent<MeshComponent>();
+            if (entity.hasComponent<MeshComponent>(registry.get())) {
+                MeshComponent& mesh = entity.getComponent<MeshComponent>(registry.get());
 
                 // Inicializa Materiais
-                if (entity.hasComponent<MaterialComponent>()) {
-                    MaterialComponent& material = entity.getComponent<MaterialComponent>();
+                if (entity.hasComponent<MaterialComponent>(registry.get())) {
+                    MaterialComponent& material = entity.getComponent<MaterialComponent>(registry.get());
                     if (!material.material->isValid()) {
                         material.material->init();
                     }
                 } else {
-                    MaterialComponent& material = entity.addComponent<MaterialComponent>();
+                    MaterialComponent& material = entity.addComponent<MaterialComponent>(registry.get());
                     material.material = std::make_shared<Material>();
                     material.material->setDefaultEffect();
                     material.material->init();
                 }
 
                 // Cria componentes renderizaveis
-                Renderable3dComponent& rc = entity.addComponent<Renderable3dComponent>();
+                Renderable3dComponent& rc = entity.addComponent<Renderable3dComponent>(registry.get());
                 if (mesh.type == MeshType::SIMPLE) {
                     rc.renderable = new RenderableMesh(mesh.mesh);
                 } else if (mesh.type == MeshType::ARRAY) {
@@ -139,9 +139,9 @@ namespace ce {
 
                 auto [min, max, size] = vertexBoundaries(mesh.mesh->vertex);
 
-                if (entity.hasComponent<TransComponent>()) {
+                if (entity.hasComponent<TransComponent>(registry.get())) {
                     // Ajuste de fisica se existir
-                    TransComponent& tc = entity.getComponent<TransComponent>();
+                    TransComponent& tc = entity.getComponent<TransComponent>(registry.get());
                     if (tc.solid) {
                         // Cria rigidBody iniciaza transformacao e inicializa shape se ele nao existir
                         Solid* solid = (Solid*)tc.trans;
@@ -162,10 +162,11 @@ namespace ce {
             }
 
             // Se existir particulas
-            if (entity.hasComponent<EmitterComponent>()) {
-                EmitterComponent& ec = entity.getComponent<EmitterComponent>();
-                if (!entity.hasComponent<RenderableParticlesComponent>()) {
-                    RenderableParticlesComponent& particleSys = entity.addComponent<RenderableParticlesComponent>();
+            if (entity.hasComponent<EmitterComponent>(registry.get())) {
+                EmitterComponent& ec = entity.getComponent<EmitterComponent>(registry.get());
+                if (!entity.hasComponent<RenderableParticlesComponent>(registry.get())) {
+                    RenderableParticlesComponent& particleSys =
+                        entity.addComponent<RenderableParticlesComponent>(registry.get());
                     particleSys.enable = true;
                     RenderableParticles* p = new RenderableParticles();
                     std::shared_ptr<ParticleContainer> pc = ec.emitter->getContainer(0); // FIXME: melhorar!!!!
@@ -176,12 +177,12 @@ namespace ce {
                 }
             }
 
-            if (entity.hasComponent<FrameBufferSpecification>()) {
-                FrameBufferSpecification& fbSpec = entity.getComponent<FrameBufferSpecification>();
+            if (entity.hasComponent<FrameBufferSpecification>(registry.get())) {
+                FrameBufferSpecification& fbSpec = entity.getComponent<FrameBufferSpecification>(registry.get());
                 if (tc.name == "shadow01") { // init shadow data
 
-                    auto& sc = entity.getComponent<ShaderComponent>();
-                    CameraComponent& cc = entity.getComponent<CameraComponent>();
+                    auto& sc = entity.getComponent<ShaderComponent>(registry.get());
+                    CameraComponent& cc = entity.getComponent<CameraComponent>(registry.get());
                     cc.camera->setViewportSize(fbSpec.width, fbSpec.height);
                     shadowData.shader = sc.shader; // entity.getComponent<Shader>();
                     shadowData.lightProjection = cc.camera->getProjection();
@@ -197,11 +198,11 @@ namespace ce {
         this->onViewportResize(canvas->getWidth(), canvas->getHeight());
 
         { // Registra Camera controllers ViewProjection deve ser localizado acima
-            auto view1 = g_registry.get().view<CameraComponent>();
+            auto view1 = registry.get()->view<CameraComponent>();
             for (auto entity : view1) {
                 Entity e(entity);
 
-                auto& cc = e.getComponent<CameraComponent>();
+                auto& cc = e.getComponent<CameraComponent>(registry.get());
                 if (cc.camKind == CamKind::FPS) {
                     layers.pushState(std::make_shared<CameraControllerFPS>(registry, e));
                 } else if (cc.camKind == CamKind::ORBIT) {
@@ -238,7 +239,7 @@ namespace ce {
 
         createRenderBuffer(vpo->getSize(), width, height);
 
-        auto view = g_registry.get().view<CameraComponent>();
+        auto view = registry.get()->view<CameraComponent>();
         for (auto entity : view) {
             auto& cameraComponent = view.get<CameraComponent>(entity);
             if (!cameraComponent.fixedAspectRatio) {
@@ -287,10 +288,10 @@ namespace ce {
 
         renderer.begin(activeCam, vpo, nullptr);
         {
-            auto lightViewEnt = g_registry.get().view<LightComponent>();
+            auto lightViewEnt = registry.get()->view<LightComponent>();
             for (auto entity : lightViewEnt) {
                 auto& lc = lightViewEnt.get<LightComponent>(entity);
-                auto& tc = g_registry.get().get<TransComponent>(entity); // Lento
+                auto& tc = registry.get()->get<TransComponent>(entity); // Lento
                 if (lc.global) {
                     // FIXME: usar o direcionm depois no segundo parametro
                     glm::mat4 lightView =
@@ -299,7 +300,7 @@ namespace ce {
                 }
             }
 
-            auto group = g_registry.get().group<TransComponent, Renderable3dComponent>();
+            auto group = registry.get()->group<TransComponent, Renderable3dComponent>();
             for (auto entity : group) {
                 auto [tc, rc] = group.get<TransComponent, Renderable3dComponent>(entity);
 
@@ -320,15 +321,15 @@ namespace ce {
     }
 
     void Scene::execEmitterPass(IRenderer3d& renderer) {
-        auto view = g_registry.get().view<RenderableParticlesComponent>();
+        auto view = registry.get()->view<RenderableParticlesComponent>();
         for (auto entity : view) {
             RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
             Renderable3D* renderable = rc.renderable;
 
             Entity e(entity);
-            TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
-            auto& sc = e.getComponent<ShaderComponent>();
-            MaterialComponent& mc = e.getComponent<MaterialComponent>();
+            TransComponent& tc = e.getComponent<TransComponent>(registry.get()); // FIXME: group this!!!
+            auto& sc = e.getComponent<ShaderComponent>(registry.get());
+            MaterialComponent& mc = e.getComponent<MaterialComponent>(registry.get());
 
             RenderCommand command;
             command.transform = tc.trans->translateSrc(origem->getPosition());
@@ -348,7 +349,7 @@ namespace ce {
     void Scene::execRenderPass(IRenderer3d& renderer) {
         // ref:
         // https://github.com/skypjack/entt/wiki/Crash-Course:-entity-component-system/465d90e0f5961adc460cd9d1e9358370987fbcd3#views-and-groups
-        auto group = g_registry.get().view<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>();
+        auto group = registry.get()->view<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>();
         for (auto entity : group) {
             auto [sc, mc, tc, rc] =
                 group.get<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
@@ -394,12 +395,13 @@ namespace ce {
             }
 
             // data load lights
-            auto lightView = g_registry.get().view<LightComponent>();
+            auto lightView = registry.get()->view<LightComponent>();
             for (auto entity : lightView) {
                 auto& lc = lightView.get<LightComponent>(entity);
-                auto& tc = g_registry.get().get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
-                if (lc.global)                                           // biding light prop
+                auto& tc = registry.get()->get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
+                if (lc.global) {                                        // biding light prop
                     lc.light->bindLight(renderer.uboQueue(), tc.trans->getMatrix());
+                }
             }
 
             renderBuffer->bind(); // bind renderbuffer to draw we're not using the stencil buffer now
@@ -425,7 +427,7 @@ namespace ce {
             if (verbose > 0) {      // RENDER DEBUG
                 if (verbose == 1) { // DEBUG OCTREE
 
-                    if (dl.valid() == false) {
+                    if (!dl.valid()) {
                         std::unordered_map<GLenum, std::string> shadeData;
                         shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
                         shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
@@ -469,7 +471,7 @@ namespace ce {
                     renderLines.uboQueue().insert(std::make_pair("projection", Uniform(activeCam->getProjection())));
                     renderLines.uboQueue().insert(std::make_pair("view", Uniform(vpo->getSel().view)));
 
-                    auto group = g_registry.get().group<TransComponent, Renderable3dComponent>();
+                    auto group = registry.get()->group<TransComponent, Renderable3dComponent>();
                     for (auto entity : group) {
                         auto [tc, rc] = group.get<TransComponent, Renderable3dComponent>(entity);
 
@@ -478,13 +480,13 @@ namespace ce {
                         rc.renderable->submit(command, renderLines);
                     }
 
-                    auto view = g_registry.get().view<RenderableParticlesComponent>();
+                    auto view = registry.get()->view<RenderableParticlesComponent>();
                     for (auto entity : view) {
                         RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
                         Renderable3D* renderable = rc.renderable;
 
                         Entity e(entity);
-                        TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
+                        TransComponent& tc = e.getComponent<TransComponent>(registry.get()); // FIXME: group this!!!
 
                         RenderCommand command;
                         command.transform = tc.trans->translateSrc(origem->getPosition());

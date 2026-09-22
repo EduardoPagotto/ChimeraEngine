@@ -29,10 +29,10 @@ namespace ce {
 
                 std::string entName = nFb.attribute("name").value();
                 std::string entId = nFb.attribute("id").value();
-                Entity entity(entName, entId);
+                Entity entity = Entity::Create(registry.get(), entName, entId);
 
                 [[maybe_unused]]
-                FrameBufferSpecification& fb = entity.addComponent<FrameBufferSpecification>();
+                FrameBufferSpecification& fb = entity.addComponent<FrameBufferSpecification>(registry.get());
                 for (pugi::xml_node next = nFb.first_child(); next; next = next.next_sibling()) {
                     std::string name = next.name();
                     std::string url = next.attribute("url").value();

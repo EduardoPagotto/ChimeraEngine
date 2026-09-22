@@ -7,7 +7,7 @@ namespace ce {
 
         std::string nn = node.name();
 
-        CameraComponent& cc = entity.getComponent<CameraComponent>();
+        CameraComponent& cc = entity.getComponent<CameraComponent>(registry.get());
         if (pugi::xml_node orbital = getExtra(node, "orbital"); orbital != nullptr) {
 
             cc.camKind = CamKind::ORBIT;
@@ -40,7 +40,7 @@ namespace ce {
 
     void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) {
 
-        CameraComponent& cc = entity.addComponent<CameraComponent>();
+        CameraComponent& cc = entity.addComponent<CameraComponent>(registry.get());
         cc.tag.id = nodeCam.attribute("id").value();
         cc.tag.name = nodeCam.attribute("name").value();
         // cc.tag.serial = Collada::getNewSerial();
@@ -68,8 +68,8 @@ namespace ce {
                     cc.camera = std::make_shared<CameraOrtho>(xmag, ymag, znear, zfar);
                 }
 
-                if (entity.hasComponent<TransComponent>()) {
-                    TransComponent& trans = entity.getComponent<TransComponent>();
+                if (entity.hasComponent<TransComponent>(registry.get())) {
+                    TransComponent& trans = entity.getComponent<TransComponent>(registry.get());
                     cc.camera->setPosition(trans.trans->getPosition());
                 }
             }

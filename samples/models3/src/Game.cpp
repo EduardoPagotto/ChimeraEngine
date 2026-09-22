@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include "chimera_base/event.hpp"
+#include "chimera_ecs/Entity.hpp"
 #include "chimera_ecs/TransComponent.hpp"
 #include "chimera_render/2d/Group.hpp"
 #include "chimera_render/2d/Sprite.hpp"
@@ -58,7 +59,8 @@ void Game::onAttach() {
 
     using namespace ce;
     // Localiza objeto como o primario
-    TransComponent& tc = g_registry.findComponent<TransComponent>("Zoltan");
+    TransComponent& tc = Entity::FindComponent<TransComponent>(registry.get(), "Zoltan");
+
     pCorpoRigido = (Solid*)tc.trans;
 
     auto font = assets->getFontFromIndex(0).handle();
@@ -97,28 +99,28 @@ void Game::onUpdate(const double& ts) {
         return;
     }
 
-    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_UP)) {
-        pCorpoRigido->applyForce(glm::vec3(10.0, 0.0, 0.0));
+    if (this->inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_UP)) {
+        pCorpoRigido->applyForce(glm::vec3(20.0, 0.0, 0.0));
     }
 
-    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_DOWN)) {
-        pCorpoRigido->applyForce(glm::vec3(-10.0, 0.0, 0.0));
+    if (this->inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_DOWN)) {
+        pCorpoRigido->applyForce(glm::vec3(-20.0, 0.0, 0.0));
     }
 
-    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_LEFT)) {
-        pCorpoRigido->applyForce(glm::vec3(0.0, 10.0, 0.0));
+    if (this->inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_LEFT)) {
+        pCorpoRigido->applyForce(glm::vec3(0.0, 20.0, 0.0));
     }
 
-    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_RIGHT)) {
-        pCorpoRigido->applyForce(glm::vec3(0.0, -10.0, 0.0));
+    if (this->inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_RIGHT)) {
+        pCorpoRigido->applyForce(glm::vec3(0.0, -20.0, 0.0));
     }
 
     if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_A)) {
-        pCorpoRigido->applyTorc(glm::vec3(0.0, 0.0, 10.0));
+        pCorpoRigido->applyTorc(glm::vec3(0.0, 0.0, 20.0));
     }
 
     if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_S)) {
-        pCorpoRigido->applyTorc(glm::vec3(0.0, 0.0, -10.0));
+        pCorpoRigido->applyTorc(glm::vec3(0.0, 0.0, -20.0));
     }
 
     if (pCorpoRigido != nullptr) {

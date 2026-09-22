@@ -2,6 +2,7 @@
 #include "chimera_collada/ColladaCam.hpp"
 #include "chimera_collada/ColladaEffect.hpp"
 #include "chimera_ecs/CameraComponent.hpp"
+#include "chimera_ecs/Entity.hpp"
 #include "chimera_ecs/ShaderComponent.hpp"
 
 namespace ce {
@@ -15,7 +16,8 @@ namespace ce {
 
                 for (pugi::xml_node nTile = nTiles.first_child(); nTile; nTile = nTile.next_sibling()) {
 
-                    Entity entity(nTile.attribute("name").value(), nTile.attribute("id").value());
+                    Entity entity =
+                        Entity::Create(registry.get(), nTile.attribute("name").value(), nTile.attribute("id").value());
 
                     for (pugi::xml_node node = nTile.first_child(); node; node = node.next_sibling()) {
 
@@ -35,8 +37,8 @@ namespace ce {
                     }
 
                     [[maybe_unused]]
-                    CameraComponent& cCam = entity.getComponent<CameraComponent>();
-                    auto& shaderCom = entity.getComponent<ShaderComponent>();
+                    CameraComponent& cCam = entity.getComponent<CameraComponent>(registry.get());
+                    auto& shaderCom = entity.getComponent<ShaderComponent>(registry.get());
                     std::shared_ptr<Shader> shader = shaderCom.shader;
                 }
             }

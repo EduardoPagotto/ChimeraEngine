@@ -58,15 +58,15 @@ namespace ce {
             }
 
             target.erase(0, 1); // remove #
-            auto view = g_registry.get().view<TagInfo>();
+            auto view = registry.get()->view<TagInfo>();
             for (auto entity : view) {
                 // Pega a chave (mesh)
                 TagInfo& tag = view.get<TagInfo>(entity);
                 if (tag.id == target) {
                     Entity ent2(entity);
-                    TransComponent& tc = ent2.getComponent<TransComponent>();
+                    TransComponent& tc = ent2.getComponent<TransComponent>(registry.get());
                     [[maybe_unused]]
-                    MeshComponent& mc = ent2.getComponent<MeshComponent>();
+                    MeshComponent& mc = ent2.getComponent<MeshComponent>(registry.get());
                     Solid* solid = new Solid(pc.get(), tc.trans->getMatrix(), ent2); // nova transformacao
                     delete tc.trans;                                                 // deleta objeto de transformacao
                     tc.trans = nullptr;                                              // limpa ponteiro

@@ -39,7 +39,7 @@ namespace ce {
 
         void setNoze(const float& noze) {
             this->noze = noze;
-            size = (noze == 0.0f) ? 1 : 2;
+            size = (noze == 0.0F) ? 1 : 2;
         }
 
         void setIndex(const uint8_t s) { indice = (s >= 0 && s < 2) ? s : 0; }

@@ -11,7 +11,7 @@ namespace ce {
         setChildParam(nEmiter, "maindir", dir);
         setChildParam(nEmiter, "spread", spread);
 
-        EmitterComponent& ec = entity.addComponent<EmitterComponent>();
+        EmitterComponent& ec = entity.addComponent<EmitterComponent>(registry.get());
         ec.tag.id = id;
         ec.tag.name = name;
         ec.emitter = new EmitterFont(dir, spread); // EF to R

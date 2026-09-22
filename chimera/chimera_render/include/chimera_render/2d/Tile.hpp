@@ -17,7 +17,5 @@ namespace ce {
         virtual void onUpdate(const double& ts) override {}
         virtual void onEvent(const SDL_Event& event) override {}
         virtual void onRender() override { Layer::onRender(); }
-
-        std::string getName() const override { return "Tile"; }
     };
 } // namespace ce

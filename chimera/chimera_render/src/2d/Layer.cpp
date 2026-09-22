@@ -6,7 +6,7 @@ namespace ce {
 
     Layer::Layer(IRenderer2D* renderer, std::shared_ptr<Shader> shader, std::shared_ptr<Camera> camera,
                  const std::string& name)
-        : shader(shader), camera(camera), renderer(renderer) {
+        : shader(shader), camera(camera), renderer(renderer), name(name) {
 
         GLint texIDs[] = {0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15,
                           16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
@@ -18,8 +18,9 @@ namespace ce {
 
     Layer::~Layer() {
 
-        for (int i = 0; i < renderables.size(); i++)
+        for (int i = 0; i < renderables.size(); i++) {
             delete renderables[i];
+        }
     }
 
     void Layer::onRender() {
@@ -32,8 +33,9 @@ namespace ce {
         //  rc.uniforms["textures"] = Uniform(32, texIDs);
         renderer->setCommandRender(&rc);
 
-        for (auto renderable : renderables)
+        for (auto* renderable : renderables) {
             renderable->submit(*renderer);
+        }
 
         renderer->end();
         renderer->flush();

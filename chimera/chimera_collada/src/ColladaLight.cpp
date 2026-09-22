@@ -3,7 +3,7 @@
 
 namespace ce {
     void ColladaLight::create(Entity& entity, pugi::xml_node nodeLight) { // FIXME: preciso mesmo da entidade ???
-        LightComponent& lc = entity.addComponent<LightComponent>();
+        LightComponent& lc = entity.addComponent<LightComponent>(registry.get());
         lc.light = std::make_shared<Light>();
         lc.tag.id = nodeLight.attribute("id").value();
         lc.tag.name = nodeLight.attribute("name").value();

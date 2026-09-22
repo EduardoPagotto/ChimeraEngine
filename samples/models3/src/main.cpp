@@ -33,7 +33,7 @@ int main(int argn, char** argv) {
         std::shared_ptr<entt::registry> registry = std::make_shared<entt::registry>();
         registry->ctx().emplace<std::shared_ptr<ICanva>>(std::make_shared<CanvasGL>("Simples", 1800, 600, false));
         registry->ctx().emplace<std::shared_ptr<InputManager>>(std::make_shared<InputManager>());
-        registry->ctx().emplace<std::shared_ptr<ViewProjection>>(std::make_shared<ViewProjection>(0.5F));
+        registry->ctx().emplace<std::shared_ptr<ViewProjection>>(std::make_shared<ViewProjection>(0.0F)); // != 0 HDM
         registry->ctx().emplace<std::shared_ptr<AssetManager>>(std::make_shared<AssetManager>());
 
         // // 1. Criando uma entidade comum

@@ -5,7 +5,7 @@
 namespace ce {
     void ColladaMesh::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node nMesh) {
 
-        MeshComponent& eMesh = entity.addComponent<MeshComponent>();
+        MeshComponent& eMesh = entity.addComponent<MeshComponent>(registry.get());
         eMesh.mesh = new Mesh();
         eMesh.tag.id = id;
         eMesh.tag.name = name;

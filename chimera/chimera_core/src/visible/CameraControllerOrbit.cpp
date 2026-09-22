@@ -8,7 +8,6 @@ namespace ce {
     CameraControllerOrbit::CameraControllerOrbit(std::shared_ptr<entt::registry> registry, Entity entity)
         : entity(entity), registry(registry) {
 
-        // FIXME: ATENCAO!!!!! ainda nao existe no main!!!!!
         this->vp = registry->ctx().get<std::shared_ptr<ViewProjection>>();
         this->inputManager = registry->ctx().get<std::shared_ptr<InputManager>>();
     }
@@ -16,7 +15,7 @@ namespace ce {
     CameraControllerOrbit::~CameraControllerOrbit() {}
 
     void CameraControllerOrbit::onAttach() {
-        auto& cc = entity.getComponent<CameraComponent>();
+        auto& cc = entity.getComponent<CameraComponent>(registry.get());
         camera = cc.camera;
         up = cc.up;
         // pitch = cc.pitch;

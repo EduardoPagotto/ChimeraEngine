@@ -7,7 +7,7 @@
 namespace ce {
     void ColladaWaveFront::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node geo) {
 
-        MeshComponent& eMesh = entity.addComponent<MeshComponent>();
+        MeshComponent& eMesh = entity.addComponent<MeshComponent>(registry.get());
         eMesh.mesh = new Mesh();
         eMesh.tag.id = id;
         eMesh.tag.name = name;
@@ -15,7 +15,7 @@ namespace ce {
         eMesh.type = getMeshTypeFromString(geo.attribute("partition").value());
         std::string target = geo.attribute("target").value();
 
-        MaterialComponent& eMaterial = entity.addComponent<MaterialComponent>();
+        MaterialComponent& eMaterial = entity.addComponent<MaterialComponent>(registry.get());
         eMaterial.tag.id = eMesh.tag.id + "_mat";
         eMaterial.tag.name = eMesh.tag.name + "_mat";
         eMaterial.material = std::make_shared<Material>();

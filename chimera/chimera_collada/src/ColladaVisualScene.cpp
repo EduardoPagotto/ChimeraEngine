@@ -12,7 +12,7 @@ namespace ce {
 
         std::string entName = node.attribute("name").value();
         std::string entId = node.attribute("id").value();
-        Entity entity(entName, entId);
+        Entity entity = Entity::Create(registry.get(), entName, entId);
         for (pugi::xml_node n = node.first_child(); n; n = n.next_sibling())
             nodeData(n, entity);
     }
@@ -24,7 +24,7 @@ namespace ce {
         if (name == "matrix") {
 
             if (std::string sid = n.attribute("sid").value(); sid == "transform") {
-                TransComponent& tc = entity.addComponent<TransComponent>();
+                TransComponent& tc = entity.addComponent<TransComponent>(registry.get());
                 tc.trans = new Transform(textToMat4(n.text().as_string()));
             }
 

@@ -147,11 +147,18 @@
 		"cmake.useCMakePresets": "never",
 		"cmake.buildDirectory": "${workspaceFolder}/build",
 		"clangd.arguments": [
-			"--background-index",
-			"--compile-commands-dir=${workspaceFolder}/build", // Aponta para a pasta onde o CMake gera o compile_commands.json
 			"--clang-tidy",
+			"--completion-style=detailed",
+			"--background-index",
+			// "--header-insertion=never",
+			"--compile-commands-dir=${workspaceFolder}/build", // Aponta para a pasta onde o CMake gera o compile_commands.json
 			//"--header-insertion=iwyu"
 		],
+		// "editor.codeActionsOnSave": {
+        // 	"source.fixAll.clang-tidy": "explicit"
+		// },
+		// "C_Cpp.errorSquiggles": "disabled",
+    	// "C_Cpp.intelliSenseEngine": "disabled",
 		"editor.formatOnSave": true, // Formata automaticamente ao salvar
 		"editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
 		"clangd.onConfigChanged": "restart",

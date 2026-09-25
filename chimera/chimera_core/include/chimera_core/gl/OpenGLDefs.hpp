@@ -385,8 +385,9 @@ namespace ce {
         }
 
         ~DepthFuncSetter() {
-            if (changed)
+            if (changed) {
                 glDepthFunc(oldSetting);
+            }
         }
 
       private:
@@ -399,21 +400,23 @@ namespace ce {
         BinaryStateEnable(const GLenum& attr, const GLboolean& newState) : changed(false), attr(attr) {
             glGetBooleanv(attr, &oldState);
             if (newState != oldState) {
-                if (newState == GL_TRUE)
+                if (newState == GL_TRUE) {
                     glEnable(attr);
-                else
+                } else {
                     glDisable(attr);
+                }
 
                 changed = true;
             }
         }
 
         ~BinaryStateEnable() {
-            if (changed == true) {
-                if (oldState == GL_TRUE)
+            if (changed) {
+                if (oldState == GL_TRUE) {
                     glEnable(attr);
-                else
+                } else {
                     glDisable(attr);
+                }
             }
         }
 

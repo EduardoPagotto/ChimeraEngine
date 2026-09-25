@@ -21,22 +21,21 @@ namespace ce {
     //     indices[a + 2] = face.z;
     // }
     //
-    // struct Vertex3D {
-    //     glm::vec3 pos{0.0};
-    //     glm::vec3 nor{0.0};
-    //     glm::vec2 tex{0.0};
+    // struct Vertex {
+    //     glm::vec3 point{0.0};
+    //     glm::vec3 normal{0.0};
+    //     glm::vec2 uv{0.0};
     // };
 
-    // struct MeshPart {
+    // struct SubMesh {
     //     AABB aabb;
-    //     std::vector<uint32_t> indices;
-    //     std::optional<size_t> materialIndex;
+    //     std::vector<uint32_t> indexes;
+    //     std::optional<uint32_t> mIndexes;
     // };
 
     // struct CompleteMesh {
-    //     std::string name;
-    //     std::vector<Vertex3D> vertices;
-    //     std::vector<MeshPart> parts; // Each part represents a glTF primitive
+    //     std::vector<Vertex> vertex;
+    //     std::vector<SubMesh> subs; // Each part represents a glTF primitive
     // };
 
     struct VertexData {

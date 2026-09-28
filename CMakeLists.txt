@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 4.3.0)
+set(CMAKE_VERBOSE_MAKEFILE ON)
 
 PROJECT(ChimeraEngine VERSION 0.1.0 LANGUAGES CXX)
 

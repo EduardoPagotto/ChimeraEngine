@@ -1,5 +1,13 @@
 # Habilita checagens baseadas no LLVM, Google e melhorias modernas
-Checks: '-*,bugprone-*,-bugprone-easily-swappable-parameters,readability-*,-readability-identifier-length,-performance-*,-google-explicit-constructor,-modernize-use-trailing-return-type,-readability-magic-numbers,-cppcoreguidelines-avoid-magic-numbers'
+Checks: '-*,
+         readability-identifier-naming,
+         modernize-use-ranges,
+         modernize-use-std-format,
+         modernize-use-starts-ends-with,
+         modernize-use-equals-default,
+         modernize-use-equals-delete,
+         performance-move-const-object,
+         bugprone-shared-ptr-array-mismatch'
 
 ExtraArgsBefore:
   - -std=c++20
@@ -16,16 +24,34 @@ CheckOptions:
     value: 'false'
   - key:   modernize-use-using
     value: 'true'
-  - key: readability-identifier-naming.ClassMethodCase
-    value: CamelCase
-  - key: readability-identifier-naming.MethodCase
-    value: camelBack
-
-#  - key:   readability-identifier-naming.VariableCase
-#    value: camelBack
-#  - key:   readability-identifier-naming.FunctionCase
-#    value: camelBack
-#  - key:   readability-identifier-naming.StaticMemberFunctionCase
-#    value: CamelCase
-#  - key:   readability-identifier-naming.VariableMinLength
-#    value: '1'
+  - key:   readability-identifier-naming.VariableMinLength
+    value: '1'
+  # Classes (Padrão PascalCase/CamelCase ex: MyClass)
+  - key:             readability-identifier-naming.ClassCase
+    value:           CamelCase
+  # Concepts do C++20 (A Standard Library usa snake_case, ex: std::floating_point)
+  - key:             readability-identifier-naming.ConceptCase
+    value:           snake_case
+  # Funções Globais e Estáticas (Estilo std::, ex: do_something)
+  - key:             readability-identifier-naming.FunctionCase
+    value:           snake_case
+  # Ativa a checagem para membros (atributos) de classe privados
+  - key: readability-identifier-naming.PrivateMemberCase
+    value: 'snake_case'
+  # Força o sufixo de sublinhado (_) no final do nome
+  - key: readability-identifier-naming.PrivateMemberSuffix
+    value: '_'
+  # Força Snake case nos metodos
+  - key:             readability-identifier-naming.MethodCase
+    value:           snake_case
+  - key:             readability-identifier-naming.PrivateMethodCase
+    value:           snake_case
+  - key:             readability-identifier-naming.ProtectedMethodCase
+    value:           snake_case
+  - key:             readability-identifier-naming.PublicMethodCase
+    value:           snake_case
+  # Variáveis Locais e Parâmetros (Altamente recomendado em snake_case)
+  - key:             readability-identifier-naming.ParameterCase
+    value:           snake_case
+  - key:             readability-identifier-naming.VariableCase
+    value:           snake_case

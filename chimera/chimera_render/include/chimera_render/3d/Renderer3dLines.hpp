@@ -6,11 +6,6 @@
 namespace ce {
 
     class Renderer3dLines : public IRenderer3d {
-
-      private:
-        DrawLine drawLine;
-        Frustum frustum;
-
       public:
         Renderer3dLines() noexcept = default;
 
@@ -25,13 +20,17 @@ namespace ce {
 
         virtual void flush() override;
 
-        bool valid() noexcept { return drawLine.valid(); }
+        bool valid() noexcept { return draw_line_.valid(); }
 
-        void destroy() noexcept { drawLine.destroy(); };
+        void destroy() noexcept { draw_line_.destroy(); };
 
         void create(std::shared_ptr<Shader> shader, const uint32_t& sizeBuffer) noexcept {
-            drawLine.create(shader, sizeBuffer);
+            draw_line_.create(shader, sizeBuffer);
         };
+
+      private:
+        DrawLine draw_line_;
+        Frustum frustum_;
     };
 
 } // namespace ce

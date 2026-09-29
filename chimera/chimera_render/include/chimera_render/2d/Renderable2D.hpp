@@ -7,10 +7,6 @@
 namespace ce {
 
     class Renderable2D : public IRenderable2D {
-
-      protected:
-        Prop2D prop2d;
-
       public:
         Renderable2D(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color) {
             prop2d.position = pos;
@@ -43,5 +39,8 @@ namespace ce {
         }
 
         const Prop2D& getProp() const { return prop2d; }
+
+      protected:
+        Prop2D prop2d;
     };
 } // namespace ce

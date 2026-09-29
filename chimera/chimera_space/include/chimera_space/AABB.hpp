@@ -18,13 +18,6 @@ namespace ce {
     };
 
     class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
-      protected:
-        std::array<glm::vec3, 8> vertex;
-
-      private:
-        glm::vec3 position{0.0F};
-        glm::vec3 size{0.0F};
-
       public:
         explicit AABB() noexcept = default;
         explicit AABB(const AABB& _cpy) noexcept = default;
@@ -34,9 +27,9 @@ namespace ce {
 
         bool visible(const Frustum& _frustum) const noexcept { return _frustum.aabbVisible(vertex); }
 
-        glm::vec3 getPosition() const { return position; }
+        glm::vec3 getPosition() const { return position_; }
 
-        glm::vec3 getSize() const { return size; }
+        glm::vec3 getSize() const { return size_; }
 
         void setPosition(const glm::vec3& pos, const glm::vec3& size) noexcept {
             const glm::vec3 halfV = (size / 2.0F);
@@ -54,8 +47,8 @@ namespace ce {
             vertex[6] = glm::vec3(min.x, max.y, max.z); // AabbBondery::TNW 6
             vertex[7] = max; // glm::vec3(max.x, max.y, max.z); // AabbBondery::TNE 7 Maximal point (back)
 
-            this->size = getSizeMinMax(min, max);
-            this->position = min + (this->size / 2.0F);
+            this->size_ = getSizeMinMax(min, max);
+            this->position_ = min + (this->size_ / 2.0F);
         }
 
         bool intersects(const AABB& val) const noexcept {
@@ -88,5 +81,12 @@ namespace ce {
 
         // FIXME: dot normal posicao para distancia (calcula do AABB em relacao ao frustum)
         // float distance(const Frustum& _frustum) const noexcept { return _frustum.AABBDistance(vertex); }
+
+      protected:
+        std::array<glm::vec3, 8> vertex;
+
+      private:
+        glm::vec3 position_{0.0F};
+        glm::vec3 size_{0.0F};
     };
 } // namespace ce

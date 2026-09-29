@@ -5,14 +5,14 @@
 
 namespace ce {
 
-    RenderableBsp::RenderableBsp(Mesh& mesh) : Renderable3D(), totIndex(0) {
+    RenderableBsp::RenderableBsp(Mesh& mesh) : Renderable3D(), tot_index_(0) {
 
         Mesh meshFinal;
         meshReindex(mesh, meshFinal);
 
         BspTree bspTree;
         std::vector<TrisIndex> vTris;
-        root = bspTree.create(meshFinal, vTris);
+        root_ = bspTree.create(meshFinal, vTris);
 
         // create VAO and VBO
         vao = std::make_shared<VertexArray>();
@@ -41,14 +41,14 @@ namespace ce {
                 std::make_shared<IndexBuffer>((uint32_t*)&trisIndex[0], trisIndex.size() * 3);
 
             Renderable3D* r = new RenderableIBO(vao, ibo, AABB(min, max));
-            vChild.push_back(r);
+            v_child_.push_back(r);
         }
 
         vao->unbind();
 
         auto [min, max, size] = vertexBoundaries(meshFinal.vertex);
-        aabb.setBoundary(min, max);
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Childs: %ld", this->vChild.size());
+        aabb_.setBoundary(min, max);
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Childs: %ld", this->v_child_.size());
     }
 
     RenderableBsp::~RenderableBsp() { this->destroy(); }
@@ -61,14 +61,14 @@ namespace ce {
                 case SIDE::CP_FRONT: {
                     traverseTree(cameraPos, tree->back, childDraw);
                     if (tree->isLeaf == true) // set to draw Polygon
-                        childDraw.push_back(vChild[tree->leafIndex]);
+                        childDraw.push_back(v_child_[tree->leafIndex]);
 
                     traverseTree(cameraPos, tree->front, childDraw);
                 } break;
                 case SIDE::CP_BACK: {
                     traverseTree(cameraPos, tree->front, childDraw);
                     if (tree->isLeaf == true) // set to draw Polygon
-                        childDraw.push_back(vChild[tree->leafIndex]);
+                        childDraw.push_back(v_child_[tree->leafIndex]);
 
                     traverseTree(cameraPos, tree->back, childDraw);
                 } break;
@@ -83,7 +83,7 @@ namespace ce {
     void RenderableBsp::submit(RenderCommand& command, IRenderer3d& renderer) {
         std::vector<Renderable3D*> childDraw;
         const glm::vec3 cameraPos = renderer.getCamera()->getPosition();
-        traverseTree(cameraPos, root, childDraw);
+        traverseTree(cameraPos, root_, childDraw);
         for (uint32_t c = 0; c < childDraw.size(); c++)
             renderer.submit(command, childDraw[c], c);
 
@@ -92,14 +92,14 @@ namespace ce {
 
     void RenderableBsp::destroy() {
 
-        while (!vChild.empty()) {
-            Renderable3D* child = vChild.back();
-            vChild.pop_back();
+        while (!v_child_.empty()) {
+            Renderable3D* child = v_child_.back();
+            v_child_.pop_back();
             delete child;
             child = nullptr;
         }
 
-        collapse(root);
+        collapse(root_);
     }
 
     void RenderableBsp::collapse(BSPTreeNode* tree) {

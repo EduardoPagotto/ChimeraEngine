@@ -11,7 +11,7 @@ namespace ce {
         bool isSolid;
         bool isLeaf;
 
-        BSPTreeNode(const Plane& _hyperPlane)
-            : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), leafIndex(0), isSolid(false), isLeaf(false) {}
+        BSPTreeNode(const Plane& hyper_plane)
+            : hyperPlane(hyper_plane), front(nullptr), back(nullptr), leafIndex(0), isSolid(false), isLeaf(false) {}
     };
 } // namespace ce

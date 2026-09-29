@@ -6,17 +6,15 @@
 namespace ce {
 
     class RenderableDynamic : public Renderable3D {
-
-      private:
-        [[maybe_unused]]
-        uint32_t max;
-        std::shared_ptr<VertexBuffer> vbo;
-
       public:
         RenderableDynamic(const uint32_t& max);
 
         virtual ~RenderableDynamic();
 
         void render(VertexData* pVertice, const uint32_t& size);
+
+      private:
+        uint32_t max_;
+        std::shared_ptr<VertexBuffer> vbo_;
     };
 } // namespace ce

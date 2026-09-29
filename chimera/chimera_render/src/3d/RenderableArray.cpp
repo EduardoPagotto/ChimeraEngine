@@ -6,7 +6,8 @@
 
 namespace ce {
 
-    RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* mesh) : Renderable3D(), totIndex(0) {
+    RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* mesh)
+        : Renderable3D(), tot_index_(0) {
         // create vertex buffers
         vao = std::make_shared<VertexArray>();
         vao->bind();
@@ -34,33 +35,33 @@ namespace ce {
 
             Renderable3D* r = new RenderableIBO(vao, ibo, AABB(min, max));
 
-            vChild.push_back(r);
+            v_child_.push_back(r);
 
-            totIndex += ptrTrisIndex.size();
+            tot_index_ += ptrTrisIndex.size();
         }
 
         vao->unbind();
 
         auto [min, max, size] = vertexBoundaries(mesh->vertex);
 
-        aabb.setBoundary(min, max);
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Childs: %ld", vChild.size());
+        aabb_.setBoundary(min, max);
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Childs: %ld", v_child_.size());
     }
 
     RenderableArray::~RenderableArray() {
 
         vao.reset();
 
-        while (!vChild.empty()) {
-            Renderable3D* child = vChild.back();
-            vChild.pop_back();
+        while (!v_child_.empty()) {
+            Renderable3D* child = v_child_.back();
+            v_child_.pop_back();
             delete child;
             child = nullptr;
         }
     }
 
     void RenderableArray::submit(RenderCommand& command, IRenderer3d& renderer) {
-        for (uint32_t c = 0; c < vChild.size(); c++)
-            renderer.submit(command, vChild[c], c);
+        for (uint32_t c = 0; c < v_child_.size(); c++)
+            renderer.submit(command, v_child_[c], c);
     }
 } // namespace ce

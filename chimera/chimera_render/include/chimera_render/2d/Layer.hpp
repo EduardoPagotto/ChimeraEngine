@@ -13,9 +13,9 @@ namespace ce {
 
         virtual ~Layer();
         virtual void onRender() override;
-        virtual std::string getName() const override { return this->name; }
+        virtual std::string getName() const override { return this->name_; }
 
-        void add(IRenderable2D* renderable) { renderables.push_back(renderable); }
+        void add(IRenderable2D* renderable) { renderables_.push_back(renderable); }
         std::shared_ptr<Camera> getCamera() const { return camera; };
 
       protected:
@@ -23,8 +23,8 @@ namespace ce {
         std::shared_ptr<Camera> camera;
 
       private:
-        IRenderer2D* renderer;
-        std::vector<IRenderable2D*> renderables;
-        std::string name;
+        IRenderer2D* renderer_;
+        std::vector<IRenderable2D*> renderables_;
+        std::string name_;
     };
 } // namespace ce

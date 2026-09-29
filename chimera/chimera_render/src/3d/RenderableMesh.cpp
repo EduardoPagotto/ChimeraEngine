@@ -30,20 +30,20 @@ namespace ce {
 
         auto [min, max, size] = vertexIndexedBoundaries(temp.vertex, temp.iFace);
 
-        aabb.setBoundary(min, max);
+        aabb_.setBoundary(min, max);
 
         std::shared_ptr<IndexBuffer> ibo =
             std::make_shared<IndexBuffer>((uint32_t*)&temp.iFace[0], temp.iFace.size() * 3);
 
-        totIndex = ibo->getSize();
+        tot_index_ = ibo->getSize();
 
-        child = new RenderableIBO(vao, ibo, AABB(min, max));
+        child_ = new RenderableIBO(vao, ibo, AABB(min, max));
     }
 
     RenderableMesh::~RenderableMesh() {
-        delete child;
-        child = nullptr;
+        delete child_;
+        child_ = nullptr;
     }
 
-    void RenderableMesh::submit(RenderCommand& command, IRenderer3d& renderer) { renderer.submit(command, child, 0); }
+    void RenderableMesh::submit(RenderCommand& command, IRenderer3d& renderer) { renderer.submit(command, child_, 0); }
 } // namespace ce

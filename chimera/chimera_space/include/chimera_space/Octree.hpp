@@ -9,65 +9,52 @@
 namespace ce {
 
     class Octree {
-      private:
-        [[maybe_unused]]
-        Octree* pParent{nullptr};
-        uint32_t capacity{27};
-        bool leafMode{true};
-        uint32_t deep{0};
-        uint32_t serial{0};
-        AABB boundary;
-        std::vector<std::unique_ptr<Octree>> childs;
-        std::vector<glm::vec3> points;
-        std::vector<uint32_t> indexes;
-        inline static uint32_t serial_master{0};
-
       public:
         explicit Octree(const glm::vec3& pos, const glm::vec3& size, Octree* parent) noexcept
-            : pParent(parent), capacity(parent->capacity), leafMode(parent->leafMode), deep(parent->deep + 1),
-              serial(serial_master++) {
-            boundary.setPosition(pos, size);
+            : p_parent_(parent), capacity_(parent->capacity_), leaf_mode_(parent->leaf_mode_), deep_(parent->deep_ + 1),
+              serial_(serial_master++) {
+            boundary_.setPosition(pos, size);
         }
 
         explicit Octree(const AABB& boundary, const uint32_t& capacity, const bool& leafMode) noexcept
-            : pParent(nullptr), capacity(capacity), leafMode(leafMode), deep(0), serial(serial_master++),
-              boundary(boundary) {}
+            : p_parent_(nullptr), capacity_(capacity), leaf_mode_(leafMode), deep_(0), serial_(serial_master++),
+              boundary_(boundary) {}
 
         virtual ~Octree() noexcept { destroy(); }
 
         void destroy() noexcept {
-            if (!childs.empty()) {
-                for (auto& octree : childs) {
+            if (!childs_.empty()) {
+                for (auto& octree : childs_) {
                     octree->destroy();
                     octree = nullptr;
                 }
-                childs.clear();
+                childs_.clear();
             }
 
-            points.clear();
-            indexes.clear();
+            points_.clear();
+            indexes_.clear();
         }
 
         bool insert(const glm::vec3& point, const uint32_t& index) noexcept {
 
-            if (boundary.contains(point) == false)
+            if (boundary_.contains(point) == false)
                 return false;
 
-            if ((points.size() < capacity) && ((!leafMode) || childs.empty())) {
-                points.push_back(point);
-                indexes.push_back(index);
+            if ((points_.size() < capacity_) && ((!leaf_mode_) || childs_.empty())) {
+                points_.push_back(point);
+                indexes_.push_back(index);
                 return true;
             }
 
-            if (childs.empty())
+            if (childs_.empty())
                 this->subdivide();
 
-            if (leafMode) {
-                for (std::size_t i = 0; i < points.size(); i++)
-                    this->insertNew(points[i], indexes[i]);
+            if (leaf_mode_) {
+                for (std::size_t i = 0; i < points_.size(); i++)
+                    this->insertNew(points_[i], indexes_[i]);
 
-                points.clear();
-                indexes.clear();
+                points_.clear();
+                indexes_.clear();
             }
 
             return this->insertNew(point, index);
@@ -85,28 +72,28 @@ namespace ce {
 
         void query(const AABB& aabb, std::vector<glm::vec3>& found) noexcept {
 
-            if (boundary.intersects(aabb) == false)
+            if (boundary_.intersects(aabb) == false)
                 return;
 
-            for (auto p : points) {
+            for (auto p : points_) {
                 if (aabb.contains(p) == true)
                     found.push_back(p);
             }
 
-            for (auto& octree : childs) {
+            for (auto& octree : childs_) {
                 octree->query(aabb, found);
             }
         }
 
         bool hasPoint(const glm::vec3& point) noexcept {
 
-            if (boundary.contains(point) == true) {
-                for (auto& octree : childs) {
+            if (boundary_.contains(point) == true) {
+                for (auto& octree : childs_) {
                     if (octree->hasPoint(point))
                         return true;
                 }
 
-                for (auto p : points) {
+                for (auto p : points_) {
                     if (isNearV3(p, point))
                         return true;
                 }
@@ -131,13 +118,13 @@ namespace ce {
 
         void getBondaryList(std::vector<AABB>& list, const bool& showEmpty) noexcept {
 
-            if (!childs.empty()) {
-                for (auto& octree : childs) {
+            if (!childs_.empty()) {
+                for (auto& octree : childs_) {
                     octree->getBondaryList(list, showEmpty);
                 }
             } else {
-                if ((points.size() > 0) || (showEmpty)) {
-                    list.push_back(boundary);
+                if ((points_.size() > 0) || (showEmpty)) {
+                    list.push_back(boundary_);
                 }
             }
         }
@@ -145,30 +132,30 @@ namespace ce {
       private:
         void subdivide() noexcept {
 
-            const glm::vec3 s = boundary.getSize() / 2.0f;
+            const glm::vec3 s = boundary_.getSize() / 2.0f;
             const glm::vec3 h = s / 2.0f;
-            const glm::vec3 max = boundary.getPosition() + h;
-            const glm::vec3 min = boundary.getPosition() - h;
+            const glm::vec3 max = boundary_.getPosition() + h;
+            const glm::vec3 min = boundary_.getPosition() - h;
 
-            childs.push_back(std::make_unique<Octree>(glm::vec3(min.x, min.y, min.z), s, this)); // AabbBondery::BSW 0
-            childs.push_back(std::make_unique<Octree>(glm::vec3(max.x, min.y, min.z), s, this)); // AabbBondery::BSE 1
-            childs.push_back(std::make_unique<Octree>(glm::vec3(min.x, max.y, min.z), s, this)); // AabbBondery::TSW 2
-            childs.push_back(std::make_unique<Octree>(glm::vec3(max.x, max.y, min.z), s, this)); // AabbBondery::TSE 3
-            childs.push_back(std::make_unique<Octree>(glm::vec3(min.x, min.y, max.z), s, this)); // AabbBondery::BNW 4
-            childs.push_back(std::make_unique<Octree>(glm::vec3(max.x, min.y, max.z), s, this)); // AabbBondery::BNE 5
-            childs.push_back(std::make_unique<Octree>(glm::vec3(min.x, max.y, max.z), s, this)); // AabbBondery::TNW 6
-            childs.push_back(std::make_unique<Octree>(glm::vec3(max.x, max.y, max.z), s, this)); // AabbBondery::TNE 7
+            childs_.push_back(std::make_unique<Octree>(glm::vec3(min.x, min.y, min.z), s, this)); // AabbBondery::BSW 0
+            childs_.push_back(std::make_unique<Octree>(glm::vec3(max.x, min.y, min.z), s, this)); // AabbBondery::BSE 1
+            childs_.push_back(std::make_unique<Octree>(glm::vec3(min.x, max.y, min.z), s, this)); // AabbBondery::TSW 2
+            childs_.push_back(std::make_unique<Octree>(glm::vec3(max.x, max.y, min.z), s, this)); // AabbBondery::TSE 3
+            childs_.push_back(std::make_unique<Octree>(glm::vec3(min.x, min.y, max.z), s, this)); // AabbBondery::BNW 4
+            childs_.push_back(std::make_unique<Octree>(glm::vec3(max.x, min.y, max.z), s, this)); // AabbBondery::BNE 5
+            childs_.push_back(std::make_unique<Octree>(glm::vec3(min.x, max.y, max.z), s, this)); // AabbBondery::TNW 6
+            childs_.push_back(std::make_unique<Octree>(glm::vec3(max.x, max.y, max.z), s, this)); // AabbBondery::TNE 7
         }
 
         void _visible(const Frustum& frustum, HeapQ<uint32_t>& qIndexes) noexcept {
 
-            if (boundary.visible(frustum)) {
-                for (auto& octree : childs) {
+            if (boundary_.visible(frustum)) {
+                for (auto& octree : childs_) {
                     octree->_visible(frustum, qIndexes);
                 }
 
                 uint32_t last = -1;
-                for (auto& i : this->indexes) {
+                for (auto& i : this->indexes_) {
                     if (i != last) {
                         qIndexes.push(i);
                         last = i;
@@ -178,11 +165,24 @@ namespace ce {
         }
 
         bool insertNew(const glm::vec3& point, const uint32_t& index) noexcept {
-            for (auto& octree : childs) {
+            for (auto& octree : childs_) {
                 if (octree->insert(point, index))
                     return true;
             }
             return false;
         }
+
+      private:
+        [[maybe_unused]]
+        Octree* p_parent_{nullptr};
+        uint32_t capacity_{27};
+        bool leaf_mode_{true};
+        uint32_t deep_{0};
+        uint32_t serial_{0};
+        AABB boundary_;
+        std::vector<std::unique_ptr<Octree>> childs_;
+        std::vector<glm::vec3> points_;
+        std::vector<uint32_t> indexes_;
+        inline static uint32_t serial_master{0};
     };
 } // namespace ce

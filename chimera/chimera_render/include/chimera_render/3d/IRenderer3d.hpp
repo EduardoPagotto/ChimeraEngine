@@ -14,11 +14,6 @@ namespace ce {
     class IRenderer3d;
 
     class Renderable3D {
-
-      protected:
-        uint32_t indexAuxCommand = 0;
-        std::shared_ptr<VertexArray> vao;
-
       public:
         Renderable3D() = default;
 
@@ -42,16 +37,13 @@ namespace ce {
         inline void setIndexAuxCommand(const uint32_t& command) { indexAuxCommand = command; }
 
         inline const uint32_t getIndexAuxCommand() const { return indexAuxCommand; }
+
+      protected:
+        uint32_t indexAuxCommand = 0;
+        std::shared_ptr<VertexArray> vao;
     };
 
     class IRenderer3d {
-
-      protected:
-        std::shared_ptr<Camera> camera;
-        std::shared_ptr<ViewProjection> vpo;
-        TransformationStack stack; // TODO: implementar a hierarquia de modelos direta (sem fisica)
-        MapUniform uniformsQueue;
-
       public:
         IRenderer3d() {
             uniformsQueue.reserve(500);
@@ -75,5 +67,11 @@ namespace ce {
         inline TransformationStack& getStack() { return stack; };
 
         inline MapUniform& uboQueue() { return uniformsQueue; }
+
+      protected:
+        std::shared_ptr<Camera> camera;
+        std::shared_ptr<ViewProjection> vpo;
+        TransformationStack stack; // TODO: implementar a hierarquia de modelos direta (sem fisica)
+        MapUniform uniformsQueue;
     };
 } // namespace ce

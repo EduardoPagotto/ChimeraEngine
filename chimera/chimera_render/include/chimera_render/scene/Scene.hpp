@@ -26,8 +26,8 @@ namespace ce {
       public:
         Scene(std::shared_ptr<entt::registry> registry);
         virtual ~Scene();
-        void setOrigem(ITrans* o) { origem = o; }
-        StateStack& getLayes() { return this->layers; }
+        void setOrigem(ITrans* o) { origem_ = o; }
+        StateStack& getLayes() { return this->layers_; }
         // Herdados
         virtual void onAttach() override;
         virtual void onDeatach() override;
@@ -46,29 +46,29 @@ namespace ce {
                                              const uint32_t& height);
         void createOctree(const AABB& aabb);
 
-        std::shared_ptr<ViewProjection> vpo;
-        std::shared_ptr<IPhysicsControl> phyCrt;
-        std::shared_ptr<Camera> activeCam;
-        std::shared_ptr<Octree> octree;
-        std::shared_ptr<ce::CanvasGL> canvas;
+        std::shared_ptr<ViewProjection> vpo_;
+        std::shared_ptr<IPhysicsControl> phy_crt_;
+        std::shared_ptr<Camera> active_cam_;
+        std::shared_ptr<Octree> octree_;
+        std::shared_ptr<ce::CanvasGL> canvas_;
 
-        StateStack layers;
-        ITrans* origem;
+        StateStack layers_;
+        ITrans* origem_;
 
-        ShadowData shadowData;
-        uint8_t verbose;
+        ShadowData shadow_data_;
+        uint8_t verbose_;
 
-        std::vector<std::shared_ptr<RenderBuffer>> vRB;
-        std::vector<IEmitter*> emitters;
+        std::vector<std::shared_ptr<RenderBuffer>> v_rb_;
+        std::vector<IEmitter*> emitters_;
 
-        Entity eRenderBuferSpec;
-        BatchRender2D batchRender2D;
+        Entity e_render_bufer_spec_;
+        BatchRender2D batch_render2_d_;
 
-        AABB sceneAABB;
-        Renderer3dLines renderLines;
+        AABB scene_aabb_;
+        Renderer3dLines render_lines_;
 
-        DrawLine dl;
+        DrawLine dl_;
 
-        std::shared_ptr<entt::registry> registry;
+        std::shared_ptr<entt::registry> registry_;
     };
 } // namespace ce

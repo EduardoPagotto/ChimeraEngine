@@ -9,23 +9,16 @@
 namespace ce {
 
     class RenderableBsp : public Renderable3D {
-
-      private:
-        std::vector<Renderable3D*> vChild;
-        AABB aabb;
-        uint32_t totIndex;
-        BSPTreeNode* root;
-
       public:
         RenderableBsp(Mesh& mesh);
 
         virtual ~RenderableBsp();
 
-        const uint32_t getSize() const override { return totIndex; }
+        const uint32_t getSize() const override { return tot_index_; }
 
         std::shared_ptr<IndexBuffer> getIBO() const override { return nullptr; }
 
-        const AABB& getAABB() const override { return aabb; }
+        const AABB& getAABB() const override { return aabb_; }
 
         void submit(RenderCommand& command, IRenderer3d& renderer) override;
 
@@ -38,5 +31,11 @@ namespace ce {
 
         // TODO: Testar!!!!!!
         bool lineOfSight(const glm::vec3& Start, const glm::vec3& End, BSPTreeNode* tree);
+
+      private:
+        std::vector<Renderable3D*> v_child_;
+        AABB aabb_;
+        uint32_t tot_index_;
+        BSPTreeNode* root_;
     };
 } // namespace ce

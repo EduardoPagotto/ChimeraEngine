@@ -7,21 +7,15 @@ namespace ce {
     enum class SIDE { CP_ONPLANE, CP_FRONT, CP_BACK, CP_SPANNING };
 
     class Plane {
-      private:
-        glm::vec3 point{0.0F};  // vertice A
-        glm::vec3 normal{0.0F}; // plane calc cross product B and C across A
-        float ND{0.0F};
-        int O{0};
-
       public:
         explicit Plane() noexcept = default;
         explicit Plane(const Plane& o) noexcept = default;
-        explicit Plane(const glm::vec3& point, const glm::vec3& normal) noexcept : point(point), normal(normal) {
+        explicit Plane(const glm::vec3& point, const glm::vec3& normal) noexcept : point_(point), normal_(normal) {
             this->calcND();
         }
 
-        explicit Plane(const glm::vec3& pa, const glm::vec3& pb, const glm::vec3& pc) noexcept : point(pa) {
-            normal = glm::normalize(glm::cross(pb - pa, pc - pa));
+        explicit Plane(const glm::vec3& pa, const glm::vec3& pb, const glm::vec3& pc) noexcept : point_(pa) {
+            normal_ = glm::normalize(glm::cross(pb - pa, pc - pa));
             this->calcND();
         }
 
@@ -29,17 +23,17 @@ namespace ce {
 
         Plane& operator=(const Plane& o) noexcept = default;
 
-        glm::vec3 getPoint() const { return this->point; }
-        glm::vec3 getNormal() const { return this->normal; }
+        glm::vec3 getPoint() const { return this->point_; }
+        glm::vec3 getNormal() const { return this->normal_; }
 
         bool collinearNormal(const glm::vec3& normal) const noexcept {
-            const glm::vec3 sub = this->normal - normal;
+            const glm::vec3 sub = this->normal_ - normal;
             return isLessEpsilon(sub.x + sub.y + sub.z);
         }
 
         SIDE classifyPoint(const glm::vec3& point) const noexcept {
-            const glm::vec3 dir = this->point - point;
-            const float clipTest = glm::dot(dir, this->normal);
+            const glm::vec3 dir = this->point_ - point;
+            const float clipTest = glm::dot(dir, this->normal_);
 
             if (isLessEpsilon(clipTest)) {
                 return SIDE::CP_ONPLANE;
@@ -59,9 +53,9 @@ namespace ce {
             uint8_t behind{0};
             uint8_t onPlane{0};
 
-            clipTest.x = glm::dot((this->point - pA), this->normal); // Clip Test poin A
-            clipTest.y = glm::dot((this->point - pB), this->normal); // Clip Test poin B
-            clipTest.z = glm::dot((this->point - pC), this->normal); // Clip Test poin C
+            clipTest.x = glm::dot((this->point_ - pA), this->normal_); // Clip Test poin A
+            clipTest.y = glm::dot((this->point_ - pB), this->normal_); // Clip Test poin B
+            clipTest.z = glm::dot((this->point_ - pC), this->normal_); // Clip Test poin C
 
             for (uint8_t i = 0; i < 3; i++) {
                 if (isLessEpsilon(clipTest[i])) {
@@ -95,13 +89,13 @@ namespace ce {
                        float& percentage) const noexcept {
 
             const glm::vec3 direction = p1 - p0;
-            const float linelength = glm::dot(direction, this->normal);
+            const float linelength = glm::dot(direction, this->normal_);
             if (fabsf(linelength) < 0.0001) { // FIXME: EPISLON????
                 return false;
             }
 
-            const glm::vec3 L1 = this->point - p0;
-            const float dist_from_plane = glm::dot(L1, this->normal);
+            const glm::vec3 L1 = this->point_ - p0;
+            const float dist_from_plane = glm::dot(L1, this->normal_);
             percentage = dist_from_plane / linelength;
 
             if (percentage < 0.0F) {
@@ -117,7 +111,7 @@ namespace ce {
         }
 
         bool aabbBehind(const std::array<glm::vec3, 8>& vList) const noexcept {
-            return glm::dot(normal, vList[O]) < ND;
+            return glm::dot(normal_, vList[o_]) < nd_;
         }
 
         // FIXME: dot normal posicao para distancia (calcula do AABB em relacao ao frustum)
@@ -126,9 +120,14 @@ namespace ce {
 
       private:
         void calcND() noexcept {
-            ND = dot(normal, point);
-            O = normal.z < 0.0F ? (normal.y < 0.0F ? (normal.x < 0.0F ? 0 : 1) : (normal.x < 0.0F ? 2 : 3))
-                                : (normal.y < 0.0F ? (normal.x < 0.0F ? 4 : 5) : (normal.x < 0.0F ? 6 : 7));
+            nd_ = dot(normal_, point_);
+            o_ = normal_.z < 0.0F ? (normal_.y < 0.0F ? (normal_.x < 0.0F ? 0 : 1) : (normal_.x < 0.0F ? 2 : 3))
+                                  : (normal_.y < 0.0F ? (normal_.x < 0.0F ? 4 : 5) : (normal_.x < 0.0F ? 6 : 7));
         }
+
+        glm::vec3 point_{0.0F};  // vertice A
+        glm::vec3 normal_{0.0F}; // plane calc cross product B and C across A
+        float nd_{0.0F};
+        int o_{0};
     };
 } // namespace ce

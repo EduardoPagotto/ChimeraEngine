@@ -7,21 +7,20 @@
 namespace ce {
 
     class Group3d : public IRenderable3d {
-
-      private:
-        std::vector<IRenderable3d*> renderables;
-        glm::mat4 transformationMatrix;
-
       public:
-        Group3d(const glm::mat4& transform) : transformationMatrix(transform) {}
+        Group3d(const glm::mat4& transform) : transformation_matrix_(transform) {}
         virtual ~Group3d() {}
         virtual void submit(RenderCommand& command, IRenderer3d& renderer) override {
-            renderer.getStack().push(transformationMatrix);
+            renderer.getStack().push(transformation_matrix_);
             for (auto renderable : renderables)
                 renderable->submit(command, renderer);
             renderer.getStack().pop();
         }
 
         inline void add(IRenderable3d* renderable) { renderables.push_back(renderable); }
+
+      private:
+        std::vector<IRenderable3d*> renderables_;
+        glm::mat4 transformation_matrix_;
     };
 } // namespace ce

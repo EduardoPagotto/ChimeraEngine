@@ -8,7 +8,7 @@ namespace ce {
 
         this->camera = camera;
         this->vpo = vpo;
-        frustum.set(vpo->getSel().viewProjectionInverse);
+        frustum_.set(vpo->getSel().viewProjectionInverse);
     }
 
     void Renderer3dLines::end() {}
@@ -18,12 +18,12 @@ namespace ce {
         const AABB nova = renderable->getAABB().transformation(command.transform);
 
         // only if in the clip-space
-        if (nova.visible(frustum) == true)
-            drawLine.addAABB(nova, glm::vec3(1.0, 1.0, 0.0));
+        if (nova.visible(frustum_) == true)
+            draw_line_.addAABB(nova, glm::vec3(1.0, 1.0, 0.0));
     }
 
     void Renderer3dLines::flush() {
-        drawLine.render(uniformsQueue);
+        draw_line_.render(uniformsQueue);
         uniformsQueue.clear();
     }
 } // namespace ce

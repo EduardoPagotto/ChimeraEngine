@@ -7,12 +7,6 @@
 namespace ce {
 
     class RenderableArray : public Renderable3D {
-
-      private:
-        std::vector<Renderable3D*> vChild;
-        AABB aabb;
-        uint32_t totIndex;
-
       public:
         RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* mesh);
 
@@ -20,10 +14,15 @@ namespace ce {
 
         void submit(RenderCommand& command, IRenderer3d& renderer) override;
 
-        const uint32_t getSize() const override { return totIndex; }
+        const uint32_t getSize() const override { return tot_index_; }
 
         std::shared_ptr<IndexBuffer> getIBO() const override { return nullptr; }
 
-        const AABB& getAABB() const override { return aabb; }
+        const AABB& getAABB() const override { return aabb_; }
+
+      private:
+        std::vector<Renderable3D*> v_child_;
+        AABB aabb_;
+        uint32_t tot_index_;
     };
 } // namespace ce

@@ -8,23 +8,16 @@
 namespace ce {
 
     class RenderableParticles : public Renderable3D {
-
-      private:
-        std::shared_ptr<VertexBuffer> vboVex;
-        std::shared_ptr<VertexBuffer> vboPos;
-        std::shared_ptr<VertexBuffer> vboCor;
-        std::shared_ptr<ParticleContainer> pc;
-
       public:
         RenderableParticles() = default;
 
         virtual ~RenderableParticles();
 
-        const uint32_t getSize() const override { return pc->particlesCount; }
+        const uint32_t getSize() const override { return pc_->particlesCount; }
 
         std::shared_ptr<IndexBuffer> getIBO() const override { return nullptr; }
 
-        const AABB& getAABB() const override { return pc->aabb; }
+        const AABB& getAABB() const override { return pc_->aabb; }
 
         void submit(RenderCommand& command, IRenderer3d& renderer) override;
 
@@ -34,6 +27,12 @@ namespace ce {
 
         void destroy();
 
-        void setParticleContainer(std::shared_ptr<ParticleContainer> pc) { this->pc = pc; }
+        void setParticleContainer(std::shared_ptr<ParticleContainer> pc) { this->pc_ = pc; }
+
+      private:
+        std::shared_ptr<VertexBuffer> vbo_vex_;
+        std::shared_ptr<VertexBuffer> vbo_pos_;
+        std::shared_ptr<VertexBuffer> vbo_cor_;
+        std::shared_ptr<ParticleContainer> pc_;
     };
 } // namespace ce

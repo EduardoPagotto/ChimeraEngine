@@ -8,16 +8,6 @@
 namespace ce {
 
     class Renderer3d : public IRenderer3d {
-
-      private:
-        std::queue<uint32_t> qRenderableIndexes;
-        std::vector<RenderCommand> vRenderCommand;
-        std::vector<Renderable3D*> vRenderable;
-        std::vector<std::shared_ptr<Texture>> textureQueue;
-        std::shared_ptr<Octree> octree;
-        Frustum frustum;
-        bool logData;
-
       public:
         Renderer3d(const bool& logData);
 
@@ -33,5 +23,14 @@ namespace ce {
         virtual void flush() override;
 
         virtual inline std::vector<std::shared_ptr<Texture>>& texQueue() { return textureQueue; }
+
+      private:
+        std::queue<uint32_t> qRenderableIndexes;
+        std::vector<RenderCommand> vRenderCommand;
+        std::vector<Renderable3D*> vRenderable;
+        std::vector<std::shared_ptr<Texture>> textureQueue;
+        std::shared_ptr<Octree> octree;
+        Frustum frustum;
+        bool logData;
     };
 } // namespace ce

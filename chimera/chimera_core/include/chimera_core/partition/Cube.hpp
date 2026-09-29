@@ -36,11 +36,6 @@ namespace ce {
     };
 
     class Cube : public AABB {
-      private:
-        Cube *pNorth{nullptr}, *pEast{nullptr}, *pSouth{nullptr}, *pWest{nullptr}, *pUp{nullptr}, *pDown{nullptr};
-        Mesh* mesh{nullptr};
-        SPACE space;
-
       public:
         Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max);
         virtual ~Cube();
@@ -55,11 +50,11 @@ namespace ce {
         void newCeeling();
         void newRampNSEW(SPACE space);
 
-        inline const SPACE getSpace() const { return this->space; }
+        inline const SPACE getSpace() const { return this->space_; }
 
         inline bool emptySpace() const {
-            return ((this->space == SPACE::EMPTY) || (this->space == SPACE::FLOOR) || (this->space == SPACE::CEILING) ||
-                    (this->space == SPACE::FC));
+            return ((this->space_ == SPACE::EMPTY) || (this->space_ == SPACE::FLOOR) ||
+                    (this->space_ == SPACE::CEILING) || (this->space_ == SPACE::FC));
         }
 
         CARDINAL emptyQuadrantDiag(DEEP deep, bool invert);
@@ -67,6 +62,11 @@ namespace ce {
 
         void newFlatFloorCeeling(bool isFloor, CARDINAL card);
         void addFace(bool clockwise, int numFace, int numTex);
+
+      private:
+        Cube *pNorth{nullptr}, *pEast{nullptr}, *pSouth{nullptr}, *pWest{nullptr}, *pUp{nullptr}, *pDown{nullptr};
+        Mesh* mesh_{nullptr};
+        SPACE space_;
     };
 
     void initCubeBase();

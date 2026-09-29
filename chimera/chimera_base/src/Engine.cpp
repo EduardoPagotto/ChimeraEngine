@@ -4,20 +4,20 @@
 
 namespace ce {
 
-    Engine::Engine(std::shared_ptr<entt::registry> registry) : registry(registry) {
+    Engine::Engine(std::shared_ptr<entt::registry> registry) : registry_(registry) {
 
-        canva = registry->ctx().get<std::shared_ptr<ICanva>>();
+        canva_ = registry->ctx().get<std::shared_ptr<ICanva>>();
 
-        timerFPS.setElapsedCount(1000);
-        timerFPS.start();
-        CHIMERA_EVENT01 = SDL_RegisterEvents(1);
+        timer_fps_.setElapsedCount(1000);
+        timer_fps_.start();
+        chimera_even_t01 = SDL_RegisterEvents(1);
 
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Engine Chimera OK");
     }
 
     void Engine::run() { // NOLINT
 
-        auto& im = registry->ctx().get<std::shared_ptr<InputManager>>();
+        auto& im = registry_->ctx().get<std::shared_ptr<InputManager>>();
 
         SDL_Event event;
         bool kill{false};
@@ -39,7 +39,7 @@ namespace ce {
                         const int32_t novaWidth = event.window.data1;
                         const int32_t novaHeight = event.window.data2;
                         SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Resize screem received: %d x %d", novaWidth, novaHeight);
-                        canva->reshape(novaWidth, novaHeight);
+                        canva_->reshape(novaWidth, novaHeight);
 
                     } break;
                     case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED: {
@@ -73,10 +73,10 @@ namespace ce {
                         break;
 
                     default:
-                        if (event.type == CHIMERA_EVENT01) {
+                        if (event.type == chimera_even_t01) {
                             if (static_cast<EventCE>(event.user.code) == EventCE::TOGGLE_FULL_SCREEN) {
                                 SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Toggle fullscreem received");
-                                canva->toggleFullScreen();
+                                canva_->toggleFullScreen();
                             }
                         }
                         break;
@@ -84,7 +84,7 @@ namespace ce {
 
                 im->handleEvent(event);
 
-                for (auto& ev : stack) {
+                for (auto& ev : stack_) {
                     ev->onEvent(event);
                 }
             }
@@ -95,22 +95,22 @@ namespace ce {
             ts = (double)countDelta / 1000.0F;
             if (!im->getStatusPause()) { // update game
 
-                for (auto iten : stack) {
+                for (auto iten : stack_) {
                     iten->onUpdate(ts);
                 }
 
-                canva->before();
+                canva_->before();
 
-                for (auto iten : stack) {
+                for (auto iten : stack_) {
                     iten->onRender();
                 }
 
-                canva->after();
+                canva_->after();
             }
 
-            if (timerFPS.stepCount()) { // count FPS each second
-                fps = timerFPS.getCountStep();
-                sendChimeraEvent(EventCE::NEW_FPS, (void*)&fps, nullptr);
+            if (timer_fps_.stepCount()) { // count FPS each second
+                fps_ = timer_fps_.getCountStep();
+                sendChimeraEvent(EventCE::NEW_FPS, (void*)&fps_, nullptr);
             }
 
             countDelta = SDL_GetTicks() - beginCount; // frame count limit

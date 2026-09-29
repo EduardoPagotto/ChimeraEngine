@@ -14,7 +14,7 @@ ExtraArgsBefore:
 
 # Trata avisos específicos como erros
 # WarningsAsErrors: 'bugprone-*,performance-*'
-WarningsAsErrors: 'performance-*'
+WarningsAsErrors: 'performance-*, -readability-*'
 
 # Configurações específicas para certas checagens
 CheckOptions:
@@ -37,21 +37,21 @@ CheckOptions:
     value:           snake_case
   # Ativa a checagem para membros (atributos) de classe privados
   - key: readability-identifier-naming.PrivateMemberCase
-    value: 'snake_case'
+    value: 'lower_case'
   # Força o sufixo de sublinhado (_) no final do nome
   - key: readability-identifier-naming.PrivateMemberSuffix
     value: '_'
   # Força Snake case nos metodos
   - key:             readability-identifier-naming.MethodCase
-    value:           snake_case
+    value:           lower_case
   - key:             readability-identifier-naming.PrivateMethodCase
-    value:           snake_case
+    value:           lower_case
   - key:             readability-identifier-naming.ProtectedMethodCase
-    value:           snake_case
+    value:           lower_case
   - key:             readability-identifier-naming.PublicMethodCase
-    value:           snake_case
+    value:           lower_case
   # Variáveis Locais e Parâmetros (Altamente recomendado em snake_case)
   - key:             readability-identifier-naming.ParameterCase
-    value:           snake_case
+    value:           lower_case
   - key:             readability-identifier-naming.VariableCase
-    value:           snake_case
+    value:           lower_case

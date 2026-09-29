@@ -98,7 +98,7 @@ void Game::onRender() {
 void Game::onEvent(const SDL_Event& event) {
     using namespace ce;
 
-    if (event.type == CHIMERA_EVENT01) {
+    if (event.type == chimera_even_t01) {
         if (static_cast<EventCE>(event.user.code) == EventCE::NEW_FPS) {
             uint32_t* pFps = (uint32_t*)event.user.data1;
             fps = *pFps;

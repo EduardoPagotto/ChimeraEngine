@@ -21,17 +21,6 @@ namespace ce {
 
     class BatchRender2D : public IRenderer2D {
 
-      private:
-        TransformationStack stack;
-        std::shared_ptr<IndexBuffer> ibo;
-        std::shared_ptr<VertexArray> pVao;
-        std::shared_ptr<VertexBuffer> pVbo;
-        GLsizei indexCount;
-        VertexDataSimple* buffer;
-        RenderCommand* renderComando;
-        std::vector<std::shared_ptr<Texture>> textures;
-        std::shared_ptr<Camera> camera;
-
       public:
         BatchRender2D();
 
@@ -50,11 +39,21 @@ namespace ce {
         virtual void drawString(std::shared_ptr<Font> font, const std::string& text, const glm::vec3& pos,
                                 const glm::vec4& color) override;
 
-        inline virtual TransformationStack& getStack() override { return stack; };
+        inline virtual TransformationStack& getStack() override { return stack_; };
 
-        inline virtual void setCommandRender(struct RenderCommand* command) override { renderComando = command; }
+        inline virtual void setCommandRender(struct RenderCommand* command) override { render_comando_ = command; }
 
       private:
         float submitTexture(std::shared_ptr<Texture> texture);
+
+        TransformationStack stack_;
+        std::shared_ptr<IndexBuffer> ibo_;
+        std::shared_ptr<VertexArray> p_vao_;
+        std::shared_ptr<VertexBuffer> p_vbo_;
+        GLsizei index_count_;
+        VertexDataSimple* buffer_;
+        RenderCommand* render_comando_;
+        std::vector<std::shared_ptr<Texture>> textures_;
+        std::shared_ptr<Camera> camera_;
     };
 } // namespace ce

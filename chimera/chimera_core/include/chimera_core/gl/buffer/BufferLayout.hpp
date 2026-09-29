@@ -14,10 +14,6 @@ namespace ce {
     };
 
     class BufferLayout {
-      private:
-        uint16_t size = 0;
-        std::vector<BufferElement> layout;
-
       public:
         BufferLayout() = default;
         virtual ~BufferLayout() = default;
@@ -30,13 +26,17 @@ namespace ce {
             push(count, GL_FLOAT, sizeof(float), normalized);
         }
 
-        inline const std::vector<BufferElement>& getLayout() const { return layout; }
-        inline uint32_t getStride() const { return size; }
+        inline const std::vector<BufferElement>& getLayout() const { return layout_; }
+        inline uint32_t getStride() const { return size_; }
 
       private:
-        inline void push(uint16_t count, uint16_t type, uint16_t sizeOfType, bool normalized) {
-            layout.push_back({count, type, sizeOfType, normalized, this->size});
-            this->size += sizeOfType * count;
+        inline void push(uint16_t count, uint16_t type, uint16_t size_of_type, bool normalized) {
+            layout_.push_back({count, type, size_of_type, normalized, this->size_});
+            this->size_ += size_of_type * count;
         }
+
+      private:
+        uint16_t size_ = 0;
+        std::vector<BufferElement> layout_;
     };
 } // namespace ce

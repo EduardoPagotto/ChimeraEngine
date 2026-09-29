@@ -155,7 +155,7 @@ namespace ce {
         : AABB(min, max), pNorth(nullptr), pEast(nullptr), pSouth(nullptr), pWest(nullptr), pUp(nullptr),
           pDown(nullptr) {
 
-        space = (caracter == 0x20) ? SPACE::EMPTY : (SPACE)(caracter - 0x30);
+        space_ = (caracter == 0x20) ? SPACE::EMPTY : (SPACE)(caracter - 0x30);
     }
 
     void linkCubes(const glm::ivec3& size, std::vector<Cube*>& vpCube) {
@@ -251,21 +251,21 @@ namespace ce {
 
         uint32_t ia, ib, ic;
         if (!clockwise) {
-            ia = mesh->iFace.size() * 3; // tl->size() * 3;
+            ia = mesh_->iFace.size() * 3; // tl->size() * 3;
             ib = ia + 1;
             ic = ib + 1;
         } else {
-            ic = mesh->iFace.size() * 3; // tl->size() * 3;
+            ic = mesh_->iFace.size() * 3; // tl->size() * 3;
             ib = ic + 1;
             ia = ib + 1;
         }
 
         const glm::vec3 vn = glm::normalize(glm::cross(vb - va, vc - va)); // CROSS(U,V)
-        mesh->vertex.push_back({va, vn, ta});
-        mesh->vertex.push_back({vb, vn, tb});
-        mesh->vertex.push_back({vc, vn, tc});
+        mesh_->vertex.push_back({va, vn, ta});
+        mesh_->vertex.push_back({vb, vn, tb});
+        mesh_->vertex.push_back({vc, vn, tc});
 
-        mesh->iFace.push_back(glm::uvec3(ia, ib, ic)); // Face
+        mesh_->iFace.push_back(glm::uvec3(ia, ib, ic)); // Face
     }
 
     CARDINAL Cube::emptyQuadrantDiag(DEEP deep, bool invert) {
@@ -650,7 +650,7 @@ namespace ce {
     }
 
     void Cube::create(Mesh* mesh) {
-        this->mesh = mesh;
+        this->mesh_ = mesh;
 
         const SPACE val{this->getSpace()};
         switch (val) {

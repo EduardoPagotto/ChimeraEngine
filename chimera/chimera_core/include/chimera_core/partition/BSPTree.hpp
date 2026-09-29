@@ -5,13 +5,9 @@
 
 namespace ce {
     class BspTree { // Ref: https://github.com/taylorstine/BSP_Tree
-      private:
-        std::vector<VertexData> vertex;
-        std::vector<TrisIndex> vpLeaf;
-
       public:
-        BspTree() {}
-        virtual ~BspTree() {}
+        BspTree() = default;
+        virtual ~BspTree() = default;
         BSPTreeNode* create(Mesh& mesh, std::vector<TrisIndex>& vpLeafOut);
 
       private:
@@ -21,5 +17,8 @@ namespace ce {
         void splitTriangle(const glm::vec3& fx, std::shared_ptr<Triangle> _pTriangle, Plane& hyperPlane,
                            std::list<std::shared_ptr<Triangle>>& _vTriangle);
         void createLeafy(BSPTreeNode* tree, std::list<std::shared_ptr<Triangle>>& _vTriangle);
+
+        std::vector<VertexData> vertex_;
+        std::vector<TrisIndex> vp_leaf_;
     };
 } // namespace ce

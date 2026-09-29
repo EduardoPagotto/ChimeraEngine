@@ -26,14 +26,14 @@ namespace ce {
         void invertPitch();
         void processCameraFOV(const float& offset);
 
-        float pitch, yaw, movementSpeed;
-        glm::vec3 up, front, worldUp, right;
-        Entity entity;
-        std::shared_ptr<Camera> camera;
-        std::shared_ptr<ViewProjection> vp;
-        std::shared_ptr<entt::registry> registry;
-        std::shared_ptr<InputManager> inputManager;
+        float pitch_, yaw_, movement_speed_;
+        glm::vec3 up_, front_, world_up_, right_;
+        Entity entity_;
+        std::shared_ptr<Camera> camera_;
+        std::shared_ptr<ViewProjection> vp_;
+        std::shared_ptr<entt::registry> registry_;
+        std::shared_ptr<InputManager> input_manager_;
 
-        ce::Gamepad::AxixConfig player0Config{0.18F, 0.18F, 0.18F}; // Deadzones customizadas
+        ce::Gamepad::AxixConfig player0_config_{0.18F, 0.18F, 0.18F}; // Deadzones customizadas
     };
 } // namespace ce

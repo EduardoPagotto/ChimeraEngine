@@ -39,15 +39,15 @@ namespace ce {
         }
 
         virtual ~Gamepad() {
-            for (auto& [id, gamepad] : connectedGamepads) {
+            for (auto& [id, gamepad] : connected_gamepads_) {
                 SDL_CloseGamepad(gamepad);
             }
-            connectedGamepads.clear();
+            connected_gamepads_.clear();
         }
 
         // Associa um Gamepad físico (via Instance ID) a um Jogador lógico
         void assignGamepadToPlayer(int playerIndex, SDL_JoystickID instanceId) {
-            playerMappings[playerIndex].push_back(instanceId);
+            player_mappings_[playerIndex].push_back(instanceId);
         }
 
         // Atualiza os estados físicos - Chame uma vez no início do seu Game Loop
@@ -58,7 +58,7 @@ namespace ce {
                 SDL_Gamepad* gamepad = SDL_OpenGamepad(event.gdevice.which);
                 if (gamepad != nullptr) {
                     SDL_JoystickID id = SDL_GetGamepadID(gamepad);
-                    connectedGamepads[id] = gamepad;
+                    connected_gamepads_[id] = gamepad;
                     // Por padrão, joga novos controles para o Player 0 (Customizável)
                     assignGamepadToPlayer(0, id);
 
@@ -69,11 +69,11 @@ namespace ce {
             } else if (event.type == SDL_EVENT_GAMEPAD_REMOVED) {
 
                 SDL_JoystickID id = event.gdevice.which;
-                if (connectedGamepads.contains(id)) {
-                    SDL_CloseGamepad(connectedGamepads[id]);
-                    connectedGamepads.erase(id);
+                if (connected_gamepads_.contains(id)) {
+                    SDL_CloseGamepad(connected_gamepads_[id]);
+                    connected_gamepads_.erase(id);
                     // Remove mapeamento do jogador
-                    for (auto& [player, list] : playerMappings) {
+                    for (auto& [player, list] : player_mappings_) {
                         std::erase(list, id);
                     }
                     SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Gamepad desconectado ID: %d", id);
@@ -102,9 +102,9 @@ namespace ce {
 
         void updateContinuousInput() {
 
-            for (auto& [id, gamepad] : connectedGamepads) {
+            for (auto& [id, gamepad] : connected_gamepads_) {
 
-                auto& bStates = buttonStates[id];
+                auto& bStates = button_states_[id];
 
                 for (int b = SDL_GAMEPAD_BUTTON_SOUTH; b < SDL_GAMEPAD_BUTTON_COUNT; ++b) {
 
@@ -138,7 +138,7 @@ namespace ce {
         // --- API de Consulta por Jogador (Varre todos os controles atribuídos a ele) ---
 
         ButtonState getButtonState(int playerIndex, SDL_GamepadButton button) const {
-            if (!playerMappings.contains(playerIndex)) {
+            if (!player_mappings_.contains(playerIndex)) {
                 return ButtonState::None;
             }
 
@@ -146,12 +146,12 @@ namespace ce {
             bool anyHeld = false;
             bool anyReleased = false;
 
-            for (SDL_JoystickID id : playerMappings.at(playerIndex)) {
-                if (!buttonStates.contains(id) || !buttonStates.at(id).contains(button)) {
+            for (SDL_JoystickID id : player_mappings_.at(playerIndex)) {
+                if (!button_states_.contains(id) || !button_states_.at(id).contains(button)) {
                     continue;
                 }
 
-                ButtonState state = buttonStates.at(id).at(button);
+                ButtonState state = button_states_.at(id).at(button);
                 if (state == ButtonState::Pressed) {
                     anyPressed = true;
                 }
@@ -197,18 +197,18 @@ namespace ce {
         glm::vec2 getNormalizedStick(int playerIndex, SDL_GamepadAxis axisX, SDL_GamepadAxis axisY,
                                      float deadZone) const {
 
-            if (!playerMappings.contains(playerIndex)) {
+            if (!player_mappings_.contains(playerIndex)) {
                 return glm::vec2(0.0F);
             }
 
             glm::vec2 combinedInput(0.0F);
 
-            for (SDL_JoystickID id : playerMappings.at(playerIndex)) {
-                if (!connectedGamepads.contains(id)) {
+            for (SDL_JoystickID id : player_mappings_.at(playerIndex)) {
+                if (!connected_gamepads_.contains(id)) {
                     continue;
                 }
 
-                SDL_Gamepad* gamepad = connectedGamepads.at(id);
+                SDL_Gamepad* gamepad = connected_gamepads_.at(id);
 
                 // Valores brutos do SDL3 vão de -32768 a 32767
                 float rawX = static_cast<float>(SDL_GetGamepadAxis(gamepad, axisX)) / 32767.0F;
@@ -233,8 +233,8 @@ namespace ce {
             return combinedInput;
         }
 
-        std::unordered_map<SDL_JoystickID, SDL_Gamepad*> connectedGamepads;
-        std::unordered_map<int, std::vector<SDL_JoystickID>> playerMappings; // Player ID -> Lista de controles físicos
-        std::unordered_map<SDL_JoystickID, std::unordered_map<SDL_GamepadButton, ButtonState>> buttonStates;
+        std::unordered_map<SDL_JoystickID, SDL_Gamepad*> connected_gamepads_;
+        std::unordered_map<int, std::vector<SDL_JoystickID>> player_mappings_;
+        std::unordered_map<SDL_JoystickID, std::unordered_map<SDL_GamepadButton, ButtonState>> button_states_;
     };
 } // namespace ce

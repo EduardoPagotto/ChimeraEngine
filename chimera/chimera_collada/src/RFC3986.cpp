@@ -7,22 +7,22 @@ namespace ce {
         const char* urlFile = "file://";
         size_t urlFileLen = 7;
         std::size_t mark1 = url.rfind('#');
-        fragment = (mark1 != std::string::npos) ? url.substr(mark1 + 1, std::string::npos) : url;
+        fragment_ = (mark1 != std::string::npos) ? url.substr(mark1 + 1, std::string::npos) : url;
 
         if (url.find(urlFile, 0, urlFileLen) != std::string::npos) {
             if (mark1 == std::string::npos) {
-                scheme = RFC3986_SCHEME::INVALID;
-                path = url.substr(urlFileLen, std::string::npos);
+                scheme_ = RFC3986_SCHEME::INVALID;
+                path_ = url.substr(urlFileLen, std::string::npos);
             } else {
-                scheme = RFC3986_SCHEME::FILE;
-                path = url.substr(urlFileLen, mark1 - urlFileLen);
+                scheme_ = RFC3986_SCHEME::FILE;
+                path_ = url.substr(urlFileLen, mark1 - urlFileLen);
             }
         } else {
-            scheme = RFC3986_SCHEME::LOCAL;
-            path = "";
+            scheme_ = RFC3986_SCHEME::LOCAL;
+            path_ = "";
         }
 
-        return scheme;
+        return scheme_;
     }
 
 } // namespace ce

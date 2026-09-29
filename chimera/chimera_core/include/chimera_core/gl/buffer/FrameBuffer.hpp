@@ -14,14 +14,6 @@ namespace ce {
     };
 
     class FrameBuffer {
-      private:
-        uint32_t framBufferID, rbo;
-        FrameBufferSpecification spec;
-        std::shared_ptr<Texture> depthAttachment;
-        TexParam depthTexSpec, rboSpec;
-        std::vector<std::shared_ptr<Texture>> colorAttachments;
-        std::vector<TexParam> colorTexSpecs;
-
       public:
         FrameBuffer(const FrameBufferSpecification& spec);
         ~FrameBuffer();
@@ -40,5 +32,12 @@ namespace ce {
       private:
         void destroy();
         void invalidade();
+
+        uint32_t framBufferID, rbo;
+        FrameBufferSpecification spec;
+        std::shared_ptr<Texture> depthAttachment;
+        TexParam depthTexSpec, rboSpec;
+        std::vector<std::shared_ptr<Texture>> colorAttachments;
+        std::vector<TexParam> colorTexSpecs;
     };
 } // namespace ce

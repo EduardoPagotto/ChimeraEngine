@@ -4,7 +4,7 @@
 namespace ce {
 
     // Define um ID único em um escopo global/namespace para o seu tipo de evento
-    inline Uint32 CHIMERA_EVENT01{0};
+    inline Uint32 chimera_even_t01{0}; // FIXME: passar para initconst!!
 
     /// @brief EventsME
     enum class EventCE : int32_t {
@@ -23,16 +23,16 @@ namespace ce {
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
     /// @param user_event Event kind
-    /// @param paramA pointerA
-    /// @param paramB PointerB
+    /// @param param_a pointerA
+    /// @param param_b PointerB
     /// @return True if ok
-    inline void sendChimeraEvent(const EventCE& user_event, void* _paramA, void* _paramB) {
+    inline void sendChimeraEvent(const EventCE& user_event, void* param_a, void* param_b) {
         SDL_Event event;
         SDL_zero(event);
-        event.type = CHIMERA_EVENT01;
+        event.type = chimera_even_t01;
         event.user.code = static_cast<Sint32>(user_event);
-        event.user.data1 = _paramA;
-        event.user.data2 = _paramB;
+        event.user.data1 = param_a;
+        event.user.data2 = param_b;
         if (!SDL_PushEvent(&event)) {
             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Critical PushEvent fail: %s", SDL_GetError());
         }

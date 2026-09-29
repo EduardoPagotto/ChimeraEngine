@@ -6,23 +6,23 @@
 namespace ce {
 
     CameraControllerFPS::CameraControllerFPS(std::shared_ptr<entt::registry> registry, Entity entity)
-        : entity(entity), registry(registry) {
+        : entity_(entity), registry_(registry) {
 
-        this->inputManager = registry->ctx().get<std::shared_ptr<InputManager>>();
-        this->vp = registry->ctx().get<std::shared_ptr<ViewProjection>>();
+        this->input_manager_ = registry->ctx().get<std::shared_ptr<InputManager>>();
+        this->vp_ = registry->ctx().get<std::shared_ptr<ViewProjection>>();
     }
 
     CameraControllerFPS::~CameraControllerFPS() {}
 
     void CameraControllerFPS::onAttach() {
 
-        auto& cc = entity.getComponent<CameraComponent>(registry.get());
-        camera = cc.camera;
-        up = cc.up;
-        worldUp = cc.up;
-        pitch = cc.pitch;
-        yaw = cc.yaw;
-        movementSpeed = fsp_camera_max_speed;
+        auto& cc = entity_.getComponent<CameraComponent>(registry_.get());
+        camera_ = cc.camera;
+        up_ = cc.up;
+        world_up_ = cc.up;
+        pitch_ = cc.pitch;
+        yaw_ = cc.yaw;
+        movement_speed_ = fsp_camera_max_speed;
 
         this->updateVectors();
     }
@@ -30,108 +30,108 @@ namespace ce {
     void CameraControllerFPS::onDeatach() {}
 
     void CameraControllerFPS::updateVP() {
-        if (vp->getSize() == 1) {
-            vp->getLeft().update(glm::lookAt(camera->getPosition(), camera->getPosition() + front, up),
-                                 camera->getProjection());
+        if (vp_->getSize() == 1) {
+            vp_->getLeft().update(glm::lookAt(camera_->getPosition(), camera_->getPosition() + front_, up_),
+                                  camera_->getProjection());
         } else {
-            glm::vec3 cross1 = glm::cross(up, front);      // up and front already are  vectors!!!!
-            glm::vec3 norm1 = glm::normalize(cross1);      // vector side (would be left or right)
-            glm::vec3 final_norm1 = norm1 * vp->getNoze(); // point of eye
-            glm::vec3 novaPositionL = camera->getPosition() + final_norm1;
-            glm::vec3 novaPositionR = camera->getPosition() - final_norm1;
-            vp->getLeft().update(glm::lookAt(novaPositionL, novaPositionL + front, up),
-                                 camera->getProjection()); // Left
-            vp->getRight().update(glm::lookAt(novaPositionR, novaPositionR + front, up),
-                                  camera->getProjection()); // Right
+            glm::vec3 cross1 = glm::cross(up_, front_);     // up and front already are  vectors!!!!
+            glm::vec3 norm1 = glm::normalize(cross1);       // vector side (would be left or right)
+            glm::vec3 final_norm1 = norm1 * vp_->getNoze(); // point of eye
+            glm::vec3 novaPositionL = camera_->getPosition() + final_norm1;
+            glm::vec3 novaPositionR = camera_->getPosition() - final_norm1;
+            vp_->getLeft().update(glm::lookAt(novaPositionL, novaPositionL + front_, up_),
+                                  camera_->getProjection()); // Left
+            vp_->getRight().update(glm::lookAt(novaPositionR, novaPositionR + front_, up_),
+                                   camera_->getProjection()); // Right
         }
     }
 
     void CameraControllerFPS::updateVectors() {
 
-        front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-        front.y = sin(glm::radians(pitch));
-        front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-        front = glm::normalize(front);
+        front_.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+        front_.y = sin(glm::radians(pitch_));
+        front_.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+        front_ = glm::normalize(front_);
 
-        right = glm::normalize(glm::cross(front, worldUp));
-        up = glm::normalize(glm::cross(right, front));
+        right_ = glm::normalize(glm::cross(front_, world_up_));
+        up_ = glm::normalize(glm::cross(right_, front_));
     }
 
     void CameraControllerFPS::processCameraRotation(double xOffset, double yOffset, bool constrainPitch) {
-        yaw += (float)xOffset;
-        pitch += (float)yOffset;
+        yaw_ += (float)xOffset;
+        pitch_ += (float)yOffset;
 
         // Constrain the pitch
         if (constrainPitch) {
-            if (pitch > 89.0F) {
-                pitch = 89.0F;
-            } else if (pitch < -89.0F) {
-                pitch = -89.0F;
+            if (pitch_ > 89.0F) {
+                pitch_ = 89.0F;
+            } else if (pitch_ < -89.0F) {
+                pitch_ = -89.0F;
             }
         }
     }
 
     void CameraControllerFPS::processCameraMovement(glm::vec3& direction, float deltaTime) {
-        float velocity = movementSpeed * deltaTime;
-        camera->setPosition(camera->getPosition() + direction * velocity);
+        float velocity = movement_speed_ * deltaTime;
+        camera_->setPosition(camera_->getPosition() + direction * velocity);
     }
 
     void CameraControllerFPS::onUpdate(const double& ts) {
         // Movement speed
-        if (inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_LSHIFT)) { // acelerar mover
+        if (input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_LSHIFT)) { // acelerar mover
 
-            movementSpeed = fsp_camera_max_speed * 4.0F;
-        } else if (inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_LALT)) { //  desacelerar mover
+            movement_speed_ = fsp_camera_max_speed * 4.0F;
+        } else if (input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_LALT)) { //  desacelerar mover
 
-            movementSpeed = fsp_camera_max_speed / 4.0F;
+            movement_speed_ = fsp_camera_max_speed / 4.0F;
         } else {
 
-            movementSpeed = fsp_camera_max_speed;
+            movement_speed_ = fsp_camera_max_speed;
         }
 
         // CameraFPS movement
         glm::vec3 direction = glm::vec3(0.0F);
-        if (inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_W)) { // to foward
-            direction += front;
+        if (input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_W)) { // to foward
+            direction += front_;
         }
 
-        if (inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_S)) { // to backward
-            direction -= front;
+        if (input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_S)) { // to backward
+            direction -= front_;
         }
 
-        if (inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_A)) { // to left
-            direction -= right;
+        if (input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_A)) { // to left
+            direction -= right_;
         }
 
-        if (inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_D)) { //  to right
-            direction += right;
+        if (input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_D)) { //  to right
+            direction += right_;
         }
 
-        if (inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_SPACE)) { // to up
-            direction += worldUp;
+        if (input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_SPACE)) { // to up
+            direction += world_up_;
         }
 
-        if (inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_LCTRL)) { //  to booton
-            direction -= worldUp;
+        if (input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_LCTRL)) { //  to booton
+            direction -= world_up_;
         }
 
         float mouseXDelta{0.0F};
         float mouseYDelta{0.0F};
 
-        auto gp = this->inputManager->getGamepad();
-        auto ms = this->inputManager->getMouse();
+        auto gp = this->input_manager_->getGamepad();
+        auto ms = this->input_manager_->getMouse();
 
-        glm::vec2 leftStick = gp->getLeftStick(0, player0Config);
+        glm::vec2 leftStick = gp->getLeftStick(0, player0_config_);
         if (glm::length(leftStick) > 0.0F) {
 
             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick Esquerdo -> X: %f | Y: %f", leftStick.x,
                          leftStick.y);
 
-            direction += front * leftStick.y * 1.5F; // mov FB
-            direction -= right * leftStick.x * 1.5F; // mov RL
+            direction += front_ * leftStick.y * 1.5F; // mov FB
+            direction -= right_ * leftStick.x * 1.5F; // mov RL
         }
 
-        glm::vec2 rightStick = gp->getRightStick(0, player0Config);
+        glm::vec2 rightStick = gp->getRightStick(0, player0_config_);
         if (glm::length(rightStick) > 0.0F) {
 
             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick Direito -> X: %f | Y: %f", rightStick.x,
@@ -148,15 +148,15 @@ namespace ce {
 
         Gamepad::ButtonState pad_up = gp->getButtonState(0, SDL_GAMEPAD_BUTTON_DPAD_UP);
         if (pad_up == Gamepad::ButtonState::Pressed || pad_up == Gamepad::ButtonState::Held) {
-            direction += (worldUp * 0.5F); // mov U<->D
+            direction += (world_up_ * 0.5F); // mov U<->D
         }
 
         Gamepad::ButtonState pad_down = gp->getButtonState(0, SDL_GAMEPAD_BUTTON_DPAD_DOWN);
         if (pad_down == Gamepad::ButtonState::Pressed || pad_down == Gamepad::ButtonState::Held) {
-            direction -= worldUp * 0.5F; // mov D<->U
+            direction -= world_up_ * 0.5F; // mov D<->U
         }
 
-        glm::vec2 triggerStick = gp->getTriggerStick(0, player0Config);
+        glm::vec2 triggerStick = gp->getTriggerStick(0, player0_config_);
         if (glm::length(triggerStick) > 0.0F) {
 
             // Gamepad::ButtonState north = gp->getButtonState(0, SDL_GAMEPAD_BUTTON_NORTH);
@@ -189,7 +189,7 @@ namespace ce {
     }
 
     void CameraControllerFPS::invertPitch() {
-        pitch = -pitch;
+        pitch_ = -pitch_;
         updateVectors();
     }
 

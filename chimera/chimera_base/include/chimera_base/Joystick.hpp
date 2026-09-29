@@ -21,15 +21,15 @@ namespace ce {
         }
 
         virtual ~Joystick() noexcept {
-            for (auto i = joys.begin(); i != joys.end(); i++) {
+            for (auto i = joys_.begin(); i != joys_.end(); i++) {
                 SDL_CloseJoystick(i->second);
             }
 
-            joys.clear();
+            joys_.clear();
         }
 
         [[clang::noinline]] SDL_Joystick* get(const SDL_JoystickID& joystick_id) noexcept {
-            if (auto got = joys.find(joystick_id); got != joys.end()) {
+            if (auto got = joys_.find(joystick_id); got != joys_.end()) {
                 return got->second;
             }
 
@@ -72,7 +72,7 @@ namespace ce {
                     SDL_GUIDToString(SDL_GetJoystickGUIDForID(instance_id), guid, sizeof(guid));
                     SDL_LogInfo(SDL_LOG_CATEGORY_INPUT, " guid: %s", guid);
 
-                    if (joys.contains(instance_id)) {
+                    if (joys_.contains(instance_id)) {
                         continue;
                     }
 
@@ -84,19 +84,19 @@ namespace ce {
                     SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick buttons:%d", SDL_GetNumJoystickButtons(handle));
                     SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick trackballs: %d", SDL_GetNumJoystickBalls(handle));
 
-                    this->joys[instance_id] = handle;
+                    this->joys_[instance_id] = handle;
                 }
             }
         }
 
         [[clang::noinline]] void removed(const SDL_JoyDeviceEvent& device) {
             //
-            if (joys.contains(device.which)) {
-                SDL_CloseJoystick(joys[device.which]);
-                joys.erase(device.which);
+            if (joys_.contains(device.which)) {
+                SDL_CloseJoystick(joys_[device.which]);
+                joys_.erase(device.which);
             }
         }
 
-        std::unordered_map<SDL_JoystickID, SDL_Joystick*> joys;
+        std::unordered_map<SDL_JoystickID, SDL_Joystick*> joys_;
     };
 } // namespace ce

@@ -7,9 +7,6 @@
 namespace ce {
 
     class LoadHeightMap {
-      private:
-        SDL_Surface* pImage{nullptr};
-        uint32_t width{0}, height{0}, squareX{0}, squareZ{0}, minimal{0};
 
       public:
         LoadHeightMap(int _squareX, int _squareZ);
@@ -25,5 +22,9 @@ namespace ce {
         uint32_t getHeight(const uint32_t& w, const uint32_t& h);
         glm::vec3 defineScale(const glm::vec3& _size);
         // glm::vec3 calcNormalHeight(int x, int z);
+
+      private:
+        SDL_Surface* pImage{nullptr};
+        uint32_t width{0}, height{0}, squareX{0}, squareZ{0}, minimal{0};
     };
 } // namespace ce

@@ -8,17 +8,6 @@
 
 namespace ce {
     class PhysicsControl : public IPhysicsControl {
-      private:
-        btBroadphaseInterface* broadPhase;
-        btDefaultCollisionConfiguration* collisionConfig;
-        btCollisionDispatcher* dispatcher;
-        btSequentialImpulseConstraintSolver* solver;
-        btDiscreteDynamicsWorld* discretDynamicsWorld;
-        std::map<btCollisionObject*, std::pair<uint32_t*, uint32_t*>> contactActives;
-
-        bool checkAllowCollision(uint32_t* entity);
-        static void doTickCallBack(btDynamicsWorld* world, btScalar timeStep);
-        void processTickCallBack(btScalar timeStep);
 
       public:
         PhysicsControl();
@@ -27,7 +16,19 @@ namespace ce {
         virtual void removeAllObjs() override;
         virtual void stepSim(const double& ts) override;
         virtual void checkCollisions() override;
-        virtual void setGravity(const btVector3& _vet) override { discretDynamicsWorld->setGravity(_vet); }
-        virtual btDiscreteDynamicsWorld* getWorld() override { return discretDynamicsWorld; }
+        virtual void setGravity(const btVector3& _vet) override { discret_dynamics_world_->setGravity(_vet); }
+        virtual btDiscreteDynamicsWorld* getWorld() override { return discret_dynamics_world_; }
+
+      private:
+        btBroadphaseInterface* broad_phase_;
+        btDefaultCollisionConfiguration* collision_config_;
+        btCollisionDispatcher* dispatcher_;
+        btSequentialImpulseConstraintSolver* solver_;
+        btDiscreteDynamicsWorld* discret_dynamics_world_;
+        std::map<btCollisionObject*, std::pair<uint32_t*, uint32_t*>> contact_actives_;
+
+        bool checkAllowCollision(uint32_t* entity);
+        static void doTickCallBack(btDynamicsWorld* world, btScalar timeStep);
+        void processTickCallBack(btScalar timeStep);
     };
 } // namespace ce

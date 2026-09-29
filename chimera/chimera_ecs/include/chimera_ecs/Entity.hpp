@@ -8,12 +8,10 @@
 namespace ce {
 
     class Entity {
-        entt::entity handle{entt::null};
-
       public:
         Entity() = default;
         Entity(const Entity& other) = default;
-        Entity(entt::entity novo) : handle(novo) {}
+        Entity(entt::entity novo) : handle_(novo) {}
 
         static Entity Create(entt::registry* r, const std::string& name, const std::string& id) {
             entt::entity handle = r->create();
@@ -69,38 +67,41 @@ namespace ce {
         }
 
         void destroy(entt::registry* r) {
-            r->destroy(handle);
-            handle = entt::null;
+            r->destroy(handle_);
+            handle_ = entt::null;
         }
 
         template <typename T>
         bool hasComponent(entt::registry* r) const {
-            return r->all_of<T>(handle);
+            return r->all_of<T>(handle_);
         }
 
         template <typename T, typename... Args>
         T& addComponent(entt::registry* r, Args&&... args) {
-            return r->emplace<T>(handle, std::forward<Args>(args)...);
+            return r->emplace<T>(handle_, std::forward<Args>(args)...);
         }
 
         template <typename T>
         T& getComponent(entt::registry* r) {
-            return r->get<T>(handle);
+            return r->get<T>(handle_);
         }
 
         template <typename T>
         void removeComponent(entt::registry* r) {
-            r->remove<T>(handle);
+            r->remove<T>(handle_);
         }
 
-        operator bool() const { return handle != entt::null; }
+        operator bool() const { return handle_ != entt::null; }
 
-        operator uint32_t() const { return (uint32_t)handle; }
+        operator uint32_t() const { return (uint32_t)handle_; }
 
-        operator entt::entity() const { return handle; }
+        operator entt::entity() const { return handle_; }
 
-        bool operator==(const Entity& other) const { return (handle == other.handle); }
+        bool operator==(const Entity& other) const { return (handle_ == other.handle_); }
 
         bool operator!=(const Entity& other) const { return !(*this == other); }
+
+      private:
+        entt::entity handle_{entt::null};
     };
 } // namespace ce

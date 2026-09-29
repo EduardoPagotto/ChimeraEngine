@@ -4,15 +4,15 @@
 namespace ce {
 
     Solid::Solid(PhysicsControl* _pWorld, const glm::mat4& _trans, uint32_t entity)
-        : mass(0.0f), frictionDynamic(15.0f), frictionStatic(10.0f), restitution(0.0f), pRigidBody(nullptr),
-          pShapeCollision(nullptr), trimesh(nullptr), pWorld(_pWorld), entity(entity) {
+        : mass_(0.0f), friction_dynamic_(15.0f), friction_static_(10.0f), restitution_(0.0f), p_rigid_body_(nullptr),
+          p_shape_collision_(nullptr), trimesh_(nullptr), p_world_(_pWorld), entity_(entity) {
 
         this->setMatrix(_trans); // pMotionState carregado aqui!
     }
 
     Solid::~Solid() {
 
-        if (pRigidBody) {
+        if (p_rigid_body_) {
             // FIXME: esta falhando aqui!!!
             // pWorld->discretDynamicsWorld->removeRigidBody ( pRigidBody );
             // pWorld->getWorld()->removeRigidBody(pRigidBody);
@@ -20,8 +20,8 @@ namespace ce {
             // delete pRigidBody;
         }
 
-        if (pShapeCollision) {
-            delete pShapeCollision;
+        if (p_shape_collision_) {
+            delete p_shape_collision_;
         }
     }
 
@@ -42,35 +42,35 @@ namespace ce {
             setShapeBox(_size);
 
         btVector3 localInertia(0.0, 0.0, 0.0);
-        if (mass != 0.0f) {
-            pShapeCollision->calculateLocalInertia(mass, localInertia);
+        if (mass_ != 0.0f) {
+            p_shape_collision_->calculateLocalInertia(mass_, localInertia);
         }
 
-        pShapeCollision->setUserPointer((void*)&entity);
+        p_shape_collision_->setUserPointer((void*)&entity_);
 
-        btRigidBody::btRigidBodyConstructionInfo rBodyInfo(mass, pMotionState, pShapeCollision, localInertia);
-        pRigidBody = new btRigidBody(rBodyInfo);
+        btRigidBody::btRigidBodyConstructionInfo rBodyInfo(mass_, p_motion_state_, p_shape_collision_, localInertia);
+        p_rigid_body_ = new btRigidBody(rBodyInfo);
 
-        pRigidBody->setActivationState(DISABLE_DEACTIVATION);
+        p_rigid_body_->setActivationState(DISABLE_DEACTIVATION);
 
-        pRigidBody->setUserPointer((void*)&entity);
+        p_rigid_body_->setUserPointer((void*)&entity_);
 
         // TODO: implementar o atrito estatico
-        pRigidBody->setFriction(frictionDynamic);
-        pRigidBody->setRestitution(restitution);
+        p_rigid_body_->setFriction(friction_dynamic_);
+        p_rigid_body_->setRestitution(restitution_);
 
-        pRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
+        p_rigid_body_->setContactProcessingThreshold(BT_LARGE_FLOAT);
 
         // pWorld->discretDynamicsWorld->addRigidBody ( pRigidBody, 1, 1 );
-        pWorld->getWorld()->addRigidBody(pRigidBody, 1, 1);
+        p_world_->getWorld()->addRigidBody(p_rigid_body_, 1, 1);
     }
 
     void Solid::setIndexVertexArray(btTriangleIndexVertexArray* _indexVertexArray) {
 
-        trimesh = new btGImpactMeshShape(_indexVertexArray);
-        trimesh->setLocalScaling(btVector3(1.f, 1.f, 1.f));
-        trimesh->updateBound();
-        pShapeCollision = trimesh;
+        trimesh_ = new btGImpactMeshShape(_indexVertexArray);
+        trimesh_->setLocalScaling(btVector3(1.f, 1.f, 1.f));
+        trimesh_->updateBound();
+        p_shape_collision_ = trimesh_;
         // pShapeCollision->updateBound();
         // pShapeCollision = new pShapeCollision(trimesh);
     }
@@ -80,7 +80,7 @@ namespace ce {
         btScalar matrix[16];
 
         // Pega posicao do corpo atual e ajusta sua matrix (posicao e rotacao)
-        pRigidBody->getMotionState()->getWorldTransform(transLocal);
+        p_rigid_body_->getMotionState()->getWorldTransform(transLocal);
         transLocal.getOpenGLMatrix(&matrix[0]);
 
         // desloca desenha para o pbjeto horigem
@@ -92,23 +92,23 @@ namespace ce {
     }
 
     const glm::vec3 Solid::getPosition() const {
-        btVector3 pos = pRigidBody->getWorldTransform().getOrigin();
+        btVector3 pos = p_rigid_body_->getWorldTransform().getOrigin();
         return glm::vec3(pos.getX(), pos.getY(), pos.getZ());
     }
 
     void Solid::setPosition(const glm::vec3& _pos) {
 
-        btTransform l_transform = pRigidBody->getCenterOfMassTransform();
+        btTransform l_transform = p_rigid_body_->getCenterOfMassTransform();
         l_transform.setOrigin(btVector3(_pos.x, _pos.y, _pos.z));
-        pRigidBody->setCenterOfMassTransform(l_transform);
+        p_rigid_body_->setCenterOfMassTransform(l_transform);
     }
 
     void Solid::setRotation(const glm::vec3& _rotation) {
 
-        btTransform transform = pRigidBody->getCenterOfMassTransform();
+        btTransform transform = p_rigid_body_->getCenterOfMassTransform();
 
         transform.setRotation(btQuaternion(_rotation.y, _rotation.x, _rotation.z));
-        pRigidBody->setCenterOfMassTransform(transform);
+        p_rigid_body_->setCenterOfMassTransform(transform);
     }
 
     // glm::vec3 Solid::getRotation() {
@@ -122,7 +122,7 @@ namespace ce {
         btTransform transLocal;
         btScalar matrix[16];
         // Pega posicao do corpo atual e ajusta sua matrix (posicao e rotacao)
-        pRigidBody->getMotionState()->getWorldTransform(transLocal);
+        p_rigid_body_->getMotionState()->getWorldTransform(transLocal);
         transLocal.getOpenGLMatrix(&matrix[0]);
 
         return glm::make_mat4(matrix);
@@ -131,15 +131,15 @@ namespace ce {
     void Solid::setMatrix(const glm::mat4& _trans) {
         btTransform transform;
         transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
-        pMotionState = new btDefaultMotionState(transform);
+        p_motion_state_ = new btDefaultMotionState(transform);
     }
 
     void Solid::applyTorc(const glm::vec3& _torque) {
         // pRigidBody->applyTorque(_torque);
 
-        pRigidBody->applyTorque(
-            pRigidBody->getInvInertiaTensorWorld().inverse() *
-            (pRigidBody->getWorldTransform().getBasis() * btVector3(_torque.x, _torque.y, _torque.z)));
+        p_rigid_body_->applyTorque(
+            p_rigid_body_->getInvInertiaTensorWorld().inverse() *
+            (p_rigid_body_->getWorldTransform().getBasis() * btVector3(_torque.x, _torque.y, _torque.z)));
 
         // pRigidBody->getInvInertiaTensorWorld().inverse()*(pRigidBody->getWorldTransform().getBasis()
         // * _torque);
@@ -155,12 +155,12 @@ namespace ce {
         // pRigidBody->applyCentralForce(correctedForce);
 
         // Jeito 2
-        btMatrix3x3& boxRot = pRigidBody->getWorldTransform().getBasis();
+        btMatrix3x3& boxRot = p_rigid_body_->getWorldTransform().getBasis();
 
         btVector3 prop(_prop.x, _prop.y, _prop.z);
 
         btVector3 correctedForce = boxRot * prop;
-        pRigidBody->applyCentralForce(correctedForce);
+        p_rigid_body_->applyCentralForce(correctedForce);
     }
 
     // Transformacao quando Euley nao apagar

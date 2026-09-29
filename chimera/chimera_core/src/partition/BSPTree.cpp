@@ -51,17 +51,17 @@ namespace ce {
 
         meshToTriangle(mesh, vTris);
 
-        vertex.assign(mesh.vertex.begin(), mesh.vertex.end());
+        vertex_.assign(mesh.vertex.begin(), mesh.vertex.end());
 
         // create BspTtree leafy
         BSPTreeNode* root = build(vTris);
 
-        vpLeafOut.assign(this->vpLeaf.begin(), this->vpLeaf.end());
+        vpLeafOut.assign(this->vp_leaf_.begin(), this->vp_leaf_.end());
 
-        this->vpLeaf.clear();
+        this->vp_leaf_.clear();
 
         mesh.vertex.clear();
-        mesh.vertex.assign(vertex.begin(), vertex.end());
+        mesh.vertex.assign(vertex_.begin(), vertex_.end());
         return root;
     }
 
@@ -78,14 +78,14 @@ namespace ce {
 
             score = splits = backfaces = frontfaces = 0;
 
-            Plane hyperPlane(vertex[th->idx.s].point, th->normal);
+            Plane hyperPlane(vertex_[th->idx.s].point, th->normal);
 
             for (std::shared_ptr<Triangle> currentPoly : _vTriangle) {
                 if (currentPoly != th) {
-                    SIDE result = hyperPlane.classifyPoly(vertex[currentPoly->idx.s].point, // PA
-                                                          vertex[currentPoly->idx.t].point, // PB
-                                                          vertex[currentPoly->idx.p].point, // PC
-                                                          temp);                            // Clip Test Result (A,B,C)
+                    SIDE result = hyperPlane.classifyPoly(vertex_[currentPoly->idx.s].point, // PA
+                                                          vertex_[currentPoly->idx.t].point, // PB
+                                                          vertex_[currentPoly->idx.p].point, // PC
+                                                          temp);                             // Clip Test Result (A,B,C)
                     switch (result) {
                         case SIDE::CP_ONPLANE:
                             break;
@@ -125,29 +125,29 @@ namespace ce {
         // Vertex dos triangulos a serem normalizados
         glm::vec2 vertA_uv, vertB_uv, vertC_uv;
 
-        glm::vec3 a{vertex[_pTriangle->idx.s].point};
-        glm::vec3 b{vertex[_pTriangle->idx.t].point};
-        glm::vec3 c{vertex[_pTriangle->idx.p].point};
+        glm::vec3 a{vertex_[_pTriangle->idx.s].point};
+        glm::vec3 b{vertex_[_pTriangle->idx.t].point};
+        glm::vec3 c{vertex_[_pTriangle->idx.p].point};
 
         // Normaliza Triangulo para que o corte do triangulo esteja nos segmentos de reta CA e CB (corte em a e b)
-        if (fx.x * fx.z >= 0) {                      // corte em a e c (rotaciona pontos sentido horario) ABC => BCA
-            swapFace(b, c);                          // troca b com c
-            swapFace(a, b);                          // troca a com b
-            vertA_uv = vertex[_pTriangle->idx.p].uv; // old c
-            vertB_uv = vertex[_pTriangle->idx.s].uv; // old a
-            vertC_uv = vertex[_pTriangle->idx.t].uv; // old b
+        if (fx.x * fx.z >= 0) {                       // corte em a e c (rotaciona pontos sentido horario) ABC => BCA
+            swapFace(b, c);                           // troca b com c
+            swapFace(a, b);                           // troca a com b
+            vertA_uv = vertex_[_pTriangle->idx.p].uv; // old c
+            vertB_uv = vertex_[_pTriangle->idx.s].uv; // old a
+            vertC_uv = vertex_[_pTriangle->idx.t].uv; // old b
 
         } else if (fx.y * fx.z >= 0) { // corte em b e c (totaciona pontos sentido anti-horario)  ABC => CAB
             swapFace(a, c);            // troca A com C
             swapFace(a, b);            // troca a com b
-            vertA_uv = vertex[_pTriangle->idx.t].uv; // old b
-            vertB_uv = vertex[_pTriangle->idx.p].uv; // old c
-            vertC_uv = vertex[_pTriangle->idx.s].uv; // old a
+            vertA_uv = vertex_[_pTriangle->idx.t].uv; // old b
+            vertB_uv = vertex_[_pTriangle->idx.p].uv; // old c
+            vertC_uv = vertex_[_pTriangle->idx.s].uv; // old a
 
-        } else {                                     // Cortre em a e b (pontos posicao original)
-            vertA_uv = vertex[_pTriangle->idx.s].uv; // old a
-            vertB_uv = vertex[_pTriangle->idx.t].uv; // old b
-            vertC_uv = vertex[_pTriangle->idx.p].uv; // old c
+        } else {                                      // Cortre em a e b (pontos posicao original)
+            vertA_uv = vertex_[_pTriangle->idx.s].uv; // old a
+            vertB_uv = vertex_[_pTriangle->idx.t].uv; // old b
+            vertC_uv = vertex_[_pTriangle->idx.p].uv; // old c
         }
 
         glm::vec3 A, B;       // Pega pontos posicao original e inteseccao
@@ -165,26 +165,26 @@ namespace ce {
         const glm::vec2 texB{vertB_uv + deltaB};
 
         // indices de triangulos novos
-        size_t last = vertex.size();
+        size_t last = vertex_.size();
 
         //-- T1 Triangle T1(a, b, A); // mesma normal que o original
-        vertex.push_back({a, _pTriangle->normal, vertA_uv}); // T1 PA
-        vertex.push_back({b, _pTriangle->normal, vertB_uv}); // T1 PB
-        vertex.push_back({A, _pTriangle->normal, texA});     // T1 PC
+        vertex_.push_back({a, _pTriangle->normal, vertA_uv}); // T1 PA
+        vertex_.push_back({b, _pTriangle->normal, vertB_uv}); // T1 PB
+        vertex_.push_back({A, _pTriangle->normal, texA});     // T1 PC
         _vTriangle.push_front(
             std::make_shared<Triangle>(glm::uvec3(last, last + 1, last + 2), _pTriangle->normal, _pTriangle->splitter));
 
         //-- T2 Triangle T2(b, B, A); // mesma normal que o original
-        vertex.push_back({b, _pTriangle->normal, vertB_uv}); // T2 PA
-        vertex.push_back({B, _pTriangle->normal, texB});     // T2 PB
-        vertex.push_back({A, _pTriangle->normal, texA});     // T2 PC
+        vertex_.push_back({b, _pTriangle->normal, vertB_uv}); // T2 PA
+        vertex_.push_back({B, _pTriangle->normal, texB});     // T2 PB
+        vertex_.push_back({A, _pTriangle->normal, texA});     // T2 PC
         _vTriangle.push_front(std::make_shared<Triangle>(glm::uvec3(last + 3, last + 4, last + 5), _pTriangle->normal,
                                                          _pTriangle->splitter));
 
         // -- T3 Triangle T3(A, B, c); // mesma normal que o original
-        vertex.push_back({A, _pTriangle->normal, texA});     // T3 PA
-        vertex.push_back({B, _pTriangle->normal, texB});     // T3 PB
-        vertex.push_back({c, _pTriangle->normal, vertC_uv}); // T3 PC
+        vertex_.push_back({A, _pTriangle->normal, texA});     // T3 PA
+        vertex_.push_back({B, _pTriangle->normal, texB});     // T3 PB
+        vertex_.push_back({c, _pTriangle->normal, vertC_uv}); // T3 PC
         _vTriangle.push_front(std::make_shared<Triangle>(glm::uvec3(last + 6, last + 7, last + 8), _pTriangle->normal,
                                                          _pTriangle->splitter));
 
@@ -205,16 +205,16 @@ namespace ce {
         BSPTreeNode* tree = nullptr;
 
         if (std::shared_ptr<Triangle> best = selectBestSplitter(_vTriangle); best != nullptr) {
-            tree = new BSPTreeNode(Plane(vertex[best->idx.s].point, best->normal));
+            tree = new BSPTreeNode(Plane(vertex_[best->idx.s].point, best->normal));
             while (_vTriangle.empty() == false) {
 
                 poly = _vTriangle.back();
                 _vTriangle.pop_back();
                 glm::vec3 result;
-                SIDE clipTest = tree->hyperPlane.classifyPoly(vertex[poly->idx.s].point, // PA old poly.vertex[0].point
-                                                              vertex[poly->idx.t].point, // PB
-                                                              vertex[poly->idx.p].point, // PC
-                                                              result);                   // Clip Test Result (A,B,C)
+                SIDE clipTest = tree->hyperPlane.classifyPoly(vertex_[poly->idx.s].point, // PA old poly.vertex[0].point
+                                                              vertex_[poly->idx.t].point, // PB
+                                                              vertex_[poly->idx.p].point, // PC
+                                                              result);                    // Clip Test Result (A,B,C)
                 switch (clipTest) {
                     case SIDE::CP_BACK:
                         back_list.push_front(poly);
@@ -241,7 +241,7 @@ namespace ce {
                 poly = _vTriangle.back();
                 _vTriangle.pop_back();
                 if (primeiro == true) {
-                    tree = new BSPTreeNode(Plane(vertex[poly->idx.s].point, poly->normal));
+                    tree = new BSPTreeNode(Plane(vertex_[poly->idx.s].point, poly->normal));
                     primeiro = false;
                 }
                 front_list.push_front(poly);
@@ -284,8 +284,8 @@ namespace ce {
             // convPoly = nullptr;
         }
 
-        tree->leafIndex = vpLeaf.size();
-        vpLeaf.push_back(leaf);
+        tree->leafIndex = vp_leaf_.size();
+        vp_leaf_.push_back(leaf);
 
         tree->isSolid = false;
         tree->isLeaf = true;

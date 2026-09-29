@@ -4,15 +4,15 @@
 
 namespace ce {
 
-class Constraint {
-  private:
-    Solid* pPhysicsA = nullptr;
-    Solid* pPhysicsB = nullptr;
-    btTransform transformA;
-    btTransform transformB;
+    class Constraint {
+      public:
+        Constraint() = default;
+        virtual ~Constraint() = default;
 
-  public:
-    Constraint() = default;
-    virtual ~Constraint() = default;
-};
+      private:
+        Solid* pPhysicsA = nullptr;
+        Solid* pPhysicsB = nullptr;
+        btTransform transformA;
+        btTransform transformB;
+    };
 } // namespace ce

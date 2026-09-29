@@ -16,17 +16,17 @@ namespace ce {
     class Engine {
 
       public:
-        Engine(std::shared_ptr<entt::registry> registry);
+        explicit Engine(std::shared_ptr<entt::registry> registry);
         virtual ~Engine() = default;
         void run();
 
-        StateStack& getStack() { return stack; }
+        StateStack& getStack() { return stack_; }
 
       private:
-        std::shared_ptr<entt::registry> registry;
-        std::shared_ptr<ICanva> canva;
-        uint32_t fps = 140;
-        Timer timerFPS;
-        StateStack stack;
+        std::shared_ptr<entt::registry> registry_;
+        std::shared_ptr<ICanva> canva_;
+        uint32_t fps_ = 140;
+        Timer timer_fps_;
+        StateStack stack_;
     };
 } // namespace ce

@@ -3,24 +3,24 @@
 namespace ce {
 
     BatchRender2D::BatchRender2D() {
-        indexCount = 0;
+        index_count_ = 0;
         this->init();
     }
 
     BatchRender2D::~BatchRender2D() {
-        ibo.reset();
-        pVao.reset(); // VBO's deted here!!!
+        ibo_.reset();
+        p_vao_.reset(); // VBO's deted here!!!
     }
 
     void BatchRender2D::init() {
 
-        pVao = std::make_shared<VertexArray>();
-        pVbo = std::make_shared<VertexBuffer>(BufferType::DYNAMIC);
+        p_vao_ = std::make_shared<VertexArray>();
+        p_vbo_ = std::make_shared<VertexBuffer>(BufferType::DYNAMIC);
 
-        pVao->push(pVbo);
+        p_vao_->push(p_vbo_);
 
-        pVao->bind();
-        pVbo->bind();
+        p_vao_->bind();
+        p_vbo_->bind();
 
         BufferLayout layout;
         layout.Push<float>(3, false);
@@ -28,9 +28,9 @@ namespace ce {
         layout.Push<float>(1, false);
         layout.Push<float>(4, false);
 
-        pVbo->setLayout(layout);
-        pVbo->setData(nullptr, renderer_buffer_size);
-        pVbo->unbind();
+        p_vbo_->setLayout(layout);
+        p_vbo_->setData(nullptr, renderer_buffer_size);
+        p_vbo_->unbind();
 
         uint32_t indices[renderer_indices_size];
 
@@ -45,24 +45,24 @@ namespace ce {
             offset += 4;
         }
 
-        ibo = std::make_shared<IndexBuffer>(indices, renderer_indices_size);
+        ibo_ = std::make_shared<IndexBuffer>(indices, renderer_indices_size);
 
-        pVao->unbind();
+        p_vao_->unbind();
     }
 
     void BatchRender2D::begin(std::shared_ptr<Camera> camera) {
 
-        this->camera = camera;
+        this->camera_ = camera;
 
-        pVbo->bind();
-        this->buffer = (VertexDataSimple*)pVbo->map();
+        p_vbo_->bind();
+        this->buffer_ = (VertexDataSimple*)p_vbo_->map();
     }
 
     float BatchRender2D::submitTexture(std::shared_ptr<Texture> texture) {
         float result = 0.0F;
         bool found = false;
-        for (uint i = 0; i < textures.size(); i++) {
-            if (textures[i] == texture) {
+        for (uint i = 0; i < textures_.size(); i++) {
+            if (textures_[i] == texture) {
                 result = (float)(i + 1);
                 found = true;
                 break;
@@ -70,13 +70,13 @@ namespace ce {
         }
 
         if (!found) {
-            if (textures.size() >= renderer_max_texture) {
-                end();         // End();
-                flush();       // Present();
-                begin(camera); // Begin();
+            if (textures_.size() >= renderer_max_texture) {
+                end();          // End();
+                flush();        // Present();
+                begin(camera_); // Begin();
             }
-            textures.push_back(texture);
-            result = (float)(textures.size());
+            textures_.push_back(texture);
+            result = (float)(textures_.size());
         }
         return result;
     }
@@ -94,32 +94,32 @@ namespace ce {
             textureSlot = this->submitTexture(prop.texture);
         }
 
-        buffer->point =
-            stack.multiplVec3(position); //  glm::vec3(transformationStack.back() * glm::vec4(position, 1.0f));
-        buffer->uv = uv[0];
-        buffer->tid = textureSlot;
-        buffer->color = color;
-        buffer++;
+        buffer_->point =
+            stack_.multiplVec3(position); //  glm::vec3(transformationStack.back() * glm::vec4(position, 1.0f));
+        buffer_->uv = uv[0];
+        buffer_->tid = textureSlot;
+        buffer_->color = color;
+        buffer_++;
 
-        buffer->point = stack.multiplVec3(glm::vec3(position.x, position.y + size.y, position.z));
-        buffer->uv = uv[1];
-        buffer->tid = textureSlot;
-        buffer->color = color;
-        buffer++;
+        buffer_->point = stack_.multiplVec3(glm::vec3(position.x, position.y + size.y, position.z));
+        buffer_->uv = uv[1];
+        buffer_->tid = textureSlot;
+        buffer_->color = color;
+        buffer_++;
 
-        buffer->point = stack.multiplVec3(glm::vec3(position.x + size.x, position.y + size.y, position.z));
-        buffer->uv = uv[2];
-        buffer->tid = textureSlot;
-        buffer->color = color;
-        buffer++;
+        buffer_->point = stack_.multiplVec3(glm::vec3(position.x + size.x, position.y + size.y, position.z));
+        buffer_->uv = uv[2];
+        buffer_->tid = textureSlot;
+        buffer_->color = color;
+        buffer_++;
 
-        buffer->point = stack.multiplVec3(glm::vec3(position.x + size.x, position.y, position.z));
-        buffer->uv = uv[3];
-        buffer->tid = textureSlot;
-        buffer->color = color;
-        buffer++;
+        buffer_->point = stack_.multiplVec3(glm::vec3(position.x + size.x, position.y, position.z));
+        buffer_->uv = uv[3];
+        buffer_->tid = textureSlot;
+        buffer_->color = color;
+        buffer_++;
 
-        indexCount += 6;
+        index_count_ += 6;
     }
 
     void BatchRender2D::drawString(std::shared_ptr<Font> font, const std::string& text, const glm::vec3& pos,
@@ -153,31 +153,31 @@ namespace ce {
                 const float u1 = glyph.square.w;
                 const float v1 = glyph.square.h;
 
-                buffer->point = stack.multiplVec3(glm::vec3(x0, y0, 0.0F));
-                buffer->uv = glm::vec2(u0, v0);
-                buffer->tid = textureSlot;
-                buffer->color = color;
-                buffer++;
+                buffer_->point = stack_.multiplVec3(glm::vec3(x0, y0, 0.0F));
+                buffer_->uv = glm::vec2(u0, v0);
+                buffer_->tid = textureSlot;
+                buffer_->color = color;
+                buffer_++;
 
-                buffer->point = stack.multiplVec3(glm::vec3(x0, y1, 0.0F));
-                buffer->uv = glm::vec2(u0, v1); // glm::vec2(u0, v1);
-                buffer->tid = textureSlot;
-                buffer->color = color;
-                buffer++;
+                buffer_->point = stack_.multiplVec3(glm::vec3(x0, y1, 0.0F));
+                buffer_->uv = glm::vec2(u0, v1); // glm::vec2(u0, v1);
+                buffer_->tid = textureSlot;
+                buffer_->color = color;
+                buffer_++;
 
-                buffer->point = stack.multiplVec3(glm::vec3(x1, y1, 0.0F));
-                buffer->uv = glm::vec2(u1, v1);
-                buffer->tid = textureSlot;
-                buffer->color = color;
-                buffer++;
+                buffer_->point = stack_.multiplVec3(glm::vec3(x1, y1, 0.0F));
+                buffer_->uv = glm::vec2(u1, v1);
+                buffer_->tid = textureSlot;
+                buffer_->color = color;
+                buffer_++;
 
-                buffer->point = stack.multiplVec3(glm::vec3(x1, y0, 0.0F));
-                buffer->uv = glm::vec2(u1, v0);
-                buffer->tid = textureSlot;
-                buffer->color = color;
-                buffer++;
+                buffer_->point = stack_.multiplVec3(glm::vec3(x1, y0, 0.0F));
+                buffer_->uv = glm::vec2(u1, v0);
+                buffer_->tid = textureSlot;
+                buffer_->color = color;
+                buffer_++;
 
-                indexCount += 6;
+                index_count_ += 6;
 
                 x += static_cast<float>(glyph.advance) * scale.x;
             }
@@ -185,8 +185,8 @@ namespace ce {
     }
 
     void BatchRender2D::end() {
-        pVbo->unmap();
-        pVbo->unbind();
+        p_vbo_->unmap();
+        p_vbo_->unbind();
     }
 
     void BatchRender2D::flush() {
@@ -196,24 +196,24 @@ namespace ce {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         BinaryStateEnable cull(GL_CULL_FACE, GL_FALSE);
         // bind shader and uniforms from model
-        glUseProgram(renderComando->shader->getID());
-        for (const auto& kv : renderComando->uniforms) {
-            renderComando->shader->setUniformU(kv.first.c_str(), kv.second);
+        glUseProgram(render_comando_->shader->getID());
+        for (const auto& kv : render_comando_->uniforms) {
+            render_comando_->shader->setUniformU(kv.first.c_str(), kv.second);
         }
 
-        for (auto i = 0; i < textures.size(); i++) {
-            textures[i]->bind(i);
+        for (auto i = 0; i < textures_.size(); i++) {
+            textures_[i]->bind(i);
         }
 
-        pVao->bind();
-        ibo->bind();
+        p_vao_->bind();
+        ibo_->bind();
 
-        glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, index_count_, GL_UNSIGNED_INT, nullptr);
 
-        ibo->unbind();
-        pVao->unbind();
-        indexCount = 0;
-        textures.clear();
+        ibo_->unbind();
+        p_vao_->unbind();
+        index_count_ = 0;
+        textures_.clear();
         glUseProgram(0);
     }
 

@@ -2,30 +2,30 @@
 
 namespace ce {
     void Timer::start() {
-        started = true;
-        paused = false;
-        startTicks = SDL_GetTicks();
-        lastTicks = startTicks;
+        started_ = true;
+        paused_ = false;
+        start_ticks_ = SDL_GetTicks();
+        last_ticks_ = start_ticks_;
     }
 
     void Timer::stop() {
-        started = false;
-        paused = false;
+        started_ = false;
+        paused_ = false;
     }
 
     void Timer::pause() {
-        if (started && !paused) {
-            paused = true;
-            pausedTicks = SDL_GetTicks() - startTicks;
+        if (started_ && !paused_) {
+            paused_ = true;
+            paused_ticks_ = SDL_GetTicks() - start_ticks_;
         }
     }
 
     void Timer::resume() {
-        if (paused) {
-            paused = false;
-            startTicks = SDL_GetTicks() - pausedTicks;
-            lastTicks = startTicks;
-            pausedTicks = 0;
+        if (paused_) {
+            paused_ = false;
+            start_ticks_ = SDL_GetTicks() - paused_ticks_;
+            last_ticks_ = start_ticks_;
+            paused_ticks_ = 0;
         }
     }
 
@@ -36,11 +36,11 @@ namespace ce {
     }
 
     uint32_t Timer::ticks() const {
-        if (started) {
-            if (!paused) {
-                return SDL_GetTicks() - startTicks;
+        if (started_) {
+            if (!paused_) {
+                return SDL_GetTicks() - start_ticks_;
             }
-            return pausedTicks;
+            return paused_ticks_;
         }
         return 0;
     }
@@ -48,11 +48,11 @@ namespace ce {
     bool Timer::stepCount() {
 
         uint32_t temp = ticks();
-        if (temp < elapsedCount) {
-            step++;
+        if (temp < elapsed_count_) {
+            step_++;
         } else {
-            countStep = step;
-            step = 0;
+            count_step_ = step_;
+            step_ = 0;
             start();
             return true;
         }
@@ -62,8 +62,8 @@ namespace ce {
 
     uint32_t Timer::deltaCountMS() {
         uint32_t current = SDL_GetTicks();
-        uint32_t val = current - lastTicks;
-        lastTicks = current;
+        uint32_t val = current - last_ticks_;
+        last_ticks_ = current;
         return val;
     }
 } // namespace ce

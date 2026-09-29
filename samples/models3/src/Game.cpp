@@ -25,7 +25,7 @@ Game::~Game() {}
 void Game::onEvent(const SDL_Event& event) {
     using namespace ce;
 
-    if (event.type == CHIMERA_EVENT01) {
+    if (event.type == chimera_even_t01) {
         switch (static_cast<EventCE>(event.user.code)) {
             case ce::EventCE::COLLIDE_START: {
                 uint32_t* n1 = (uint32_t*)event.user.data1;

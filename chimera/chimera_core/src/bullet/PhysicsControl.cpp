@@ -5,31 +5,32 @@ namespace ce {
 
     PhysicsControl::PhysicsControl() {
 
-        collisionConfig = new btDefaultCollisionConfiguration();
-        dispatcher = new btCollisionDispatcher(collisionConfig);
+        collision_config_ = new btDefaultCollisionConfiguration();
+        dispatcher_ = new btCollisionDispatcher(collision_config_);
 
-        btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
+        btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher_);
 
-        broadPhase = new btDbvtBroadphase();
-        solver = new btSequentialImpulseConstraintSolver;
-        discretDynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadPhase, solver, collisionConfig);
+        broad_phase_ = new btDbvtBroadphase();
+        solver_ = new btSequentialImpulseConstraintSolver;
+        discret_dynamics_world_ = new btDiscreteDynamicsWorld(dispatcher_, broad_phase_, solver_, collision_config_);
 
         // true para forca aplicada apenas dentro docallback
-        discretDynamicsWorld->setInternalTickCallback(PhysicsControl::doTickCallBack, static_cast<void*>(this), false);
+        discret_dynamics_world_->setInternalTickCallback(PhysicsControl::doTickCallBack, static_cast<void*>(this),
+                                                         false);
     }
 
     PhysicsControl::~PhysicsControl() {
         removeAllObjs();
         clearAllShapes();
 
-        delete discretDynamicsWorld;
-        delete solver;
-        delete collisionConfig;
-        delete dispatcher;
-        delete broadPhase;
+        delete discret_dynamics_world_;
+        delete solver_;
+        delete collision_config_;
+        delete dispatcher_;
+        delete broad_phase_;
     }
 
-    void PhysicsControl::stepSim(const double& ts) { discretDynamicsWorld->stepSimulation(ts); }
+    void PhysicsControl::stepSim(const double& ts) { discret_dynamics_world_->stepSimulation(ts); }
 
     void PhysicsControl::doTickCallBack(btDynamicsWorld* world, btScalar timeStep) {
 
@@ -54,16 +55,16 @@ namespace ce {
 
     void PhysicsControl::removeAllObjs() {
         // remove the rigidbodies from the dynamics world and delete them
-        for (int i = discretDynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--) {
+        for (int i = discret_dynamics_world_->getNumCollisionObjects() - 1; i >= 0; i--) {
 
-            btCollisionObject* pObj = discretDynamicsWorld->getCollisionObjectArray()[i];
+            btCollisionObject* pObj = discret_dynamics_world_->getCollisionObjectArray()[i];
             btRigidBody* pBody = btRigidBody::upcast(pObj);
 
             if (pBody && pBody->getMotionState()) {
                 delete pBody->getMotionState();
             }
 
-            discretDynamicsWorld->removeCollisionObject(pObj);
+            discret_dynamics_world_->removeCollisionObject(pObj);
             delete pObj;
         }
     }
@@ -83,12 +84,12 @@ namespace ce {
 
         std::map<btCollisionObject*, std::pair<uint32_t*, uint32_t*>> new_contacts;
 
-        int numManifolds = discretDynamicsWorld->getDispatcher()->getNumManifolds();
+        int numManifolds = discret_dynamics_world_->getDispatcher()->getNumManifolds();
 
         for (int i = 0; i < numManifolds; i++) {
 
             btPersistentManifold* contactManiFold =
-                discretDynamicsWorld->getDispatcher()->getManifoldByIndexInternal(i);
+                discret_dynamics_world_->getDispatcher()->getManifoldByIndexInternal(i);
 
             btCollisionObject* objA = (btCollisionObject*)contactManiFold->getBody0();
             btCollisionObject* objB = (btCollisionObject*)contactManiFold->getBody1();
@@ -137,7 +138,7 @@ namespace ce {
         if (!new_contacts.empty()) {
 
             for (it = new_contacts.begin(); it != new_contacts.end(); it++) {
-                if (contactActives.find((*it).first) == contactActives.end()) {
+                if (contact_actives_.find((*it).first) == contact_actives_.end()) {
 
                     if (checkAllowCollision((*it).second.first) == true) {
                         sendChimeraEvent(EventCE::COLLIDE_START, (*it).second.first, (*it).second.second);
@@ -150,8 +151,8 @@ namespace ce {
             }
         }
 
-        if (!contactActives.empty()) {
-            for (it = contactActives.begin(); it != contactActives.end(); it++) {
+        if (!contact_actives_.empty()) {
+            for (it = contact_actives_.begin(); it != contact_actives_.end(); it++) {
                 if (new_contacts.find((*it).first) == new_contacts.end()) {
 
                     if (checkAllowCollision((*it).second.first) == true) {
@@ -161,6 +162,6 @@ namespace ce {
             }
         }
 
-        contactActives = new_contacts;
+        contact_actives_ = new_contacts;
     }
 } // namespace ce

@@ -5,8 +5,8 @@
 namespace ce {
 
     struct EmitterComponent {
-        IEmitter* emitter;
+        IEmitter* emitter{nullptr};
         TagInfo tag;
-        EmitterComponent() : emitter(nullptr) {}
+        EmitterComponent() = default;
     };
 } // namespace ce

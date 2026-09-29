@@ -25,14 +25,14 @@ namespace ce {
         void processDistance(const int& _mz);
         void invertPitch();
 
-        float pitch, yaw, distance, min, max;
-        glm::vec3 up, front;
-        Entity entity;
-        std::shared_ptr<Camera> camera;
-        std::shared_ptr<ViewProjection> vp;
+        float pitch_, yaw_, distance_, min_, max_;
+        glm::vec3 up_, front_;
+        Entity entity_;
+        std::shared_ptr<Camera> camera_;
+        std::shared_ptr<ViewProjection> vp_;
 
-        std::shared_ptr<entt::registry> registry;
-        std::shared_ptr<InputManager> inputManager;
+        std::shared_ptr<entt::registry> registry_;
+        std::shared_ptr<InputManager> input_manager_;
     };
 
 } // namespace ce

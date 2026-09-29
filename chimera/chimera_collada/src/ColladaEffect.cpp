@@ -152,7 +152,7 @@ namespace ce {
                 } else if (std::string(first.name()) == "texture") {
 
                     std::string texId = first.attribute("texture").value();
-                    std::string idTex = mapaTex[mapa2D[texId]];
+                    std::string idTex = mapa_tex_[mapa2d_[texId]];
 
                     ColladaImage ci(registry, colladaDom, idTex);
                     ci.create(entity, tp, ci.getLibrary("library_images"));
@@ -197,12 +197,12 @@ namespace ce {
                 if (std::string sVal1 = val1.name(); sVal1 == "surface") {
                     std::string keyImage = val1.child("init_from").text().as_string();
                     // loadImage(keyImage, tp);
-                    mapaTex[sid] = keyImage;
+                    mapa_tex_[sid] = keyImage;
 
                 } else if (sVal1 == "sampler2D") {
                     if (setTextureParam(val1, tp) == false) {
                         std::string keyMap = val1.child("source").text().as_string();
-                        mapa2D[sid] = keyMap;
+                        mapa2d_[sid] = keyMap;
                     }
                 } else if (sVal1 == "samplerDEPTH") {
                     // nao e textura e FR

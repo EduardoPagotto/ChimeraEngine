@@ -59,7 +59,7 @@ namespace ce {
             for (auto domCache : Collada::vColladaDom) {
                 if (domCache.file == rfc.getPath()) {
                     colladaDom = domCache;
-                    fragment = rfc.getFragment();
+                    fragment_ = rfc.getFragment();
                     SDL_Log("Arquivo %s cache, id: %s", colladaDom.file.c_str(), rfc.getFragment().c_str());
                     return;
                 }
@@ -78,7 +78,7 @@ namespace ce {
             Collada::vColladaDom.push_back(colladaDom);
         }
 
-        fragment = rfc.getFragment();
+        fragment_ = rfc.getFragment();
     }
 
     void Collada::destroy() {
@@ -96,7 +96,7 @@ namespace ce {
     }
 
     const pugi::xml_node Collada::getLibrary(const std::string& libraryName) {
-        return getLibraryKey(libraryName, fragment);
+        return getLibraryKey(libraryName, fragment_);
     }
 
     const pugi::xml_node Collada::getLibraryKey(const std::string& libraryName, const std::string& key) {

@@ -10,8 +10,8 @@ namespace ce {
             : Collada(registry, dom, url) {};
 
         virtual ~ColladaEffect() {
-            mapaTex.clear();
-            mapa2D.clear();
+            mapa_tex_.clear();
+            mapa2d_.clear();
         }
         void create(const std::string& refName, Entity& entity, pugi::xml_node node);
 
@@ -22,7 +22,7 @@ namespace ce {
         void setMaterial(const pugi::xml_node& node, TexParam& tp);
         Entity entity;
 
-        std::unordered_map<std::string, std::string> mapaTex;
-        std::unordered_map<std::string, std::string> mapa2D;
+        std::unordered_map<std::string, std::string> mapa_tex_;
+        std::unordered_map<std::string, std::string> mapa2d_;
     };
 } // namespace ce

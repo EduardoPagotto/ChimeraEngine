@@ -21,19 +21,19 @@ namespace ce {
         };
 
         Mouse() {
-            this->continuousButtons.fill(false);
-            this->pressedButtons.fill(false);
-            this->releasedButtons.fill(false);
+            this->continuous_buttons_.fill(false);
+            this->pressed_buttons_.fill(false);
+            this->released_buttons_.fill(false);
         }
 
         virtual ~Mouse() = default;
 
         // Limpa os gatilhos rápidos e os deltas acumulados no frame anterior
         void startFrame() {
-            this->pressedButtons.fill(false);
-            this->releasedButtons.fill(false);
-            this->delta = {0.0F, 0.0F};
-            this->scrolll = {0.0F, 0.0F};
+            this->pressed_buttons_.fill(false);
+            this->released_buttons_.fill(false);
+            this->delta_ = {0.0F, 0.0F};
+            this->scrolll_ = {0.0F, 0.0F};
         }
 
         // Captura os eventos de hardware brutos do SDL_PollEvent (Garante zero latência e perda)
@@ -43,15 +43,15 @@ namespace ce {
             switch (event.type) {
                 case SDL_EVENT_MOUSE_MOTION:
                     // No SDL3, coordenadas e deltas de movimento usam floats
-                    position = {event.motion.x, event.motion.y};
+                    position_ = {event.motion.x, event.motion.y};
                     // Acumula caso ocorram múltiplos sub-frames
-                    delta += glm::vec2(event.motion.xrel, event.motion.yrel);
+                    delta_ += glm::vec2(event.motion.xrel, event.motion.yrel);
                     break;
 
                 case SDL_EVENT_MOUSE_BUTTON_DOWN: {
                     uint8_t buttonIndex = event.button.button - 1;
                     if (buttonIndex < TotalButtons) {
-                        this->pressedButtons[buttonIndex] = true;
+                        this->pressed_buttons_[buttonIndex] = true;
                     }
                     break;
                 }
@@ -59,14 +59,14 @@ namespace ce {
                 case SDL_EVENT_MOUSE_BUTTON_UP: {
                     uint8_t buttonIndex = event.button.button - 1;
                     if (buttonIndex < TotalButtons) {
-                        this->releasedButtons[buttonIndex] = true;
+                        this->released_buttons_[buttonIndex] = true;
                     }
                     break;
                 }
 
                 case SDL_EVENT_MOUSE_WHEEL:
                     // SDL3 usa floats para o roller para suportar scrolls de precisão livre
-                    this->scrolll += glm::vec2(event.wheel.x, event.wheel.y);
+                    this->scrolll_ += glm::vec2(event.wheel.x, event.wheel.y);
                     // m_scrollY += event.wheel.y; // Geralmente o scroll vertical padrão
                     break;
                 default:
@@ -80,31 +80,31 @@ namespace ce {
         // Atualiza o estado contínuo (se botões continuam apertados)
         void updateContinuousInput() {
             uint32_t buttonMask = SDL_GetMouseState(nullptr, nullptr);
-            this->continuousButtons[Left] = (buttonMask & SDL_BUTTON_MASK(SDL_BUTTON_LEFT)) != 0;
-            this->continuousButtons[Middle] = (buttonMask & SDL_BUTTON_MASK(SDL_BUTTON_MIDDLE)) != 0;
-            this->continuousButtons[Right] = (buttonMask & SDL_BUTTON_MASK(SDL_BUTTON_RIGHT)) != 0;
+            this->continuous_buttons_[Left] = (buttonMask & SDL_BUTTON_MASK(SDL_BUTTON_LEFT)) != 0;
+            this->continuous_buttons_[Middle] = (buttonMask & SDL_BUTTON_MASK(SDL_BUTTON_MIDDLE)) != 0;
+            this->continuous_buttons_[Right] = (buttonMask & SDL_BUTTON_MASK(SDL_BUTTON_RIGHT)) != 0;
         }
 
         // Retona posicao do mouse
-        [[nodiscard]] glm::vec2 getPositionXY() const { return this->position; }
+        [[nodiscard]] glm::vec2 getPositionXY() const { return this->position_; }
 
         // Retorna o deslocamento (Delta) ocorrido neste frame
-        [[nodiscard]] glm::vec2 getDeltaXY() const { return this->delta; }
+        [[nodiscard]] glm::vec2 getDeltaXY() const { return this->delta_; }
 
         // Retorna o scroll da rodinha ocorrido neste frame (Positivo = Cima/Direita, Negativo = Baixo/Esquerda)
-        [[nodiscard]] glm::vec2 getScroll() const { return this->scrolll; }
+        [[nodiscard]] glm::vec2 getScroll() const { return this->scrolll_; }
 
-        [[nodiscard]] bool isButtonDown(MouseButton button) const { return this->continuousButtons[button]; }
-        [[nodiscard]] bool isButtonKeyPressed(MouseButton button) const { return this->pressedButtons[button]; }
-        [[nodiscard]] bool isButtonKeyReleased(MouseButton button) const { return this->releasedButtons[button]; }
+        [[nodiscard]] bool isButtonDown(MouseButton button) const { return this->continuous_buttons_[button]; }
+        [[nodiscard]] bool isButtonKeyPressed(MouseButton button) const { return this->pressed_buttons_[button]; }
+        [[nodiscard]] bool isButtonKeyReleased(MouseButton button) const { return this->released_buttons_[button]; }
 
       private:
-        glm::vec2 position{0.0F, 0.0F}; // float m_mouseX, m_mouseY;
-        glm::vec2 delta{0.0F, 0.0F};    // float m_deltaX, m_deltaY;
-        glm::vec2 scrolll{0.0F, 0.0F};  //  float m_scrollX, m_scrollY;
+        glm::vec2 position_{0.0F, 0.0F}; // float m_mouseX, m_mouseY;
+        glm::vec2 delta_{0.0F, 0.0F};    // float m_deltaX, m_deltaY;
+        glm::vec2 scrolll_{0.0F, 0.0F};  //  float m_scrollX, m_scrollY;
 
-        std::array<bool, TotalButtons> continuousButtons{};
-        std::array<bool, TotalButtons> pressedButtons{};
-        std::array<bool, TotalButtons> releasedButtons{};
+        std::array<bool, TotalButtons> continuous_buttons_{};
+        std::array<bool, TotalButtons> pressed_buttons_{};
+        std::array<bool, TotalButtons> released_buttons_{};
     };
 } // namespace ce

@@ -23,20 +23,20 @@ namespace ce {
         bool stepCount();
         uint32_t deltaCountMS();
 
-        bool isStarted() const { return started; }
-        bool isPaused() const { return paused; }
-        uint32_t getCountStep() const { return countStep; }
-        void setElapsedCount(const uint32_t& val) { elapsedCount = val; }
+        bool isStarted() const { return started_; }
+        bool isPaused() const { return paused_; }
+        uint32_t getCountStep() const { return count_step_; }
+        void setElapsedCount(const uint32_t& val) { elapsed_count_ = val; }
         double deltaTimeSecounds() { return ((double)deltaCountMS()) / 1000.0F; }
 
       private:
-        bool started = false;
-        bool paused = false;
-        uint32_t startTicks = 0;
-        uint32_t lastTicks = 0;
-        uint32_t pausedTicks = 0;
-        uint32_t step = 0;
-        uint32_t countStep = 0;
-        uint32_t elapsedCount = 0;
+        bool started_ = false;
+        bool paused_ = false;
+        uint32_t start_ticks_ = 0;
+        uint32_t last_ticks_ = 0;
+        uint32_t paused_ticks_ = 0;
+        uint32_t step_ = 0;
+        uint32_t count_step_ = 0;
+        uint32_t elapsed_count_ = 0;
     };
 } // namespace ce

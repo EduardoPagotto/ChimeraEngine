@@ -3,14 +3,14 @@
 #include "chimera_core/gl/OpenGLDefs.hpp"
 #include <SDL3/SDL_log.h>
 
-Game::Game(std::shared_ptr<entt::registry> registry) : registry(registry) {
+Game::Game(std::shared_ptr<entt::registry> registry) : registry_(registry) {
 
-    this->canva = std::dynamic_pointer_cast<ce::CanvasGL>(registry->ctx().get<std::shared_ptr<ce::ICanva>>());
-    if (this->canva == nullptr) {
+    this->canva_ = std::dynamic_pointer_cast<ce::CanvasGL>(registry->ctx().get<std::shared_ptr<ce::ICanva>>());
+    if (this->canva_ == nullptr) {
         throw std::runtime_error("Canva not found in CTX");
     }
 
-    this->inputManager = registry->ctx().get<std::shared_ptr<ce::InputManager>>();
+    this->input_manager_ = registry->ctx().get<std::shared_ptr<ce::InputManager>>();
 }
 
 Game::~Game() {}
@@ -56,12 +56,12 @@ void Game::onEvent(const SDL_Event& event) {
 void Game::onUpdate(const double& ts) {
     using namespace ce;
 
-    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
+    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
         sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
         return;
     }
 
-    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_F1)) {
+    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_F1)) {
         sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
         return;
     }

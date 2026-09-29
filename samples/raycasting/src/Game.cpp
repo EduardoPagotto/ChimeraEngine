@@ -7,14 +7,14 @@
 #include <format>
 #include <stdexcept>
 
-Game::Game(std::shared_ptr<entt::registry> registry) : registry(registry) {
+Game::Game(std::shared_ptr<entt::registry> registry) : registry_(registry) {
 
-    this->canva = std::dynamic_pointer_cast<ce::CanvaFB>(registry->ctx().get<std::shared_ptr<ce::ICanva>>());
-    if (this->canva == nullptr) {
+    this->canva_ = std::dynamic_pointer_cast<ce::CanvaFB>(registry->ctx().get<std::shared_ptr<ce::ICanva>>());
+    if (this->canva_ == nullptr) {
         throw std::runtime_error("Canva not found in CTX");
     }
 
-    this->inputManager = registry->ctx().get<std::shared_ptr<ce::InputManager>>();
+    this->input_manager_ = registry->ctx().get<std::shared_ptr<ce::InputManager>>();
 }
 
 Game::~Game() {}
@@ -23,20 +23,20 @@ std::string Game::getName() const { return "GAME"; }
 
 void Game::onAttach() {
 
-    moveSpeed = 0.05;
-    rotSpeed = 0.025;
+    move_speed_ = 0.05;
+    rot_speed_ = 0.025;
 
     // estado de inicialização
-    state = new State;
-    state->pos = glm::vec2(3, 3);
-    state->dir = glm::vec2(-1, 0);
-    state->cam = glm::vec2(0, fov);
+    state_ = new State;
+    state_->pos = glm::vec2(3, 3);
+    state_->dir = glm::vec2(-1, 0);
+    state_->cam = glm::vec2(0, fov);
 
-    world = new World;
+    world_ = new World;
 
     const char* file = "assets/maps/raycasting_world.txt";
 
-    if (!LoadWorld(file, world)) {
+    if (!LoadWorld(file, world_)) {
         throw std::runtime_error(std::format("File not found: {}", file));
     }
 }
@@ -62,7 +62,7 @@ void Game::testeGamePad() {
 
     using namespace ce;
 
-    auto gp = this->inputManager->getGamepad();
+    auto gp = this->input_manager_->getGamepad();
     Gamepad::ButtonState bt = gp->getButtonState(0, SDL_GAMEPAD_BUTTON_NORTH);
 
     if (bt == Gamepad::ButtonState::Pressed) {
@@ -78,19 +78,19 @@ void Game::testeGamePad() {
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Botao liberado");
     }
 
-    glm::vec2 leftStick = gp->getLeftStick(0, player0Config);
+    glm::vec2 leftStick = gp->getLeftStick(0, player0_config_);
     if (glm::length(leftStick) > 0.0F) {
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick Esquerdo -> X: %f | Y: %f", leftStick.x,
                      leftStick.y);
     }
 
-    glm::vec2 rightStick = gp->getRightStick(0, player0Config);
+    glm::vec2 rightStick = gp->getRightStick(0, player0_config_);
     if (glm::length(rightStick) > 0.0F) {
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick Direito -> X: %f | Y: %f", rightStick.x,
                      rightStick.y);
     }
 
-    glm::vec2 trigerStick = gp->getTriggerStick(0, player0Config);
+    glm::vec2 trigerStick = gp->getTriggerStick(0, player0_config_);
     if (glm::length(trigerStick) > 0.0F) {
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick trigerStick -> X: %f | Y: %f", trigerStick.x,
                      trigerStick.y);
@@ -103,54 +103,54 @@ void Game::onUpdate(const double& ts) {
     // SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "%.3f", ts);
     testeGamePad();
 
-    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
+    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
         sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
         return;
     }
 
-    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_F1)) {
+    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_F1)) {
         sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
         return;
     }
 
-    if (this->inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_W)) {
-        glm::ivec2 curr = state->pos;
-        glm::ivec2 next = state->pos + state->dir * moveSpeed * 2.0f;
+    if (this->input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_W)) {
+        glm::ivec2 curr = state_->pos;
+        glm::ivec2 next = state_->pos + state_->dir * move_speed_ * 2.0f;
 
-        if (world->data[next.x + curr.y * world->width] == 0)
-            state->pos.x += state->dir.x * moveSpeed;
+        if (world_->data[next.x + curr.y * world_->width] == 0)
+            state_->pos.x += state_->dir.x * move_speed_;
 
-        if (world->data[curr.x + next.y * world->width] == 0)
-            state->pos.y += state->dir.y * moveSpeed;
+        if (world_->data[curr.x + next.y * world_->width] == 0)
+            state_->pos.y += state_->dir.y * move_speed_;
     }
 
-    if (this->inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_S)) {
-        glm::ivec2 curr = state->pos;
-        glm::ivec2 next = state->pos - state->dir * moveSpeed * 2.0f;
+    if (this->input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_S)) {
+        glm::ivec2 curr = state_->pos;
+        glm::ivec2 next = state_->pos - state_->dir * move_speed_ * 2.0f;
 
-        if (world->data[next.x + curr.y * world->width] == 0)
-            state->pos.x -= state->dir.x * moveSpeed;
+        if (world_->data[next.x + curr.y * world_->width] == 0)
+            state_->pos.x -= state_->dir.x * move_speed_;
 
-        if (world->data[curr.x + next.y * world->width] == 0)
-            state->pos.y -= state->dir.y * moveSpeed;
+        if (world_->data[curr.x + next.y * world_->width] == 0)
+            state_->pos.y -= state_->dir.y * move_speed_;
     }
 
-    if (this->inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_A)) {
-        double oldDirX = state->dir.x;
-        state->dir.x = state->dir.x * cos(rotSpeed) - state->dir.y * sin(rotSpeed);
-        state->dir.y = oldDirX * sin(rotSpeed) + state->dir.y * cos(rotSpeed);
-        double oldcamx = state->cam.x;
-        state->cam.x = state->cam.x * cos(rotSpeed) - state->cam.y * sin(rotSpeed);
-        state->cam.y = oldcamx * sin(rotSpeed) + state->cam.y * cos(rotSpeed);
+    if (this->input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_A)) {
+        double oldDirX = state_->dir.x;
+        state_->dir.x = state_->dir.x * cos(rot_speed_) - state_->dir.y * sin(rot_speed_);
+        state_->dir.y = oldDirX * sin(rot_speed_) + state_->dir.y * cos(rot_speed_);
+        double oldcamx = state_->cam.x;
+        state_->cam.x = state_->cam.x * cos(rot_speed_) - state_->cam.y * sin(rot_speed_);
+        state_->cam.y = oldcamx * sin(rot_speed_) + state_->cam.y * cos(rot_speed_);
     }
 
-    if (this->inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_D)) {
-        double oldDirX = state->dir.x;
-        state->dir.x = state->dir.x * cos(-rotSpeed) - state->dir.y * sin(-rotSpeed);
-        state->dir.y = oldDirX * sin(-rotSpeed) + state->dir.y * cos(-rotSpeed);
-        double oldcamx = state->cam.x;
-        state->cam.x = state->cam.x * cos(-rotSpeed) - state->cam.y * sin(-rotSpeed);
-        state->cam.y = oldcamx * sin(-rotSpeed) + state->cam.y * cos(-rotSpeed);
+    if (this->input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_D)) {
+        double oldDirX = state_->dir.x;
+        state_->dir.x = state_->dir.x * cos(-rot_speed_) - state_->dir.y * sin(-rot_speed_);
+        state_->dir.y = oldDirX * sin(-rot_speed_) + state_->dir.y * cos(-rot_speed_);
+        double oldcamx = state_->cam.x;
+        state_->cam.x = state_->cam.x * cos(-rot_speed_) - state_->cam.y * sin(-rot_speed_);
+        state_->cam.y = oldcamx * sin(-rot_speed_) + state_->cam.y * cos(-rot_speed_);
     }
 }
 
@@ -165,5 +165,5 @@ void Game::onRender() {
     //     }
     // }
 
-    RenderScene(*state, *world, canva->getPixelsCanvas());
+    RenderScene(*state_, *world_, canva_->getPixelsCanvas());
 }

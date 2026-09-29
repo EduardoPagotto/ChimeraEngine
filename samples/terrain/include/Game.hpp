@@ -18,7 +18,7 @@ class Game : public ce::IStateMachine {
     std::string getName() const override { return "GAME"; }
 
   private:
-    std::shared_ptr<entt::registry> registry;
-    std::shared_ptr<ce::CanvasGL> canva;
-    std::shared_ptr<ce::InputManager> inputManager;
+    std::shared_ptr<entt::registry> registry_;
+    std::shared_ptr<ce::CanvasGL> canva_;
+    std::shared_ptr<ce::InputManager> input_manager_;
 };

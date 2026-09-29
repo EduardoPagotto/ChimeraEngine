@@ -20,8 +20,8 @@ void TileLayer::onEvent(const SDL_Event& event) {
         case SDL_EVENT_MOUSE_BUTTON_DOWN:
         case SDL_EVENT_MOUSE_BUTTON_UP:
         case SDL_EVENT_MOUSE_MOTION: {
-            x = event.motion.x;
-            y = event.motion.y;
+            x_ = event.motion.x;
+            y_ = event.motion.y;
         } break;
     }
 }
@@ -39,8 +39,8 @@ void TileLayer::onRender() {
 
     // Formula                                (float)(x * sizeW / witdh - (sizeW/2), (float)((sizeH /2) - y * sizeH /
     // height)
-    shader->setUniformU(
-        "light_pos", ce::Uniform(glm::vec2((float)(x * 32.0f / 960.0f - 16.0f), (float)(16.0f - y * 32.0f / 540.0f))));
+    shader->setUniformU("light_pos", ce::Uniform(glm::vec2((float)(x_ * 32.0f / 960.0f - 16.0f),
+                                                           (float)(16.0f - y_ * 32.0f / 540.0f))));
 
     Layer::onRender();
     glUseProgram(0);

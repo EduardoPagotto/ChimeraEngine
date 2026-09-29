@@ -14,7 +14,7 @@
 // #include "chimera_render/2d/Group.hpp"
 // #include <time.h>
 
-Game::Game(std::shared_ptr<entt::registry> registry, ce::Engine* engine) : registry(registry), engine(engine) {
+Game::Game(std::shared_ptr<entt::registry> registry, ce::Engine* engine) : registry_(registry), engine_(engine) {
 
     using namespace ce;
     srand(time(nullptr));
@@ -26,9 +26,9 @@ Game::Game(std::shared_ptr<entt::registry> registry, ce::Engine* engine) : regis
     // group->add(button);
     // layer->add(group);
 
-    this->inputManager = registry->ctx().get<std::shared_ptr<ce::InputManager>>();
-    this->canvas = std::dynamic_pointer_cast<ce::CanvasGL>(registry->ctx().get<std::shared_ptr<ce::ICanva>>());
-    if (this->canvas == nullptr) {
+    this->input_manager_ = registry->ctx().get<std::shared_ptr<ce::InputManager>>();
+    this->canvas_ = std::dynamic_pointer_cast<ce::CanvasGL>(registry->ctx().get<std::shared_ptr<ce::ICanva>>());
+    if (this->canvas_ == nullptr) {
         throw std::runtime_error("Canva not found in CTX");
     }
 
@@ -43,7 +43,7 @@ Game::Game(std::shared_ptr<entt::registry> registry, ce::Engine* engine) : regis
     shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Basic2D.frag";
     shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Basic2D.vert";
 
-    shader = asset->loadShader("Basic2D", shadeData).handle();
+    shader_ = asset->loadShader("Basic2D", shadeData).handle();
 }
 
 Game::~Game() {}
@@ -57,20 +57,20 @@ void Game::onAttach() {
                         // (video 96) video 103 finaliza o pick mouse colocar para rodar o scene como
                         // renderbuffer!!!!!!!!!
 
-    layer = std::make_shared<TileLayer>(shader);
+    layer_ = std::make_shared<TileLayer>(shader_);
 
-    layer->getCamera()->setViewportSize(canvas->getWidth(), canvas->getHeight());
+    layer_->getCamera()->setViewportSize(canvas_->getWidth(), canvas_->getHeight());
 
-    auto asset = registry->ctx().get<std::shared_ptr<ce::AssetManager>>();
+    auto asset = registry_->ctx().get<std::shared_ptr<ce::AssetManager>>();
 
     for (float y = -8.0F; y < 8.0F; y++) {
 
         for (float x = -14.0F; x < 14.0F; x++) {
 
             if (rand() % 4 == 0) {
-                layer->add(new Sprite(x, y, 1.0F, 1.0F, glm::vec4(rand() % 1000 / 1000.0F, 0, 1, 1)));
+                layer_->add(new Sprite(x, y, 1.0F, 1.0F, glm::vec4(rand() % 1000 / 1000.0F, 0, 1, 1)));
             } else {
-                layer->add(new Sprite(x, y, 1.0F, 1.0F, asset->getTextureFromIndex(rand() % 3).handle()));
+                layer_->add(new Sprite(x, y, 1.0F, 1.0F, asset->getTextureFromIndex(rand() % 3).handle()));
             }
         }
     }
@@ -79,11 +79,11 @@ void Game::onAttach() {
 
     font->scale = glm::vec2(0.04, 0.04);
 
-    lFPS = new Label("None", 0, 0, font, glm::vec4(1.0, 1.0, 1.0, 1.0));
+    l_fps_ = new Label("None", 0, 0, font, glm::vec4(1.0, 1.0, 1.0, 1.0));
 
-    layer->add(lFPS);
+    layer_->add(l_fps_);
 
-    engine->getStack().pushState(layer);
+    engine_->getStack().pushState(layer_);
 }
 
 void Game::onDeatach() {
@@ -101,22 +101,22 @@ void Game::onEvent(const SDL_Event& event) {
     if (event.type == chimera_even_t01) {
         if (static_cast<EventCE>(event.user.code) == EventCE::NEW_FPS) {
             uint32_t* pFps = (uint32_t*)event.user.data1;
-            fps = *pFps;
-            SDL_Log("FPS: %d", fps);
+            fps_ = *pFps;
+            SDL_Log("FPS: %d", fps_);
         }
     }
 }
 
 void Game::onUpdate(const double& ts) {
 
-    lFPS->setText(std::string("FPS: ") + std::to_string(fps));
+    l_fps_->setText(std::string("FPS: ") + std::to_string(fps_));
 
-    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
+    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
         sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
         return;
     }
 
-    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_F1)) {
+    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_F1)) {
         sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
         return;
     }

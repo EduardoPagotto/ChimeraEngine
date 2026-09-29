@@ -10,14 +10,14 @@
 // #include "chimera_base/utils.hpp"
 
 Game::Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::Scene> scene)
-    : registry(registry), scene(scene), pCorpoRigido(nullptr) {
+    : registry_(registry), scene_(scene), p_corpo_rigido_(nullptr) {
 
     using namespace ce;
 
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
 
-    this->inputManager = registry->ctx().get<std::shared_ptr<ce::InputManager>>();
-    this->assets = registry->ctx().get<std::shared_ptr<ce::AssetManager>>();
+    this->input_manager_ = registry->ctx().get<std::shared_ptr<ce::InputManager>>();
+    this->assets_ = registry->ctx().get<std::shared_ptr<ce::AssetManager>>();
 }
 
 Game::~Game() {}
@@ -44,7 +44,7 @@ void Game::onEvent(const SDL_Event& event) {
             } break;
             case ce::EventCE::NEW_FPS: {
                 uint32_t* pFps = (uint32_t*)event.user.data1;
-                fps = *pFps;
+                fps_ = *pFps;
                 // glm::vec3 val1 = pCorpoRigido->getPosition();
                 // sPosicaoObj = "pos:(" + std::to_string(val1.x) + "," + std::to_string(val1.y) + "," +
                 // std::to_string(val1.z) + ")";
@@ -59,19 +59,19 @@ void Game::onAttach() {
 
     using namespace ce;
     // Localiza objeto como o primario
-    TransComponent& tc = Entity::FindComponent<TransComponent>(registry.get(), "Zoltan");
+    TransComponent& tc = Entity::FindComponent<TransComponent>(registry_.get(), "Zoltan");
 
-    pCorpoRigido = (Solid*)tc.trans;
+    p_corpo_rigido_ = (Solid*)tc.trans;
 
-    auto font = assets->getFontFromIndex(0).handle();
+    auto font = assets_->getFontFromIndex(0).handle();
 
-    lFPS = new Label("None", 0, 0, font, glm::vec4(1.0, 1.0, 1.0, 1.0));
+    l_fps_ = new Label("None", 0, 0, font, glm::vec4(1.0, 1.0, 1.0, 1.0));
 
-    std::shared_ptr<Tile> tile = std::dynamic_pointer_cast<Tile>(scene->getLayes().getState("TileText"));
+    std::shared_ptr<Tile> tile = std::dynamic_pointer_cast<Tile>(scene_->getLayes().getState("TileText"));
 
     Group* group = new Group(glm::translate(glm::mat4(1.0F), glm::vec3(-500.0F, 270.0F, 0.0F)));
     group->add(new Sprite(0.0F, 0.0F, 200.0F, 50.0F, glm::vec4(0, 0, 1, 0.25)));
-    group->add(lFPS);
+    group->add(l_fps_);
     tile->add(group);
     // tile->add(lFPS);
 
@@ -89,48 +89,48 @@ void Game::onDeatach() {}
 void Game::onUpdate(const double& ts) {
     using namespace ce;
 
-    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
+    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
         sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
         return;
     }
 
-    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_F1)) {
+    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_F1)) {
         sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
         return;
     }
 
-    if (this->inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_UP)) {
-        pCorpoRigido->applyForce(glm::vec3(20.0, 0.0, 0.0));
+    if (this->input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_UP)) {
+        p_corpo_rigido_->applyForce(glm::vec3(20.0, 0.0, 0.0));
     }
 
-    if (this->inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_DOWN)) {
-        pCorpoRigido->applyForce(glm::vec3(-20.0, 0.0, 0.0));
+    if (this->input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_DOWN)) {
+        p_corpo_rigido_->applyForce(glm::vec3(-20.0, 0.0, 0.0));
     }
 
-    if (this->inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_LEFT)) {
-        pCorpoRigido->applyForce(glm::vec3(0.0, 20.0, 0.0));
+    if (this->input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_LEFT)) {
+        p_corpo_rigido_->applyForce(glm::vec3(0.0, 20.0, 0.0));
     }
 
-    if (this->inputManager->getKeyboard()->isKeyDown(SDL_SCANCODE_RIGHT)) {
-        pCorpoRigido->applyForce(glm::vec3(0.0, -20.0, 0.0));
+    if (this->input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_RIGHT)) {
+        p_corpo_rigido_->applyForce(glm::vec3(0.0, -20.0, 0.0));
     }
 
-    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_A)) {
-        pCorpoRigido->applyTorc(glm::vec3(0.0, 0.0, 20.0));
+    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_A)) {
+        p_corpo_rigido_->applyTorc(glm::vec3(0.0, 0.0, 20.0));
     }
 
-    if (this->inputManager->getKeyboard()->isKeyPressed(SDL_SCANCODE_S)) {
-        pCorpoRigido->applyTorc(glm::vec3(0.0, 0.0, -20.0));
+    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_S)) {
+        p_corpo_rigido_->applyTorc(glm::vec3(0.0, 0.0, -20.0));
     }
 
-    if (pCorpoRigido != nullptr) {
-        scene->setOrigem(pCorpoRigido);
+    if (p_corpo_rigido_ != nullptr) {
+        scene_->setOrigem(p_corpo_rigido_);
     }
 
     float propulsaoLRUD{5.0F};
     glm::vec3 propLateral(0.0F);
 
-    auto gp = this->inputManager->getGamepad();
+    auto gp = this->input_manager_->getGamepad();
     ce::Gamepad::AxixConfig player0Config{0.18F, 0.18F, 0.18F};
 
     if (gp->getButtonState(0, SDL_GAMEPAD_BUTTON_DPAD_UP) == Gamepad::ButtonState::Pressed) {
@@ -183,12 +183,12 @@ void Game::onUpdate(const double& ts) {
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Torque: %f %f %f", rFinal.x, rFinal.y, rFinal.z);
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Forca : %f %f %f", vFinal.x, vFinal.y, vFinal.z);
 
-        pCorpoRigido->applyForce(vFinal);
-        pCorpoRigido->applyTorc(rFinal);
+        p_corpo_rigido_->applyForce(vFinal);
+        p_corpo_rigido_->applyTorc(rFinal);
     }
     //}
 
-    lFPS->setText(std::string("FPS: ") + std::to_string(fps));
+    l_fps_->setText(std::string("FPS: ") + std::to_string(fps_));
 }
 
 void Game::onRender() {}

@@ -19,12 +19,12 @@ class Game : public ce::IStateMachine {
     std::string getName() const override { return "GAME"; }
 
   private:
-    std::shared_ptr<entt::registry> registry;
-    std::shared_ptr<ce::Scene> scene;
-    std::shared_ptr<ce::InputManager> inputManager;
-    std::shared_ptr<ce::AssetManager> assets;
+    std::shared_ptr<entt::registry> registry_;
+    std::shared_ptr<ce::Scene> scene_;
+    std::shared_ptr<ce::InputManager> input_manager_;
+    std::shared_ptr<ce::AssetManager> assets_;
 
-    ce::Solid* pCorpoRigido;
-    ce::Label* lFPS;
-    int fps;
+    ce::Solid* p_corpo_rigido_;
+    ce::Label* l_fps_;
+    int fps_;
 };

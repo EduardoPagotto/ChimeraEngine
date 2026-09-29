@@ -21,13 +21,13 @@ class Game : public ce::IStateMachine {
   private:
     void testeGamePad();
 
-    State* state{nullptr};
-    World* world{nullptr};
-    float moveSpeed{0.0F};
-    float rotSpeed{0.0F};
-    std::shared_ptr<entt::registry> registry;
-    std::shared_ptr<ce::CanvaFB> canva;
-    std::shared_ptr<ce::InputManager> inputManager;
+    State* state_{nullptr};
+    World* world_{nullptr};
+    float move_speed_{0.0F};
+    float rot_speed_{0.0F};
+    std::shared_ptr<entt::registry> registry_;
+    std::shared_ptr<ce::CanvaFB> canva_;
+    std::shared_ptr<ce::InputManager> input_manager_;
 
-    ce::Gamepad::AxixConfig player0Config{0.18F, 0.18F, 0.18F}; // Deadzones customizadas
+    ce::Gamepad::AxixConfig player0_config_{0.18F, 0.18F, 0.18F}; // Deadzones customizadas
 };

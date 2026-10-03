@@ -16,7 +16,7 @@ struct MaterialData {
 
 struct MaterialLoader {
     using result_type = MaterialData;
-    MaterialData operator()(const std::string& filePath) const { return MaterialData{}; }
+    MaterialData operator()(const std::string& file_path) const { return MaterialData{}; }
 };
 
 namespace ce {

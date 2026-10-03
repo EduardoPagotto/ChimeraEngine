@@ -40,13 +40,13 @@ namespace ce {
 
     class Loader {
       public:
-        explicit Loader(const std::filesystem::path& filePath, entt::registry* registry) : registry(registry) {
+        explicit Loader(const std::filesystem::path& file_path, entt::registry* registry) : registry_(registry) {
 
             // 1. Create the data buffer using the modern static constructor
-            auto expectedBuffer = fastgltf::GltfDataBuffer::FromPath(filePath);
+            auto expected_buffer = fastgltf::GltfDataBuffer::FromPath(file_path);
 
             // 2. Always validate that the file read succeeded
-            if (expectedBuffer.error() != fastgltf::Error::None) {
+            if (expected_buffer.error() != fastgltf::Error::None) {
                 throw std::runtime_error("Failed to read file buffer into memory.");
             }
 
@@ -58,18 +58,18 @@ namespace ce {
             // constexpr auto extensions = fastgltf::Extensions::KHR_lights_punctual;
 
             // 3. Parse the asset using the buffer (.get() unpacks the expected value)
-            auto expectedAsset = parser.loadGltf(expectedBuffer.get(), filePath.parent_path(), options);
-            if (expectedAsset.error() != fastgltf::Error::None) {
+            auto expected_asset = parser.loadGltf(expected_buffer.get(), file_path.parent_path(), options);
+            if (expected_asset.error() != fastgltf::Error::None) {
                 throw std::runtime_error("Failed to parse glTF structure");
             }
 
             // fastgltf::Asset asset = std::move(expectedAsset.get());
-            this->asset = std::move(expectedAsset.get());
+            asset_ = std::move(expected_asset.get());
         }
 
         virtual ~Loader() = default;
 
-        static std::pair<entt::id_type, std::string_view> GetIdentify(const fastgltf::Image& image) {
+        static std::pair<entt::id_type, std::string_view> get_identify(const fastgltf::Image& image) {
 
             if (const auto* val = std::get_if<fastgltf::sources::URI>(&image.data)) {
                 std::string name = (!image.name.empty()) ? std::string(image.name) : std::string(val->uri.c_str());
@@ -80,19 +80,19 @@ namespace ce {
             throw std::runtime_error("Falha no parse de textura");
         }
 
-        void getImages(const std::filesystem::path& imgPath, std::shared_ptr<VulkanContext> ctx) {
-            auto& assetManager = registry->ctx().get<AssetManager>();
+        void get_images(const std::filesystem::path& img_path, std::shared_ptr<VulkanContext> ctx) {
+            auto& asset_manager = registry_->ctx().get<AssetManager>();
 
             size_t i = 0;
-            for (const auto& image : asset.images) {
+            for (const auto& image : asset_.images) {
 
-                auto [id_textura, uri] = GetIdentify(image);
+                auto [id_textura, uri] = get_identify(image);
 
-                auto fim = imgPath / uri;
+                auto fim = img_path / uri;
 
                 SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Image (%lu) id: %u -> %s", i++, id_textura, fim.c_str());
 
-                assetManager.texture.load(id_textura, ctx, std::string(fim).c_str());
+                asset_manager.texture.load(id_textura, ctx, std::string(fim).c_str());
 
                 // if (auto val = std::get_if<fastgltf::sources::URI>(&image.data)) {
 
@@ -114,15 +114,15 @@ namespace ce {
         std::vector<CompleteMesh> getMeshs(std::shared_ptr<VulkanContext> ctx) { // NOLINT
             // auto& assetManager = registry->ctx().get<AssetManager>();
 
-            std::vector<CompleteMesh> outMeshes;
+            std::vector<CompleteMesh> out_meshes;
 
             // 2. Iterate through all meshes within the asset
-            for (const auto& mesh : asset.meshes) {
+            for (const auto& mesh : asset_.meshes) {
 
-                CompleteMesh completeMesh;
-                completeMesh.name = mesh.name;
+                CompleteMesh complete_mesh;
+                complete_mesh.name = mesh.name;
 
-                uint32_t countPrimitive = 0;
+                uint32_t count_primitive = 0;
                 // 3. Process every primitive (sub-mesh) inside this mesh
                 for (const auto& primitive : mesh.primitives) {
 
@@ -131,12 +131,12 @@ namespace ce {
                         continue;
                     }
 
-                    if (countPrimitive == 0) { // VBO
+                    if (count_primitive == 0) { // VBO
 
                         // Verificando compartilhamento de Índices (Indices)
                         if (primitive.indicesAccessor.has_value()) {
-                            size_t accessorIndex = primitive.indicesAccessor.value();
-                            std::cout << "Acessor de Índices: ID " << accessorIndex << "\n";
+                            size_t accessor_index = primitive.indicesAccessor.value();
+                            std::cout << "Acessor de Índices: ID " << accessor_index << "\n";
                         }
 
                         for (const auto& [attributeName, accessorIndex] : primitive.attributes) {
@@ -145,40 +145,40 @@ namespace ce {
                                       << ")\n";
                         }
 
-                        const auto* posAttribute = primitive.findAttribute("POSITION");
-                        const auto* normAttribute = primitive.findAttribute("NORMAL");
-                        const auto* uvAttribute = primitive.findAttribute("TEXCOORD_0");
+                        const auto* pos_attribute = primitive.findAttribute("POSITION");
+                        const auto* norm_attribute = primitive.findAttribute("NORMAL");
+                        const auto* uv_attribute = primitive.findAttribute("TEXCOORD_0");
                         // const auto* colorAttribute = primitive.findAttribute("COLOR_0");
 
                         // --- PROCESS VERTICES ---
                         // Find the core POSITION attribute accessor to determine the sizing requirement
-                        if (posAttribute == primitive.attributes.end()) {
+                        if (pos_attribute == primitive.attributes.end()) {
                             continue; // Invalid primitive
                         }
 
-                        const auto& posAccessor = asset.accessors[posAttribute->accessorIndex];
-                        size_t vertexCount = posAccessor.count;
-                        completeMesh.vertices.resize(vertexCount);
+                        const auto& pos_accessor = asset_.accessors[pos_attribute->accessorIndex];
+                        size_t vertex_count = pos_accessor.count;
+                        complete_mesh.vertices.resize(vertex_count);
 
                         // Fetch and map the POSITION attribute into GLM vec3
                         fastgltf::iterateAccessorWithIndex<glm::vec3>(
-                            asset, posAccessor,
-                            [&](glm::vec3 pos, size_t idx) { completeMesh.vertices[idx].pos = pos; });
+                            asset_, pos_accessor,
+                            [&](glm::vec3 pos, size_t idx) { complete_mesh.vertices[idx].pos = pos; });
 
                         // Fetch and map the NORMAL attribute if present
-                        if (normAttribute != primitive.attributes.end()) {
-                            const auto& normAccessor = asset.accessors[normAttribute->accessorIndex];
+                        if (norm_attribute != primitive.attributes.end()) {
+                            const auto& norm_accessor = asset_.accessors[norm_attribute->accessorIndex];
                             fastgltf::iterateAccessorWithIndex<glm::vec3>(
-                                asset, normAccessor,
-                                [&](glm::vec3 norm, size_t idx) { completeMesh.vertices[idx].nor = norm; });
+                                asset_, norm_accessor,
+                                [&](glm::vec3 norm, size_t idx) { complete_mesh.vertices[idx].nor = norm; });
                         }
 
                         // Fetch and map the TEXCOORD_0 (Texture Coordinates) attribute if present
-                        if (uvAttribute != primitive.attributes.end()) {
-                            const auto& uvAccessor = asset.accessors[uvAttribute->accessorIndex];
+                        if (uv_attribute != primitive.attributes.end()) {
+                            const auto& uv_accessor = asset_.accessors[uv_attribute->accessorIndex];
                             fastgltf::iterateAccessorWithIndex<glm::vec2>(
-                                asset, uvAccessor,
-                                [&](glm::vec2 uv, size_t idx) { completeMesh.vertices[idx].tex = uv; });
+                                asset_, uv_accessor,
+                                [&](glm::vec2 uv, size_t idx) { complete_mesh.vertices[idx].tex = uv; });
                         }
 
                         // Fetch and map the COLOR_0 attribute if present
@@ -192,33 +192,34 @@ namespace ce {
                         // }
                     }
 
-                    countPrimitive++;
+                    count_primitive++;
 
-                    MeshPart meshPart;
+                    MeshPart mesh_part;
 
                     if (primitive.materialIndex.has_value()) {
-                        meshPart.materialIndex = primitive.materialIndex.value();
+                        mesh_part.materialIndex = primitive.materialIndex.value();
                     }
 
                     // --- PROCESS INDICES ---
                     // If the primitive is indexed (or has them automatically generated by our option flag)
                     if (primitive.indicesAccessor.has_value()) {
-                        const auto& indexAccessor = asset.accessors[primitive.indicesAccessor.value()];
-                        meshPart.indices.resize(indexAccessor.count);
+                        const auto& index_accessor = asset_.accessors[primitive.indicesAccessor.value()];
+                        mesh_part.indices.resize(index_accessor.count);
 
                         // iterateAccessor automatically handles converting uint8, uint16, or uint32 data types up
                         // to standard uint32_t
                         fastgltf::iterateAccessorWithIndex<uint32_t>(
-                            asset, indexAccessor, [&](uint32_t index, size_t idx) { meshPart.indices[idx] = index; });
+                            asset_, index_accessor,
+                            [&](uint32_t index, size_t idx) { mesh_part.indices[idx] = index; });
                     }
 
-                    completeMesh.parts.push_back(std::move(meshPart));
+                    complete_mesh.parts.push_back(std::move(mesh_part));
                 }
 
-                outMeshes.push_back(std::move(completeMesh));
+                out_meshes.push_back(std::move(complete_mesh));
             }
 
-            return outMeshes;
+            return out_meshes;
         }
 
         // void getMaterials() {
@@ -254,7 +255,7 @@ namespace ce {
         // }
 
       private:
-        fastgltf::Asset asset;
-        entt::registry* registry;
+        fastgltf::Asset asset_;
+        entt::registry* registry_;
     };
 } // namespace ce

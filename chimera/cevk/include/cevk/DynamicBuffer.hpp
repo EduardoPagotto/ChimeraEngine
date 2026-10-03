@@ -16,14 +16,14 @@ namespace ce {
         ~BufferDynamic() = default;
 
       private:
-        void* allocateDynamicBufferTransferSpace(size_t size, uint32_t max) { // size:=sizeof(UboModel), MAX_OBJECTS
+        void* allocateDynamicBufferTransferSpace(size_t size, uint32_t max) { // size:=sizeof(UboModel), max_objects
 
             // Caculate alignment of model data
             this->uniformAlignment = (size + this->minOffset - 1) & ~(this->minOffset - 1);
 
-            // Create space in memory to hold dynamic byffer that is alignment and holds MAX_OBJECTS
+            // Create space in memory to hold dynamic byffer that is alignment and holds max_objects
             // this->modelTransferSpace =
-            //     (UboModel*)aligned_alloc(this->uniformAlignment, this->uniformAlignment * MAX_OBJECTS);
+            //     (UboModel*)aligned_alloc(this->uniformAlignment, this->uniformAlignment * max_objects);
             return aligned_alloc(this->uniformAlignment, this->uniformAlignment * max);
         }
 

@@ -8,48 +8,48 @@ namespace ce {
 #pragma region Buffer
 
     void Buffer::init(VkPhysicalDevice physical, VkDevice device) {
-        this->physical = physical;
-        this->device = device;
+        this->physical_ = physical;
+        this->device_ = device;
     }
 
-    void Buffer::create(const VkDeviceSize& bufferSize, const VkBufferUsageFlags& bufferUsage,
-                        const VkMemoryPropertyFlags& bufferProperties) {
+    void Buffer::create(const VkDeviceSize& buffer_size, const VkBufferUsageFlags& buffer_usage,
+                        const VkMemoryPropertyFlags& buffer_properties) {
 
         // information to create a buffer (dosen't include assigning memory)
-        const VkBufferCreateInfo bufferInfo{
+        const VkBufferCreateInfo buffer_info{
             .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
-            .size = bufferSize,                       // Size of buffer (size of 1 vertex * number of vertices)
-            .usage = bufferUsage,                     // Multiple types of buffer possible
+            .size = buffer_size,                      // Size of buffer (size of 1 vertex * number of vertices)
+            .usage = buffer_usage,                    // Multiple types of buffer possible
             .sharingMode = VK_SHARING_MODE_EXCLUSIVE, // Similar to Swap Chain images, can share vertex buffers
         };
 
-        this->bufferSize = bufferSize;
+        this->buffer_size_ = buffer_size;
 
-        if (vkCreateBuffer(device, &bufferInfo, nullptr, &this->buffer) != VK_SUCCESS) {
+        if (vkCreateBuffer(device_, &buffer_info, nullptr, &this->buffer_) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create a Buffer!");
         }
 
         // GET BUFFER MEMORY REQUIREMENTS
-        VkMemoryRequirements memRequirements;
-        vkGetBufferMemoryRequirements(device, this->buffer, &memRequirements);
+        VkMemoryRequirements mem_requirements;
+        vkGetBufferMemoryRequirements(device_, this->buffer_, &mem_requirements);
 
         // ALLOCATE MEMORY TO BUFFER
         // VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT : CPU can interact with memory
         // VK_MEMORY_PROPERTY_HOST_COHERENT_BIT : Allows placement of data straight into buffer mapping (otherwise would
         // have to specify manually)
-        const VkMemoryAllocateInfo memoryAllocInfo{
+        const VkMemoryAllocateInfo memory_alloc_info{
             .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
-            .allocationSize = memRequirements.size,
-            .memoryTypeIndex =
-                VulkanContext::FindMemoryTypeIndex(this->physical, memRequirements.memoryTypeBits, bufferProperties)};
+            .allocationSize = mem_requirements.size,
+            .memoryTypeIndex = VulkanContext::FindMemoryTypeIndex(this->physical_, mem_requirements.memoryTypeBits,
+                                                                  buffer_properties)};
 
         // Allocate memory to VkDebviceMemory
-        if (vkAllocateMemory(this->device, &memoryAllocInfo, nullptr, &this->memory) != VK_SUCCESS) {
+        if (vkAllocateMemory(this->device_, &memory_alloc_info, nullptr, &this->memory_) != VK_SUCCESS) {
             throw std::runtime_error("Failed to allocate Vertex Buffer Memory!!");
         }
 
         // Allocate memory to given vertex buffer
-        vkBindBufferMemory(this->device, this->buffer, this->memory, 0);
+        vkBindBufferMemory(this->device_, this->buffer_, this->memory_, 0);
     }
 
     void Buffer::mapper(void* src) {
@@ -58,35 +58,35 @@ namespace ce {
         // 2. "Map" the vertex buffer memory to that point
         // 3. Copy memory from vertices vector to the point
         // 4. Unmap the vertex buffer memory
-        void* mappedData;
-        vkMapMemory(this->device, this->memory, 0, this->bufferSize, 0, &mappedData);
-        std::memcpy(mappedData, static_cast<const void*>(src), static_cast<size_t>(bufferSize));
-        vkUnmapMemory(device, memory);
+        void* mapped_data;
+        vkMapMemory(this->device_, this->memory_, 0, this->buffer_size_, 0, &mapped_data);
+        std::memcpy(mapped_data, static_cast<const void*>(src), static_cast<size_t>(buffer_size_));
+        vkUnmapMemory(device_, memory_);
     }
 
     void Buffer::destroy() {
-        if (device == VK_NULL_HANDLE) {
+        if (device_ == VK_NULL_HANDLE) {
             return;
         }
 
         // Se a memória estava mapeada, desmapeia primeiro
-        // if ((mappedData != nullptr) && (memory != VK_NULL_HANDLE)) {
+        // if ((mapped_data_ != nullptr) && (memory != VK_NULL_HANDLE)) {
         //     vkUnmapMemory(device, memory);
-        //     mappedData = nullptr;
+        //     mapped_data_ = nullptr;
         // }
 
         // Deleta o buffer se ele existir
-        if (buffer != VK_NULL_HANDLE) {
-            vkDestroyBuffer(device, buffer, nullptr);
-            buffer = VK_NULL_HANDLE;
+        if (buffer_ != VK_NULL_HANDLE) {
+            vkDestroyBuffer(device_, buffer_, nullptr);
+            buffer_ = VK_NULL_HANDLE;
         }
 
         // Libera a memória alocada por último
-        if (memory != VK_NULL_HANDLE) {
-            vkFreeMemory(device, memory, nullptr);
-            memory = VK_NULL_HANDLE;
+        if (memory_ != VK_NULL_HANDLE) {
+            vkFreeMemory(device_, memory_, nullptr);
+            memory_ = VK_NULL_HANDLE;
         }
 
-        device = VK_NULL_HANDLE;
+        device_ = VK_NULL_HANDLE;
     }
 } // namespace ce

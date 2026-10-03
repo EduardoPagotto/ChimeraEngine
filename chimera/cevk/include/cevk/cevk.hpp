@@ -9,8 +9,8 @@
 
 namespace ce {
 
-    const int MAX_FRAME_DRAWS = 2;
-    const int MAX_OBJECTS = 30;
+    inline constinit int max_frame_draws{2};
+    inline constinit uint32_t max_objects{30};
 
     //
     // Vertex data representation

@@ -19,8 +19,8 @@ namespace ce {
 
         this->swapchain.init(ctx_, this->renderPass.getRenderPass());
 
-        this->frames.resize(ce::MAX_FRAME_DRAWS);
-        for (size_t i = 0; i < ce::MAX_FRAME_DRAWS; i++) {
+        this->frames.resize(ce::max_frame_draws);
+        for (size_t i = 0; i < ce::max_frame_draws; i++) {
             this->frames[i] = ce::Frame();
             this->frames[i].init(this->ctx_->logical, this->ctx_->queueFamilyIndices.graphicsFamily);
         }
@@ -49,9 +49,9 @@ namespace ce {
         }
 
         // Get next frame
-        this->currentFrame = (this->currentFrame + 1) % ce::MAX_FRAME_DRAWS;
+        this->currentFrame = (this->currentFrame + 1) % ce::max_frame_draws;
         // AHHHH!!!!!! ugly!!!!! this is complete wrong, find what missmatch sYncs!!!
-        if (this->currentFrame == (ce::MAX_FRAME_DRAWS - 1)) {
+        if (this->currentFrame == (ce::max_frame_draws - 1)) {
             vkDeviceWaitIdle(ctx_->logical);
         }
     }

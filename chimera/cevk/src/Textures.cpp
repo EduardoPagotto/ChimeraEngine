@@ -26,9 +26,9 @@ namespace ce {
         // 2. CREATE DESCRIPTOR POOL
         //------------------------------------------------------------------------------------
         this->descriptorPool.addPoolSize(
-            VkDescriptorPoolSize{.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, .descriptorCount = MAX_OBJECTS});
+            VkDescriptorPoolSize{.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, .descriptorCount = max_objects});
 
-        this->descriptorPool.create(this->ctx->logical, MAX_OBJECTS, static_cast<VkDescriptorPoolCreateFlagBits>(0));
+        this->descriptorPool.create(this->ctx->logical, max_objects, static_cast<VkDescriptorPoolCreateFlagBits>(0));
 
         //------------------------------------------------------------------------------------
         //  3. CREATE TEXTURE SAMPLER

@@ -10,27 +10,23 @@ int main(int argc, char* argv[]) {
 
     auto result = EXIT_SUCCESS;
 
-    // Habilita todas as mensagens em modo Debug
-    SDL_SetLogPriority(SDL_LOG_CATEGORY_VIDEO, SDL_LOG_PRIORITY_DEBUG);
-    SDL_SetLogPriority(SDL_LOG_CATEGORY_INPUT, SDL_LOG_PRIORITY_DEBUG);
-    SDL_SetLogPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG);
-    SDL_SetLogPriority(SDL_LOG_CATEGORY_RENDER, SDL_LOG_PRIORITY_DEBUG);
-
     try {
+        // Habilita todas as mensagens em modo Debug
+        SDL_SetLogPriority(SDL_LOG_CATEGORY_VIDEO, SDL_LOG_PRIORITY_DEBUG);
+        SDL_SetLogPriority(SDL_LOG_CATEGORY_INPUT, SDL_LOG_PRIORITY_DEBUG);
+        SDL_SetLogPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG);
+        SDL_SetLogPriority(SDL_LOG_CATEGORY_RENDER, SDL_LOG_PRIORITY_DEBUG);
+        SDL_SetLogPriorities(SDL_LOG_PRIORITY_DEBUG);
+
+        SDL_Log("SDL31 Iniciado");
+        // Registry to entt
         std::shared_ptr<entt::registry> registry = std::make_shared<entt::registry>();
+        registry->ctx().emplace<std::shared_ptr<ICanva>>(std::make_shared<CanvaVK>("Teste SDL31", 800, 600));
+        registry->ctx().emplace<std::shared_ptr<InputManager>>(std::make_shared<InputManager>());
+        // ctx->createWindow("Teste SDL31");
 
-        using enum InputEnable;
-        InputEnable in = Mouse | Keyboard;
-
-        registry->ctx().emplace<std::shared_ptr<InputManager>>(std::make_shared<InputManager>(in, true));
-        auto& ctx = registry->ctx().emplace<std::shared_ptr<VulkanContext>>(std::make_shared<VulkanContext>());
-
-        ctx->createWindow("Teste SDL31");
-
-        std::shared_ptr<ce::CanvaVK> canva = std::make_shared<CanvaVK>(ctx);
-
-        Engine engine(registry, canva);
-        std::shared_ptr<IStateMachine> game = std::make_shared<Game>(registry, canva);
+        Engine engine(registry);
+        std::shared_ptr<IStateMachine> game = std::make_shared<Game>(registry);
 
         engine.getStack().pushState(game);
         engine.run();

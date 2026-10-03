@@ -2,7 +2,10 @@
 
 namespace ce {
 
-    CanvaVK::CanvaVK(std::shared_ptr<VulkanContext> ctx) : ctx(ctx) {
+    CanvaVK::CanvaVK(const std::string& name, const int& width, const int& height) {
+
+        this->ctx_ = std::make_shared<VulkanContext>();
+        this->ctx_->createWindow(name, width, height);
 
         // clear colour
         this->clearValues.resize(2);
@@ -11,15 +14,15 @@ namespace ce {
         this->clearValues[1].depthStencil.depth = 1.0F;
 
         // Get Swap Chain details so we cam pick best setting
-        SwapChainDetails swapchainDetails = VulkanContext::GetSwapChainDetails(ctx->physical, ctx->surface);
-        this->renderPass.init(ctx, SwapChain::ChooseBestSurfaceFormat(swapchainDetails.formats).format);
+        SwapChainDetails swapchain_details = VulkanContext::GetSwapChainDetails(ctx_->physical, ctx_->surface);
+        this->renderPass.init(ctx_, SwapChain::ChooseBestSurfaceFormat(swapchain_details.formats).format);
 
-        this->swapchain.init(ctx, this->renderPass.getRenderPass());
+        this->swapchain.init(ctx_, this->renderPass.getRenderPass());
 
         this->frames.resize(ce::MAX_FRAME_DRAWS);
         for (size_t i = 0; i < ce::MAX_FRAME_DRAWS; i++) {
             this->frames[i] = ce::Frame();
-            this->frames[i].init(this->ctx->logical, this->ctx->queueFamilyIndices.graphicsFamily);
+            this->frames[i].init(this->ctx_->logical, this->ctx_->queueFamilyIndices.graphicsFamily);
         }
     }
     CanvaVK::~CanvaVK() {
@@ -34,7 +37,7 @@ namespace ce {
         ce::Frame& frame = this->frames[this->currentFrame];
 
         // -- PRESENT RENDERED IMAGE TO SCREEN --
-        VkResult result = ce::RenderPass::SendImageToScreen(ctx->presentationQueue, frame.renderFinishedSemaphore,
+        VkResult result = ce::RenderPass::SendImageToScreen(ctx_->presentationQueue, frame.renderFinishedSemaphore,
                                                             this->swapchain.getSwapchain(), this->indexFrame);
 
         if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) { //|| framebufferResized
@@ -49,21 +52,21 @@ namespace ce {
         this->currentFrame = (this->currentFrame + 1) % ce::MAX_FRAME_DRAWS;
         // AHHHH!!!!!! ugly!!!!! this is complete wrong, find what missmatch sYncs!!!
         if (this->currentFrame == (ce::MAX_FRAME_DRAWS - 1)) {
-            vkDeviceWaitIdle(ctx->logical);
+            vkDeviceWaitIdle(ctx_->logical);
         }
     }
 
     void CanvaVK::toggleFullScreen() {
-        SDL_SetWindowFullscreen(ctx->window, !this->fullscreen);
-        this->fullscreen = !this->fullscreen;
+        SDL_SetWindowFullscreen(ctx_->window, !this->fullscreen_);
+        this->fullscreen_ = !this->fullscreen_;
     }
 
-    void CanvaVK::reshape(int _width, int _height) {
+    void CanvaVK::reshape(int width, int height) {
         eventReShape = true;
         this->swapchain.recreateSwapchain();
     }
 
-    std::pair<uint32_t, VkRenderPassBeginInfo> CanvaVK::nextImageRenderPass() {
+    std::pair<uint32_t, VkRenderPassBeginInfo> CanvaVK::next_image_renderpass() {
         // -- GET NEXT IMAGE --
         ce::Frame& frame = this->frames[this->currentFrame];
 

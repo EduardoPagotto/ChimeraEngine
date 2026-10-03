@@ -11,26 +11,28 @@ namespace ce {
 
     /// @brief Canva Interface
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
-    /// @since 20130925
-    /// @date 20260907
+    /// @since 20260801
+    /// @date 20261002
     class CanvaVK : public ICanva {
 
       public:
-        explicit CanvaVK(std::shared_ptr<VulkanContext> ctx);
+        explicit CanvaVK(const std::string& name, const int& width, const int& height);
         virtual ~CanvaVK();
 
         virtual void before() override;
         virtual void after() override;
         virtual void toggleFullScreen() override;
-        virtual void reshape(int _width, int _height) override;
+        virtual void reshape(int width, int height) override;
         virtual uint32_t getWidth() const override { return this->swapchain.getExtent().width; }
         virtual uint32_t getHeight() const override { return this->swapchain.getExtent().height; }
 
-        std::pair<uint32_t, VkRenderPassBeginInfo> nextImageRenderPass();
+        std::pair<uint32_t, VkRenderPassBeginInfo> next_image_renderpass();
+
+        std::shared_ptr<VulkanContext> ctx() { return ctx_; }
 
       private:
-        std::shared_ptr<VulkanContext> ctx;
-        bool fullscreen{false};
+        bool fullscreen_{false};
+        std::shared_ptr<VulkanContext> ctx_;
 
       public:
         std::vector<VkClearValue> clearValues;

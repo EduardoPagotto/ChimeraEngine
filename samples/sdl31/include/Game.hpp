@@ -12,7 +12,7 @@
 
 class Game : public ce::IStateMachine {
   public:
-    Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::CanvaVK> canva);
+    Game(std::shared_ptr<entt::registry> registry);
     virtual ~Game();
     virtual void onAttach() override;
     virtual void onDeatach() override;
@@ -32,32 +32,33 @@ class Game : public ce::IStateMachine {
     void updateModel(size_t modelId, glm::mat4 newModel);
     size_t createMeshModel(const std::string& modelFile);
 
-    std::shared_ptr<ce::VulkanContext> ctx;
+    std::shared_ptr<ce::CanvaVK> canvas_;
+    std::shared_ptr<ce::VulkanContext> ctx_;
 
-    VkPushConstantRange pushConstantRange;
+    VkPushConstantRange push_constant_range_;
 
     // Scene Settings
     struct UboViewProjection {
         glm::mat4 projection;
         glm::mat4 view;
-    } uboViewProjection;
+    } ubo_view_projection_;
 
-    ce::DescriptorPool descriptorPool;
-    ce::UniformBuffer uniformBufferVP;
+    ce::DescriptorPool descriptor_pool_;
+    ce::UniformBuffer uniform_buffer_vp_;
 
-    std::shared_ptr<ce::Textures> textureMng;
-    std::shared_ptr<ce::PipelineLayout> pipelineLayout;
-    std::shared_ptr<ce::Pipeline> graphicPipeline;
+    std::shared_ptr<ce::Textures> texture_mng_;
+    std::shared_ptr<ce::PipelineLayout> pipeline_layout_;
+    std::shared_ptr<ce::Pipeline> graphic_pipeline_;
 
     // Scene Objects
-    std::vector<ce::MeshModel> modelList;
+    std::vector<ce::MeshModel> model_list_;
     //
-    float angle{0.0F};
-    float deltaTime{0};
-    float lastTime{0};
-    size_t helicopter{0};
+    float angle_{0.0F};
+    float delta_time_{0};
+    float last_time_{0};
+    size_t helicopter_{0};
 
-    std::shared_ptr<entt::registry> registry;
-    std::shared_ptr<ce::CanvaVK> canva;
-    std::shared_ptr<ce::InputManager> inputManager;
+    std::shared_ptr<entt::registry> registry_;
+
+    std::shared_ptr<ce::InputManager> input_manager_;
 };

@@ -12,17 +12,17 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <vulkan/vulkan_core.h>
 
-Game::Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::CanvaVK> canva)
-    : registry(registry), canva(canva) {
+Game::Game(std::shared_ptr<entt::registry> registry) : registry_(registry) {
 
     using namespace ce;
 
-    ctx = registry->ctx().get<std::shared_ptr<VulkanContext>>();
+    canvas_ = std::dynamic_pointer_cast<ce::CanvaVK>(registry->ctx().get<std::shared_ptr<ce::ICanva>>());
+    ctx_ = canvas_->ctx();
 
-    this->uniformBufferVP.init(ctx->physical, ctx->logical, canva->swapchain.getSwapchainResSize(),
-                               sizeof(UboViewProjection));
+    this->uniform_buffer_vp_.init(ctx_->physical, ctx_->logical, canvas_->swapchain.getSwapchainResSize(),
+                                  sizeof(UboViewProjection));
 
-    this->textureMng = std::make_shared<Textures>(ctx);
+    this->texture_mng_ = std::make_shared<Textures>(ctx_);
 
     createDescriptorSetLayout();
     createPushConstantRange();
@@ -38,100 +38,87 @@ Game::Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::CanvaVK
     const glm::vec3 camPos = glm::vec3(-100.0F, 150.0F, 200.0F);
     const glm::vec3 camCenter = glm::vec3(0.0F, 0.0F, -2.0F);
     const glm::vec3 camUp = glm::vec3(0.0F, 1.0F, 0.0F);
-    float aspect = static_cast<float>(canva->getWidth()) / static_cast<float>(canva->getHeight());
+    float aspect = static_cast<float>(canvas_->getWidth()) / static_cast<float>(canvas_->getHeight());
 
-    uboViewProjection.projection = glm::perspective(radixAngle, aspect, near, far);
-    uboViewProjection.view = glm::lookAt(camPos, camCenter, camUp);
-    uboViewProjection.projection[1][1] *= -1; // vulkan inverted of OpenGL
+    ubo_view_projection_.projection = glm::perspective(radixAngle, aspect, near, far);
+    ubo_view_projection_.view = glm::lookAt(camPos, camCenter, camUp);
+    ubo_view_projection_.projection[1][1] *= -1; // vulkan inverted of OpenGL
 
     // Create our default "no texture" texture
-    std::shared_ptr<VulkanTexture> vulkanTex = VulkanTexture::Create(ctx, "./assets/textures/plain.png");
-    textureMng->allocTexture(vulkanTex);
+    std::shared_ptr<VulkanTexture> vulkanTex = VulkanTexture::Create(ctx_, "./assets/textures/plain.png");
+    texture_mng_->allocTexture(vulkanTex);
 
-    this->inputManager = registry->ctx().get<std::shared_ptr<InputManager>>();
+    this->input_manager_ = registry->ctx().get<std::shared_ptr<InputManager>>();
 }
 
 Game::~Game() {
 
     // Wait until no action being run on device before destroying
-    vkDeviceWaitIdle(ctx->logical);
+    vkDeviceWaitIdle(ctx_->logical);
 
     // free(modelTransferSpace);
-    for (auto& model : modelList) {
+    for (auto& model : model_list_) {
         model.destroyMeshModel();
     }
 
-    textureMng.reset();
-    descriptorPool.destroy();
-    uniformBufferVP.destroy();
+    texture_mng_.reset();
+    descriptor_pool_.destroy();
+    uniform_buffer_vp_.destroy();
 
-    graphicPipeline.reset();
-    pipelineLayout.reset();
+    graphic_pipeline_.reset();
+    pipeline_layout_.reset();
 }
 
 void Game::onAttach() {
 
-    angle = 0.0F;
-    deltaTime = 0;
-    lastTime = 0;
-    helicopter = this->createMeshModel("./assets/models/Seahawk.obj");
+    angle_ = 0.0F;
+    delta_time_ = 0;
+    last_time_ = 0;
+    helicopter_ = this->createMeshModel("./assets/models/Seahawk.obj");
 }
 
 void Game::onDeatach() {}
 
 void Game::onUpdate(const double& ts) {
-    if (this->inputManager->keyboard->isPressed(SDLK_ESCAPE)) {
+
+    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
         sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
+        return;
     }
 
-    if (this->inputManager->keyboard->isPressed(SDLK_F1)) {
+    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_F1)) {
         sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
+        return;
     }
 
     float now = SDL_GetTicks() / 1000.0F; // NOLINT
-    deltaTime = now - lastTime;
-    lastTime = now;
+    delta_time_ = now - last_time_;
+    last_time_ = now;
 
-    angle += 10.0F * deltaTime;
-    if (angle > 360.0F) {
-        angle -= 360.0F;
+    angle_ += 10.0F * delta_time_;
+    if (angle_ > 360.0F) {
+        angle_ -= 360.0F;
     }
 
-    glm::mat4 testMat = glm::rotate(glm::mat4(1.0F), glm::radians(angle), glm::vec3(0.0F, 1.0F, 0.0F));
+    glm::mat4 testMat = glm::rotate(glm::mat4(1.0F), glm::radians(angle_), glm::vec3(0.0F, 1.0F, 0.0F));
     //  testMat = glm::rotate(testMat, glm::radians(-45.0F), glm::vec3(0.0F, 0.0F, 1.0F));
     //  this->modelList[0].setModel(testMat);
 
-    if (canva->eventReShape) {
-        canva->eventReShape = false;
-        float aspect = static_cast<float>(canva->getWidth()) / static_cast<float>(canva->getHeight());
+    if (canvas_->eventReShape) {
+        canvas_->eventReShape = false;
+        float aspect = static_cast<float>(canvas_->getWidth()) / static_cast<float>(canvas_->getHeight());
 
         const float near = 0.1F;
         const float far = 1000.0F;
         const float radixAngle = glm::radians(45.F); // 1:15:21
-        uboViewProjection.projection = glm::perspective(radixAngle, aspect, near, far);
-        uboViewProjection.projection[1][1] *= -1; // vulkan inverted of OpenGL
+        ubo_view_projection_.projection = glm::perspective(radixAngle, aspect, near, far);
+        ubo_view_projection_.projection[1][1] *= -1; // vulkan inverted of OpenGL
     }
 
-    this->updateModel(helicopter, testMat);
+    this->updateModel(helicopter_, testMat);
 }
 
-void Game::onEvent(const SDL_Event& event) {
-
-    using namespace ce;
-
-    switch (event.type) {
-        case SDL_EVENT_WINDOW_MOUSE_ENTER:
-            sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr);
-            break;
-        case SDL_EVENT_WINDOW_MOUSE_LEAVE:
-        case SDL_EVENT_WINDOW_FOCUS_LOST:
-            sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr);
-            break;
-        default:
-            return false;
-    }
-    return true;
-}
+void Game::onEvent(const SDL_Event& event) {}
 
 std::string Game::getName() const { return "Game"; }
 
@@ -141,7 +128,7 @@ std::string Game::getName() const { return "Game"; }
 
 void Game::createDescriptorSetLayout() {
 
-    ce::DescriptorSetLayout& uniformDS = this->uniformBufferVP.getDescriptorSetLayout();
+    ce::DescriptorSetLayout& uniformDS = this->uniform_buffer_vp_.getDescriptorSetLayout();
 
     uniformDS.addBinding({
         .binding = 0,                                        // Binding (designed by binding number in shader)
@@ -156,15 +143,15 @@ void Game::createDescriptorSetLayout() {
 
 void Game::createPushConstantRange() {
     // Define push constant value (no 'create' needed!)
-    this->pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT; // Shader stage push constant will go to
-    this->pushConstantRange.offset = 0;                              // offset into given data to pass to push constant
-    this->pushConstantRange.size = sizeof(ce::Model);                // Size of data being passed
+    this->push_constant_range_.stageFlags = VK_SHADER_STAGE_VERTEX_BIT; // Shader stage push constant will go to
+    this->push_constant_range_.offset = 0;               // offset into given data to pass to push constant
+    this->push_constant_range_.size = sizeof(ce::Model); // Size of data being passed
 }
 
 void Game::createGraphicsPipeline() {
 
     // Read in SPIR-V code shaders, Vertex Stage creation information and Fragment Stage creation information
-    std::shared_ptr<ce::Shader> shader = std::make_shared<ce::Shader>(ctx->logical);
+    std::shared_ptr<ce::Shader> shader = std::make_shared<ce::Shader>(ctx_->logical);
     shader->addCode(VK_SHADER_STAGE_VERTEX_BIT, ce::aux::readFile("./bin/vert.spv"));
     shader->addCode(VK_SHADER_STAGE_FRAGMENT_BIT, ce::aux::readFile("./bin/frag.spv"));
 
@@ -181,28 +168,28 @@ void Game::createGraphicsPipeline() {
     shader->setVertexInput(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_FALSE);
 
     // -- VIEWPORT & SCISSOR
-    const VkViewport viewport{.x = 0.0F,                                        // x start coordinate
-                              .y = 0.0F,                                        // y start coordinate
-                              .width = static_cast<float>(canva->getWidth()),   // width of viewport
-                              .height = static_cast<float>(canva->getHeight()), // height of viewport
-                              .minDepth = 0.0F,                                 // min framebuffer depth
-                              .maxDepth = 1.0F};                                // max framebuffer depth
+    const VkViewport viewport{.x = 0.0F,                                          // x start coordinate
+                              .y = 0.0F,                                          // y start coordinate
+                              .width = static_cast<float>(canvas_->getWidth()),   // width of viewport
+                              .height = static_cast<float>(canvas_->getHeight()), // height of viewport
+                              .minDepth = 0.0F,                                   // min framebuffer depth
+                              .maxDepth = 1.0F};                                  // max framebuffer depth
 
     const VkRect2D scissor{.offset = VkOffset2D{.x = 0, .y = 0}, // Offset to use region from
                            .extent =
-                               canva->swapchain.getExtent()}; // Extent to describe region to use, starting at offset
+                               canvas_->swapchain.getExtent()}; // Extent to describe region to use, starting at offset
 
     // -- PIPELINE LAYOUT --
-    this->pipelineLayout = std::make_shared<ce::PipelineLayout>(this->ctx->logical);
-    this->pipelineLayout->addLayout(this->uniformBufferVP.getDescriptorSetLayout().get());
-    this->pipelineLayout->addLayout(this->textureMng->getUniformSampler().getDescriptorSetLayout().get());
-    this->pipelineLayout->addPushRange(this->pushConstantRange);
-    this->pipelineLayout->create();
+    this->pipeline_layout_ = std::make_shared<ce::PipelineLayout>(this->ctx_->logical);
+    this->pipeline_layout_->addLayout(this->uniform_buffer_vp_.getDescriptorSetLayout().get());
+    this->pipeline_layout_->addLayout(this->texture_mng_->getUniformSampler().getDescriptorSetLayout().get());
+    this->pipeline_layout_->addPushRange(this->push_constant_range_);
+    this->pipeline_layout_->create();
 
     // TODO: mudar o nome da classe
-    this->graphicPipeline = std::make_shared<ce::Pipeline>(this->ctx->logical);
-    this->graphicPipeline->addViewport(viewport);
-    this->graphicPipeline->addScissor(scissor);
+    this->graphic_pipeline_ = std::make_shared<ce::Pipeline>(this->ctx_->logical);
+    this->graphic_pipeline_->addViewport(viewport);
+    this->graphic_pipeline_->addScissor(scissor);
 
     const VkPipelineColorBlendAttachmentState colourState{
         .blendEnable = VK_TRUE,
@@ -216,10 +203,10 @@ void Game::createGraphicsPipeline() {
                           VK_COLOR_COMPONENT_A_BIT, // Color to apply blending to
     };
 
-    this->graphicPipeline->addColourState(colourState);
+    this->graphic_pipeline_->addColourState(colourState);
 
     // -- GRAPHICS PIPELINE CREATION
-    this->graphicPipeline->create(shader, canva->renderPass.getRenderPass(), this->pipelineLayout->get());
+    this->graphic_pipeline_->create(shader, canvas_->renderPass.getRenderPass(), this->pipeline_layout_->get());
 }
 
 void Game::createDescriptorPool() {
@@ -227,33 +214,33 @@ void Game::createDescriptorPool() {
     // CREATE UNIFORM DESCRIPTOR POOL
     // Type of Descriptors + how many DESCRIPTORS, not Descriptor Sets (combined makes the pool size)
     // ViewProjection Pool
-    this->descriptorPool.addPoolSize(
+    this->descriptor_pool_.addPoolSize(
         VkDescriptorPoolSize{.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-                             .descriptorCount = static_cast<uint32_t>(this->uniformBufferVP.getBuffers().size())});
+                             .descriptorCount = static_cast<uint32_t>(this->uniform_buffer_vp_.getBuffers().size())});
 
     // Create Descriptor Pool, Maximum number of descriptor Sets
-    this->descriptorPool.create(this->ctx->logical, static_cast<uint32_t>(canva->swapchain.getSwapchainResSize()),
-                                static_cast<VkDescriptorPoolCreateFlagBits>(0));
+    this->descriptor_pool_.create(this->ctx_->logical, static_cast<uint32_t>(canvas_->swapchain.getSwapchainResSize()),
+                                  static_cast<VkDescriptorPoolCreateFlagBits>(0));
 }
 
 void Game::createDescriptorSets() {
 
-    this->uniformBufferVP.allocateDescriptorSetsWithPool(this->uniformBufferVP.getBuffers().size(),
-                                                         this->descriptorPool.get());
+    this->uniform_buffer_vp_.allocateDescriptorSetsWithPool(this->uniform_buffer_vp_.getBuffers().size(),
+                                                            this->descriptor_pool_.get());
 
-    ce::DescriptorSetWrite dsw(ctx->logical);
+    ce::DescriptorSetWrite dsw(ctx_->logical);
 
     // Update all of descriptor set buffer bindings
-    for (size_t i = 0; i < this->uniformBufferVP.getBuffers().size(); i++) {
+    for (size_t i = 0; i < this->uniform_buffer_vp_.getBuffers().size(); i++) {
 
-        ce::DescriptorSet& uboDS = this->uniformBufferVP.getDescriptorSet(i);
+        ce::DescriptorSet& uboDS = this->uniform_buffer_vp_.getDescriptorSet(i);
 
         // VIEW PROJECTION DESCRIPTOR
         // Buffer info and data offset info
         const VkDescriptorBufferInfo vpBufferInfo{
-            .buffer = this->uniformBufferVP.getBuffers()[i]->get(), // Buffer get data from
-            .offset = 0,                                            // Position of star of data
-            .range = sizeof(UboViewProjection)                      // Size of data
+            .buffer = this->uniform_buffer_vp_.getBuffers()[i]->get(), // Buffer get data from
+            .offset = 0,                                               // Position of star of data
+            .range = sizeof(UboViewProjection)                         // Size of data
         };
 
         // Data about connection between binding and buffer
@@ -278,11 +265,11 @@ void Game::createDescriptorSets() {
 
 void Game::updateModel(size_t modelId, glm::mat4 newModel) {
 
-    if (modelId >= this->modelList.size()) {
+    if (modelId >= this->model_list_.size()) {
         return;
     }
 
-    this->modelList[modelId].setModel(newModel);
+    this->model_list_[modelId].setModel(newModel);
 }
 
 size_t Game::createMeshModel(const std::string& modelFile) {
@@ -312,21 +299,21 @@ size_t Game::createMeshModel(const std::string& modelFile) {
 
             // Otherwise, create texture and set value to index of new texture
             std::shared_ptr<ce::VulkanTexture> vulkanTex =
-                ce::VulkanTexture::Create(ctx, "./assets/textures/" + textureNames[i]);
+                ce::VulkanTexture::Create(ctx_, "./assets/textures/" + textureNames[i]);
 
-            matToTex[i] = static_cast<int>(textureMng->allocTexture(vulkanTex));
+            matToTex[i] = static_cast<int>(texture_mng_->allocTexture(vulkanTex));
         }
     }
 
     // Load in all our meshes
-    std::vector<ce::Mesh> modelMeshes = ce::MeshModel::LoadNode(ctx->physical, ctx->logical, ctx->graphicsQueue,
-                                                                ctx->commandPool, scene->mRootNode, scene, matToTex);
+    std::vector<ce::Mesh> modelMeshes = ce::MeshModel::LoadNode(ctx_->physical, ctx_->logical, ctx_->graphicsQueue,
+                                                                ctx_->commandPool, scene->mRootNode, scene, matToTex);
 
     // Create mesh model and add to list
     ce::MeshModel meshModel(modelMeshes);
-    this->modelList.push_back(meshModel);
+    this->model_list_.push_back(meshModel);
 
-    return this->modelList.size() - 1;
+    return this->model_list_.size() - 1;
 }
 
 //---------------------------------------------
@@ -336,38 +323,38 @@ size_t Game::createMeshModel(const std::string& modelFile) {
 void Game::onRender() {
 
     // -- GET NEXT IMAGE --
-    ce::Frame& frame = canva->frames[canva->currentFrame];
+    ce::Frame& frame = canvas_->frames[canvas_->currentFrame];
 
     // Get index of next image to be draw to, execute sincronization
-    auto [imageIndex, renderPassBeginInfo] = canva->nextImageRenderPass();
+    auto [imageIndex, renderPassBeginInfo] = canvas_->next_image_renderpass();
 
     ce::CmdRender cmd;
     cmd.begin(frame.commandBuffer, VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT, renderPassBeginInfo,
-              this->graphicPipeline->get());
+              this->graphic_pipeline_->get());
 
     // Copy View Projection data in UBO
-    this->uniformBufferVP.getBuffers()[imageIndex]->mapper(&this->uboViewProjection);
+    this->uniform_buffer_vp_.getBuffers()[imageIndex]->mapper(&this->ubo_view_projection_);
 
-    ce::DescriptorSet& vpUboDS = this->uniformBufferVP.getDescriptorSet(imageIndex);
+    ce::DescriptorSet& vpUboDS = this->uniform_buffer_vp_.getDescriptorSet(imageIndex);
 
-    for (size_t j = 0; j < this->modelList.size(); j++) {
+    for (size_t j = 0; j < this->model_list_.size(); j++) {
 
-        ce::MeshModel thisModel = modelList[j];
+        ce::MeshModel thisModel = model_list_[j];
 
-        cmd.pushConstants(this->pipelineLayout->get(), VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ce::Model),
+        cmd.pushConstants(this->pipeline_layout_->get(), VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ce::Model),
                           &thisModel.getModel2());
 
         for (size_t k = 0; k < thisModel.getMeshCount(); k++) {
 
             ce::DescriptorSet& samplerUboDS =
-                this->textureMng->getUniformSampler().getDescriptorSet(thisModel.getMesh(k)->getTexId());
+                this->texture_mng_->getUniformSampler().getDescriptorSet(thisModel.getMesh(k)->getTexId());
 
             cmd.addVertexBuffer({0}, thisModel.getMesh(k)->getVertexBuffer());
             cmd.bindVertexBuffer(0);
             cmd.bindIndexBuffer({0}, thisModel.getMesh(k)->getIndexBuffer());
             cmd.addDescriptorSet(vpUboDS.get());
             cmd.addDescriptorSet(samplerUboDS.get());
-            cmd.bindDescriptorSets(this->pipelineLayout->get());
+            cmd.bindDescriptorSets(this->pipeline_layout_->get());
             cmd.drawIndexed(thisModel.getMesh(k)->getIndexCount(), 1, 0, 0, 0);
             cmd.clearTemps();
         }
@@ -376,5 +363,5 @@ void Game::onRender() {
     cmd.end();
 
     // -- SUBMIT COMMAND BUFFER TO RENDER
-    cmd.submitToRender(ctx->graphicsQueue, &frame, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+    cmd.submitToRender(ctx_->graphicsQueue, &frame, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 }

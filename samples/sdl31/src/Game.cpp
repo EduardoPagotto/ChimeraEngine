@@ -24,29 +24,29 @@ Game::Game(std::shared_ptr<entt::registry> registry) : registry_(registry) {
 
     this->texture_mng_ = std::make_shared<Textures>(ctx_);
 
-    createDescriptorSetLayout();
-    createPushConstantRange();
-    createGraphicsPipeline();
-    createDescriptorPool();
-    createDescriptorSets();
+    create_descriptorset_layout();
+    create_pushconstant_range();
+    create_graphics_pipeline();
+    create_descriptorpool();
+    create_descriptorsets();
 
     // const float radixAngle = 45.0F;
     const float near = 0.1F;
     const float far = 1000.0F;
 
-    const float radixAngle = glm::radians(45.F); // 1:15:21
-    const glm::vec3 camPos = glm::vec3(-100.0F, 150.0F, 200.0F);
-    const glm::vec3 camCenter = glm::vec3(0.0F, 0.0F, -2.0F);
-    const glm::vec3 camUp = glm::vec3(0.0F, 1.0F, 0.0F);
+    const float radix_angle = glm::radians(45.F); // 1:15:21
+    const glm::vec3 cam_pos = glm::vec3(-100.0F, 150.0F, 200.0F);
+    const glm::vec3 cam_center = glm::vec3(0.0F, 0.0F, -2.0F);
+    const glm::vec3 cam_up = glm::vec3(0.0F, 1.0F, 0.0F);
     float aspect = static_cast<float>(canvas_->getWidth()) / static_cast<float>(canvas_->getHeight());
 
-    ubo_view_projection_.projection = glm::perspective(radixAngle, aspect, near, far);
-    ubo_view_projection_.view = glm::lookAt(camPos, camCenter, camUp);
+    ubo_view_projection_.projection = glm::perspective(radix_angle, aspect, near, far);
+    ubo_view_projection_.view = glm::lookAt(cam_pos, cam_center, cam_up);
     ubo_view_projection_.projection[1][1] *= -1; // vulkan inverted of OpenGL
 
     // Create our default "no texture" texture
-    std::shared_ptr<VulkanTexture> vulkanTex = VulkanTexture::Create(ctx_, "./assets/textures/plain.png");
-    texture_mng_->allocTexture(vulkanTex);
+    std::shared_ptr<VulkanTexture> vulkan_tex = VulkanTexture::Create(ctx_, "./assets/textures/plain.png");
+    texture_mng_->allocTexture(vulkan_tex);
 
     this->input_manager_ = registry->ctx().get<std::shared_ptr<InputManager>>();
 }
@@ -74,7 +74,7 @@ void Game::onAttach() {
     angle_ = 0.0F;
     delta_time_ = 0;
     last_time_ = 0;
-    helicopter_ = this->createMeshModel("./assets/models/Seahawk.obj");
+    helicopter_ = this->create_mesh_model("./assets/models/Seahawk.obj");
 }
 
 void Game::onDeatach() {}
@@ -100,7 +100,7 @@ void Game::onUpdate(const double& ts) {
         angle_ -= 360.0F;
     }
 
-    glm::mat4 testMat = glm::rotate(glm::mat4(1.0F), glm::radians(angle_), glm::vec3(0.0F, 1.0F, 0.0F));
+    glm::mat4 test_mat = glm::rotate(glm::mat4(1.0F), glm::radians(angle_), glm::vec3(0.0F, 1.0F, 0.0F));
     //  testMat = glm::rotate(testMat, glm::radians(-45.0F), glm::vec3(0.0F, 0.0F, 1.0F));
     //  this->modelList[0].setModel(testMat);
 
@@ -110,12 +110,12 @@ void Game::onUpdate(const double& ts) {
 
         const float near = 0.1F;
         const float far = 1000.0F;
-        const float radixAngle = glm::radians(45.F); // 1:15:21
-        ubo_view_projection_.projection = glm::perspective(radixAngle, aspect, near, far);
+        const float radix_angle = glm::radians(45.F); // 1:15:21
+        ubo_view_projection_.projection = glm::perspective(radix_angle, aspect, near, far);
         ubo_view_projection_.projection[1][1] *= -1; // vulkan inverted of OpenGL
     }
 
-    this->updateModel(helicopter_, testMat);
+    this->update_model(helicopter_, test_mat);
 }
 
 void Game::onEvent(const SDL_Event& event) {}
@@ -126,11 +126,11 @@ std::string Game::getName() const { return "Game"; }
 // Inicializaçao
 //---------------------------------------------
 
-void Game::createDescriptorSetLayout() {
+void Game::create_descriptorset_layout() {
 
-    ce::DescriptorSetLayout& uniformDS = this->uniform_buffer_vp_.getDescriptorSetLayout();
+    ce::DescriptorSetLayout& uniform_ds = this->uniform_buffer_vp_.getDescriptorSetLayout();
 
-    uniformDS.addBinding({
+    uniform_ds.addBinding({
         .binding = 0,                                        // Binding (designed by binding number in shader)
         .descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, // Type of descriptor
         .descriptorCount = 1,                                // Number of descriptors for binding
@@ -138,17 +138,17 @@ void Game::createDescriptorSetLayout() {
         .pImmutableSamplers = nullptr,
     });
 
-    uniformDS.create();
+    uniform_ds.create();
 }
 
-void Game::createPushConstantRange() {
+void Game::create_pushconstant_range() {
     // Define push constant value (no 'create' needed!)
     this->push_constant_range_.stageFlags = VK_SHADER_STAGE_VERTEX_BIT; // Shader stage push constant will go to
     this->push_constant_range_.offset = 0;               // offset into given data to pass to push constant
     this->push_constant_range_.size = sizeof(ce::Model); // Size of data being passed
 }
 
-void Game::createGraphicsPipeline() {
+void Game::create_graphics_pipeline() {
 
     // Read in SPIR-V code shaders, Vertex Stage creation information and Fragment Stage creation information
     std::shared_ptr<ce::Shader> shader = std::make_shared<ce::Shader>(ctx_->logical);
@@ -191,7 +191,7 @@ void Game::createGraphicsPipeline() {
     this->graphic_pipeline_->addViewport(viewport);
     this->graphic_pipeline_->addScissor(scissor);
 
-    const VkPipelineColorBlendAttachmentState colourState{
+    const VkPipelineColorBlendAttachmentState colour_state{
         .blendEnable = VK_TRUE,
         .srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA,
         .dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
@@ -203,13 +203,13 @@ void Game::createGraphicsPipeline() {
                           VK_COLOR_COMPONENT_A_BIT, // Color to apply blending to
     };
 
-    this->graphic_pipeline_->addColourState(colourState);
+    this->graphic_pipeline_->addColourState(colour_state);
 
     // -- GRAPHICS PIPELINE CREATION
     this->graphic_pipeline_->create(shader, canvas_->renderPass.getRenderPass(), this->pipeline_layout_->get());
 }
 
-void Game::createDescriptorPool() {
+void Game::create_descriptorpool() {
 
     // CREATE UNIFORM DESCRIPTOR POOL
     // Type of Descriptors + how many DESCRIPTORS, not Descriptor Sets (combined makes the pool size)
@@ -223,7 +223,7 @@ void Game::createDescriptorPool() {
                                   static_cast<VkDescriptorPoolCreateFlagBits>(0));
 }
 
-void Game::createDescriptorSets() {
+void Game::create_descriptorsets() {
 
     this->uniform_buffer_vp_.allocateDescriptorSetsWithPool(this->uniform_buffer_vp_.getBuffers().size(),
                                                             this->descriptor_pool_.get());
@@ -233,11 +233,11 @@ void Game::createDescriptorSets() {
     // Update all of descriptor set buffer bindings
     for (size_t i = 0; i < this->uniform_buffer_vp_.getBuffers().size(); i++) {
 
-        ce::DescriptorSet& uboDS = this->uniform_buffer_vp_.getDescriptorSet(i);
+        ce::DescriptorSet& ubo_ds = this->uniform_buffer_vp_.getDescriptorSet(i);
 
         // VIEW PROJECTION DESCRIPTOR
         // Buffer info and data offset info
-        const VkDescriptorBufferInfo vpBufferInfo{
+        const VkDescriptorBufferInfo vp_buffer_info{
             .buffer = this->uniform_buffer_vp_.getBuffers()[i]->get(), // Buffer get data from
             .offset = 0,                                               // Position of star of data
             .range = sizeof(UboViewProjection)                         // Size of data
@@ -247,12 +247,12 @@ void Game::createDescriptorSets() {
         // Add to a list of descriptor set writes
         dsw.add(VkWriteDescriptorSet{
             .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-            .dstSet = uboDS.get(), // Descriptor Set to update
-            .dstBinding = 0,       // Binding to update (matches with binding on layout/shader)
-            .dstArrayElement = 0,  // index in array to update
-            .descriptorCount = 1,  // type of Descriptor
+            .dstSet = ubo_ds.get(), // Descriptor Set to update
+            .dstBinding = 0,        // Binding to update (matches with binding on layout/shader)
+            .dstArrayElement = 0,   // index in array to update
+            .descriptorCount = 1,   // type of Descriptor
             .descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, // Amount to update
-            .pBufferInfo = &vpBufferInfo                         // Information about buffer data to bind
+            .pBufferInfo = &vp_buffer_info                       // Information about buffer data to bind
         });
     }
     // Update the descripto sets with new buffer/binding info
@@ -263,55 +263,55 @@ void Game::createDescriptorSets() {
 // Loader Models
 //---------------------------------------------
 
-void Game::updateModel(size_t modelId, glm::mat4 newModel) {
+void Game::update_model(size_t model_id, glm::mat4 new_model) {
 
-    if (modelId >= this->model_list_.size()) {
+    if (model_id >= this->model_list_.size()) {
         return;
     }
 
-    this->model_list_[modelId].setModel(newModel);
+    this->model_list_[model_id].setModel(new_model);
 }
 
-size_t Game::createMeshModel(const std::string& modelFile) {
+size_t Game::create_mesh_model(const std::string& model_file) {
     // Import model "scene"
     Assimp::Importer importer;
 
-    const aiScene* scene = importer.ReadFile(modelFile.c_str(), aiProcess_Triangulate | aiProcess_FlipUVs |
-                                                                    aiProcess_JoinIdenticalVertices);
+    const aiScene* scene = importer.ReadFile(model_file.c_str(), aiProcess_Triangulate | aiProcess_FlipUVs |
+                                                                     aiProcess_JoinIdenticalVertices);
 
     if (scene == nullptr) {
-        throw std::runtime_error("Faile to load model! (" + modelFile + ")");
+        throw std::runtime_error("Faile to load model! (" + model_file + ")");
     }
 
     // Get vector of all material with 1:1 ID placement
-    std::vector<std::string> textureNames = ce::MeshModel::LoadMaterials(scene);
+    std::vector<std::string> texture_names = ce::MeshModel::LoadMaterials(scene);
 
     // Convesion from the material list IDs to our Descriptor Array IDs
-    std::vector<int> matToTex(textureNames.size());
+    std::vector<int> mat_to_tex(texture_names.size());
 
     // Loop over textureNames and create textures for them
-    for (size_t i = 0; i < textureNames.size(); i++) {
+    for (size_t i = 0; i < texture_names.size(); i++) {
 
         // If material had not texture, set '0' to indicate no texture, texture 0 will be reserved for a default texture
-        if (textureNames[i].empty()) { // FIXME: talvez set seria melhor
-            matToTex[i] = 0;
+        if (texture_names[i].empty()) { // FIXME: talvez set seria melhor
+            mat_to_tex[i] = 0;
         } else {
 
             // Otherwise, create texture and set value to index of new texture
-            std::shared_ptr<ce::VulkanTexture> vulkanTex =
-                ce::VulkanTexture::Create(ctx_, "./assets/textures/" + textureNames[i]);
+            std::shared_ptr<ce::VulkanTexture> vulkan_tex =
+                ce::VulkanTexture::Create(ctx_, "./assets/textures/" + texture_names[i]);
 
-            matToTex[i] = static_cast<int>(texture_mng_->allocTexture(vulkanTex));
+            mat_to_tex[i] = static_cast<int>(texture_mng_->allocTexture(vulkan_tex));
         }
     }
 
     // Load in all our meshes
-    std::vector<ce::Mesh> modelMeshes = ce::MeshModel::LoadNode(ctx_->physical, ctx_->logical, ctx_->graphicsQueue,
-                                                                ctx_->commandPool, scene->mRootNode, scene, matToTex);
+    std::vector<ce::Mesh> model_meshes = ce::MeshModel::LoadNode(
+        ctx_->physical, ctx_->logical, ctx_->graphicsQueue, ctx_->commandPool, scene->mRootNode, scene, mat_to_tex);
 
     // Create mesh model and add to list
-    ce::MeshModel meshModel(modelMeshes);
-    this->model_list_.push_back(meshModel);
+    ce::MeshModel mesh_model(model_meshes);
+    this->model_list_.push_back(mesh_model);
 
     return this->model_list_.size() - 1;
 }
@@ -335,27 +335,27 @@ void Game::onRender() {
     // Copy View Projection data in UBO
     this->uniform_buffer_vp_.getBuffers()[imageIndex]->mapper(&this->ubo_view_projection_);
 
-    ce::DescriptorSet& vpUboDS = this->uniform_buffer_vp_.getDescriptorSet(imageIndex);
+    ce::DescriptorSet& vp_ubo_ds = this->uniform_buffer_vp_.getDescriptorSet(imageIndex);
 
     for (size_t j = 0; j < this->model_list_.size(); j++) {
 
-        ce::MeshModel thisModel = model_list_[j];
+        ce::MeshModel this_model = model_list_[j];
 
         cmd.pushConstants(this->pipeline_layout_->get(), VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ce::Model),
-                          &thisModel.getModel2());
+                          &this_model.getModel2());
 
-        for (size_t k = 0; k < thisModel.getMeshCount(); k++) {
+        for (size_t k = 0; k < this_model.getMeshCount(); k++) {
 
-            ce::DescriptorSet& samplerUboDS =
-                this->texture_mng_->getUniformSampler().getDescriptorSet(thisModel.getMesh(k)->getTexId());
+            ce::DescriptorSet& sampler_ubo_ds =
+                this->texture_mng_->getUniformSampler().getDescriptorSet(this_model.getMesh(k)->getTexId());
 
-            cmd.addVertexBuffer({0}, thisModel.getMesh(k)->getVertexBuffer());
+            cmd.addVertexBuffer({0}, this_model.getMesh(k)->getVertexBuffer());
             cmd.bindVertexBuffer(0);
-            cmd.bindIndexBuffer({0}, thisModel.getMesh(k)->getIndexBuffer());
-            cmd.addDescriptorSet(vpUboDS.get());
-            cmd.addDescriptorSet(samplerUboDS.get());
+            cmd.bindIndexBuffer({0}, this_model.getMesh(k)->getIndexBuffer());
+            cmd.addDescriptorSet(vp_ubo_ds.get());
+            cmd.addDescriptorSet(sampler_ubo_ds.get());
             cmd.bindDescriptorSets(this->pipeline_layout_->get());
-            cmd.drawIndexed(thisModel.getMesh(k)->getIndexCount(), 1, 0, 0, 0);
+            cmd.drawIndexed(this_model.getMesh(k)->getIndexCount(), 1, 0, 0, 0);
             cmd.clearTemps();
         }
     }

@@ -23,14 +23,14 @@ class Game : public ce::IStateMachine {
 
   private:
     // - Vulkan create functions
-    void createDescriptorSetLayout();
-    void createPushConstantRange();
-    void createGraphicsPipeline();
-    void createDescriptorPool();
-    void createDescriptorSets();
+    void create_descriptorset_layout();
+    void create_pushconstant_range();
+    void create_graphics_pipeline();
+    void create_descriptorpool();
+    void create_descriptorsets();
 
-    void updateModel(size_t modelId, glm::mat4 newModel);
-    size_t createMeshModel(const std::string& modelFile);
+    void update_model(size_t model_id, glm::mat4 new_model);
+    size_t create_mesh_model(const std::string& model_file);
 
     std::shared_ptr<ce::CanvaVK> canvas_;
     std::shared_ptr<ce::VulkanContext> ctx_;

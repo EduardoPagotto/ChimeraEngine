@@ -19,12 +19,12 @@ namespace ce {
         void* allocate_dynamic_buffer_transfer_space(size_t size, uint32_t max) { // size:=sizeof(UboModel), max_objects
 
             // Caculate alignment of model data
-            this->uniform_alignment_ = (size + this->min_offset_ - 1) & ~(this->min_offset_ - 1);
+            uniform_alignment_ = (size + min_offset_ - 1) & ~(min_offset_ - 1);
 
             // Create space in memory to hold dynamic byffer that is alignment and holds max_objects
-            // this->modelTransferSpace =
-            //     (UboModel*)aligned_alloc(this->uniformAlignment, this->uniformAlignment * max_objects);
-            return aligned_alloc(this->uniform_alignment_, this->uniform_alignment_ * max);
+            // modelTransferSpace =
+            //     (UboModel*)aligned_alloc(uniformAlignment, uniformAlignment * max_objects);
+            return aligned_alloc(uniform_alignment_, uniform_alignment_ * max);
         }
 
         template <typename T>
@@ -34,17 +34,17 @@ namespace ce {
             void* data = nullptr;
             // for (size_t i = 0; i < meshList.size(); i++) {
 
-            //     std::byte* ptr_base = reinterpret_cast<std::byte*>(this->modelTransferSpace);
-            //     std::byte* ptr_atual = ptr_base + (i * this->uniformAlignment);
+            //     std::byte* ptr_base = reinterpret_cast<std::byte*>(modelTransferSpace);
+            //     std::byte* ptr_atual = ptr_base + (i * uniformAlignment);
             //     UboModel* thisModel = std::launder(reinterpret_cast<UboModel*>(ptr_atual));
 
             //     *thisModel = meshList[i].getModel(); // FIXME: modelo antigo funcionava, reavaliar
             // }
 
             // Map the list of model data // FIXME: usar class Buffer abaixo!!
-            vkMapMemory(logical_, this->memory_[image_index], 0, this->uniform_alignment_ * mesh_list.size(), 0, &data);
-            memory_(data, this->model_transfer_space_, this->uniform_alignment_ * mesh_list.size());
-            vkUnmapMemory(logical_, this->memory_[image_index]);
+            vkMapMemory(logical_, memory_[image_index], 0, uniform_alignment_ * mesh_list.size(), 0, &data);
+            memory_(data, model_transfer_space_, uniform_alignment_ * mesh_list.size());
+            vkUnmapMemory(logical_, memory_[image_index]);
         }
 
       private:

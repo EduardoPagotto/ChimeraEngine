@@ -3,17 +3,17 @@ namespace ce {
 
 #pragma region Pipeline
 
-    Pipeline::~Pipeline() { vkDestroyPipeline(device_, this->handle_, nullptr); }
+    Pipeline::~Pipeline() { vkDestroyPipeline(device_, handle_, nullptr); }
 
     void Pipeline::create(std::shared_ptr<Shader> shader, VkRenderPass render_pass, VkPipelineLayout pipeline_layout) {
 
         // -- VIEWPORT & SCISSOR
         const VkPipelineViewportStateCreateInfo viewport_state_create_info{
             .sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO,
-            .viewportCount = static_cast<uint32_t>(this->viewports_.size()),
-            .pViewports = this->viewports_.data(),
-            .scissorCount = static_cast<uint32_t>(this->scissors_.size()),
-            .pScissors = this->scissors_.data()};
+            .viewportCount = static_cast<uint32_t>(viewports_.size()),
+            .pViewports = viewports_.data(),
+            .scissorCount = static_cast<uint32_t>(scissors_.size()),
+            .pScissors = scissors_.data()};
 
         // Dynamic State creation info
         const VkPipelineDynamicStateCreateInfo dynamic_state_create_info{
@@ -49,8 +49,8 @@ namespace ce {
         const VkPipelineColorBlendStateCreateInfo color_blending_create_info{
             .sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO, //
             .logicOpEnable = VK_FALSE, // alternative to calulation is use logical operations
-            .attachmentCount = static_cast<uint32_t>(this->colour_states_.size()),
-            .pAttachments = this->colour_states_.data()};
+            .attachmentCount = static_cast<uint32_t>(colour_states_.size()),
+            .pAttachments = colour_states_.data()};
 
         // -- DEPTH STENCIL TESTING
         const VkPipelineDepthStencilStateCreateInfo depth_stencil_create_info{
@@ -84,7 +84,7 @@ namespace ce {
         };
 
         // Create Graphics Pipeline
-        if (vkCreateGraphicsPipelines(device_, VK_NULL_HANDLE, 1, &pipeline_create_info, nullptr, &this->handle_) !=
+        if (vkCreateGraphicsPipelines(device_, VK_NULL_HANDLE, 1, &pipeline_create_info, nullptr, &handle_) !=
             VK_SUCCESS) {
             throw std::runtime_error("Failed to create a graphic pipeline");
         }
@@ -100,11 +100,11 @@ namespace ce {
             .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
             .setLayoutCount = static_cast<uint32_t>(descriptor_set_layouts_.size()),
             .pSetLayouts = descriptor_set_layouts_.data(),
-            .pushConstantRangeCount = static_cast<uint32_t>(this->push_constant_ranges_.size()),
-            .pPushConstantRanges = this->push_constant_ranges_.data()};
+            .pushConstantRangeCount = static_cast<uint32_t>(push_constant_ranges_.size()),
+            .pPushConstantRanges = push_constant_ranges_.data()};
 
         // Create PipelineLayout
-        if (vkCreatePipelineLayout(device_, &pipeline_layout_create_info, nullptr, &this->handle_) != VK_SUCCESS) {
+        if (vkCreatePipelineLayout(device_, &pipeline_layout_create_info, nullptr, &handle_) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create Pipeline Layout!");
         }
     }

@@ -5,11 +5,11 @@ namespace ce {
 
     IBO::IBO(VkPhysicalDevice physical, VkDevice logical) : physical_(physical), logical_(logical) {}
 
-    IBO::~IBO() { this->destroy(); }
+    IBO::~IBO() { destroy(); }
 
     void IBO::destroy() {
-        this->count_ = 0;
-        this->buffer_.destroy();
+        count_ = 0;
+        buffer_.destroy();
     }
 
     void IBO::create(VkQueue queue, VkCommandPool command_buffer, std::vector<uint32_t>* indices) {
@@ -17,7 +17,7 @@ namespace ce {
         // Get size of buffer needed for indices
         VkDeviceSize buffer_size = sizeof(uint32_t) * indices->size();
 
-        this->count_ = indices->size();
+        count_ = indices->size();
 
         // Temporary buffer to "stage" index data before transfering to GPU
         Buffer staging_buffer(physical_, logical_);
@@ -28,12 +28,12 @@ namespace ce {
         staging_buffer.mapper(indices->data());
 
         // Create buffer for index data on GPU aceess only area
-        this->buffer_.init(physical_, logical_);
-        this->buffer_.create(buffer_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
-                             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+        buffer_.init(physical_, logical_);
+        buffer_.create(buffer_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
+                       VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
         // Copy from staging buffer to GPU access buffer
-        aux::CopyBuffer(this->logical_, queue, command_buffer, staging_buffer.get(), this->buffer_.get(), buffer_size);
+        aux::CopyBuffer(logical_, queue, command_buffer, staging_buffer.get(), buffer_.get(), buffer_size);
     }
 
 } // namespace ce

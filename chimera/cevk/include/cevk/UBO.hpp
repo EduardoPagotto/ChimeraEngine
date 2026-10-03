@@ -11,18 +11,18 @@ namespace ce {
     class UniformSampler {
       public:
         explicit UniformSampler() = default;
-        virtual ~UniformSampler() { this->destroy(); };
+        virtual ~UniformSampler() { destroy(); };
 
         void init(VkDevice logical) {
-            this->logical_ = logical;
-            this->descriptor_set_layout_.init(logical);
+            logical_ = logical;
+            descriptor_set_layout_.init(logical);
         }
 
         void destroy() {
             for (size_t i = 0; i < images_.size(); i++) {
-                this->images_[i].reset();
+                images_[i].reset();
             }
-            this->images_.clear();
+            images_.clear();
         }
 
         std::pair<size_t, size_t> allocate_descriptor_sets_with_pool(size_t tot,
@@ -33,15 +33,15 @@ namespace ce {
             for (size_t i = 0; i < tot; i++) {
                 size_t pos = descriptors_.size();
                 descriptors_.push_back(DescriptorSet{});
-                descriptors_[pos].init(this->logical_);
-                descriptors_[pos].alloc(descriptor_pool, this->descriptor_set_layout_.get(), variable_count_info);
+                descriptors_[pos].init(logical_);
+                descriptors_[pos].alloc(descriptor_pool, descriptor_set_layout_.get(), variable_count_info);
             }
 
             return {start, tot};
         }
 
-        DescriptorSet& get_descriptor_set(size_t index) { return this->descriptors_[index]; }
-        DescriptorSetLayout& get_descriptor_set_layout() { return this->descriptor_set_layout_; }
+        DescriptorSet& get_descriptor_set(size_t index) { return descriptors_[index]; }
+        DescriptorSetLayout& get_descriptor_set_layout() { return descriptor_set_layout_; }
 
         std::vector<std::shared_ptr<Image>>& get_images() { return images_; }
 
@@ -55,22 +55,22 @@ namespace ce {
     class UniformBuffer {
       public:
         explicit UniformBuffer() = default;
-        virtual ~UniformBuffer() { this->destroy(); }
+        virtual ~UniformBuffer() { destroy(); }
 
         void init(VkPhysicalDevice physical, VkDevice logical, const size_t max_ubo, const size_t size_data_ubo) {
 
-            this->logical_ = logical;
+            logical_ = logical;
             // ViewProjection Buffer size
             const VkDeviceSize vp_buffer_size = size_data_ubo; // tamanho do struct com os dados
 
             // One uniform buffer for each image (and by extention, command buffer)
-            this->buffers_.resize(max_ubo); // total a ser criado
+            buffers_.resize(max_ubo); // total a ser criado
 
             // Create Unifor buffers
             for (size_t i = 0; i < max_ubo; i++) {
-                this->buffers_[i] = std::make_shared<Buffer>(physical, logical);
-                this->buffers_[i]->create(vp_buffer_size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-                                          VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+                buffers_[i] = std::make_shared<Buffer>(physical, logical);
+                buffers_[i]->create(vp_buffer_size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                                    VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
             }
 
             // UNIFORM VALUES DESCRIPTOR SET LAYOUT AND DESCRIPTORSETS
@@ -80,9 +80,9 @@ namespace ce {
 
         void destroy() {
             for (size_t i = 0; i < buffers_.size(); i++) {
-                this->buffers_[i].reset();
+                buffers_[i].reset();
             }
-            this->buffers_.clear();
+            buffers_.clear();
         }
 
         std::pair<size_t, size_t> allocate_descriptor_sets_with_pool(size_t tot,
@@ -92,15 +92,15 @@ namespace ce {
             for (size_t i = 0; i < tot; i++) {
                 size_t pos = descriptors_.size();
                 descriptors_.push_back(DescriptorSet{});
-                descriptors_[pos].init(this->logical_);
-                descriptors_[pos].alloc(descriptor_pool, this->descriptor_set_layout_.get());
+                descriptors_[pos].init(logical_);
+                descriptors_[pos].alloc(descriptor_pool, descriptor_set_layout_.get());
             }
 
             return {start, tot};
         }
 
-        DescriptorSet& get_descriptor_set(size_t index) { return this->descriptors_[index]; }
-        DescriptorSetLayout& get_descriptor_set_layout() { return this->descriptor_set_layout_; }
+        DescriptorSet& get_descriptor_set(size_t index) { return descriptors_[index]; }
+        DescriptorSetLayout& get_descriptor_set_layout() { return descriptor_set_layout_; }
 
         std::vector<std::shared_ptr<Buffer>>& get_buffers() { return buffers_; }
 

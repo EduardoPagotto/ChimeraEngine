@@ -7,7 +7,7 @@ namespace ce {
     void CmdRender::begin(VkCommandBuffer cmdbuffer, VkCommandBufferUsageFlagBits flag,
                           const VkRenderPassBeginInfo& renderpass_begin_info, VkPipeline& graphic_pipeline) {
 
-        this->cmdbuffer_ = cmdbuffer;
+        cmdbuffer_ = cmdbuffer;
         // Information to begin the command buffer record
         const VkCommandBufferBeginInfo begin_info{
             .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
@@ -15,15 +15,15 @@ namespace ce {
         };
 
         // Begin recording transfer commands
-        if (vkBeginCommandBuffer(this->cmdbuffer_, &begin_info) != VK_SUCCESS) {
+        if (vkBeginCommandBuffer(cmdbuffer_, &begin_info) != VK_SUCCESS) {
             throw std::runtime_error("Failed to begin a CmdRender Buffer!");
         }
 
         // Begin Render Pass
-        vkCmdBeginRenderPass(this->cmdbuffer_, &renderpass_begin_info, VK_SUBPASS_CONTENTS_INLINE);
+        vkCmdBeginRenderPass(cmdbuffer_, &renderpass_begin_info, VK_SUBPASS_CONTENTS_INLINE);
 
         // Bind Pipeline to be used  in render pass
-        vkCmdBindPipeline(this->cmdbuffer_, VK_PIPELINE_BIND_POINT_GRAPHICS, graphic_pipeline);
+        vkCmdBindPipeline(cmdbuffer_, VK_PIPELINE_BIND_POINT_GRAPHICS, graphic_pipeline);
     }
 
     void CmdRender::push_constants(VkPipelineLayout pipeline_layout, VkShaderStageFlagBits stage, uint32_t offset,
@@ -38,8 +38,8 @@ namespace ce {
     }
 
     void CmdRender::add_vertex_buffer(const VkDeviceSize& offset, const VkBuffer& buffer) {
-        this->vextex_buffers_.push_back(buffer);
-        this->offsets_.push_back(offset);
+        vextex_buffers_.push_back(buffer);
+        offsets_.push_back(offset);
     }
 
     void CmdRender::bind_index_buffer(const VkDeviceSize& offset, const VkBuffer& index_buffer) { // TODO: offset {0}
@@ -53,7 +53,7 @@ namespace ce {
                                offsets_.data()); // CmdRender to bind vertex buffer before drawing with then
     }
 
-    void CmdRender::add_descriptor_set(const VkDescriptorSet& desc) { this->descriptorset_group_.push_back(desc); }
+    void CmdRender::add_descriptor_set(const VkDescriptorSet& desc) { descriptorset_group_.push_back(desc); }
 
     void CmdRender::bind_descriptor_sets(const VkPipelineLayout& pipeline_layout) {
         vkCmdBindDescriptorSets(cmdbuffer_, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_layout, 0,
@@ -68,9 +68,9 @@ namespace ce {
     }
 
     void CmdRender::end() {
-        vkCmdEndRenderPass(this->cmdbuffer_);
+        vkCmdEndRenderPass(cmdbuffer_);
 
-        if (vkEndCommandBuffer(this->cmdbuffer_) != VK_SUCCESS) {
+        if (vkEndCommandBuffer(cmdbuffer_) != VK_SUCCESS) {
             throw std::runtime_error("Failed to end a CmdRender!");
         }
     }
@@ -93,8 +93,8 @@ namespace ce {
             .waitSemaphoreCount = static_cast<uint32_t>(wait_semaphores.size()), // Number of semaphores to wait on
             .pWaitSemaphores = wait_semaphores.data(),                           //
             .pWaitDstStageMask = wait_stages.data(),                             // Stagegs to check semaphores at
-            .commandBufferCount = 1,              // Number of command buffers to submit FIXME: é isto mesmo?
-            .pCommandBuffers = &this->cmdbuffer_, // Command buffer to submit
+            .commandBufferCount = 1,        // Number of command buffers to submit FIXME: é isto mesmo?
+            .pCommandBuffers = &cmdbuffer_, // Command buffer to submit
             .signalSemaphoreCount = static_cast<uint32_t>(signal_semaphores.size()), // Number of semaphore to signal
             .pSignalSemaphores = signal_semaphores.data(), // Semaphore to signal when command buffer finishes
         };

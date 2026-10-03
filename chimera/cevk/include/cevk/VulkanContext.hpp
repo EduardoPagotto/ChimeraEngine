@@ -9,7 +9,7 @@ namespace ce {
     class VulkanContext {
       public:
         VulkanContext() = default;
-        ~VulkanContext() { this->destroy(); }
+        ~VulkanContext() { destroy(); }
 
         void create_window(const std::string& name = "Teste", const int& width = 800, const int& height = 600);
         void init();

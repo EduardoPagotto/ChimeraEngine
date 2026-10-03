@@ -16,11 +16,11 @@ namespace ce {
         // Factory pattern exigido pelo AssetManager
         static std::shared_ptr<VulkanTexture> create(std::shared_ptr<VulkanContext> ctx, const std::string& file_path);
 
-        std::shared_ptr<Image> get() { return this->tex_img_; }
+        std::shared_ptr<Image> get() { return tex_img_; }
 
-        void clear_bindless_index() { this->delta_ = index_; }
+        void clear_bindless_index() { delta_ = index_; }
         uint32_t get_bindless_index() const { return (index_ - delta_); }
-        uint32_t get_index() const { return this->index_; }
+        uint32_t get_index() const { return index_; }
         static void reset_index() { next_texture_index = 0; }
 
       private:

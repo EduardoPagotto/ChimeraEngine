@@ -2,14 +2,14 @@
 #include <stdexcept>
 
 namespace ce {
-    CmdBuffer::CmdBuffer(VkDevice device, VkCommandPool commandpool) { this->init(device, commandpool); }
+    CmdBuffer::CmdBuffer(VkDevice device, VkCommandPool commandpool) { init(device, commandpool); }
 
-    CmdBuffer::~CmdBuffer() { this->destroy(); }
+    CmdBuffer::~CmdBuffer() { destroy(); }
 
     void CmdBuffer::init(VkDevice device, VkCommandPool commandpool) {
 
-        this->device_ = device;
-        this->commandpool_ = commandpool;
+        device_ = device;
+        commandpool_ = commandpool;
 
         const VkCommandBufferAllocateInfo cb_alloc_info{
             .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
@@ -22,21 +22,21 @@ namespace ce {
             .commandBufferCount = static_cast<uint32_t>(1)};
 
         // Allocate command buffers and place handles in array of buffers
-        if (vkAllocateCommandBuffers(device, &cb_alloc_info, &this->handle_) != VK_SUCCESS) {
+        if (vkAllocateCommandBuffers(device, &cb_alloc_info, &handle_) != VK_SUCCESS) {
             throw std::runtime_error("Failed to Allocate Command buffers!");
         }
     }
 
     void CmdBuffer::destroy() {
         // Free temporary command buffer back to pool
-        if (this->handle_ != VK_NULL_HANDLE) {
-            vkFreeCommandBuffers(this->device_, this->commandpool_, static_cast<uint32_t>(1), &this->handle_);
-            this->handle_ = VK_NULL_HANDLE;
+        if (handle_ != VK_NULL_HANDLE) {
+            vkFreeCommandBuffers(device_, commandpool_, static_cast<uint32_t>(1), &handle_);
+            handle_ = VK_NULL_HANDLE;
         }
     }
 
     void CmdBuffer::clean() {
-        if (vkResetCommandBuffer(this->handle_, VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT) != VK_SUCCESS) {
+        if (vkResetCommandBuffer(handle_, VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT) != VK_SUCCESS) {
             throw std::runtime_error("Failed to reset a Command Buffer!");
         }
     }
@@ -50,14 +50,14 @@ namespace ce {
         };
 
         // Begin recording transfer commands
-        if (vkBeginCommandBuffer(this->handle_, &begin_info) != VK_SUCCESS) {
+        if (vkBeginCommandBuffer(handle_, &begin_info) != VK_SUCCESS) {
             throw std::runtime_error("Failed to begin a Command Buffer!");
         }
     }
 
     void CmdBuffer::end() {
         // End commands
-        if (vkEndCommandBuffer(this->handle_) != VK_SUCCESS) {
+        if (vkEndCommandBuffer(handle_) != VK_SUCCESS) {
             throw std::runtime_error("Failed to end a Command Buffer!");
         }
     }
@@ -67,7 +67,7 @@ namespace ce {
         const VkSubmitInfo submit_info{
             .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO, //
             .commandBufferCount = 1,                //
-            .pCommandBuffers = &this->handle_       //
+            .pCommandBuffers = &handle_             //
         };
 
         // Submit transfer command to transfer queue and wait until it finishes

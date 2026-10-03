@@ -3,9 +3,9 @@
 
 namespace ce {
     void DescriptorSetLayout::destroy() {
-        if (this->handle_ != VK_NULL_HANDLE && this->device_ != VK_NULL_HANDLE) {
-            vkDestroyDescriptorSetLayout(this->device_, this->handle_, nullptr);
-            this->handle_ = VK_NULL_HANDLE;
+        if (handle_ != VK_NULL_HANDLE && device_ != VK_NULL_HANDLE) {
+            vkDestroyDescriptorSetLayout(device_, handle_, nullptr);
+            handle_ = VK_NULL_HANDLE;
         }
     }
 
@@ -21,7 +21,7 @@ namespace ce {
         };
 
         // Create Descriptor Set Layout
-        if (vkCreateDescriptorSetLayout(this->device_, &layout_create_info, nullptr, &this->handle_) != VK_SUCCESS) {
+        if (vkCreateDescriptorSetLayout(device_, &layout_create_info, nullptr, &handle_) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create descriptor set Layout!");
         }
 

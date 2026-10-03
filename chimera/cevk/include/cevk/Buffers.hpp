@@ -7,8 +7,8 @@ namespace ce {
     class Buffer {
       public:
         explicit Buffer() = default;
-        explicit Buffer(VkPhysicalDevice physical, VkDevice device) { this->init(physical, device); }
-        virtual ~Buffer() { this->destroy(); }
+        explicit Buffer(VkPhysicalDevice physical, VkDevice device) { init(physical, device); }
+        virtual ~Buffer() { destroy(); }
 
         void init(VkPhysicalDevice physical, VkDevice device);
 

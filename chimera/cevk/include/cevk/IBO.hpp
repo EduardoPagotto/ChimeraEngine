@@ -12,8 +12,8 @@ namespace ce {
         IBO(const IBO&) = delete;
         IBO& operator=(const IBO&) = delete;
 
-        size_t get_count() const { return this->count_; }
-        VkBuffer get() const { return this->buffer_.get(); }
+        size_t get_count() const { return count_; }
+        VkBuffer get() const { return buffer_.get(); }
 
         void destroy();
         void create(VkQueue queue, VkCommandPool command_buffer, std::vector<uint32_t>* indices);

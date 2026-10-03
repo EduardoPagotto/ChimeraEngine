@@ -6,11 +6,11 @@ namespace ce {
 
     TextureBindless::TextureBindless(std::shared_ptr<VulkanContext> ctx) : ctx_(ctx) {
         //
-        this->uniform_.init(ctx->logical);
+        uniform_.init(ctx->logical);
         //------------------------------------------------------------------------------------
         // 1. CREATE DESCRIPTOR SET LAYOUT BINDLESS
         //------------------------------------------------------------------------------------
-        DescriptorSetLayout& layout = this->uniform_.get_descriptor_set_layout();
+        DescriptorSetLayout& layout = uniform_.get_descriptor_set_layout();
         layout.add_binding(VkDescriptorSetLayoutBinding{
             .binding = 0,
             .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
@@ -32,11 +32,11 @@ namespace ce {
         //------------------------------------------------------------------------------------
         // 2. CREATE DESCRIPTOR POOL
         //------------------------------------------------------------------------------------
-        this->descriptor_pool_.add_pool_size(
+        descriptor_pool_.add_pool_size(
             VkDescriptorPoolSize{.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, .descriptorCount = 10000});
 
         // Ativa suporte a bindless no pool e Precisamos de apenas 1 set único global
-        this->descriptor_pool_.create(ctx->logical, 1, VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT);
+        descriptor_pool_.create(ctx->logical, 1, VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT);
 
         //------------------------------------------------------------------------------------
         // 3. ALOCAR O DESCRIPTOR SET ÚNICO ---
@@ -47,13 +47,13 @@ namespace ce {
             .descriptorSetCount = 1,
             .pDescriptorCounts = &max_textures};
 
-        uniform_.allocate_descriptor_sets_with_pool(1, this->descriptor_pool_.get(),
+        uniform_.allocate_descriptor_sets_with_pool(1, descriptor_pool_.get(),
                                                     static_cast<void*>(&variable_count_info));
 
         //------------------------------------------------------------------------------------
         //  4. CREATE TEXTURE SAMPLER
         //------------------------------------------------------------------------------------
-        this->tex_sampler_.init(ctx->logical);
+        tex_sampler_.init(ctx->logical);
     }
 
     TextureBindless::~TextureBindless() {
@@ -66,14 +66,14 @@ namespace ce {
 
         //   Atualiza o Descriptor Set global colocando esta nova imagem no seu respectivo índice
         VkDescriptorImageInfo image_info = {
-            .sampler = this->tex_sampler_.get(),     // Pode usar um sampler global ou um específico por textura
+            .sampler = tex_sampler_.get(),           // Pode usar um sampler global ou um específico por textura
             .imageView = tex->get()->getImageView(), // imageView,
             .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
         };
 
-        DescriptorSet& descriptor_set = this->uniform_.get_descriptor_set(0);
+        DescriptorSet& descriptor_set = uniform_.get_descriptor_set(0);
 
-        DescriptorSetWrite dsw(this->ctx_->logical);
+        DescriptorSetWrite dsw(ctx_->logical);
         // Descriptor Write info
         dsw.add(VkWriteDescriptorSet{.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
                                      .dstSet = descriptor_set.get(),               // O set global gigante

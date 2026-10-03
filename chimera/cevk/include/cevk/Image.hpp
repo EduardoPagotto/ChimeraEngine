@@ -10,8 +10,8 @@ namespace ce {
         virtual ~Image();
 
         void init(VkPhysicalDevice physical, VkDevice device) {
-            this->physical_ = physical;
-            this->device_ = device;
+            physical_ = physical;
+            device_ = device;
         }
 
         void destroy();
@@ -23,9 +23,9 @@ namespace ce {
 
         void createImageView(VkImageAspectFlags aspect_flags);
 
-        VkImageView& getImageView() { return this->image_view_; }
-        VkImage& getImage() { return this->image_; }
-        VkDeviceMemory& getImageMemory() { return this->image_memory_; }
+        VkImageView& getImageView() { return image_view_; }
+        VkImage& getImage() { return image_; }
+        VkDeviceMemory& getImageMemory() { return image_memory_; }
 
       private:
         bool is_imported_{false};

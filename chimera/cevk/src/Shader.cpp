@@ -5,7 +5,7 @@
 
 namespace ce {
     Shader::~Shader() {
-        for (size_t i = 0; i < this->shader_modules_.size(); i++) {
+        for (size_t i = 0; i < shader_modules_.size(); i++) {
             vkDestroyShaderModule(device_, shader_modules_[i], nullptr);
         }
     }
@@ -71,9 +71,9 @@ namespace ce {
             binding_descriptions_.data(); // List of vertex bind Descritions
         ;                                 // (data spacing stride information)
         vertex_input_create_info_.vertexAttributeDescriptionCount =
-            static_cast<uint32_t>(this->attribute_descriptions_.size());
+            static_cast<uint32_t>(attribute_descriptions_.size());
         vertex_input_create_info_.pVertexAttributeDescriptions =
-            this->attribute_descriptions_.data(); // Listof Vertex Attribute Description
+            attribute_descriptions_.data(); // Listof Vertex Attribute Description
         ;                                         //  (data format and where
         ;                                         // to bind to/from)
 

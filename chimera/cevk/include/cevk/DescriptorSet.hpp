@@ -9,9 +9,9 @@ namespace ce {
         explicit DescriptorSet() = default;
         virtual ~DescriptorSet() = default;
 
-        void init(VkDevice device) { this->device_ = device; }
+        void init(VkDevice device) { device_ = device; }
 
-        VkDescriptorSet& get() { return this->descriptor_sets_; }
+        VkDescriptorSet& get() { return descriptor_sets_; }
 
         void alloc(const VkDescriptorPool& descriptor_pool, VkDescriptorSetLayout& descriptor_set_layouts,
                    void* variable_count_info = VK_NULL_HANDLE);
@@ -28,14 +28,13 @@ namespace ce {
 
         void update() {
             // Update the descripto sets with new buffer/binding info
-            vkUpdateDescriptorSets(device_, static_cast<uint32_t>(this->set_writes_.size()), this->set_writes_.data(),
-                                   0, nullptr);
+            vkUpdateDescriptorSets(device_, static_cast<uint32_t>(set_writes_.size()), set_writes_.data(), 0, nullptr);
 
-            this->set_writes_.clear();
-            this->set_writes_.shrink_to_fit();
+            set_writes_.clear();
+            set_writes_.shrink_to_fit();
         }
 
-        void add(const VkWriteDescriptorSet& vp_set_write) { this->set_writes_.push_back(vp_set_write); }
+        void add(const VkWriteDescriptorSet& vp_set_write) { set_writes_.push_back(vp_set_write); }
 
       private:
         VkDevice device_{VK_NULL_HANDLE};

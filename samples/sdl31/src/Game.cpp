@@ -348,15 +348,15 @@ void Game::onRender() {
         for (size_t k = 0; k < this_model.getMeshCount(); k++) {
 
             ce::DescriptorSet& sampler_ubo_ds =
-                this->texture_mng_->get_uniform_sampler().get_descriptor_set(this_model.getMesh(k)->getTexId());
+                this->texture_mng_->get_uniform_sampler().get_descriptor_set(this_model.getMesh(k)->get_tex_id());
 
-            cmd.add_vertex_buffer({0}, this_model.getMesh(k)->getVertexBuffer());
+            cmd.add_vertex_buffer({0}, this_model.getMesh(k)->get_vertex_buffer());
             cmd.bind_vertex_buffer(0);
-            cmd.bind_index_buffer({0}, this_model.getMesh(k)->getIndexBuffer());
+            cmd.bind_index_buffer({0}, this_model.getMesh(k)->get_index_buffer());
             cmd.add_descriptor_set(vp_ubo_ds.get());
             cmd.add_descriptor_set(sampler_ubo_ds.get());
             cmd.bind_descriptor_sets(this->pipeline_layout_->get());
-            cmd.draw_indexed(this_model.getMesh(k)->getIndexCount(), 1, 0, 0, 0);
+            cmd.draw_indexed(this_model.getMesh(k)->get_index_count(), 1, 0, 0, 0);
             cmd.clear_temps();
         }
     }

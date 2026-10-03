@@ -4,8 +4,8 @@
 
 namespace ce {
 
-    MeshModel::MeshModel(const std::vector<Mesh>& newMeshList) {
-        meshList = newMeshList;
+    MeshModel::MeshModel(const std::vector<Mesh>& new_mesh_list) {
+        meshList = new_mesh_list;
         model = glm::mat4(1.0F);
     }
 
@@ -20,13 +20,13 @@ namespace ce {
 
     void MeshModel::destroyMeshModel() {
         for (auto& mesh : this->meshList) {
-            mesh.destroyBuffers();
+            mesh.destroy_buffers();
         }
     }
     std::vector<std::string> MeshModel::LoadMaterials(const aiScene* scene) {
 
         // Create 1:1 sized list of textures
-        std::vector<std::string> textureList(scene->mNumMaterials);
+        std::vector<std::string> texture_list(scene->mNumMaterials);
 
         // go through each material and copy its texture file name (if it exists)
         for (size_t i = 0; i < scene->mNumMaterials; i++) {
@@ -35,7 +35,7 @@ namespace ce {
             aiMaterial* material = scene->mMaterials[i];
 
             // Inicialise the texture to empty string (will be replaced if texture exists)
-            textureList[i] = "";
+            texture_list[i] = "";
 
             // Check for a Diffuse Texture (standard detail texture)
             if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
@@ -50,39 +50,39 @@ namespace ce {
                     // filename = "./textures/" + filename.erase(0, 1);
                     // filename.erase(0, 1);
 
-                    textureList[i] = filename;
+                    texture_list[i] = filename;
                 }
             }
         }
 
-        return textureList;
+        return texture_list;
     }
 
     std::vector<Mesh> MeshModel::LoadNode(VkPhysicalDevice physical, VkDevice logical, VkQueue queue,
-                                          VkCommandPool commandPool, aiNode* node, const aiScene* scene,
-                                          std::vector<int>& matToText) {
+                                          VkCommandPool command_pool, aiNode* node, const aiScene* scene,
+                                          std::vector<int>& mat_to_text) {
         //
-        std::vector<Mesh> meshList;
+        std::vector<Mesh> mesh_list;
 
         // Go through each mesh at this node and create it, then add it to our meshList
         for (size_t i = 0; i < node->mNumMeshes; i++) {
-            meshList.push_back(
-                LoadMesh(physical, logical, queue, commandPool, scene->mMeshes[node->mMeshes[i]], scene, matToText));
+            mesh_list.push_back(
+                LoadMesh(physical, logical, queue, command_pool, scene->mMeshes[node->mMeshes[i]], scene, mat_to_text));
         }
 
         // Go through each attached to this node and load it, then append their meshes to this node's mesh list
         for (size_t i = 0; i < node->mNumChildren; i++) {
             //
-            std::vector<Mesh> newList =
-                LoadNode(physical, logical, queue, commandPool, node->mChildren[i], scene, matToText);
-            meshList.insert(meshList.end(), newList.begin(), newList.end());
+            std::vector<Mesh> new_list =
+                LoadNode(physical, logical, queue, command_pool, node->mChildren[i], scene, mat_to_text);
+            mesh_list.insert(mesh_list.end(), new_list.begin(), new_list.end());
         }
 
-        return meshList;
+        return mesh_list;
     }
 
-    Mesh MeshModel::LoadMesh(VkPhysicalDevice physical, VkDevice logical, VkQueue queue, VkCommandPool commandPool,
-                             aiMesh* mesh, const aiScene* scene, std::vector<int> matToText) {
+    Mesh MeshModel::LoadMesh(VkPhysicalDevice physical, VkDevice logical, VkQueue queue, VkCommandPool command_pool,
+                             aiMesh* mesh, const aiScene* scene, std::vector<int> mat_to_text) {
         //
         std::vector<Vertex> vertices;
         std::vector<uint32_t> indices;
@@ -119,7 +119,7 @@ namespace ce {
         }
 
         // Create new Mesh with details and return it
-        return {physical, logical, queue, commandPool, &vertices, &indices, matToText[mesh->mMaterialIndex]};
+        return {physical, logical, queue, command_pool, &vertices, &indices, mat_to_text[mesh->mMaterialIndex]};
     }
 
 } // namespace ce

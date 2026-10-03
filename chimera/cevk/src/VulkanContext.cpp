@@ -27,17 +27,17 @@ namespace ce {
 
         SDL_LogInfo(SDL_LOG_CATEGORY_VIDEO, "Vulkan SDL3 Window Created OK");
 
-        this->init();
+        init();
     }
 
     void VulkanContext::init() {
 
-        this->create_instance();
-        this->create_debug_callback();
-        this->create_surface();
-        this->get_new_physical_device();
-        this->create_logical_device();
-        this->create_graphics_pool();
+        create_instance();
+        create_debug_callback();
+        create_surface();
+        get_new_physical_device();
+        create_logical_device();
+        create_graphics_pool();
     }
 
     void VulkanContext::destroy() {
@@ -49,7 +49,7 @@ namespace ce {
         vkDestroySurfaceKHR(this->instance, this->surface, nullptr);
         vkDestroyDevice(this->logical, nullptr);
 
-        if (this->validation_enabled_) {
+        if (validation_enabled_) {
             DestroyDebugReportCallbackEXT(this->instance, this->callback_, nullptr);
         }
 
@@ -184,7 +184,7 @@ namespace ce {
 
     void VulkanContext::create_instance() {
 
-        if (this->validation_enabled_ && !VulkanContext::check_validation_layer_support()) {
+        if (validation_enabled_ && !VulkanContext::check_validation_layer_support()) {
             throw std::runtime_error("Required Validation Layers not supported!");
         }
 
@@ -204,7 +204,7 @@ namespace ce {
         }
 
         // If validation enabled, add extension to report validation debug info
-        if (this->validation_enabled_) {
+        if (validation_enabled_) {
             instance_extensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
         }
 
@@ -227,7 +227,7 @@ namespace ce {
         // Set a validation layer tha instace will use
         uint32_t enabled_layer_count = 0;
         const char* const* pp_enabled_layer_names = nullptr;
-        if ((!validation_layers.empty()) && this->validation_enabled_) {
+        if ((!validation_layers.empty()) && validation_enabled_) {
             enabled_layer_count = static_cast<uint32_t>(validation_layers.size());
             pp_enabled_layer_names = validation_layers.data();
         }
@@ -251,7 +251,7 @@ namespace ce {
 
     void VulkanContext::create_debug_callback() {
         // Only create callback if validation enabled
-        if (!this->validation_enabled_) {
+        if (!validation_enabled_) {
             return;
         }
 

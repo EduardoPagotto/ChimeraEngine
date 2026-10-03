@@ -9,28 +9,28 @@ namespace ce {
 
     class Pipeline {
       public:
-        explicit Pipeline(VkDevice device) : device(device) {}
+        explicit Pipeline(VkDevice device) : device_(device) {}
         virtual ~Pipeline();
 
-        void addViewport(const VkViewport& viewport) { this->viewports.push_back(viewport); }
-        void addScissor(const VkRect2D scissor) { this->scissors.push_back(scissor); }
-        void addDynamicStateEnables(const VkDynamicState& state) { dynamicStateEnables.push_back(state); };
-        void addColourState(const VkPipelineColorBlendAttachmentState& colourState) {
-            this->colourStates.push_back(colourState);
+        void add_viewport(const VkViewport& viewport) { this->viewports_.push_back(viewport); }
+        void add_scissor(const VkRect2D scissor) { this->scissors_.push_back(scissor); }
+        void add_dynamic_state_enables(const VkDynamicState& state) { dynamic_state_enables_.push_back(state); };
+        void add_colour_state(const VkPipelineColorBlendAttachmentState& colour_state) {
+            this->colour_states_.push_back(colour_state);
         }
 
-        void create(std::shared_ptr<Shader> shader, VkRenderPass renderPass, VkPipelineLayout pipelineLayout);
+        void create(std::shared_ptr<Shader> shader, VkRenderPass render_pass, VkPipelineLayout pipeline_layout);
 
-        VkPipeline& get() { return this->handle; }
+        VkPipeline& get() { return this->handle_; }
 
       private:
-        VkDevice device{VK_NULL_HANDLE};
-        VkPipeline handle{VK_NULL_HANDLE};
+        VkDevice device_{VK_NULL_HANDLE};
+        VkPipeline handle_{VK_NULL_HANDLE};
 
-        std::vector<VkViewport> viewports;
-        std::vector<VkRect2D> scissors;
-        std::vector<VkDynamicState> dynamicStateEnables;
-        std::vector<VkPipelineColorBlendAttachmentState> colourStates;
+        std::vector<VkViewport> viewports_;
+        std::vector<VkRect2D> scissors_;
+        std::vector<VkDynamicState> dynamic_state_enables_;
+        std::vector<VkPipelineColorBlendAttachmentState> colour_states_;
     };
 
 #pragma endregion
@@ -40,26 +40,26 @@ namespace ce {
     class PipelineLayout {
 
       public:
-        PipelineLayout(VkDevice device) : device(device) {}
+        PipelineLayout(VkDevice device) : device_(device) {}
 
-        virtual ~PipelineLayout() { vkDestroyPipelineLayout(device, this->handle, nullptr); }
+        virtual ~PipelineLayout() { vkDestroyPipelineLayout(device_, this->handle_, nullptr); }
 
-        void addLayout(const VkDescriptorSetLayout& descriptorSetLayout) {
-            this->descriptorSetLayouts.push_back(descriptorSetLayout);
+        void add_layout(const VkDescriptorSetLayout& descriptor_set_layout) {
+            this->descriptor_set_layouts_.push_back(descriptor_set_layout);
         }
-        void addPushRange(const VkPushConstantRange& pushConstantRange) {
-            this->pushConstantRanges.push_back(pushConstantRange);
+        void add_push_range(const VkPushConstantRange& push_constant_range) {
+            this->push_constant_ranges_.push_back(push_constant_range);
         }
 
-        VkPipelineLayout& get() { return this->handle; }
+        VkPipelineLayout& get() { return this->handle_; }
 
         void create();
 
       private:
-        VkDevice device{VK_NULL_HANDLE};
-        VkPipelineLayout handle{VK_NULL_HANDLE};
-        std::vector<VkDescriptorSetLayout> descriptorSetLayouts;
-        std::vector<VkPushConstantRange> pushConstantRanges;
+        VkDevice device_{VK_NULL_HANDLE};
+        VkPipelineLayout handle_{VK_NULL_HANDLE};
+        std::vector<VkDescriptorSetLayout> descriptor_set_layouts_;
+        std::vector<VkPushConstantRange> push_constant_ranges_;
     };
 #pragma endregion
 } // namespace ce

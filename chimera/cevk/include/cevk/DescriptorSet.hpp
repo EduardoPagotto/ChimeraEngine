@@ -9,36 +9,36 @@ namespace ce {
         explicit DescriptorSet() = default;
         virtual ~DescriptorSet() = default;
 
-        void init(VkDevice device) { this->device = device; }
+        void init(VkDevice device) { this->device_ = device; }
 
-        VkDescriptorSet& get() { return this->descriptorSets; }
+        VkDescriptorSet& get() { return this->descriptor_sets_; }
 
-        void alloc(const VkDescriptorPool& descriptorPool, VkDescriptorSetLayout& descriptorSetLayouts,
-                   void* variableCountInfo = VK_NULL_HANDLE);
+        void alloc(const VkDescriptorPool& descriptor_pool, VkDescriptorSetLayout& descriptor_set_layouts,
+                   void* variable_count_info = VK_NULL_HANDLE);
 
       private:
-        VkDevice device{VK_NULL_HANDLE};
-        VkDescriptorSet descriptorSets{VK_NULL_HANDLE};
+        VkDevice device_{VK_NULL_HANDLE};
+        VkDescriptorSet descriptor_sets_{VK_NULL_HANDLE};
     };
 
     class DescriptorSetWrite {
       public:
-        DescriptorSetWrite(VkDevice device) : device(device) {}
+        DescriptorSetWrite(VkDevice device) : device_(device) {}
         virtual ~DescriptorSetWrite() = default;
 
         void update() {
             // Update the descripto sets with new buffer/binding info
-            vkUpdateDescriptorSets(device, static_cast<uint32_t>(this->setWrites.size()), this->setWrites.data(), 0,
-                                   nullptr);
+            vkUpdateDescriptorSets(device_, static_cast<uint32_t>(this->set_writes_.size()), this->set_writes_.data(),
+                                   0, nullptr);
 
-            this->setWrites.clear();
-            this->setWrites.shrink_to_fit();
+            this->set_writes_.clear();
+            this->set_writes_.shrink_to_fit();
         }
 
-        void add(const VkWriteDescriptorSet& vpSetWrite) { this->setWrites.push_back(vpSetWrite); }
+        void add(const VkWriteDescriptorSet& vp_set_write) { this->set_writes_.push_back(vp_set_write); }
 
       private:
-        VkDevice device{VK_NULL_HANDLE};
-        std::vector<VkWriteDescriptorSet> setWrites;
+        VkDevice device_{VK_NULL_HANDLE};
+        std::vector<VkWriteDescriptorSet> set_writes_;
     };
 } // namespace ce

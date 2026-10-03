@@ -6,29 +6,29 @@ namespace ce {
     class Sampler {
       public:
         explicit Sampler() = default;
-        explicit Sampler(VkDevice logical) { this->init(logical); }
-        virtual ~Sampler() { this->destroy(); }
+        explicit Sampler(VkDevice logical) { init(logical); }
+        virtual ~Sampler() { destroy(); }
 
         void init(VkDevice logical) {
-            this->logical = logical;
-            this->create();
+            logical_ = logical;
+            create();
         }
 
         void destroy() {
-            if (textureSampler != VK_NULL_HANDLE) {
-                vkDestroySampler(this->logical, this->textureSampler, nullptr);
-                textureSampler = VK_NULL_HANDLE;
+            if (texture_sampler_ != VK_NULL_HANDLE) {
+                vkDestroySampler(logical_, texture_sampler_, nullptr);
+                texture_sampler_ = VK_NULL_HANDLE;
             }
         }
 
-        VkSampler& get() { return this->textureSampler; }
+        VkSampler& get() { return texture_sampler_; }
 
       private:
         void create() {
             //------------------------------------------------------------------------------------
             //  CREATE TEXTURE SAMPLER
             //------------------------------------------------------------------------------------
-            const VkSamplerCreateInfo samplerCreateInfo{
+            const VkSamplerCreateInfo sampler_create_info{
                 .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
                 .magFilter = VK_FILTER_LINEAR,                   // How torender when image is magnified on screen
                 .minFilter = VK_FILTER_LINEAR,                   // How to render when image is minifield on screen
@@ -45,12 +45,12 @@ namespace ce {
                 .unnormalizedCoordinates = VK_FALSE,             // Wheter coords should be normalized (between 0 and 1)
             };
 
-            if (vkCreateSampler(this->logical, &samplerCreateInfo, nullptr, &this->textureSampler) != VK_SUCCESS) {
+            if (vkCreateSampler(logical_, &sampler_create_info, nullptr, &texture_sampler_) != VK_SUCCESS) {
                 throw std::runtime_error("Failed to create a Sampler");
             }
         }
 
-        VkDevice logical{VK_NULL_HANDLE};
-        VkSampler textureSampler{VK_NULL_HANDLE};
+        VkDevice logical_{VK_NULL_HANDLE};
+        VkSampler texture_sampler_{VK_NULL_HANDLE};
     };
 } // namespace ce

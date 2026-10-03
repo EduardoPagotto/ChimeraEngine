@@ -11,13 +11,13 @@ namespace ce {
         explicit TextureBindless(std::shared_ptr<VulkanContext> ctx);
         virtual ~TextureBindless();
 
-        UniformSampler& getUniformSampler() { return uniform; }
-        uint32_t allocTexture(std::shared_ptr<VulkanTexture> tex);
+        UniformSampler& get_uniform_sampler() { return uniform_; }
+        uint32_t alloc_texture(std::shared_ptr<VulkanTexture> tex);
 
       private:
-        Sampler texSampler;
-        UniformSampler uniform;
-        DescriptorPool descriptorPool;
-        std::shared_ptr<VulkanContext> ctx;
+        Sampler tex_sampler_;
+        UniformSampler uniform_;
+        DescriptorPool descriptor_pool_;
+        std::shared_ptr<VulkanContext> ctx_;
     };
 } // namespace ce

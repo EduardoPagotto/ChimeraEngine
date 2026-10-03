@@ -6,34 +6,34 @@ namespace ce {
     class Image {
       public:
         explicit Image() = default;
-        explicit Image(VkPhysicalDevice physical, VkDevice device) : physical(physical), device(device) {}
+        explicit Image(VkPhysicalDevice physical, VkDevice device) : physical_(physical), device_(device) {}
         virtual ~Image();
 
         void init(VkPhysicalDevice physical, VkDevice device) {
-            this->physical = physical;
-            this->device = device;
+            this->physical_ = physical;
+            this->device_ = device;
         }
 
         void destroy();
 
         void createImage(uint32_t with, uint32_t height, VkFormat format, VkImageTiling tiling,
-                         VkImageUsageFlags useFlags, VkMemoryPropertyFlags propFlags);
+                         VkImageUsageFlags use_flags, VkMemoryPropertyFlags prop_flags);
 
-        void createImageViewImportedImage(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
+        void createImageViewImportedImage(VkImage image, VkFormat format, VkImageAspectFlags aspect_flags);
 
-        void createImageView(VkImageAspectFlags aspectFlags);
+        void createImageView(VkImageAspectFlags aspect_flags);
 
-        VkImageView& getImageView() { return this->imageView; }
-        VkImage& getImage() { return this->image; }
-        VkDeviceMemory& getImageMemory() { return this->imageMemory; }
+        VkImageView& getImageView() { return this->image_view_; }
+        VkImage& getImage() { return this->image_; }
+        VkDeviceMemory& getImageMemory() { return this->image_memory_; }
 
       private:
-        bool isImported{false};
-        VkFormat format;
-        VkPhysicalDevice physical{VK_NULL_HANDLE};
-        VkDevice device{VK_NULL_HANDLE};
-        VkImageView imageView{VK_NULL_HANDLE};
-        VkImage image{VK_NULL_HANDLE};
-        VkDeviceMemory imageMemory{VK_NULL_HANDLE};
+        bool is_imported_{false};
+        VkFormat format_;
+        VkPhysicalDevice physical_{VK_NULL_HANDLE};
+        VkDevice device_{VK_NULL_HANDLE};
+        VkImageView image_view_{VK_NULL_HANDLE};
+        VkImage image_{VK_NULL_HANDLE};
+        VkDeviceMemory image_memory_{VK_NULL_HANDLE};
     };
 } // namespace ce

@@ -12,16 +12,16 @@ namespace ce {
         DescriptorPool(const DescriptorPool&) = delete;
         DescriptorPool& operator=(const DescriptorPool&) = delete;
 
-        VkDescriptorPool& get() { return handle; }
+        VkDescriptorPool& get() { return handle_; }
 
-        void addPoolSize(const VkDescriptorPoolSize& poolsize) { this->poolSize.push_back(poolsize); }
+        void add_pool_size(const VkDescriptorPoolSize& poolsize) { this->pool_size_.push_back(poolsize); }
 
-        void create(VkDevice device, const uint32_t& maxSets, VkDescriptorPoolCreateFlagBits flags);
+        void create(VkDevice device, const uint32_t& max_sets, VkDescriptorPoolCreateFlagBits flags);
         void destroy() noexcept;
 
       private:
-        VkDevice device{VK_NULL_HANDLE};
-        VkDescriptorPool handle{VK_NULL_HANDLE};
-        std::vector<VkDescriptorPoolSize> poolSize;
+        VkDevice device_{VK_NULL_HANDLE};
+        VkDescriptorPool handle_{VK_NULL_HANDLE};
+        std::vector<VkDescriptorPoolSize> pool_size_;
     };
 } // namespace ce

@@ -3,37 +3,37 @@
 
 namespace ce {
 
-    IBO::IBO(VkPhysicalDevice physical, VkDevice logical) : physical(physical), logical(logical) {}
+    IBO::IBO(VkPhysicalDevice physical, VkDevice logical) : physical_(physical), logical_(logical) {}
 
     IBO::~IBO() { this->destroy(); }
 
     void IBO::destroy() {
-        this->count = 0;
-        this->buffer.destroy();
+        this->count_ = 0;
+        this->buffer_.destroy();
     }
 
-    void IBO::create(VkQueue queue, VkCommandPool commandBuffer, std::vector<uint32_t>* indices) {
+    void IBO::create(VkQueue queue, VkCommandPool command_buffer, std::vector<uint32_t>* indices) {
 
         // Get size of buffer needed for indices
-        VkDeviceSize bufferSize = sizeof(uint32_t) * indices->size();
+        VkDeviceSize buffer_size = sizeof(uint32_t) * indices->size();
 
-        this->count = indices->size();
+        this->count_ = indices->size();
 
         // Temporary buffer to "stage" index data before transfering to GPU
-        Buffer stagingBuffer(physical, logical);
-        stagingBuffer.create(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-                             VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+        Buffer staging_buffer(physical_, logical_);
+        staging_buffer.create(buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+                              VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
         // MAP MEMORY TO INDEX BUFFER
-        stagingBuffer.mapper(indices->data());
+        staging_buffer.mapper(indices->data());
 
         // Create buffer for index data on GPU aceess only area
-        this->buffer.init(physical, logical);
-        this->buffer.create(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
-                            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+        this->buffer_.init(physical_, logical_);
+        this->buffer_.create(buffer_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
+                             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
         // Copy from staging buffer to GPU access buffer
-        aux::CopyBuffer(this->logical, queue, commandBuffer, stagingBuffer.get(), this->buffer.get(), bufferSize);
+        aux::CopyBuffer(this->logical_, queue, command_buffer, staging_buffer.get(), this->buffer_.get(), buffer_size);
     }
 
 } // namespace ce

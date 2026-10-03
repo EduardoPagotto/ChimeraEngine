@@ -12,19 +12,19 @@ namespace ce {
         DescriptorSetLayout(const DescriptorSetLayout&) = delete;
         DescriptorSetLayout& operator=(const DescriptorSetLayout&) = delete;
 
-        void init(VkDevice device) { this->device = device; }
+        void init(VkDevice device) { this->device_ = device; }
         void destroy();
-        void create(void* extendedInfo = VK_NULL_HANDLE, const VkDescriptorSetLayoutCreateFlags& flags = 0);
+        void create(void* extended_info = VK_NULL_HANDLE, const VkDescriptorSetLayoutCreateFlags& flags = 0);
 
-        void addBinding(const VkDescriptorSetLayoutBinding& vpLayoutBinding) {
-            this->layoutBinding.push_back(vpLayoutBinding);
+        void add_binding(const VkDescriptorSetLayoutBinding& vp_layout_binding) {
+            this->layout_binding_.push_back(vp_layout_binding);
         }
 
-        VkDescriptorSetLayout& get() { return this->handle; }
+        VkDescriptorSetLayout& get() { return this->handle_; }
 
       private:
-        VkDevice device{VK_NULL_HANDLE};
-        VkDescriptorSetLayout handle{VK_NULL_HANDLE};
-        std::vector<VkDescriptorSetLayoutBinding> layoutBinding;
+        VkDevice device_{VK_NULL_HANDLE};
+        VkDescriptorSetLayout handle_{VK_NULL_HANDLE};
+        std::vector<VkDescriptorSetLayoutBinding> layout_binding_;
     };
 } // namespace ce

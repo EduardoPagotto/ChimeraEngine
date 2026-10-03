@@ -25,10 +25,10 @@ namespace ce {
 
         int getTexId() const { return this->texId; }
 
-        size_t getVertexCount() const { return this->vbo->getCount(); }
-        VkBuffer getVertexBuffer() { return this->vbo->getBuffer(); }
+        size_t getVertexCount() const { return this->vbo->get_count(); }
+        VkBuffer getVertexBuffer() { return this->vbo->get_buffer(); }
 
-        size_t getIndexCount() const { return this->ibo->getCount(); }
+        size_t getIndexCount() const { return this->ibo->get_count(); }
         VkBuffer getIndexBuffer() { return this->ibo->get(); }
 
         void destroyBuffers() {

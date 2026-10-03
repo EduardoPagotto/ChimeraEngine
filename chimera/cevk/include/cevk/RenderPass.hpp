@@ -10,9 +10,9 @@ namespace ce {
     class RenderPass {
       public:
         explicit RenderPass() = default;
-        explicit RenderPass(std::shared_ptr<VulkanContext> ctx, VkFormat& format) { this->init(ctx, format); }
+        explicit RenderPass(std::shared_ptr<VulkanContext> ctx, VkFormat& format) { init(ctx, format); }
 
-        virtual ~RenderPass() { this->destroy(); }
+        virtual ~RenderPass() { destroy(); }
 
         // Proibir cópia (Padrão RAII)
         RenderPass(const RenderPass&) = delete;
@@ -20,13 +20,13 @@ namespace ce {
 
         void init(std::shared_ptr<VulkanContext> ctx, const VkFormat& format) {
 
-            this->ctx = ctx;
+            ctx_ = ctx;
 
             // ATTACHEMNTS
             // Colour attachment of render pass
             // Framebuffer data will be storage as an image, but images can be given different data layouts
             // to give optimal use for certan operations
-            const VkAttachmentDescription colourAttachemnt{
+            const VkAttachmentDescription colour_attachemnt{
                 .format = format,                        // Format to use for attachment
                 .samples = VK_SAMPLE_COUNT_1_BIT,        // Number of samples to write for multisampling
                 .loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,   // Describes what to do with attachemnt before rendering
@@ -38,8 +38,8 @@ namespace ce {
             };
 
             // Depth attachemnt of render pass
-            const VkAttachmentDescription depthAttachemnt{
-                .format = VulkanContext::ChooseSupportedFormat(
+            const VkAttachmentDescription depth_attachemnt{
+                .format = VulkanContext::choose_supported_format(
                     ctx->physical,
                     {VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D32_SFLOAT, VK_FORMAT_D24_UNORM_S8_UINT}, // Formats
                     VK_IMAGE_TILING_OPTIMAL,                                                           // Tilling
@@ -55,101 +55,102 @@ namespace ce {
             // REFERENCES
             // Attachemnt reference uses an attachemnt index that refer to index in the attachemnt list passes to
             // renderPassCreateInfo
-            const VkAttachmentReference colourAttachmentReference{.attachment = 0,
-                                                                  .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL};
+            const VkAttachmentReference colour_attachment_reference{.attachment = 0,
+                                                                    .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL};
 
             // Depth Attachment Refence
-            const VkAttachmentReference depthAttachemntReference{
+            const VkAttachmentReference depth_attachemnt_reference{
                 .attachment = 1, .layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL};
 
             // Information about a particular subpass the render pass is using
             const VkSubpassDescription subpass{
                 .pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS, // Pipeline type subpass is to be bound to
                 .colorAttachmentCount = 1,
-                .pColorAttachments = &colourAttachmentReference,
-                .pDepthStencilAttachment = &depthAttachemntReference};
+                .pColorAttachments = &colour_attachment_reference,
+                .pDepthStencilAttachment = &depth_attachemnt_reference};
 
             // Need to determine when layout transitions occour subpass dependencies
-            std::array<VkSubpassDependency, 2> subpassDependencies;
+            std::array<VkSubpassDependency, 2> subpass_dependencies;
 
             // Conversion from VK_IMAGE_LAYOUT_UNDEFINED to VK_IMAGE_LAYOUT_COLOR_ATTACHEMNT_OPTIMAL
             // Transition must happen after..
-            subpassDependencies[0].srcSubpass = VK_SUBPASS_EXTERNAL; // Subpass index (VK_SUBPASS_EXTERNAL = Special
-                                                                     // value means outside of renderpass)
-            subpassDependencies[0].srcStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT; // Pipeline stage
-            subpassDependencies[0].srcAccessMask = VK_ACCESS_MEMORY_READ_BIT; // Stage access mask (memory access)
+            subpass_dependencies[0].srcSubpass = VK_SUBPASS_EXTERNAL; // Subpass index (VK_SUBPASS_EXTERNAL = Special
+                                                                      // value means outside of renderpass)
+            subpass_dependencies[0].srcStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT; // Pipeline stage
+            subpass_dependencies[0].srcAccessMask = VK_ACCESS_MEMORY_READ_BIT; // Stage access mask (memory access)
 
             // But must happen before..
-            subpassDependencies[0].dstSubpass = 0;
-            subpassDependencies[0].dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            subpassDependencies[0].dstAccessMask =
+            subpass_dependencies[0].dstSubpass = 0;
+            subpass_dependencies[0].dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            subpass_dependencies[0].dstAccessMask =
                 VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-            subpassDependencies[0].dependencyFlags = 0;
+            subpass_dependencies[0].dependencyFlags = 0;
 
             //
             // -----
             // Conversion from VK_IMAGE_LAYOUT_COLOR_ATTACHEMNT_OPTIMAL to VK_IMAGE_LAYOUT_PRESENT_SRC_KHR
             // Transition must happen after..
-            subpassDependencies[1].srcSubpass = 0;
-            subpassDependencies[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            subpassDependencies[1].srcAccessMask =
+            subpass_dependencies[1].srcSubpass = 0;
+            subpass_dependencies[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            subpass_dependencies[1].srcAccessMask =
                 VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 
             // But must happen before..
-            subpassDependencies[1].dstSubpass = VK_SUBPASS_EXTERNAL;
-            subpassDependencies[1].dstStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
-            subpassDependencies[1].dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
-            subpassDependencies[1].dependencyFlags = 0;
+            subpass_dependencies[1].dstSubpass = VK_SUBPASS_EXTERNAL;
+            subpass_dependencies[1].dstStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+            subpass_dependencies[1].dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+            subpass_dependencies[1].dependencyFlags = 0;
 
-            std::array<VkAttachmentDescription, 2> renderPassAttachemnts = {colourAttachemnt, depthAttachemnt};
+            std::array<VkAttachmentDescription, 2> render_pass_attachemnts = {colour_attachemnt, depth_attachemnt};
 
             // Create Info for render pass
-            const VkRenderPassCreateInfo renderPassCreateInfo{
+            const VkRenderPassCreateInfo render_pass_create_info{
                 .sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
-                .attachmentCount = static_cast<uint32_t>(renderPassAttachemnts.size()),
-                .pAttachments = renderPassAttachemnts.data(),
+                .attachmentCount = static_cast<uint32_t>(render_pass_attachemnts.size()),
+                .pAttachments = render_pass_attachemnts.data(),
                 .subpassCount = 1,
                 .pSubpasses = &subpass,
-                .dependencyCount = static_cast<uint32_t>(subpassDependencies.size()),
-                .pDependencies = subpassDependencies.data()};
+                .dependencyCount = static_cast<uint32_t>(subpass_dependencies.size()),
+                .pDependencies = subpass_dependencies.data()};
 
-            if (vkCreateRenderPass(ctx->logical, &renderPassCreateInfo, nullptr, &this->renderPass) != VK_SUCCESS) {
+            if (vkCreateRenderPass(ctx->logical, &render_pass_create_info, nullptr, &render_pass_) != VK_SUCCESS) {
                 throw std::runtime_error("Failed to create render pass!!!");
             }
         }
 
         void destroy() {
-            if (this->renderPass != VK_NULL_HANDLE) {
-                vkDestroyRenderPass(ctx->logical, this->renderPass, nullptr);
-                this->renderPass = VK_NULL_HANDLE;
+            if (render_pass_ != VK_NULL_HANDLE) {
+                vkDestroyRenderPass(ctx_->logical, render_pass_, nullptr);
+                render_pass_ = VK_NULL_HANDLE;
             }
         }
 
-        VkRenderPass& getRenderPass() { return this->renderPass; }
+        VkRenderPass& get_render_pass() { return render_pass_; }
 
-        static VkResult SendImageToScreen(VkQueue pQueue, VkSemaphore signal, VkSwapchainKHR swapchain,
-                                          uint32_t& imageIndex) {
+        static VkResult send_image_to_screen(VkQueue p_queue, VkSemaphore signal, VkSwapchainKHR swapchain,
+                                             uint32_t& image_index) {
             //
             // -- PRESENT RENDERED IMAGE TO SCREEN --
-            std::array<VkSemaphore, 1> signalSemaphores{signal};
-            std::array<VkSwapchainKHR, 1> swapChains{swapchain};
+            std::array<VkSemaphore, 1> signal_semaphores{signal};
+            std::array<VkSwapchainKHR, 1> swap_chains{swapchain};
 
-            const VkPresentInfoKHR presentInfo{
+            const VkPresentInfoKHR present_info{
                 .sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
-                .waitSemaphoreCount = static_cast<uint32_t>(signalSemaphores.size()), // Number of semaphores to wait on
-                .pWaitSemaphores = signalSemaphores.data(),                           // Semaphores to wait on
-                .swapchainCount = static_cast<uint32_t>(swapChains.size()), // Number of swapchains to present to
-                .pSwapchains = swapChains.data(),                           // Swapchais to present images to
-                .pImageIndices = &imageIndex,                               // Index of Images in swapchains to present
+                .waitSemaphoreCount =
+                    static_cast<uint32_t>(signal_semaphores.size()),         // Number of semaphores to wait on
+                .pWaitSemaphores = signal_semaphores.data(),                 // Semaphores to wait on
+                .swapchainCount = static_cast<uint32_t>(swap_chains.size()), // Number of swapchains to present to
+                .pSwapchains = swap_chains.data(),                           // Swapchais to present images to
+                .pImageIndices = &image_index,                               // Index of Images in swapchains to present
             };
 
             // Present Image
-            return vkQueuePresentKHR(pQueue, &presentInfo);
+            return vkQueuePresentKHR(p_queue, &present_info);
         }
 
       private:
-        std::shared_ptr<VulkanContext> ctx{nullptr};
-        VkRenderPass renderPass{VK_NULL_HANDLE};
+        std::shared_ptr<VulkanContext> ctx_{nullptr};
+        VkRenderPass render_pass_{VK_NULL_HANDLE};
     };
 
 } // namespace ce

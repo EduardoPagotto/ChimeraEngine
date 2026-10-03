@@ -12,16 +12,16 @@ namespace ce {
         IBO(const IBO&) = delete;
         IBO& operator=(const IBO&) = delete;
 
-        size_t getCount() const { return this->count; }
-        VkBuffer get() const { return this->buffer.get(); }
+        size_t get_count() const { return this->count_; }
+        VkBuffer get() const { return this->buffer_.get(); }
 
         void destroy();
-        void create(VkQueue queue, VkCommandPool commandBuffer, std::vector<uint32_t>* indices);
+        void create(VkQueue queue, VkCommandPool command_buffer, std::vector<uint32_t>* indices);
 
       private:
-        size_t count;
-        VkPhysicalDevice physical;
-        VkDevice logical;
-        Buffer buffer;
+        size_t count_;
+        VkPhysicalDevice physical_;
+        VkDevice logical_;
+        Buffer buffer_;
     };
 } // namespace ce

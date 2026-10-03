@@ -11,7 +11,7 @@ namespace ce {
         VulkanContext() = default;
         ~VulkanContext() { this->destroy(); }
 
-        void createWindow(const std::string& sName = "Teste", const int& width = 800, const int& height = 600);
+        void create_window(const std::string& name = "Teste", const int& width = 800, const int& height = 600);
         void init();
         void destroy();
 
@@ -25,34 +25,34 @@ namespace ce {
         QueueFamilyIndices queueFamilyIndices;
         SDL_Window* window{nullptr};
 
-        static uint32_t FindMemoryTypeIndex(VkPhysicalDevice physicalDevice, uint32_t allowedTypes,
-                                            VkMemoryPropertyFlags properties);
+        static uint32_t find_memory_type_index(VkPhysicalDevice physical_device, uint32_t allowed_types,
+                                               VkMemoryPropertyFlags properties);
 
-        static SwapChainDetails GetSwapChainDetails(VkPhysicalDevice device, VkSurfaceKHR surface);
+        static SwapChainDetails get_swap_chain_details(VkPhysicalDevice device, VkSurfaceKHR surface);
 
-        static VkFormat ChooseSupportedFormat(VkPhysicalDevice device, const std::vector<VkFormat>& formats,
-                                              VkImageTiling tilling, VkFormatFeatureFlags featureFlags);
+        static VkFormat choose_supported_format(VkPhysicalDevice device, const std::vector<VkFormat>& formats,
+                                                VkImageTiling tilling, VkFormatFeatureFlags feature_flags);
 
       private:
-        VkDebugReportCallbackEXT callback;
-        bool validationEnabled = true;
+        VkDebugReportCallbackEXT callback_;
+        bool validation_enabled_ = true;
 
-        static constexpr std::array<const char*, 1> deviceExtensions{VK_KHR_SWAPCHAIN_EXTENSION_NAME};
-        static constexpr std::array<const char*, 1> validationLayers{"VK_LAYER_KHRONOS_validation"};
+        static constexpr std::array<const char*, 1> device_extensions{VK_KHR_SWAPCHAIN_EXTENSION_NAME};
+        static constexpr std::array<const char*, 1> validation_layers{"VK_LAYER_KHRONOS_validation"};
 
-        void createInstance();
-        void createDebugCallback();
-        void createSurface();
-        void getNewPhysicalDevice();
-        void createLogicalDevice();
-        void createGraphicsPool();
+        void create_instance();
+        void create_debug_callback();
+        void create_surface();
+        void get_new_physical_device();
+        void create_logical_device();
+        void create_graphics_pool();
 
         // utils
-        static QueueFamilyIndices GetQueueFamilies(VkPhysicalDevice device, VkSurfaceKHR surface);
-        static bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
-        static bool CheckDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface);
-        static bool CheckInstanceExtensionSupport(std::vector<const char*>* checkExtentions);
-        static bool CheckValidationLayerSupport();
-        static bool CheckDescriptorIndexingSupport(VkPhysicalDevice device);
+        static QueueFamilyIndices get_queue_families(VkPhysicalDevice device, VkSurfaceKHR surface);
+        static bool check_device_extension_support(VkPhysicalDevice device);
+        static bool check_device_suitable(VkPhysicalDevice device, VkSurfaceKHR surface);
+        static bool check_instance_extension_support(std::vector<const char*>* check_extentions);
+        static bool check_validation_layer_support();
+        static bool check_descriptor_indexing_support(VkPhysicalDevice device);
     };
 } // namespace ce

@@ -19,7 +19,7 @@ Game::Game(std::shared_ptr<entt::registry> registry) : registry_(registry) {
     canvas_ = std::dynamic_pointer_cast<ce::CanvaVK>(registry->ctx().get<std::shared_ptr<ce::ICanva>>());
     ctx_ = canvas_->ctx();
 
-    this->uniform_buffer_vp_.init(ctx_->physical, ctx_->logical, canvas_->swapchain.getSwapchainResSize(),
+    this->uniform_buffer_vp_.init(ctx_->physical, ctx_->logical, canvas_->swapchain.get_swapchain_res_size(),
                                   sizeof(UboViewProjection));
 
     this->texture_mng_ = std::make_shared<Textures>(ctx_);
@@ -45,8 +45,8 @@ Game::Game(std::shared_ptr<entt::registry> registry) : registry_(registry) {
     ubo_view_projection_.projection[1][1] *= -1; // vulkan inverted of OpenGL
 
     // Create our default "no texture" texture
-    std::shared_ptr<VulkanTexture> vulkan_tex = VulkanTexture::Create(ctx_, "./assets/textures/plain.png");
-    texture_mng_->allocTexture(vulkan_tex);
+    std::shared_ptr<VulkanTexture> vulkan_tex = VulkanTexture::create(ctx_, "./assets/textures/plain.png");
+    texture_mng_->alloc_texture(vulkan_tex);
 
     this->input_manager_ = registry->ctx().get<std::shared_ptr<InputManager>>();
 }
@@ -128,9 +128,9 @@ std::string Game::getName() const { return "Game"; }
 
 void Game::create_descriptorset_layout() {
 
-    ce::DescriptorSetLayout& uniform_ds = this->uniform_buffer_vp_.getDescriptorSetLayout();
+    ce::DescriptorSetLayout& uniform_ds = this->uniform_buffer_vp_.get_descriptor_set_layout();
 
-    uniform_ds.addBinding({
+    uniform_ds.add_binding({
         .binding = 0,                                        // Binding (designed by binding number in shader)
         .descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, // Type of descriptor
         .descriptorCount = 1,                                // Number of descriptors for binding
@@ -152,20 +152,20 @@ void Game::create_graphics_pipeline() {
 
     // Read in SPIR-V code shaders, Vertex Stage creation information and Fragment Stage creation information
     std::shared_ptr<ce::Shader> shader = std::make_shared<ce::Shader>(ctx_->logical);
-    shader->addCode(VK_SHADER_STAGE_VERTEX_BIT, ce::aux::readFile("./bin/vert.spv"));
-    shader->addCode(VK_SHADER_STAGE_FRAGMENT_BIT, ce::aux::readFile("./bin/frag.spv"));
+    shader->add_code(VK_SHADER_STAGE_VERTEX_BIT, ce::aux::readFile("./bin/vert.spv"));
+    shader->add_code(VK_SHADER_STAGE_FRAGMENT_BIT, ce::aux::readFile("./bin/frag.spv"));
 
     // How the data for a sigle vertex (including info such as position, colour, texture coords, normals, etc..) is as a
     // whole
-    shader->addBindingDescription(0, sizeof(ce::Vertex), VK_VERTEX_INPUT_RATE_VERTEX);
+    shader->add_binding_description(0, sizeof(ce::Vertex), VK_VERTEX_INPUT_RATE_VERTEX);
 
     // Attributes of shader vertex
-    shader->addAtribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(ce::Vertex, pos)); // Position Attribute
-    shader->addAtribute(0, 1, VK_FORMAT_R32G32B32_SFLOAT, offsetof(ce::Vertex, col)); // Color Attribute
-    shader->addAtribute(0, 2, VK_FORMAT_R32G32_SFLOAT, offsetof(ce::Vertex, tex));    // Texture Atribute
+    shader->add_atribute(0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(ce::Vertex, pos)); // Position Attribute
+    shader->add_atribute(0, 1, VK_FORMAT_R32G32B32_SFLOAT, offsetof(ce::Vertex, col)); // Color Attribute
+    shader->add_atribute(0, 2, VK_FORMAT_R32G32_SFLOAT, offsetof(ce::Vertex, tex));    // Texture Atribute
 
     // -- VERTEX INPUT  ASSEMBLY INPUT --
-    shader->setVertexInput(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_FALSE);
+    shader->set_vertex_input(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_FALSE);
 
     // -- VIEWPORT & SCISSOR
     const VkViewport viewport{.x = 0.0F,                                          // x start coordinate
@@ -177,19 +177,19 @@ void Game::create_graphics_pipeline() {
 
     const VkRect2D scissor{.offset = VkOffset2D{.x = 0, .y = 0}, // Offset to use region from
                            .extent =
-                               canvas_->swapchain.getExtent()}; // Extent to describe region to use, starting at offset
+                               canvas_->swapchain.get_extent()}; // Extent to describe region to use, starting at offset
 
     // -- PIPELINE LAYOUT --
     this->pipeline_layout_ = std::make_shared<ce::PipelineLayout>(this->ctx_->logical);
-    this->pipeline_layout_->addLayout(this->uniform_buffer_vp_.getDescriptorSetLayout().get());
-    this->pipeline_layout_->addLayout(this->texture_mng_->getUniformSampler().getDescriptorSetLayout().get());
-    this->pipeline_layout_->addPushRange(this->push_constant_range_);
+    this->pipeline_layout_->add_layout(this->uniform_buffer_vp_.get_descriptor_set_layout().get());
+    this->pipeline_layout_->add_layout(this->texture_mng_->get_uniform_sampler().get_descriptor_set_layout().get());
+    this->pipeline_layout_->add_push_range(this->push_constant_range_);
     this->pipeline_layout_->create();
 
     // TODO: mudar o nome da classe
     this->graphic_pipeline_ = std::make_shared<ce::Pipeline>(this->ctx_->logical);
-    this->graphic_pipeline_->addViewport(viewport);
-    this->graphic_pipeline_->addScissor(scissor);
+    this->graphic_pipeline_->add_viewport(viewport);
+    this->graphic_pipeline_->add_scissor(scissor);
 
     const VkPipelineColorBlendAttachmentState colour_state{
         .blendEnable = VK_TRUE,
@@ -203,10 +203,10 @@ void Game::create_graphics_pipeline() {
                           VK_COLOR_COMPONENT_A_BIT, // Color to apply blending to
     };
 
-    this->graphic_pipeline_->addColourState(colour_state);
+    this->graphic_pipeline_->add_colour_state(colour_state);
 
     // -- GRAPHICS PIPELINE CREATION
-    this->graphic_pipeline_->create(shader, canvas_->renderPass.getRenderPass(), this->pipeline_layout_->get());
+    this->graphic_pipeline_->create(shader, canvas_->renderPass.get_render_pass(), this->pipeline_layout_->get());
 }
 
 void Game::create_descriptorpool() {
@@ -214,33 +214,34 @@ void Game::create_descriptorpool() {
     // CREATE UNIFORM DESCRIPTOR POOL
     // Type of Descriptors + how many DESCRIPTORS, not Descriptor Sets (combined makes the pool size)
     // ViewProjection Pool
-    this->descriptor_pool_.addPoolSize(
+    this->descriptor_pool_.add_pool_size(
         VkDescriptorPoolSize{.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-                             .descriptorCount = static_cast<uint32_t>(this->uniform_buffer_vp_.getBuffers().size())});
+                             .descriptorCount = static_cast<uint32_t>(this->uniform_buffer_vp_.get_buffers().size())});
 
     // Create Descriptor Pool, Maximum number of descriptor Sets
-    this->descriptor_pool_.create(this->ctx_->logical, static_cast<uint32_t>(canvas_->swapchain.getSwapchainResSize()),
+    this->descriptor_pool_.create(this->ctx_->logical,
+                                  static_cast<uint32_t>(canvas_->swapchain.get_swapchain_res_size()),
                                   static_cast<VkDescriptorPoolCreateFlagBits>(0));
 }
 
 void Game::create_descriptorsets() {
 
-    this->uniform_buffer_vp_.allocateDescriptorSetsWithPool(this->uniform_buffer_vp_.getBuffers().size(),
-                                                            this->descriptor_pool_.get());
+    this->uniform_buffer_vp_.allocate_descriptor_sets_with_pool(this->uniform_buffer_vp_.get_buffers().size(),
+                                                                this->descriptor_pool_.get());
 
     ce::DescriptorSetWrite dsw(ctx_->logical);
 
     // Update all of descriptor set buffer bindings
-    for (size_t i = 0; i < this->uniform_buffer_vp_.getBuffers().size(); i++) {
+    for (size_t i = 0; i < this->uniform_buffer_vp_.get_buffers().size(); i++) {
 
-        ce::DescriptorSet& ubo_ds = this->uniform_buffer_vp_.getDescriptorSet(i);
+        ce::DescriptorSet& ubo_ds = this->uniform_buffer_vp_.get_descriptor_set(i);
 
         // VIEW PROJECTION DESCRIPTOR
         // Buffer info and data offset info
         const VkDescriptorBufferInfo vp_buffer_info{
-            .buffer = this->uniform_buffer_vp_.getBuffers()[i]->get(), // Buffer get data from
-            .offset = 0,                                               // Position of star of data
-            .range = sizeof(UboViewProjection)                         // Size of data
+            .buffer = this->uniform_buffer_vp_.get_buffers()[i]->get(), // Buffer get data from
+            .offset = 0,                                                // Position of star of data
+            .range = sizeof(UboViewProjection)                          // Size of data
         };
 
         // Data about connection between binding and buffer
@@ -299,9 +300,9 @@ size_t Game::create_mesh_model(const std::string& model_file) {
 
             // Otherwise, create texture and set value to index of new texture
             std::shared_ptr<ce::VulkanTexture> vulkan_tex =
-                ce::VulkanTexture::Create(ctx_, "./assets/textures/" + texture_names[i]);
+                ce::VulkanTexture::create(ctx_, "./assets/textures/" + texture_names[i]);
 
-            mat_to_tex[i] = static_cast<int>(texture_mng_->allocTexture(vulkan_tex));
+            mat_to_tex[i] = static_cast<int>(texture_mng_->alloc_texture(vulkan_tex));
         }
     }
 
@@ -333,35 +334,35 @@ void Game::onRender() {
               this->graphic_pipeline_->get());
 
     // Copy View Projection data in UBO
-    this->uniform_buffer_vp_.getBuffers()[imageIndex]->mapper(&this->ubo_view_projection_);
+    this->uniform_buffer_vp_.get_buffers()[imageIndex]->mapper(&this->ubo_view_projection_);
 
-    ce::DescriptorSet& vp_ubo_ds = this->uniform_buffer_vp_.getDescriptorSet(imageIndex);
+    ce::DescriptorSet& vp_ubo_ds = this->uniform_buffer_vp_.get_descriptor_set(imageIndex);
 
     for (size_t j = 0; j < this->model_list_.size(); j++) {
 
         ce::MeshModel this_model = model_list_[j];
 
-        cmd.pushConstants(this->pipeline_layout_->get(), VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ce::Model),
-                          &this_model.getModel2());
+        cmd.push_constants(this->pipeline_layout_->get(), VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ce::Model),
+                           &this_model.getModel2());
 
         for (size_t k = 0; k < this_model.getMeshCount(); k++) {
 
             ce::DescriptorSet& sampler_ubo_ds =
-                this->texture_mng_->getUniformSampler().getDescriptorSet(this_model.getMesh(k)->getTexId());
+                this->texture_mng_->get_uniform_sampler().get_descriptor_set(this_model.getMesh(k)->getTexId());
 
-            cmd.addVertexBuffer({0}, this_model.getMesh(k)->getVertexBuffer());
-            cmd.bindVertexBuffer(0);
-            cmd.bindIndexBuffer({0}, this_model.getMesh(k)->getIndexBuffer());
-            cmd.addDescriptorSet(vp_ubo_ds.get());
-            cmd.addDescriptorSet(sampler_ubo_ds.get());
-            cmd.bindDescriptorSets(this->pipeline_layout_->get());
-            cmd.drawIndexed(this_model.getMesh(k)->getIndexCount(), 1, 0, 0, 0);
-            cmd.clearTemps();
+            cmd.add_vertex_buffer({0}, this_model.getMesh(k)->getVertexBuffer());
+            cmd.bind_vertex_buffer(0);
+            cmd.bind_index_buffer({0}, this_model.getMesh(k)->getIndexBuffer());
+            cmd.add_descriptor_set(vp_ubo_ds.get());
+            cmd.add_descriptor_set(sampler_ubo_ds.get());
+            cmd.bind_descriptor_sets(this->pipeline_layout_->get());
+            cmd.draw_indexed(this_model.getMesh(k)->getIndexCount(), 1, 0, 0, 0);
+            cmd.clear_temps();
         }
     }
 
     cmd.end();
 
     // -- SUBMIT COMMAND BUFFER TO RENDER
-    cmd.submitToRender(ctx_->graphicsQueue, &frame, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+    cmd.submit_to_render(ctx_->graphicsQueue, &frame, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 }

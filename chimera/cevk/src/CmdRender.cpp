@@ -26,8 +26,8 @@ namespace ce {
         vkCmdBindPipeline(this->cmdbuffer_, VK_PIPELINE_BIND_POINT_GRAPHICS, graphic_pipeline);
     }
 
-    void CmdRender::pushConstants(VkPipelineLayout pipeline_layout, VkShaderStageFlagBits stage, uint32_t offset,
-                                  size_t size, const void* src) {
+    void CmdRender::push_constants(VkPipelineLayout pipeline_layout, VkShaderStageFlagBits stage, uint32_t offset,
+                                   size_t size, const void* src) {
         // "Push" constant to given shader stage directly (no buffer)
         vkCmdPushConstants(cmdbuffer_,      //
                            pipeline_layout, //
@@ -37,32 +37,32 @@ namespace ce {
                            src);            // Actual data being pushed (cam be array)
     }
 
-    void CmdRender::addVertexBuffer(const VkDeviceSize& offset, const VkBuffer& buffer) {
+    void CmdRender::add_vertex_buffer(const VkDeviceSize& offset, const VkBuffer& buffer) {
         this->vextex_buffers_.push_back(buffer);
         this->offsets_.push_back(offset);
     }
 
-    void CmdRender::bindIndexBuffer(const VkDeviceSize& offset, const VkBuffer& index_buffer) { // TODO: offset {0}
+    void CmdRender::bind_index_buffer(const VkDeviceSize& offset, const VkBuffer& index_buffer) { // TODO: offset {0}
         // Bind mesh index buffer, with 0 offset and using the uint32_t type
         vkCmdBindIndexBuffer(cmdbuffer_, index_buffer, offset, VK_INDEX_TYPE_UINT32);
     }
 
-    void CmdRender::bindVertexBuffer(uint32_t starts) { // TODO: inicia com 0
+    void CmdRender::bind_vertex_buffer(uint32_t starts) { // TODO: inicia com 0
         vkCmdBindVertexBuffers(cmdbuffer_, starts, static_cast<uint32_t>(vextex_buffers_.size()),
                                vextex_buffers_.data(),
                                offsets_.data()); // CmdRender to bind vertex buffer before drawing with then
     }
 
-    void CmdRender::addDescriptorSet(const VkDescriptorSet& desc) { this->descriptorset_group_.push_back(desc); }
+    void CmdRender::add_descriptor_set(const VkDescriptorSet& desc) { this->descriptorset_group_.push_back(desc); }
 
-    void CmdRender::bindDescriptorSets(const VkPipelineLayout& pipeline_layout) {
+    void CmdRender::bind_descriptor_sets(const VkPipelineLayout& pipeline_layout) {
         vkCmdBindDescriptorSets(cmdbuffer_, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_layout, 0,
                                 static_cast<uint32_t>(descriptorset_group_.size()), descriptorset_group_.data(), 0,
                                 nullptr);
     }
 
-    void CmdRender::drawIndexed(uint32_t index_count, uint32_t instance_count, uint32_t first_index,
-                                int32_t vertex_offset, uint32_t first_instance) {
+    void CmdRender::draw_indexed(uint32_t index_count, uint32_t instance_count, uint32_t first_index,
+                                 int32_t vertex_offset, uint32_t first_instance) {
 
         vkCmdDrawIndexed(cmdbuffer_, index_count, instance_count, first_index, vertex_offset, first_instance);
     }
@@ -75,13 +75,13 @@ namespace ce {
         }
     }
 
-    void CmdRender::clearTemps() {
+    void CmdRender::clear_temps() {
         vextex_buffers_.clear();
         offsets_.clear();
         descriptorset_group_.clear();
     }
 
-    void CmdRender::submitToRender(VkQueue queue, Frame* frame, const VkPipelineStageFlagBits& pipeline_stage_flags) {
+    void CmdRender::submit_to_render(VkQueue queue, Frame* frame, const VkPipelineStageFlagBits& pipeline_stage_flags) {
         // -- SUBMIT COMMAND BUFFER TO RENDER
         // Queue submission information
         std::array<VkSemaphore, 1> wait_semaphores{frame->imageAvailableSemaphore};   // sync.getWait()};

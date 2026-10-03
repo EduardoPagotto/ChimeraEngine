@@ -31,30 +31,30 @@ namespace ce {
         }
 
         void create(VkDevice device, VkImage image, VkRenderPass renderpass, const VkExtent2D& extent, VkFormat& format,
-                    VkImageView depthBuffer) {
+                    VkImageView depth_buffer) {
 
             this->image = image;
-            this->inFlightFence = VK_NULL_HANDLE;
-            VkImageViewCreateInfo viewInfo{.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
-                                           .image = this->image,
-                                           .viewType = VK_IMAGE_VIEW_TYPE_2D,
-                                           .format = format,
-                                           .subresourceRange = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                                                                .baseMipLevel = 0,
-                                                                .levelCount = 1,
-                                                                .baseArrayLayer = 0,
-                                                                .layerCount = 1}};
+            inFlightFence = VK_NULL_HANDLE;
+            VkImageViewCreateInfo view_info{.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+                                            .image = image,
+                                            .viewType = VK_IMAGE_VIEW_TYPE_2D,
+                                            .format = format,
+                                            .subresourceRange = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                                                 .baseMipLevel = 0,
+                                                                 .levelCount = 1,
+                                                                 .baseArrayLayer = 0,
+                                                                 .layerCount = 1}};
 
-            vkCreateImageView(device, &viewInfo, nullptr, &this->imageView);
+            vkCreateImageView(device, &view_info, nullptr, &imageView);
 
             // Create framebuffer usinf color map and depth buffer
             std::vector<VkImageView> attachments;
-            attachments.push_back(this->imageView);
-            if (depthBuffer != VK_NULL_HANDLE) {
-                attachments.push_back(depthBuffer); // order important same as upper
+            attachments.push_back(imageView);
+            if (depth_buffer != VK_NULL_HANDLE) {
+                attachments.push_back(depth_buffer); // order important same as upper
             }
 
-            VkFramebufferCreateInfo framebufferInfo{
+            VkFramebufferCreateInfo framebuffer_info{
                 .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
                 .renderPass = renderpass,
                 .attachmentCount = static_cast<uint32_t>(attachments.size()), //
@@ -63,17 +63,17 @@ namespace ce {
                 .height = extent.height,
                 .layers = 1};
 
-            vkCreateFramebuffer(device, &framebufferInfo, nullptr, &this->framebuffer);
+            vkCreateFramebuffer(device, &framebuffer_info, nullptr, &framebuffer);
         }
 
-        __attribute__((always_inline)) void syncImg(VkDevice device, VkFence frameFence) {
+        __attribute__((always_inline)) void sync_img(VkDevice device, VkFence frame_fence) {
             // Se a imagem real adquirida ainda estiver sendo usada por algum frame virtual anterior, aguarde.
-            if (this->inFlightFence != VK_NULL_HANDLE) {
-                vkWaitForFences(device, 1, &this->inFlightFence, VK_TRUE, UINT64_MAX);
+            if (inFlightFence != VK_NULL_HANDLE) {
+                vkWaitForFences(device, 1, &inFlightFence, VK_TRUE, UINT64_MAX);
             }
 
             // Mapeia a Fence do frame virtual atual para esta imagem da swapchain.
-            this->inFlightFence = frameFence;
+            inFlightFence = frame_fence;
         }
     };
 
@@ -82,10 +82,10 @@ namespace ce {
 
       public:
         SwapchainData() = default;
-        SwapchainData(VkDevice device, VkSwapchainKHR oldSwapchain = VK_NULL_HANDLE)
-            : device(device), swapchain(oldSwapchain) {}
+        SwapchainData(VkDevice device, VkSwapchainKHR old_swapchain = VK_NULL_HANDLE)
+            : device_(device), swapchain(old_swapchain) {}
 
-        ~SwapchainData() { this->destroy(); }
+        ~SwapchainData() { destroy(); }
 
         // Movimentação permitida para transferência de escopo
         SwapchainData(SwapchainData&& other) noexcept { *this = std::move(other); }
@@ -93,12 +93,12 @@ namespace ce {
         SwapchainData& operator=(SwapchainData&& other) noexcept {
             if (this != &other) {
                 destroy();
-                this->device = other.device;
-                this->swapchain = other.swapchain;
-                this->images = std::move(other.images);
+                device_ = other.device_;
+                swapchain = other.swapchain;
+                images = std::move(other.images);
 
                 other.swapchain = VK_NULL_HANDLE;
-                other.device = VK_NULL_HANDLE;
+                other.device_ = VK_NULL_HANDLE;
             }
             return *this;
         }
@@ -108,22 +108,22 @@ namespace ce {
         SwapchainData& operator=(const SwapchainData&) = delete;
 
         void destroy() {
-            if (device != VK_NULL_HANDLE) {
-                for (auto& imgRes : images) {
-                    imgRes.cleanup(device);
+            if (device_ != VK_NULL_HANDLE) {
+                for (auto& img_res : images) {
+                    img_res.cleanup(device_);
                 }
                 images.clear();
 
                 if (swapchain != VK_NULL_HANDLE) {
-                    vkDestroySwapchainKHR(device, swapchain, nullptr);
+                    vkDestroySwapchainKHR(device_, swapchain, nullptr);
                     swapchain = VK_NULL_HANDLE;
                 }
-                device = VK_NULL_HANDLE;
+                device_ = VK_NULL_HANDLE;
             }
         }
 
       private:
-        VkDevice device{VK_NULL_HANDLE};
+        VkDevice device_{VK_NULL_HANDLE};
 
       public:
         VkSwapchainKHR swapchain{VK_NULL_HANDLE};
@@ -145,42 +145,43 @@ namespace ce {
     class SwapChain {
       public:
         explicit SwapChain() = default;
-        virtual ~SwapChain() { this->destroy(); }
+        virtual ~SwapChain() { destroy(); }
 
-        void init(std::shared_ptr<VulkanContext> ctx, VkRenderPass renderPass, bool depthBufferEnable = true);
+        void init(std::shared_ptr<VulkanContext> ctx, VkRenderPass render_pass, bool depth_buffer_enable = true);
         void destroy();
 
-        std::pair<uint32_t, SwapchainImageResource&> acquireNextImage(VkFence& inFlightFence, VkSemaphore& waitImage);
+        std::pair<uint32_t, SwapchainImageResource&> acquire_next_image(VkFence& in_flight_fence,
+                                                                        VkSemaphore& wait_image);
 
-        VkFormat& getImageFormat() { return this->surfaceFormat.format; }
-        VkSwapchainKHR getSwapchain() const { return this->swapchainData.swapchain; }
-        const VkExtent2D& getExtent() const { return this->extent; }
-        size_t getSwapchainResSize() const { return this->swapchainData.images.size(); }
-        SwapchainImageResource& getSwapchainRes(size_t index) { return this->swapchainData.images[index]; }
+        VkFormat& get_image_format() { return surface_format_.format; }
+        VkSwapchainKHR get_swapchain() const { return swapchain_data_.swapchain; }
+        const VkExtent2D& get_extent() const { return extent_; }
+        size_t get_swapchain_res_size() const { return swapchain_data_.images.size(); }
+        SwapchainImageResource& get_swapchain_res(size_t index) { return swapchain_data_.images[index]; }
 
-        static VkSurfaceFormatKHR ChooseBestSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& formats);
+        static VkSurfaceFormatKHR choose_best_surface_format(const std::vector<VkSurfaceFormatKHR>& formats);
 
-        VkRect2D& getRenderArea() { return this->renderArea; }
+        VkRect2D& get_render_area() { return render_area_; }
 
-        void recreateSwapchain();
+        void recreate_swapchain();
 
       private:
-        void createSwapchain(bool depthBufferEnable, bool rebuild);
+        void create_swapchain(bool depth_buffer_enable, bool rebuild);
 
-        SetupSwapchain setupParams();
+        SetupSwapchain setup_params();
 
-        VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& surfaceCapabilities);
+        VkExtent2D choose_swap_extent(const VkSurfaceCapabilitiesKHR& surface_capabilities);
 
-        static VkPresentModeKHR ChooseBestPresentationMode(const std::vector<VkPresentModeKHR>& presentationModes);
+        static VkPresentModeKHR choose_best_presentation_mode(const std::vector<VkPresentModeKHR>& presentation_modes);
 
-        VkSurfaceFormatKHR surfaceFormat;
-        VkExtent2D extent;
-        VkRect2D renderArea;
+        VkSurfaceFormatKHR surface_format_;
+        VkExtent2D extent_;
+        VkRect2D render_area_;
 
-        SwapchainData swapchainData;
-        VkRenderPass renderpass{VK_NULL_HANDLE};
+        SwapchainData swapchain_data_;
+        VkRenderPass renderpass_{VK_NULL_HANDLE};
 
-        std::shared_ptr<VulkanContext> ctx{VK_NULL_HANDLE};
-        std::shared_ptr<DepthBufferImage> depthBuffer{nullptr};
+        std::shared_ptr<VulkanContext> ctx_{VK_NULL_HANDLE};
+        std::shared_ptr<DepthBufferImage> depth_buffer_{nullptr};
     };
 } // namespace ce

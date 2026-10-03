@@ -40,8 +40,8 @@ namespace ce {
         const VkMemoryAllocateInfo memory_alloc_info{
             .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
             .allocationSize = mem_requirements.size,
-            .memoryTypeIndex = VulkanContext::FindMemoryTypeIndex(this->physical_, mem_requirements.memoryTypeBits,
-                                                                  buffer_properties)};
+            .memoryTypeIndex = VulkanContext::find_memory_type_index(this->physical_, mem_requirements.memoryTypeBits,
+                                                                     buffer_properties)};
 
         // Allocate memory to VkDebviceMemory
         if (vkAllocateMemory(this->device_, &memory_alloc_info, nullptr, &this->memory_) != VK_SUCCESS) {

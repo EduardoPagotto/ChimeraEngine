@@ -9,25 +9,25 @@ namespace ce {
     class VBO {
       public:
         explicit VBO() = default;
-        explicit VBO(VkPhysicalDevice physical, VkDevice logical) { this->init(physical, logical); }
-        virtual ~VBO() { this->destroy(); }
+        explicit VBO(VkPhysicalDevice physical, VkDevice logical) { init(physical, logical); }
+        virtual ~VBO() { destroy(); }
 
         void init(VkPhysicalDevice physical, VkDevice logical) {
-            this->physical = physical;
-            this->logical = logical;
+            physical_ = physical;
+            logical_ = logical;
         }
 
         void destroy();
 
-        void create(VkQueue queue, VkCommandPool commandPool, std::vector<Vertex>* vertices, size_t sizeVertex);
+        void create(VkQueue queue, VkCommandPool command_pool, std::vector<Vertex>* vertices, size_t size_vertex);
 
-        size_t getCount() const { return this->count; }
-        VkBuffer getBuffer() const { return this->buffer.get(); }
+        size_t get_count() const { return count_; }
+        VkBuffer get_buffer() const { return buffer_.get(); }
 
       private:
-        size_t count;
-        VkPhysicalDevice physical{VK_NULL_HANDLE};
-        VkDevice logical{VK_NULL_HANDLE};
-        Buffer buffer;
+        size_t count_;
+        VkPhysicalDevice physical_{VK_NULL_HANDLE};
+        VkDevice logical_{VK_NULL_HANDLE};
+        Buffer buffer_;
     };
 } // namespace ce

@@ -7,7 +7,7 @@ namespace ce {
     /// @brief Joystic Interface
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
-    /// @date 20260915
+    /// @date 20261004
     class Joystick {
 
         friend struct InputManager;

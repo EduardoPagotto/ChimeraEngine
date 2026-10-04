@@ -22,18 +22,18 @@ namespace ce {
             std::fill(this->buffer_.begin(), this->buffer_.end(), c);
         }
 
-        [[clang::always_inline]] void setPixel(uint32_t x, uint32_t y, uint32_t c) {
+        [[clang::always_inline]] void set_pixel(uint32_t x, uint32_t y, uint32_t c) {
             if (x < this->width_ && y < this->height_) [[likely]] {
                 this->buffer_[(y * this->width_) + x] = c;
             }
         }
 
-        [[clang::always_inline]] uint32_t getWidth() const { return width_; }
-        [[clang::always_inline]] uint32_t getHeight() const { return height_; }
-        [[clang::always_inline]] uint32_t getWithSize() const { return (this->width_ * sizeof(uint32_t)); }
-        [[clang::always_inline]] std::span<const uint32_t> getPixelsView() const { return this->buffer_; }
-        [[clang::always_inline]] std::span<uint32_t> getPixels() { return this->buffer_; }
-        [[clang::always_inline]] SDL_PixelFormat getPixelFormat() { return pixel_format_; }
+        [[clang::always_inline]] uint32_t width() const { return width_; }
+        [[clang::always_inline]] uint32_t height() const { return height_; }
+        [[clang::always_inline]] uint32_t with_size() const { return (this->width_ * sizeof(uint32_t)); }
+        [[clang::always_inline]] std::span<const uint32_t> pixels_view() const { return this->buffer_; }
+        [[clang::always_inline]] std::span<uint32_t> pixels() { return this->buffer_; }
+        [[clang::always_inline]] SDL_PixelFormat pixel_format() { return pixel_format_; }
 
       private:
         uint32_t width_{800};
@@ -61,11 +61,11 @@ namespace ce {
         void toggle_fullscreen() override;
         void reshape(int width, int height) override;
 
-        uint32_t width() const override { return pixel_canvas_->getWidth(); }
-        uint32_t height() const override { return pixel_canvas_->getHeight(); }
+        uint32_t width() const override { return pixel_canvas_->width(); }
+        uint32_t height() const override { return pixel_canvas_->height(); }
 
-        [[clang::always_inline]] std::shared_ptr<PixelCanvas> getPixelsCanvas() { return pixel_canvas_; }
-        [[clang::always_inline]] SDL_PixelFormat getPixelFormat() { return pixel_format_; }
+        [[clang::always_inline]] std::shared_ptr<PixelCanvas> pixels_canvas() { return pixel_canvas_; }
+        [[clang::always_inline]] SDL_PixelFormat pixel_format() { return pixel_format_; }
 
       private:
         bool full_screen_{false};

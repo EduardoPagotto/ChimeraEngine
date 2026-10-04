@@ -77,8 +77,8 @@ namespace ce {
 
 #ifdef FRAMEBUFFER_GPU_SET
         // Atualiza a textura pela GPU
-        if (!SDL_UpdateTexture(texture_, nullptr, this->pixel_canvas_->getPixelsView().data(),
-                               static_cast<int>(this->pixel_canvas_->getWithSize()))) {
+        if (!SDL_UpdateTexture(texture_, nullptr, this->pixel_canvas_->pixels_view().data(),
+                               static_cast<int>(this->pixel_canvas_->with_size()))) {
             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "update texture: %s", SDL_GetError());
         }
 #else

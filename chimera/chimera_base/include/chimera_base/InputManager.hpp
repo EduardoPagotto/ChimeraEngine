@@ -43,7 +43,7 @@ namespace ce {
             }
 
             if (!done_here) {
-                done_here = this->gamepad_->handleEvent(event);
+                done_here = this->gamepad_->handle_event(event);
             }
 
             if (!done_here && event.type == chimera_even_t01) {
@@ -80,7 +80,7 @@ namespace ce {
         void update_continuous_input() {
             this->keyboard_->update_continuous_input();
             this->mouse_->update_continuous_input();
-            this->gamepad_->updateContinuousInput();
+            this->gamepad_->update_continuous_input();
         }
 
         std::shared_ptr<Keyboard> get_keyboard() { return this->keyboard_; }

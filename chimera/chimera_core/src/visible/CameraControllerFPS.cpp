@@ -121,7 +121,7 @@ namespace ce {
         auto gp = this->input_manager_->get_gamepad();
         auto ms = this->input_manager_->get_mouse();
 
-        glm::vec2 leftStick = gp->getLeftStick(0, player0_config_);
+        glm::vec2 leftStick = gp->get_left_stick(0, player0_config_);
         if (glm::length(leftStick) > 0.0F) {
 
             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick Esquerdo -> X: %f | Y: %f", leftStick.x,
@@ -131,7 +131,7 @@ namespace ce {
             direction -= right_ * leftStick.x * 1.5F; // mov RL
         }
 
-        glm::vec2 rightStick = gp->getRightStick(0, player0_config_);
+        glm::vec2 rightStick = gp->get_right_stick(0, player0_config_);
         if (glm::length(rightStick) > 0.0F) {
 
             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick Direito -> X: %f | Y: %f", rightStick.x,
@@ -146,17 +146,17 @@ namespace ce {
             mouseYDelta = (float)mouseMove.y * fsp_camera_rotation_sensitivity;
         }
 
-        Gamepad::ButtonState pad_up = gp->getButtonState(0, SDL_GAMEPAD_BUTTON_DPAD_UP);
+        Gamepad::ButtonState pad_up = gp->get_button_state(0, SDL_GAMEPAD_BUTTON_DPAD_UP);
         if (pad_up == Gamepad::ButtonState::Pressed || pad_up == Gamepad::ButtonState::Held) {
             direction += (world_up_ * 0.5F); // mov U<->D
         }
 
-        Gamepad::ButtonState pad_down = gp->getButtonState(0, SDL_GAMEPAD_BUTTON_DPAD_DOWN);
+        Gamepad::ButtonState pad_down = gp->get_button_state(0, SDL_GAMEPAD_BUTTON_DPAD_DOWN);
         if (pad_down == Gamepad::ButtonState::Pressed || pad_down == Gamepad::ButtonState::Held) {
             direction -= world_up_ * 0.5F; // mov D<->U
         }
 
-        glm::vec2 triggerStick = gp->getTriggerStick(0, player0_config_);
+        glm::vec2 triggerStick = gp->get_trigger_stick(0, player0_config_);
         if (glm::length(triggerStick) > 0.0F) {
 
             // Gamepad::ButtonState north = gp->getButtonState(0, SDL_GAMEPAD_BUTTON_NORTH);

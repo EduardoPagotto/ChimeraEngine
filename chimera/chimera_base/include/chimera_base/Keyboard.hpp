@@ -10,7 +10,7 @@ namespace ce {
     /// @brief Keyboard Interface
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
-    /// @date 20260915
+    /// @date 20261004
     class Keyboard {
       public:
         Keyboard() {
@@ -57,10 +57,10 @@ namespace ce {
         // Atualiza o estado contínuo do teclado (Para movimentação simultânea sem delay)
         void update_continuous_input() {
             int num_keys = 0;
-            const bool* keyboardState = SDL_GetKeyboardState(&num_keys);
+            const bool* keyboard_state = SDL_GetKeyboardState(&num_keys);
 
-            if ((keyboardState != nullptr) && num_keys > 0) {
-                std::span<const bool> state_span(keyboardState, num_keys);
+            if ((keyboard_state != nullptr) && num_keys > 0) {
+                std::span<const bool> state_span(keyboard_state, num_keys);
                 std::copy(state_span.begin(), state_span.end(), this->keyboard_state_.begin());
             }
         }

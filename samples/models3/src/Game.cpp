@@ -133,24 +133,24 @@ void Game::on_update(const double& ts) {
     auto gp = this->input_manager_->get_gamepad();
     ce::Gamepad::AxixConfig player0Config{0.18F, 0.18F, 0.18F};
 
-    if (gp->getButtonState(0, SDL_GAMEPAD_BUTTON_DPAD_UP) == Gamepad::ButtonState::Pressed) {
+    if (gp->get_button_state(0, SDL_GAMEPAD_BUTTON_DPAD_UP) == Gamepad::ButtonState::Pressed) {
         propLateral.z = propulsaoLRUD;
     }
 
-    if (gp->getButtonState(0, SDL_GAMEPAD_BUTTON_DPAD_DOWN) == Gamepad::ButtonState::Pressed) {
+    if (gp->get_button_state(0, SDL_GAMEPAD_BUTTON_DPAD_DOWN) == Gamepad::ButtonState::Pressed) {
         propLateral.z = -propulsaoLRUD;
     }
 
-    if (gp->getButtonState(0, SDL_GAMEPAD_BUTTON_DPAD_LEFT) == Gamepad::ButtonState::Pressed) {
+    if (gp->get_button_state(0, SDL_GAMEPAD_BUTTON_DPAD_LEFT) == Gamepad::ButtonState::Pressed) {
         propLateral.x = propulsaoLRUD;
     }
 
-    if (gp->getButtonState(0, SDL_GAMEPAD_BUTTON_DPAD_RIGHT) == Gamepad::ButtonState::Pressed) {
+    if (gp->get_button_state(0, SDL_GAMEPAD_BUTTON_DPAD_RIGHT) == Gamepad::ButtonState::Pressed) {
         propLateral.x = -propulsaoLRUD;
     }
 
-    glm::vec2 leftStick = gp->getLeftStick(0, player0Config);
-    glm::vec2 rightStick = gp->getRightStick(0, player0Config);
+    glm::vec2 leftStick = gp->get_left_stick(0, player0Config);
+    glm::vec2 rightStick = gp->get_right_stick(0, player0Config);
 
     // int16_t deadZone = 128;
     glm::vec3 rotacao{leftStick.y, rightStick.x, leftStick.x};
@@ -165,11 +165,11 @@ void Game::on_update(const double& ts) {
                        -3.0F * (acc / 2), // y
                        0.0F};             // z
 
-    if (gp->getButtonState(0, SDL_GAMEPAD_BUTTON_SOUTH) == Gamepad::ButtonState::Pressed) {
+    if (gp->get_button_state(0, SDL_GAMEPAD_BUTTON_SOUTH) == Gamepad::ButtonState::Pressed) {
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick Botao A");
     }
 
-    if (gp->getButtonState(0, SDL_GAMEPAD_BUTTON_EAST) == Gamepad::ButtonState::Pressed) {
+    if (gp->get_button_state(0, SDL_GAMEPAD_BUTTON_EAST) == Gamepad::ButtonState::Pressed) {
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick Botao B");
     }
 

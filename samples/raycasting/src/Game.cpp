@@ -63,7 +63,7 @@ void Game::testeGamePad() {
     using namespace ce;
 
     auto gp = this->input_manager_->get_gamepad();
-    Gamepad::ButtonState bt = gp->getButtonState(0, SDL_GAMEPAD_BUTTON_NORTH);
+    Gamepad::ButtonState bt = gp->get_button_state(0, SDL_GAMEPAD_BUTTON_NORTH);
 
     if (bt == Gamepad::ButtonState::Pressed) {
 
@@ -78,19 +78,19 @@ void Game::testeGamePad() {
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Botao liberado");
     }
 
-    glm::vec2 leftStick = gp->getLeftStick(0, player0_config_);
+    glm::vec2 leftStick = gp->get_left_stick(0, player0_config_);
     if (glm::length(leftStick) > 0.0F) {
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick Esquerdo -> X: %f | Y: %f", leftStick.x,
                      leftStick.y);
     }
 
-    glm::vec2 rightStick = gp->getRightStick(0, player0_config_);
+    glm::vec2 rightStick = gp->get_right_stick(0, player0_config_);
     if (glm::length(rightStick) > 0.0F) {
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick Direito -> X: %f | Y: %f", rightStick.x,
                      rightStick.y);
     }
 
-    glm::vec2 trigerStick = gp->getTriggerStick(0, player0_config_);
+    glm::vec2 trigerStick = gp->get_trigger_stick(0, player0_config_);
     if (glm::length(trigerStick) > 0.0F) {
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick trigerStick -> X: %f | Y: %f", trigerStick.x,
                      trigerStick.y);
@@ -165,5 +165,5 @@ void Game::on_render() {
     //     }
     // }
 
-    RenderScene(*state_, *world_, canva_->getPixelsCanvas());
+    RenderScene(*state_, *world_, canva_->pixels_canvas());
 }

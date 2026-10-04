@@ -12,7 +12,7 @@ namespace ce {
     /// @brief Engine
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
-    /// @date 20260917
+    /// @date 20261004
     class Engine {
 
       public:
@@ -20,12 +20,12 @@ namespace ce {
         virtual ~Engine() = default;
         void run();
 
-        StateStack& getStack() { return stack_; }
+        StateStack& stack() { return stack_; }
 
       private:
         std::shared_ptr<entt::registry> registry_;
         std::shared_ptr<ICanva> canva_;
-        uint32_t fps_ = 140;
+        uint32_t fps_{140};
         Timer timer_fps_;
         StateStack stack_;
     };

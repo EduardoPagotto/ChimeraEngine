@@ -9,7 +9,7 @@ namespace ce {
     /// @brief Mouse Interface
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
-    /// @date 20260915
+    /// @date 20261004
     class Mouse {
         // friend struct InputManager;
       public:

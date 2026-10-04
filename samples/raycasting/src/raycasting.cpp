@@ -56,7 +56,7 @@ void DrawColumn(RayHit what, World world, std::shared_ptr<ce::PixelCanvas> pixel
 
     uint8_t type = world.data[pos];
 
-    const SDL_PixelFormatDetails* details = SDL_GetPixelFormatDetails(pixelCanvas->getPixelFormat());
+    const SDL_PixelFormatDetails* details = SDL_GetPixelFormatDetails(pixelCanvas->pixel_format());
 
     // selecione cor com base no tipo de bloco
     uint32_t corVal = 0;
@@ -80,18 +80,18 @@ void DrawColumn(RayHit what, World world, std::shared_ptr<ce::PixelCanvas> pixel
     }
 
     // calcular a altura da coluna
-    uint32_t colh = abs(int(pixelCanvas->getHeight() / what.distance));
+    uint32_t colh = abs(int(pixelCanvas->height() / what.distance));
     uint32_t cropup = 0;
     uint32_t cropdown = 0;
     uint32_t index = 0;
 
-    if (colh > pixelCanvas->getHeight()) // se for maior que a tela, corte
+    if (colh > pixelCanvas->height()) // se for maior que a tela, corte
     {
         index = column;
-        cropup = (colh - pixelCanvas->getHeight()) / 2;
+        cropup = (colh - pixelCanvas->height()) / 2;
         cropdown = cropup + 1;
     } else {
-        index = column + (((pixelCanvas->getHeight() - colh) / 2) * pixelCanvas->getWidth());
+        index = column + (((pixelCanvas->height() - colh) / 2) * pixelCanvas->width());
         cropup = 0;
         cropdown = 0;
     }
@@ -99,17 +99,17 @@ void DrawColumn(RayHit what, World world, std::shared_ptr<ce::PixelCanvas> pixel
     // desenhar coluna
     for (uint32_t c = cropup; c < (colh - cropdown); c++) {
         // desenhe o pixel da cor selecionada
-        pixelCanvas->getPixels()[index] = corVal;
-        index += pixelCanvas->getWidth();
+        pixelCanvas->pixels()[index] = corVal;
+        index += pixelCanvas->width();
     }
 }
 
 void RenderScene(State state, World world, std::shared_ptr<ce::PixelCanvas> pixelCanvas) {
 
-    for (uint32_t column = 0; column < pixelCanvas->getWidth(); column++) // Para cada coluna
+    for (uint32_t column = 0; column < pixelCanvas->width(); column++) // Para cada coluna
     {
         // calcular a posição e direção do feixe
-        float cameraX = 2 * column / float(pixelCanvas->getWidth()) - 1;
+        float cameraX = 2 * column / float(pixelCanvas->width()) - 1;
         glm::vec2 rayPos = state.pos;
         glm::vec2 rayDir = state.dir + state.cam * cameraX;
 

@@ -12,7 +12,7 @@ namespace ce {
     /// @brief Pad Interface
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
-    /// @date 20260915
+    /// @date 20261004
     class Gamepad {
       public:
         enum class ButtonState {
@@ -46,12 +46,12 @@ namespace ce {
         }
 
         // Associa um Gamepad físico (via Instance ID) a um Jogador lógico
-        void assignGamepadToPlayer(int playerIndex, SDL_JoystickID instanceId) {
-            player_mappings_[playerIndex].push_back(instanceId);
+        void assign_gamepad_to_player(int player_index, SDL_JoystickID instance_id) {
+            player_mappings_[player_index].push_back(instance_id);
         }
 
         // Atualiza os estados físicos - Chame uma vez no início do seu Game Loop
-        bool handleEvent(const SDL_Event& event) noexcept { // NOLINT
+        bool handle_event(const SDL_Event& event) noexcept { // NOLINT
 
             if (event.type == SDL_EVENT_GAMEPAD_ADDED) {
 
@@ -60,10 +60,10 @@ namespace ce {
                     SDL_JoystickID id = SDL_GetGamepadID(gamepad);
                     connected_gamepads_[id] = gamepad;
                     // Por padrão, joga novos controles para o Player 0 (Customizável)
-                    assignGamepadToPlayer(0, id);
+                    assign_gamepad_to_player(0, id);
 
                     SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Gamepad conectado ID: %d", id);
-                    GetInfoPad(id);
+                    get_info_pad(id);
                 }
 
             } else if (event.type == SDL_EVENT_GAMEPAD_REMOVED) {
@@ -85,7 +85,7 @@ namespace ce {
             return true;
         }
 
-        static void GetInfoPad(const SDL_JoystickID& instance_id) {
+        static void get_info_pad(const SDL_JoystickID& instance_id) {
 
             const char* name = SDL_GetGamepadNameForID(instance_id);
             const char* path = SDL_GetGamepadPathForID(instance_id);
@@ -100,20 +100,20 @@ namespace ce {
             SDL_LogInfo(SDL_LOG_CATEGORY_INPUT, " guid: %s", guid);
         }
 
-        void updateContinuousInput() {
+        void update_continuous_input() {
 
             for (auto& [id, gamepad] : connected_gamepads_) {
 
-                auto& bStates = button_states_[id];
+                auto& b_states = button_states_[id];
 
                 for (int b = SDL_GAMEPAD_BUTTON_SOUTH; b < SDL_GAMEPAD_BUTTON_COUNT; ++b) {
 
                     auto button = static_cast<SDL_GamepadButton>(b);
-                    bool isDown = SDL_GetGamepadButton(gamepad, button);
+                    bool is_down = SDL_GetGamepadButton(gamepad, button);
 
-                    ButtonState& current = bStates[button];
+                    ButtonState& current = b_states[button];
 
-                    if (isDown) {
+                    if (is_down) {
 
                         if (current == ButtonState::None || current == ButtonState::Released) {
                             current = ButtonState::Pressed;
@@ -137,73 +137,74 @@ namespace ce {
 
         // --- API de Consulta por Jogador (Varre todos os controles atribuídos a ele) ---
 
-        ButtonState getButtonState(int playerIndex, SDL_GamepadButton button) const {
-            if (!player_mappings_.contains(playerIndex)) {
+        ButtonState get_button_state(int player_index, SDL_GamepadButton button) const {
+            if (!player_mappings_.contains(player_index)) {
                 return ButtonState::None;
             }
 
-            bool anyPressed = false;
-            bool anyHeld = false;
-            bool anyReleased = false;
+            bool any_pressed = false;
+            bool any_held = false;
+            bool any_released = false;
 
-            for (SDL_JoystickID id : player_mappings_.at(playerIndex)) {
+            for (SDL_JoystickID id : player_mappings_.at(player_index)) {
                 if (!button_states_.contains(id) || !button_states_.at(id).contains(button)) {
                     continue;
                 }
 
                 ButtonState state = button_states_.at(id).at(button);
                 if (state == ButtonState::Pressed) {
-                    anyPressed = true;
+                    any_pressed = true;
                 }
                 if (state == ButtonState::Held) {
-                    anyHeld = true;
+                    any_held = true;
                 }
                 if (state == ButtonState::Released) {
-                    anyReleased = true;
+                    any_released = true;
                 }
             }
 
-            if (anyPressed) {
+            if (any_pressed) {
                 return ButtonState::Pressed;
             }
 
-            if (anyHeld) {
+            if (any_held) {
                 return ButtonState::Held;
             }
 
-            if (anyReleased) {
+            if (any_released) {
                 return ButtonState::Released;
             }
 
             return ButtonState::None;
         }
 
-        glm::vec2 getLeftStick(int playerIndex, const AxixConfig& config) const {
-            return getNormalizedStick(playerIndex, SDL_GAMEPAD_AXIS_LEFTX, SDL_GAMEPAD_AXIS_LEFTY, config.deadZoneLeft);
+        glm::vec2 get_left_stick(int player_index, const AxixConfig& config) const {
+            return get_normalized_stick(player_index, SDL_GAMEPAD_AXIS_LEFTX, SDL_GAMEPAD_AXIS_LEFTY,
+                                        config.deadZoneLeft);
         }
 
-        glm::vec2 getRightStick(int playerIndex, const AxixConfig& config) const {
-            return getNormalizedStick(playerIndex, SDL_GAMEPAD_AXIS_RIGHTX, SDL_GAMEPAD_AXIS_RIGHTY,
-                                      config.deadZoneRight);
+        glm::vec2 get_right_stick(int player_index, const AxixConfig& config) const {
+            return get_normalized_stick(player_index, SDL_GAMEPAD_AXIS_RIGHTX, SDL_GAMEPAD_AXIS_RIGHTY,
+                                        config.deadZoneRight);
         }
 
-        glm::vec2 getTriggerStick(int playerIndex, const AxixConfig& config) const {
-            return getNormalizedStick(playerIndex, SDL_GAMEPAD_AXIS_LEFT_TRIGGER, SDL_GAMEPAD_AXIS_RIGHT_TRIGGER,
-                                      config.deadZoneTrigger);
+        glm::vec2 get_trigger_stick(int player_index, const AxixConfig& config) const {
+            return get_normalized_stick(player_index, SDL_GAMEPAD_AXIS_LEFT_TRIGGER, SDL_GAMEPAD_AXIS_RIGHT_TRIGGER,
+                                        config.deadZoneTrigger);
         }
 
       private:
         // Processa Deadzone Radial combinando eixos X e Y usando GLM
-        glm::vec2 getNormalizedStick(int playerIndex, SDL_GamepadAxis axisX, SDL_GamepadAxis axisY,
-                                     float deadZone) const {
+        glm::vec2 get_normalized_stick(int player_index, SDL_GamepadAxis axis_x, SDL_GamepadAxis axis_y,
+                                       float dead_zone) const {
 
-            if (!player_mappings_.contains(playerIndex)) {
+            if (!player_mappings_.contains(player_index)) {
                 return glm::vec2(0.0F);
             }
 
-            glm::vec2 combinedInput(0.0F);
+            glm::vec2 combined_input(0.0F);
 
-            for (SDL_JoystickID id : player_mappings_.at(playerIndex)) {
+            for (SDL_JoystickID id : player_mappings_.at(player_index)) {
                 if (!connected_gamepads_.contains(id)) {
                     continue;
                 }
@@ -211,26 +212,26 @@ namespace ce {
                 SDL_Gamepad* gamepad = connected_gamepads_.at(id);
 
                 // Valores brutos do SDL3 vão de -32768 a 32767
-                float rawX = static_cast<float>(SDL_GetGamepadAxis(gamepad, axisX)) / 32767.0F;
-                float rawY = static_cast<float>(SDL_GetGamepadAxis(gamepad, axisY)) / 32767.0F;
+                float raw_x = static_cast<float>(SDL_GetGamepadAxis(gamepad, axis_x)) / 32767.0F;
+                float raw_y = static_cast<float>(SDL_GetGamepadAxis(gamepad, axis_y)) / 32767.0F;
 
-                glm::vec2 input(rawX, rawY);
+                glm::vec2 input(raw_x, raw_y);
                 float length = glm::length(input);
 
-                if (length > deadZone) {
+                if (length > dead_zone) {
                     // Normaliza o vetor após a deadzone para não perder precisão linear inicial
-                    glm::vec2 dir = input / length;
-                    float normalizedLength = (length - deadZone) / (1.0F - deadZone);
-                    combinedInput += dir * glm::clamp(normalizedLength, 0.0F, 1.0F);
+                    const glm::vec2 dir = input / length;
+                    const float normalized_length = (length - dead_zone) / (1.0F - dead_zone);
+                    combined_input += dir * glm::clamp(normalized_length, 0.0F, 1.0F);
                 }
             }
 
             // Limita o output combinado caso o jogador mova sticks de dois controles físicos ao mesmo tempo
-            if (glm::length(combinedInput) > 1.0F) {
-                combinedInput = glm::normalize(combinedInput);
+            if (glm::length(combined_input) > 1.0F) {
+                combined_input = glm::normalize(combined_input);
             }
 
-            return combinedInput;
+            return combined_input;
         }
 
         std::unordered_map<SDL_JoystickID, SDL_Gamepad*> connected_gamepads_;

@@ -83,7 +83,7 @@ void Game::on_attach() {
 
     layer_->add(l_fps_);
 
-    engine_->getStack().push_state(layer_);
+    engine_->stack().push_state(layer_);
 }
 
 void Game::on_deatach() {

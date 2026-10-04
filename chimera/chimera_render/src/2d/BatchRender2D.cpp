@@ -23,13 +23,13 @@ namespace ce {
         p_vbo_->bind();
 
         BufferLayout layout;
-        layout.Push<float>(3, false);
-        layout.Push<float>(2, false);
-        layout.Push<float>(1, false);
-        layout.Push<float>(4, false);
+        layout.push<float>(3, false);
+        layout.push<float>(2, false);
+        layout.push<float>(1, false);
+        layout.push<float>(4, false);
 
-        p_vbo_->setLayout(layout);
-        p_vbo_->setData(nullptr, renderer_buffer_size);
+        p_vbo_->set_layout(layout);
+        p_vbo_->set_data(nullptr, renderer_buffer_size);
         p_vbo_->unbind();
 
         uint32_t indices[renderer_indices_size];

@@ -18,12 +18,12 @@ namespace ce {
         vbo->bind();
 
         BufferLayout layout;
-        layout.Push<float>(3, false);
-        layout.Push<float>(3, false);
-        layout.Push<float>(2, false);
+        layout.push<float>(3, false);
+        layout.push<float>(3, false);
+        layout.push<float>(2, false);
 
-        vbo->setLayout(layout);
-        vbo->setData(&temp.vertex[0], temp.vertex.size());
+        vbo->set_layout(layout);
+        vbo->set_data(&temp.vertex[0], temp.vertex.size());
         vbo->unbind();
         vao->push(vbo);
         vao->unbind();

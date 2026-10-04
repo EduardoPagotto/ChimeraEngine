@@ -19,15 +19,15 @@ namespace ce {
         virtual ~BufferLayout() = default;
 
         template <typename T>
-        inline void Push(const uint32_t& count, const bool& normalized) {}
+        inline void push(const uint32_t& count, const bool& normalized) {}
 
         template <>
-        inline void Push<float>(const uint32_t& count, const bool& normalized) {
+        inline void push<float>(const uint32_t& count, const bool& normalized) {
             push(count, GL_FLOAT, sizeof(float), normalized);
         }
 
-        inline const std::vector<BufferElement>& getLayout() const { return layout_; }
-        inline uint32_t getStride() const { return size_; }
+        inline const std::vector<BufferElement>& get_layout() const { return layout_; }
+        inline uint32_t get_stride() const { return size_; }
 
       private:
         inline void push(uint16_t count, uint16_t type, uint16_t size_of_type, bool normalized) {

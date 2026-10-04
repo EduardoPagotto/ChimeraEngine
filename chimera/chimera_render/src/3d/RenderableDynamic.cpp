@@ -12,11 +12,11 @@ namespace ce {
         vbo_->bind();
 
         BufferLayout layout;
-        layout.Push<float>(3, false);
-        layout.Push<float>(3, false);
-        layout.Push<float>(2, false);
-        vbo_->setLayout(layout);
-        vbo_->reSize(max);
+        layout.push<float>(3, false);
+        layout.push<float>(3, false);
+        layout.push<float>(2, false);
+        vbo_->set_layout(layout);
+        vbo_->re_size(max);
         // vbo->setData(vertexData, vertexSize);
         // vbo->releaseAtributes();
         vbo_->unbind();

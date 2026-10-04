@@ -16,11 +16,11 @@ namespace ce {
         vbo_->bind();
 
         BufferLayout layout;
-        layout.Push<float>(3, false); // point
-        layout.Push<float>(3, false); // color
+        layout.push<float>(3, false); // point
+        layout.push<float>(3, false); // color
 
-        vbo_->setLayout(layout);
-        vbo_->setData(nullptr, size_buffer);
+        vbo_->set_layout(layout);
+        vbo_->set_data(nullptr, size_buffer);
     }
 
     void DrawLine::destroy() noexcept {
@@ -38,7 +38,7 @@ namespace ce {
         vao_->bind();
         vbo_->bind();
 
-        vbo_->setSubData(&points_[0], 0, points_.size()); // load tata dynamic
+        vbo_->set_sub_data(&points_[0], 0, points_.size()); // load tata dynamic
 
         glDrawArrays(GL_LINES, 0, points_.size());
 

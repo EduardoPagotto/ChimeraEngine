@@ -14,15 +14,15 @@ namespace ce {
                                   glm::vec3(-1.0f, 1.0f, 0.0f),  glm::vec3(-1.0f, 1.0f, 0.0f),
                                   glm::vec3(1.0f, -1.0f, 0.0f),  glm::vec3(1.0f, 1.0f, 0.0f)};
         BufferLayout b;
-        b.Push<float>(3, false);
+        b.push<float>(3, false);
 
         vao_ = std::make_shared<VertexArray>();
         vao_->bind();
 
         vbo_ = std::make_shared<VertexBuffer>(BufferType::STATIC);
         vbo_->bind();
-        vbo_->setLayout(b);
-        vbo_->setData(quad, 6);
+        vbo_->set_layout(b);
+        vbo_->set_data(quad, 6);
         vbo_->unbind();
 
         vao_->push(vbo_);

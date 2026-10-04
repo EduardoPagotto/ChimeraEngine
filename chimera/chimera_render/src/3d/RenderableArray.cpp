@@ -6,7 +6,7 @@
 
 namespace ce {
 
-    RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* mesh)
+    RenderableArray::RenderableArray(std::vector<TrisIndex>& v_ptr_tris_index, Mesh* mesh)
         : Renderable3D(), tot_index_(0) {
         // create vertex buffers
         vao = std::make_shared<VertexArray>();
@@ -16,28 +16,28 @@ namespace ce {
         vbo->bind();
 
         BufferLayout layout;
-        layout.Push<float>(3, false);
-        layout.Push<float>(3, false);
-        layout.Push<float>(2, false);
+        layout.push<float>(3, false);
+        layout.push<float>(3, false);
+        layout.push<float>(2, false);
 
-        vbo->setLayout(layout);
-        vbo->setData(&mesh->vertex[0], mesh->vertex.size());
+        vbo->set_layout(layout);
+        vbo->set_data(&mesh->vertex[0], mesh->vertex.size());
         vbo->unbind();
 
         vao->push(vbo);
 
-        for (auto ptrTrisIndex : vPtrTrisIndex) {
+        for (auto ptr_tris_index : v_ptr_tris_index) {
 
-            auto [min, max, size] = vertexIndexedBoundaries(mesh->vertex, ptrTrisIndex);
+            auto [min, max, size] = vertexIndexedBoundaries(mesh->vertex, ptr_tris_index);
 
             std::shared_ptr<IndexBuffer> ibo =
-                std::make_shared<IndexBuffer>((uint32_t*)&ptrTrisIndex[0], ptrTrisIndex.size() * 3);
+                std::make_shared<IndexBuffer>((uint32_t*)&ptr_tris_index[0], ptr_tris_index.size() * 3);
 
             Renderable3D* r = new RenderableIBO(vao, ibo, AABB(min, max));
 
             v_child_.push_back(r);
 
-            tot_index_ += ptrTrisIndex.size();
+            tot_index_ += ptr_tris_index.size();
         }
 
         vao->unbind();

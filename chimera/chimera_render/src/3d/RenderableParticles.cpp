@@ -63,11 +63,11 @@ namespace ce {
 
         // Buffer orphaning, a common way to improve streaming, perf. See above link for details.
         vbo_pos_->bind();
-        vbo_pos_->setSubData2(pc_->posData, 0, pc_->particlesCount * sizeof(glm::vec4)); // FIXME: usar o BuffewLayout
+        vbo_pos_->set_sub_data2(pc_->posData, 0, pc_->particlesCount * sizeof(glm::vec4)); // FIXME: usar o BuffewLayout
 
         // Buffer orphaning, a common way to improve streaming, // perf. See above link for details.
         vbo_cor_->bind();
-        vbo_cor_->setSubData2(pc_->colorData, 0, pc_->particlesCount * sizeof(GLubyte) * 4);
+        vbo_cor_->set_sub_data2(pc_->colorData, 0, pc_->particlesCount * sizeof(GLubyte) * 4);
 
         // Bind our texture
         // material->bindMaterialInformation(shader);

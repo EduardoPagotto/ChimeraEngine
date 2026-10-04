@@ -22,12 +22,12 @@ namespace ce {
         vbo->bind();
 
         BufferLayout layout;
-        layout.Push<float>(3, false);
-        layout.Push<float>(3, false);
-        layout.Push<float>(2, false);
+        layout.push<float>(3, false);
+        layout.push<float>(3, false);
+        layout.push<float>(2, false);
 
-        vbo->setLayout(layout);
-        vbo->setData(&meshFinal.vertex[0], meshFinal.vertex.size());
+        vbo->set_layout(layout);
+        vbo->set_data(&meshFinal.vertex[0], meshFinal.vertex.size());
         vbo->unbind();
 
         vao->push(vbo);

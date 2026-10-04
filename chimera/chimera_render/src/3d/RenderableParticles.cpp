@@ -53,7 +53,7 @@ namespace ce {
     void RenderableParticles::submit(RenderCommand& command, IRenderer3d& renderer) {
 
         pc_->cameraPos =
-            glm::inverse(renderer.getViewProjection()->getSel().view)[3]; // depois mover para o statemachine!!!
+            glm::inverse(renderer.getViewProjection()->get_sel().view)[3]; // depois mover para o statemachine!!!
         renderer.submit(command, this, 0);
     }
 

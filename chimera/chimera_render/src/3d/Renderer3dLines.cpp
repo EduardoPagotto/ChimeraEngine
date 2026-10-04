@@ -8,7 +8,7 @@ namespace ce {
 
         this->camera = camera;
         this->vpo = vpo;
-        frustum_.set(vpo->getSel().viewProjectionInverse);
+        frustum_.set(vpo->get_sel().viewProjectionInverse);
     }
 
     void Renderer3dLines::end() {}

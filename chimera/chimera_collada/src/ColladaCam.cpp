@@ -70,7 +70,7 @@ namespace ce {
 
                 if (entity.hasComponent<TransComponent>(registry.get())) {
                     TransComponent& trans = entity.getComponent<TransComponent>(registry.get());
-                    cc.camera->setPosition(trans.trans->getPosition());
+                    cc.camera->set_position(trans.trans->get_position());
                 }
             }
         }

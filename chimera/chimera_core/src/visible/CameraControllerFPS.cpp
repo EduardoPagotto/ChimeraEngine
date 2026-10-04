@@ -30,19 +30,19 @@ namespace ce {
     void CameraControllerFPS::on_deatach() {}
 
     void CameraControllerFPS::updateVP() {
-        if (vp_->getSize() == 1) {
-            vp_->getLeft().update(glm::lookAt(camera_->getPosition(), camera_->getPosition() + front_, up_),
-                                  camera_->getProjection());
+        if (vp_->get_size() == 1) {
+            vp_->get_left().update(glm::lookAt(camera_->get_position(), camera_->get_position() + front_, up_),
+                                   camera_->get_projection());
         } else {
-            glm::vec3 cross1 = glm::cross(up_, front_);     // up and front already are  vectors!!!!
-            glm::vec3 norm1 = glm::normalize(cross1);       // vector side (would be left or right)
-            glm::vec3 final_norm1 = norm1 * vp_->getNoze(); // point of eye
-            glm::vec3 novaPositionL = camera_->getPosition() + final_norm1;
-            glm::vec3 novaPositionR = camera_->getPosition() - final_norm1;
-            vp_->getLeft().update(glm::lookAt(novaPositionL, novaPositionL + front_, up_),
-                                  camera_->getProjection()); // Left
-            vp_->getRight().update(glm::lookAt(novaPositionR, novaPositionR + front_, up_),
-                                   camera_->getProjection()); // Right
+            glm::vec3 cross1 = glm::cross(up_, front_);      // up and front already are  vectors!!!!
+            glm::vec3 norm1 = glm::normalize(cross1);        // vector side (would be left or right)
+            glm::vec3 final_norm1 = norm1 * vp_->get_noze(); // point of eye
+            glm::vec3 novaPositionL = camera_->get_position() + final_norm1;
+            glm::vec3 novaPositionR = camera_->get_position() - final_norm1;
+            vp_->get_left().update(glm::lookAt(novaPositionL, novaPositionL + front_, up_),
+                                   camera_->get_projection()); // Left
+            vp_->get_right().update(glm::lookAt(novaPositionR, novaPositionR + front_, up_),
+                                    camera_->get_projection()); // Right
         }
     }
 
@@ -73,15 +73,15 @@ namespace ce {
 
     void CameraControllerFPS::processCameraMovement(glm::vec3& direction, float deltaTime) {
         float velocity = movement_speed_ * deltaTime;
-        camera_->setPosition(camera_->getPosition() + direction * velocity);
+        camera_->set_position(camera_->get_position() + direction * velocity);
     }
 
     void CameraControllerFPS::on_update(const double& ts) {
         // Movement speed
-        if (input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_LSHIFT)) { // acelerar mover
+        if (input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_LSHIFT)) { // acelerar mover
 
             movement_speed_ = fsp_camera_max_speed * 4.0F;
-        } else if (input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_LALT)) { //  desacelerar mover
+        } else if (input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_LALT)) { //  desacelerar mover
 
             movement_speed_ = fsp_camera_max_speed / 4.0F;
         } else {
@@ -91,35 +91,35 @@ namespace ce {
 
         // CameraFPS movement
         glm::vec3 direction = glm::vec3(0.0F);
-        if (input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_W)) { // to foward
+        if (input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_W)) { // to foward
             direction += front_;
         }
 
-        if (input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_S)) { // to backward
+        if (input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_S)) { // to backward
             direction -= front_;
         }
 
-        if (input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_A)) { // to left
+        if (input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_A)) { // to left
             direction -= right_;
         }
 
-        if (input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_D)) { //  to right
+        if (input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_D)) { //  to right
             direction += right_;
         }
 
-        if (input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_SPACE)) { // to up
+        if (input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_SPACE)) { // to up
             direction += world_up_;
         }
 
-        if (input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_LCTRL)) { //  to booton
+        if (input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_LCTRL)) { //  to booton
             direction -= world_up_;
         }
 
         float mouseXDelta{0.0F};
         float mouseYDelta{0.0F};
 
-        auto gp = this->input_manager_->getGamepad();
-        auto ms = this->input_manager_->getMouse();
+        auto gp = this->input_manager_->get_gamepad();
+        auto ms = this->input_manager_->get_mouse();
 
         glm::vec2 leftStick = gp->getLeftStick(0, player0_config_);
         if (glm::length(leftStick) > 0.0F) {
@@ -141,7 +141,7 @@ namespace ce {
             mouseYDelta = rightStick.y * 1.5F;  // rot UD
         } else {
             // Mouse Camera rotation
-            glm::ivec2 mouseMove = ms->getDeltaXY(); //  ->getMoveRel();
+            glm::ivec2 mouseMove = ms->get_delta_xy(); //  ->getMoveRel();
             mouseXDelta = -(float)mouseMove.x * fsp_camera_rotation_sensitivity;
             mouseYDelta = (float)mouseMove.y * fsp_camera_rotation_sensitivity;
         }

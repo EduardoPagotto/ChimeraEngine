@@ -107,7 +107,7 @@ namespace ce {
                 // TileComponent& tc = entity.addComponent<TileComponent>();
 
                 // TODO: passar tile camera para smart
-                layers_.pushState(std::make_shared<Tile>("TileText", &batch_render2_d_, sc.shader, cCam.camera));
+                layers_.push_state(std::make_shared<Tile>("TileText", &batch_render2_d_, sc.shader, cCam.camera));
             }
 
             // Se for um mesh inicializar componente
@@ -183,9 +183,9 @@ namespace ce {
 
                     auto& sc = entity.getComponent<ShaderComponent>(registry_.get());
                     CameraComponent& cc = entity.getComponent<CameraComponent>(registry_.get());
-                    cc.camera->setViewportSize(fbSpec.width, fbSpec.height);
+                    cc.camera->set_viewport_size(fbSpec.width, fbSpec.height);
                     shadow_data_.shader = sc.shader; // entity.getComponent<Shader>();
-                    shadow_data_.lightProjection = cc.camera->getProjection();
+                    shadow_data_.lightProjection = cc.camera->get_projection();
                     shadow_data_.shadowBuffer = std::make_shared<FrameBuffer>(fbSpec);
 
                 } else if (tc.name == "RenderBufferMaster") {
@@ -204,10 +204,10 @@ namespace ce {
 
                 auto& cc = e.getComponent<CameraComponent>(registry_.get());
                 if (cc.camKind == CamKind::FPS) {
-                    layers_.pushState(std::make_shared<CameraControllerFPS>(registry_, e));
+                    layers_.push_state(std::make_shared<CameraControllerFPS>(registry_, e));
                 } else if (cc.camKind == CamKind::ORBIT) {
                     // CameraControllerOrbit* ccOrb = new CameraControllerOrbit(e);
-                    layers_.pushState(std::make_shared<CameraControllerOrbit>(registry_, e));
+                    layers_.push_state(std::make_shared<CameraControllerOrbit>(registry_, e));
                 } else if (cc.camKind == CamKind::STATIC) {
                     // e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
                 }
@@ -237,7 +237,7 @@ namespace ce {
 
     void Scene::onViewportResize(const uint32_t& width, const uint32_t& height) {
 
-        createRenderBuffer(vpo_->getSize(), width, height);
+        createRenderBuffer(vpo_->get_size(), width, height);
 
         auto view = registry_.get()->view<CameraComponent>();
         for (auto entity : view) {
@@ -245,7 +245,7 @@ namespace ce {
             if (!cameraComponent.fixedAspectRatio) {
 
                 for (auto renderBuffer : v_rb_) { // altera a matrix de projecao apenas na troca de resolucao
-                    cameraComponent.camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
+                    cameraComponent.camera->set_viewport_size(renderBuffer->getWidth(), renderBuffer->getHeight());
                     if (cameraComponent.primary) {
                         active_cam_ = cameraComponent.camera;
                     }
@@ -295,7 +295,7 @@ namespace ce {
                 if (lc.global) {
                     // FIXME: usar o direcionm depois no segundo parametro
                     glm::mat4 lightView =
-                        glm::lookAt(tc.trans->getPosition(), glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
+                        glm::lookAt(tc.trans->get_position(), glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
                     shadow_data_.lightSpaceMatrix = shadow_data_.lightProjection * lightView;
                 }
             }
@@ -305,7 +305,7 @@ namespace ce {
                 auto [tc, rc] = group.get<TransComponent, Renderable3dComponent>(entity);
 
                 RenderCommand command;
-                command.transform = tc.trans->translateSrc(origem_->getPosition());
+                command.transform = tc.trans->translate_src(origem_->get_position());
                 command.shader = shadow_data_.shader;
                 command.uniforms["model"] = Uniform(command.transform);
                 command.uniforms["lightSpaceMatrix"] = Uniform(shadow_data_.lightSpaceMatrix);
@@ -332,12 +332,12 @@ namespace ce {
             MaterialComponent& mc = e.getComponent<MaterialComponent>(registry_.get());
 
             RenderCommand command;
-            command.transform = tc.trans->translateSrc(origem_->getPosition());
+            command.transform = tc.trans->translate_src(origem_->get_position());
             command.shader = sc.shader;
             mc.material->bindMaterialInformation(command.uniforms, command.vTex);
 
-            const glm::mat4& view = vpo_->getSel().view;
-            command.uniforms["projection"] = Uniform(renderer.getCamera()->getProjection());
+            const glm::mat4& view = vpo_->get_sel().view;
+            command.uniforms["projection"] = Uniform(renderer.getCamera()->get_projection());
             command.uniforms["view"] = Uniform(view);
             command.uniforms["CameraRight_worldspace"] = Uniform(glm::vec3(view[0][0], view[1][0], view[2][0]));
             command.uniforms["CameraUp_worldspace"] = Uniform(glm::vec3(view[0][1], view[1][1], view[2][1]));
@@ -355,7 +355,7 @@ namespace ce {
                 group.get<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
 
             RenderCommand command;
-            command.transform = tc.trans->translateSrc(origem_->getPosition());
+            command.transform = tc.trans->translate_src(origem_->get_position());
             command.shader = sc.shader;
             mc.material->bindMaterialInformation(command.uniforms, command.vTex);
             command.uniforms["model"] = Uniform(command.transform);
@@ -367,7 +367,7 @@ namespace ce {
         Renderer3d renderer(verbose_ > 0);
 
         if (verbose_ > 0) {
-            const glm::vec3& pos = active_cam_->getPosition();
+            const glm::vec3& pos = active_cam_->get_position();
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
         }
 
@@ -378,16 +378,16 @@ namespace ce {
         uint8_t count = 0;
         for (auto renderBuffer : v_rb_) {
 
-            vpo_->setIndex(count);
+            vpo_->set_index(count);
             count++;
 
             // data load used by all
-            renderer.uboQueue().insert(std::make_pair("projection", Uniform(active_cam_->getProjection())));
-            renderer.uboQueue().insert(std::make_pair("view", Uniform(vpo_->getSel().view)));
+            renderer.uboQueue().insert(std::make_pair("projection", Uniform(active_cam_->get_projection())));
+            renderer.uboQueue().insert(std::make_pair("view", Uniform(vpo_->get_sel().view)));
 
             // data load shadows props to renderer in shade of models!!!!
             if (shadow_data_.shadowBuffer) {
-                renderer.uboQueue().insert(std::make_pair("viewPos", Uniform(active_cam_->getPosition())));
+                renderer.uboQueue().insert(std::make_pair("viewPos", Uniform(active_cam_->get_position())));
                 renderer.uboQueue().insert(std::make_pair("shadows", Uniform(1)));
                 renderer.uboQueue().insert(std::make_pair("shadowMap", Uniform(1)));
                 renderer.uboQueue().insert(std::make_pair("lightSpaceMatrix", Uniform(shadow_data_.lightSpaceMatrix)));
@@ -400,7 +400,7 @@ namespace ce {
                 auto& lc = lightView.get<LightComponent>(entity);
                 auto& tc = registry_.get()->get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
                 if (lc.global) {                                         // biding light prop
-                    lc.light->bindLight(renderer.uboQueue(), tc.trans->getMatrix());
+                    lc.light->bindLight(renderer.uboQueue(), tc.trans->get_matrix());
                 }
             }
 
@@ -449,8 +449,8 @@ namespace ce {
                         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Octree Size: %ld", list.size());
 
                         MapUniform muni;
-                        muni["projection"] = Uniform(active_cam_->getProjection());
-                        muni["view"] = Uniform(vpo_->getSel().view);
+                        muni["projection"] = Uniform(active_cam_->get_projection());
+                        muni["view"] = Uniform(vpo_->get_sel().view);
                         dl_.render(muni);
                     }
 
@@ -469,15 +469,15 @@ namespace ce {
                     render_lines_.begin(active_cam_, vpo_, nullptr);
 
                     render_lines_.uboQueue().insert(
-                        std::make_pair("projection", Uniform(active_cam_->getProjection())));
-                    render_lines_.uboQueue().insert(std::make_pair("view", Uniform(vpo_->getSel().view)));
+                        std::make_pair("projection", Uniform(active_cam_->get_projection())));
+                    render_lines_.uboQueue().insert(std::make_pair("view", Uniform(vpo_->get_sel().view)));
 
                     auto group = registry_.get()->group<TransComponent, Renderable3dComponent>();
                     for (auto entity : group) {
                         auto [tc, rc] = group.get<TransComponent, Renderable3dComponent>(entity);
 
                         RenderCommand command;
-                        command.transform = tc.trans->translateSrc(origem_->getPosition());
+                        command.transform = tc.trans->translate_src(origem_->get_position());
                         rc.renderable->submit(command, render_lines_);
                     }
 
@@ -490,7 +490,7 @@ namespace ce {
                         TransComponent& tc = e.getComponent<TransComponent>(registry_.get()); // FIXME: group this!!!
 
                         RenderCommand command;
-                        command.transform = tc.trans->translateSrc(origem_->getPosition());
+                        command.transform = tc.trans->translate_src(origem_->get_position());
 
                         renderable->submit(command, render_lines_);
                     }

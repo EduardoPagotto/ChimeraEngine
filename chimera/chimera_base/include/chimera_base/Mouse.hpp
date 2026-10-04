@@ -29,7 +29,7 @@ namespace ce {
         virtual ~Mouse() = default;
 
         // Limpa os gatilhos rápidos e os deltas acumulados no frame anterior
-        void startFrame() {
+        void start_frame() {
             this->pressed_buttons_.fill(false);
             this->released_buttons_.fill(false);
             this->delta_ = {0.0F, 0.0F};
@@ -37,9 +37,9 @@ namespace ce {
         }
 
         // Captura os eventos de hardware brutos do SDL_PollEvent (Garante zero latência e perda)
-        bool handleEvent(const SDL_Event& event) noexcept {
+        bool handle_event(const SDL_Event& event) noexcept {
 
-            bool doneHere = true;
+            bool done_here = true;
             switch (event.type) {
                 case SDL_EVENT_MOUSE_MOTION:
                     // No SDL3, coordenadas e deltas de movimento usam floats
@@ -49,17 +49,17 @@ namespace ce {
                     break;
 
                 case SDL_EVENT_MOUSE_BUTTON_DOWN: {
-                    uint8_t buttonIndex = event.button.button - 1;
-                    if (buttonIndex < TotalButtons) {
-                        this->pressed_buttons_[buttonIndex] = true;
+                    uint8_t button_index = event.button.button - 1;
+                    if (button_index < TotalButtons) {
+                        this->pressed_buttons_[button_index] = true;
                     }
                     break;
                 }
 
                 case SDL_EVENT_MOUSE_BUTTON_UP: {
-                    uint8_t buttonIndex = event.button.button - 1;
-                    if (buttonIndex < TotalButtons) {
-                        this->released_buttons_[buttonIndex] = true;
+                    uint8_t button_index = event.button.button - 1;
+                    if (button_index < TotalButtons) {
+                        this->released_buttons_[button_index] = true;
                     }
                     break;
                 }
@@ -70,33 +70,33 @@ namespace ce {
                     // m_scrollY += event.wheel.y; // Geralmente o scroll vertical padrão
                     break;
                 default:
-                    doneHere = false;
+                    done_here = false;
                     break;
             }
 
-            return doneHere;
+            return done_here;
         }
 
         // Atualiza o estado contínuo (se botões continuam apertados)
-        void updateContinuousInput() {
-            uint32_t buttonMask = SDL_GetMouseState(nullptr, nullptr);
-            this->continuous_buttons_[Left] = (buttonMask & SDL_BUTTON_MASK(SDL_BUTTON_LEFT)) != 0;
-            this->continuous_buttons_[Middle] = (buttonMask & SDL_BUTTON_MASK(SDL_BUTTON_MIDDLE)) != 0;
-            this->continuous_buttons_[Right] = (buttonMask & SDL_BUTTON_MASK(SDL_BUTTON_RIGHT)) != 0;
+        void update_continuous_input() {
+            uint32_t button_mask = SDL_GetMouseState(nullptr, nullptr);
+            this->continuous_buttons_[Left] = (button_mask & SDL_BUTTON_MASK(SDL_BUTTON_LEFT)) != 0;
+            this->continuous_buttons_[Middle] = (button_mask & SDL_BUTTON_MASK(SDL_BUTTON_MIDDLE)) != 0;
+            this->continuous_buttons_[Right] = (button_mask & SDL_BUTTON_MASK(SDL_BUTTON_RIGHT)) != 0;
         }
 
         // Retona posicao do mouse
-        [[nodiscard]] glm::vec2 getPositionXY() const { return this->position_; }
+        [[nodiscard]] glm::vec2 get_position_xy() const { return this->position_; }
 
         // Retorna o deslocamento (Delta) ocorrido neste frame
-        [[nodiscard]] glm::vec2 getDeltaXY() const { return this->delta_; }
+        [[nodiscard]] glm::vec2 get_delta_xy() const { return this->delta_; }
 
         // Retorna o scroll da rodinha ocorrido neste frame (Positivo = Cima/Direita, Negativo = Baixo/Esquerda)
-        [[nodiscard]] glm::vec2 getScroll() const { return this->scrolll_; }
+        [[nodiscard]] glm::vec2 get_scroll() const { return this->scrolll_; }
 
-        [[nodiscard]] bool isButtonDown(MouseButton button) const { return this->continuous_buttons_[button]; }
-        [[nodiscard]] bool isButtonKeyPressed(MouseButton button) const { return this->pressed_buttons_[button]; }
-        [[nodiscard]] bool isButtonKeyReleased(MouseButton button) const { return this->released_buttons_[button]; }
+        [[nodiscard]] bool is_button_down(MouseButton button) const { return this->continuous_buttons_[button]; }
+        [[nodiscard]] bool is_button_key_pressed(MouseButton button) const { return this->pressed_buttons_[button]; }
+        [[nodiscard]] bool is_button_key_released(MouseButton button) const { return this->released_buttons_[button]; }
 
       private:
         glm::vec2 position_{0.0F, 0.0F}; // float m_mouseX, m_mouseY;

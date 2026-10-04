@@ -19,7 +19,7 @@ namespace ce {
         this->camera = camera;
         this->vpo = vpo;
         this->octree = octree;
-        frustum.set(vpo->getSel().viewProjectionInverse);
+        frustum.set(vpo->get_sel().viewProjectionInverse);
     }
 
     void Renderer3d::end() {

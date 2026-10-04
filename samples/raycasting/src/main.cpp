@@ -32,7 +32,7 @@ int main(int argn, char** argv) {
 
         std::shared_ptr<IStateMachine> game = std::make_shared<Game>(registry);
 
-        engine.getStack().pushState(game);
+        engine.getStack().push_state(game);
         engine.run();
 
         SDL_Log("Loop de Game encerrado!!!!");

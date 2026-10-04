@@ -16,13 +16,13 @@ namespace ce {
         virtual ~Solid();
 
         // Inherited
-        virtual const glm::vec3 getPosition() const override;
-        virtual const glm::mat4 getMatrix() const override;
-        virtual const glm::mat4 translateSrc(const glm::vec3& _pos) const override;
+        virtual const glm::vec3 get_position() const override;
+        virtual const glm::mat4 get_matrix() const override;
+        virtual const glm::mat4 translate_src(const glm::vec3& _pos) const override;
         // virtual const glm::vec3 getRotation() const override;
-        virtual void setPosition(const glm::vec3& _pos) override;
-        virtual void setRotation(const glm::vec3& _rotation) override;
-        virtual void setMatrix(const glm::mat4& _trans) override;
+        virtual void set_position(const glm::vec3& _pos) override;
+        virtual void set_rotation(const glm::vec3& _rotation) override;
+        virtual void set_matrix(const glm::mat4& _trans) override;
 
         // prop init FIXME: melhorar!!! ainda confuso
         void init(const glm::vec3& _size); // usado no scene no final da inicializacao

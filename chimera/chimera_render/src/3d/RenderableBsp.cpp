@@ -82,7 +82,7 @@ namespace ce {
 
     void RenderableBsp::submit(RenderCommand& command, IRenderer3d& renderer) {
         std::vector<Renderable3D*> childDraw;
-        const glm::vec3 cameraPos = renderer.getCamera()->getPosition();
+        const glm::vec3 cameraPos = renderer.getCamera()->get_position();
         traverseTree(cameraPos, root_, childDraw);
         for (uint32_t c = 0; c < childDraw.size(); c++)
             renderer.submit(command, childDraw[c], c);

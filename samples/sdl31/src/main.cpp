@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
         Engine engine(registry);
         std::shared_ptr<IStateMachine> game = std::make_shared<Game>(registry);
 
-        engine.getStack().pushState(game);
+        engine.getStack().push_state(game);
         engine.run();
 
         SDL_Log("Finalizado");

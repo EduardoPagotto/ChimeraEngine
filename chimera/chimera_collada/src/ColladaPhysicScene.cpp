@@ -67,10 +67,10 @@ namespace ce {
                     TransComponent& tc = ent2.getComponent<TransComponent>(registry.get());
                     [[maybe_unused]]
                     MeshComponent& mc = ent2.getComponent<MeshComponent>(registry.get());
-                    Solid* solid = new Solid(pc.get(), tc.trans->getMatrix(), ent2); // nova transformacao
-                    delete tc.trans;                                                 // deleta objeto de transformacao
-                    tc.trans = nullptr;                                              // limpa ponteiro
-                    tc.solid = true;                                                 // muda tipos de dado
+                    Solid* solid = new Solid(pc.get(), tc.trans->get_matrix(), ent2); // nova transformacao
+                    delete tc.trans;                                                  // deleta objeto de transformacao
+                    tc.trans = nullptr;                                               // limpa ponteiro
+                    tc.solid = true;                                                  // muda tipos de dado
                     tc.trans = solid; // carrega novo objeto de transformacao
 
                     [[maybe_unused]]

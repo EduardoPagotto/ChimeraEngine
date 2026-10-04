@@ -14,25 +14,25 @@ namespace ce {
     class Keyboard {
       public:
         Keyboard() {
-            int numKeys = 0;
-            SDL_GetKeyboardState(&numKeys);
+            int num_keys = 0;
+            SDL_GetKeyboardState(&num_keys);
 
-            this->keyboard_state_.resize(numKeys, 0);
-            this->pressed_keys_.resize(numKeys, 0);
-            this->released_keys_.resize(numKeys, 0);
+            this->keyboard_state_.resize(num_keys, 0);
+            this->pressed_keys_.resize(num_keys, 0);
+            this->released_keys_.resize(num_keys, 0);
         }
 
         // Limpa os gatilhos rápidos do frame anterior. Chame no INÍCIO do loop principal.
-        void startFrame() {
+        void start_frame() {
             // teclado
             std::fill(this->pressed_keys_.begin(), this->pressed_keys_.end(), 0);
             std::fill(this->released_keys_.begin(), this->released_keys_.end(), 0);
         }
 
         // Processa os eventos de clique único vindos do SDL_PollEvent (Garante 100% de detecção)
-        bool handleEvent(const SDL_Event& event) {
+        bool handle_event(const SDL_Event& event) {
 
-            bool doneHere = true;
+            bool done_here = true;
             switch (event.type) {
                 case SDL_EVENT_KEY_DOWN: {
                     size_t scancode = static_cast<size_t>(event.key.scancode);
@@ -47,26 +47,26 @@ namespace ce {
                     }
                 } break;
                 default:
-                    doneHere = false;
+                    done_here = false;
                     break;
             }
 
-            return doneHere;
+            return done_here;
         }
 
         // Atualiza o estado contínuo do teclado (Para movimentação simultânea sem delay)
-        void updateContinuousInput() {
-            int numKeys = 0;
-            const bool* keyboardState = SDL_GetKeyboardState(&numKeys);
+        void update_continuous_input() {
+            int num_keys = 0;
+            const bool* keyboardState = SDL_GetKeyboardState(&num_keys);
 
-            if ((keyboardState != nullptr) && numKeys > 0) {
-                std::span<const bool> stateSpan(keyboardState, numKeys);
-                std::copy(stateSpan.begin(), stateSpan.end(), this->keyboard_state_.begin());
+            if ((keyboardState != nullptr) && num_keys > 0) {
+                std::span<const bool> state_span(keyboardState, num_keys);
+                std::copy(state_span.begin(), state_span.end(), this->keyboard_state_.begin());
             }
         }
 
         // [CONTINUAMENTE PRESSIONADA]: Perfeito para andar/correr com múltiplas teclas ao mesmo tempo
-        [[nodiscard]] bool isKeyDown(SDL_Scancode scancode) const {
+        [[nodiscard]] bool is_key_down(SDL_Scancode scancode) const {
             if (static_cast<size_t>(scancode) >= this->keyboard_state_.size()) {
                 return false;
             }
@@ -75,7 +75,7 @@ namespace ce {
         }
 
         // [PRESSIONADA NESTE FRAME]: Pega cliques instantâneos, sem falhas (Pular, Atirar, Abrir Menu)
-        [[nodiscard]] bool isKeyPressed(SDL_Scancode scancode) const {
+        [[nodiscard]] bool is_key_pressed(SDL_Scancode scancode) const {
             if (static_cast<size_t>(scancode) >= this->pressed_keys_.size()) {
                 return false;
             }
@@ -84,7 +84,7 @@ namespace ce {
         }
 
         // [LIBERADA NESTE FRAME]: Detecta o momento exato em que a tecla foi solta
-        [[nodiscard]] bool isKeyReleased(SDL_Scancode scancode) const {
+        [[nodiscard]] bool is_key_released(SDL_Scancode scancode) const {
             if (static_cast<size_t>(scancode) >= this->released_keys_.size()) {
                 return false;
             }

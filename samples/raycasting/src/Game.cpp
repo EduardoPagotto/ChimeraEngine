@@ -62,7 +62,7 @@ void Game::testeGamePad() {
 
     using namespace ce;
 
-    auto gp = this->input_manager_->getGamepad();
+    auto gp = this->input_manager_->get_gamepad();
     Gamepad::ButtonState bt = gp->getButtonState(0, SDL_GAMEPAD_BUTTON_NORTH);
 
     if (bt == Gamepad::ButtonState::Pressed) {
@@ -103,17 +103,17 @@ void Game::on_update(const double& ts) {
     // SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "%.3f", ts);
     testeGamePad();
 
-    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
+    if (this->input_manager_->get_keyboard()->is_key_pressed(SDL_SCANCODE_ESCAPE)) {
         sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
         return;
     }
 
-    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_F1)) {
+    if (this->input_manager_->get_keyboard()->is_key_pressed(SDL_SCANCODE_F1)) {
         sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
         return;
     }
 
-    if (this->input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_W)) {
+    if (this->input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_W)) {
         glm::ivec2 curr = state_->pos;
         glm::ivec2 next = state_->pos + state_->dir * move_speed_ * 2.0f;
 
@@ -124,7 +124,7 @@ void Game::on_update(const double& ts) {
             state_->pos.y += state_->dir.y * move_speed_;
     }
 
-    if (this->input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_S)) {
+    if (this->input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_S)) {
         glm::ivec2 curr = state_->pos;
         glm::ivec2 next = state_->pos - state_->dir * move_speed_ * 2.0f;
 
@@ -135,7 +135,7 @@ void Game::on_update(const double& ts) {
             state_->pos.y -= state_->dir.y * move_speed_;
     }
 
-    if (this->input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_A)) {
+    if (this->input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_A)) {
         double oldDirX = state_->dir.x;
         state_->dir.x = state_->dir.x * cos(rot_speed_) - state_->dir.y * sin(rot_speed_);
         state_->dir.y = oldDirX * sin(rot_speed_) + state_->dir.y * cos(rot_speed_);
@@ -144,7 +144,7 @@ void Game::on_update(const double& ts) {
         state_->cam.y = oldcamx * sin(rot_speed_) + state_->cam.y * cos(rot_speed_);
     }
 
-    if (this->input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_D)) {
+    if (this->input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_D)) {
         double oldDirX = state_->dir.x;
         state_->dir.x = state_->dir.x * cos(-rot_speed_) - state_->dir.y * sin(-rot_speed_);
         state_->dir.y = oldDirX * sin(-rot_speed_) + state_->dir.y * cos(-rot_speed_);

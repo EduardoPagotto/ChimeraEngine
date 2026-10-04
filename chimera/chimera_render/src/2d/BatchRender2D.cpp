@@ -95,25 +95,25 @@ namespace ce {
         }
 
         buffer_->point =
-            stack_.multiplVec3(position); //  glm::vec3(transformationStack.back() * glm::vec4(position, 1.0f));
+            stack_.multipl_vec3(position); //  glm::vec3(transformationStack.back() * glm::vec4(position, 1.0f));
         buffer_->uv = uv[0];
         buffer_->tid = textureSlot;
         buffer_->color = color;
         buffer_++;
 
-        buffer_->point = stack_.multiplVec3(glm::vec3(position.x, position.y + size.y, position.z));
+        buffer_->point = stack_.multipl_vec3(glm::vec3(position.x, position.y + size.y, position.z));
         buffer_->uv = uv[1];
         buffer_->tid = textureSlot;
         buffer_->color = color;
         buffer_++;
 
-        buffer_->point = stack_.multiplVec3(glm::vec3(position.x + size.x, position.y + size.y, position.z));
+        buffer_->point = stack_.multipl_vec3(glm::vec3(position.x + size.x, position.y + size.y, position.z));
         buffer_->uv = uv[2];
         buffer_->tid = textureSlot;
         buffer_->color = color;
         buffer_++;
 
-        buffer_->point = stack_.multiplVec3(glm::vec3(position.x + size.x, position.y, position.z));
+        buffer_->point = stack_.multipl_vec3(glm::vec3(position.x + size.x, position.y, position.z));
         buffer_->uv = uv[3];
         buffer_->tid = textureSlot;
         buffer_->color = color;
@@ -153,25 +153,25 @@ namespace ce {
                 const float u1 = glyph.square.w;
                 const float v1 = glyph.square.h;
 
-                buffer_->point = stack_.multiplVec3(glm::vec3(x0, y0, 0.0F));
+                buffer_->point = stack_.multipl_vec3(glm::vec3(x0, y0, 0.0F));
                 buffer_->uv = glm::vec2(u0, v0);
                 buffer_->tid = textureSlot;
                 buffer_->color = color;
                 buffer_++;
 
-                buffer_->point = stack_.multiplVec3(glm::vec3(x0, y1, 0.0F));
+                buffer_->point = stack_.multipl_vec3(glm::vec3(x0, y1, 0.0F));
                 buffer_->uv = glm::vec2(u0, v1); // glm::vec2(u0, v1);
                 buffer_->tid = textureSlot;
                 buffer_->color = color;
                 buffer_++;
 
-                buffer_->point = stack_.multiplVec3(glm::vec3(x1, y1, 0.0F));
+                buffer_->point = stack_.multipl_vec3(glm::vec3(x1, y1, 0.0F));
                 buffer_->uv = glm::vec2(u1, v1);
                 buffer_->tid = textureSlot;
                 buffer_->color = color;
                 buffer_++;
 
-                buffer_->point = stack_.multiplVec3(glm::vec3(x1, y0, 0.0F));
+                buffer_->point = stack_.multipl_vec3(glm::vec3(x1, y0, 0.0F));
                 buffer_->uv = glm::vec2(u1, v0);
                 buffer_->tid = textureSlot;
                 buffer_->color = color;

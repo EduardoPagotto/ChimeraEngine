@@ -8,7 +8,7 @@ namespace ce {
 
         canva_ = registry->ctx().get<std::shared_ptr<ICanva>>();
 
-        timer_fps_.setElapsedCount(1000);
+        timer_fps_.set_elapsed_count(1000);
         timer_fps_.start();
         chimera_even_t01 = SDL_RegisterEvents(1);
 
@@ -29,7 +29,7 @@ namespace ce {
 
             beginCount = SDL_GetTicks();
 
-            im->startFrame();
+            im->start_frame();
 
             while (SDL_PollEvent(&event)) {
 
@@ -82,7 +82,7 @@ namespace ce {
                         break;
                 }
 
-                im->handleEvent(event);
+                im->handle_event(event);
 
                 for (auto& ev : stack_) {
                     ev->on_event(event);
@@ -90,10 +90,10 @@ namespace ce {
             }
 
             // Atualiza o estado das teclas que continuam pressionadas
-            im->updateContinuousInput();
+            im->update_continuous_input();
 
             ts = (double)countDelta / 1000.0F;
-            if (!im->getStatusPause()) { // update game
+            if (!im->get_status_pause()) { // update game
 
                 for (auto iten : stack_) {
                     iten->on_update(ts);
@@ -108,8 +108,8 @@ namespace ce {
                 canva_->after();
             }
 
-            if (timer_fps_.stepCount()) { // count FPS each second
-                fps_ = timer_fps_.getCountStep();
+            if (timer_fps_.step_count()) { // count FPS each second
+                fps_ = timer_fps_.get_count_step();
                 sendChimeraEvent(EventCE::NEW_FPS, (void*)&fps_, nullptr);
             }
 

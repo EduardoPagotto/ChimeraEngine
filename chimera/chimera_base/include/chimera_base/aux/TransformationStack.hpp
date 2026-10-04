@@ -7,36 +7,36 @@ namespace ce {
     class TransformationStack {
       public:
         TransformationStack() {
-            transformationStack.push_back(glm::mat4(1.0f));
-            transCache = &transformationStack.back();
+            transformation_stack_.push_back(glm::mat4(1.0f));
+            trans_cache_ = &transformation_stack_.back();
         }
 
         inline void push(const glm::mat4& matrix) {
-            transformationStack.push_back(transformationStack.back() * matrix);
-            transCache = &transformationStack.back();
+            transformation_stack_.push_back(transformation_stack_.back() * matrix);
+            trans_cache_ = &transformation_stack_.back();
         }
 
-        inline void pushOver(const glm::mat4& matrix) {
-            transformationStack.push_back(matrix);
-            transCache = &transformationStack.back();
+        inline void push_over(const glm::mat4& matrix) {
+            transformation_stack_.push_back(matrix);
+            trans_cache_ = &transformation_stack_.back();
         }
 
-        inline const glm::vec3 multiplVec3(const glm::vec3& point) const {
-            return glm::vec3((*transCache) * glm::vec4(point, 1.0f));
+        inline const glm::vec3 multipl_vec3(const glm::vec3& point) const {
+            return glm::vec3((*trans_cache_) * glm::vec4(point, 1.0f));
         }
 
         inline void pop() {
-            if (transformationStack.size() > 1)
-                transformationStack.pop_back();
+            if (transformation_stack_.size() > 1)
+                transformation_stack_.pop_back();
 
-            transCache = &transformationStack.back();
+            trans_cache_ = &transformation_stack_.back();
             // TODO: log here!!!
         }
 
-        inline glm::mat4 const get() const { return *transCache; }
+        inline glm::mat4 const get() const { return *trans_cache_; }
 
       private:
-        std::vector<glm::mat4> transformationStack;
-        const glm::mat4* transCache;
+        std::vector<glm::mat4> transformation_stack_;
+        const glm::mat4* trans_cache_;
     };
 } // namespace ce

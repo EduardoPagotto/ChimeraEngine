@@ -47,7 +47,7 @@ int main(int argn, char** argv) {
         std::shared_ptr<IStateMachine> game = std::make_shared<Game>(registry, &engine);
 
         // engine.getStack().pushState(scene);
-        engine.getStack().pushState(game);
+        engine.getStack().push_state(game);
 
         engine.run();
 

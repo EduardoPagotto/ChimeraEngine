@@ -8,8 +8,8 @@
 namespace ce {
 
     [[clang::always_inline]]
-    inline const int16_t dead16(const int16_t& vIn, const int16_t& deadzone) {
-        return (vIn + (vIn >> 16) ^ (vIn >> 16)) > deadzone ? vIn : 0;
+    inline const int16_t dead16(const int16_t& v_in, const int16_t& deadzone) {
+        return (v_in + (v_in >> 16) ^ (v_in >> 16)) > deadzone ? v_in : 0;
     }
 
     [[clang::always_inline]]
@@ -18,8 +18,8 @@ namespace ce {
     }
 
     [[clang::always_inline]]
-    inline const float axis16(const int16_t& vIn, const int16_t& deadzone, const int16_t& limit) {
-        return scale16(dead16(vIn, deadzone), limit);
+    inline const float axis16(const int16_t& v_in, const int16_t& deadzone, const int16_t& limit) {
+        return scale16(dead16(v_in, deadzone), limit);
     }
 
     // TODO: REMOVER
@@ -38,34 +38,34 @@ namespace ce {
     }
 
     inline std::string extractNameByFile(const std::string& filepath) {
-        auto lastSlash = filepath.find_last_of("/\\");
-        lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+        auto last_slash = filepath.find_last_of("/\\");
+        last_slash = last_slash == std::string::npos ? 0 : last_slash + 1;
 
-        auto lastDot = filepath.rfind('.');
-        auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
-        return filepath.substr(lastSlash, count);
+        auto last_dot = filepath.rfind('.');
+        auto count = last_dot == std::string::npos ? filepath.size() - last_slash : last_dot - last_slash;
+        return filepath.substr(last_slash, count);
     }
 
-    inline void textToStringArray(const std::string& sIn, std::vector<std::string>& vOut, char delimiter) {
+    inline void textToStringArray(const std::string& s_in, std::vector<std::string>& v_out, char delimiter) {
         std::string token;
-        std::istringstream tokenStream(sIn);
-        while (std::getline(tokenStream, token, delimiter))
-            vOut.push_back(token);
+        std::istringstream token_stream(s_in);
+        while (std::getline(token_stream, token, delimiter))
+            v_out.push_back(token);
     }
 
-    inline void textToFloatArray(const std::string& text, std::vector<float>& arrayFloat) {
-        std::vector<std::string> textData;
-        textToStringArray(text, textData, ' ');
-        for (const std::string& val : textData) {
+    inline void textToFloatArray(const std::string& text, std::vector<float>& array_float) {
+        std::vector<std::string> text_data;
+        textToStringArray(text, text_data, ' ');
+        for (const std::string& val : text_data) {
             if (val.size() != 0)
-                arrayFloat.push_back(std::stod(val));
+                array_float.push_back(std::stod(val));
         }
     }
 
-    inline void textToUIntArray(const std::string& text, std::vector<uint32_t>& arrayI) {
-        std::vector<std::string> textData;
-        textToStringArray(text, textData, ' ');
-        for (const std::string& val : textData)
-            arrayI.push_back(static_cast<uint32_t>(std::stoul(val)));
+    inline void textToUIntArray(const std::string& text, std::vector<uint32_t>& array_i) {
+        std::vector<std::string> text_data;
+        textToStringArray(text, text_data, ' ');
+        for (const std::string& val : text_data)
+            array_i.push_back(static_cast<uint32_t>(std::stoul(val)));
     }
 } // namespace ce

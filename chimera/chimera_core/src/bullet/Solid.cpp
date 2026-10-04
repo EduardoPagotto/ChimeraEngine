@@ -7,7 +7,7 @@ namespace ce {
         : mass_(0.0f), friction_dynamic_(15.0f), friction_static_(10.0f), restitution_(0.0f), p_rigid_body_(nullptr),
           p_shape_collision_(nullptr), trimesh_(nullptr), p_world_(_pWorld), entity_(entity) {
 
-        this->setMatrix(_trans); // pMotionState carregado aqui!
+        this->set_matrix(_trans); // pMotionState carregado aqui!
     }
 
     Solid::~Solid() {
@@ -75,7 +75,7 @@ namespace ce {
         // pShapeCollision = new pShapeCollision(trimesh);
     }
 
-    const glm::mat4 Solid::translateSrc(const glm::vec3& _pos) const { // translate model matrix
+    const glm::mat4 Solid::translate_src(const glm::vec3& _pos) const { // translate model matrix
         btTransform transLocal;
         btScalar matrix[16];
 
@@ -91,19 +91,19 @@ namespace ce {
         return glm::make_mat4(matrix);
     }
 
-    const glm::vec3 Solid::getPosition() const {
+    const glm::vec3 Solid::get_position() const {
         btVector3 pos = p_rigid_body_->getWorldTransform().getOrigin();
         return glm::vec3(pos.getX(), pos.getY(), pos.getZ());
     }
 
-    void Solid::setPosition(const glm::vec3& _pos) {
+    void Solid::set_position(const glm::vec3& _pos) {
 
         btTransform l_transform = p_rigid_body_->getCenterOfMassTransform();
         l_transform.setOrigin(btVector3(_pos.x, _pos.y, _pos.z));
         p_rigid_body_->setCenterOfMassTransform(l_transform);
     }
 
-    void Solid::setRotation(const glm::vec3& _rotation) {
+    void Solid::set_rotation(const glm::vec3& _rotation) {
 
         btTransform transform = p_rigid_body_->getCenterOfMassTransform();
 
@@ -117,7 +117,7 @@ namespace ce {
     //     return glm::vec3(rotX, rotY, rotZ);
     // }
 
-    const glm::mat4 Solid::getMatrix() const {
+    const glm::mat4 Solid::get_matrix() const {
 
         btTransform transLocal;
         btScalar matrix[16];
@@ -128,7 +128,7 @@ namespace ce {
         return glm::make_mat4(matrix);
     }
 
-    void Solid::setMatrix(const glm::mat4& _trans) {
+    void Solid::set_matrix(const glm::mat4& _trans) {
         btTransform transform;
         transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
         p_motion_state_ = new btDefaultMotionState(transform);

@@ -29,7 +29,7 @@ namespace ce {
 
         RenderCommand rc;
         rc.shader = shader;
-        rc.uniforms["pr_matrix"] = Uniform(camera->getProjection());
+        rc.uniforms["pr_matrix"] = Uniform(camera->get_projection());
         //  rc.uniforms["textures"] = Uniform(32, texIDs);
         renderer_->setCommandRender(&rc);
 

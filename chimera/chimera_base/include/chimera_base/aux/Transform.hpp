@@ -7,25 +7,25 @@ namespace ce {
     class ITrans {
       public:
         virtual ~ITrans() = default;
-        virtual const glm::vec3 getPosition() const = 0;
-        virtual const glm::mat4 getMatrix() const = 0;
-        virtual const glm::mat4 translateSrc(const glm::vec3& pos) const = 0;
+        virtual const glm::vec3 get_position() const = 0;
+        virtual const glm::mat4 get_matrix() const = 0;
+        virtual const glm::mat4 translate_src(const glm::vec3& pos) const = 0;
         // virtual const glm::vec3 getRotation() = 0; // TODO: Implementar
-        virtual void setPosition(const glm::vec3& pos) = 0;
-        virtual void setRotation(const glm::vec3& rot) = 0;
-        virtual void setMatrix(const glm::mat4& transform) = 0;
+        virtual void set_position(const glm::vec3& pos) = 0;
+        virtual void set_rotation(const glm::vec3& rot) = 0;
+        virtual void set_matrix(const glm::mat4& transform) = 0;
     };
 
-    class Transform : public ITrans {
+    class Transform final : public ITrans {
       public:
         Transform() = default;
-        Transform(const glm::mat4& transform) : transform(transform) {}
+        Transform(const glm::mat4& transform) : transform_(transform) {}
         virtual ~Transform() = default;
-        virtual const glm::vec3 getPosition() const override { return glm::vec3(this->transform[3]); }
-        virtual const glm::mat4 getMatrix() const override { return this->transform; }
-        virtual const glm::mat4 translateSrc(const glm::vec3& pos) const override {
-            glm::mat4 matrixCoord = transform;
-            float* matrix = glm::value_ptr(matrixCoord);
+        virtual const glm::vec3 get_position() const override { return glm::vec3(this->transform_[3]); }
+        virtual const glm::mat4 get_matrix() const override { return this->transform_; }
+        virtual const glm::mat4 translate_src(const glm::vec3& pos) const override {
+            glm::mat4 matrix_coord = transform_;
+            float* matrix = glm::value_ptr(matrix_coord);
             // pega posicao do objeto horigem de desenho (viewpoint fixo),desloca desenha para o pbjeto horigem
             matrix[12] -= pos.x;
             matrix[13] -= pos.y;
@@ -39,13 +39,15 @@ namespace ce {
         //     transform = matRot * matTrans;                                  // primeiro translada depois rotaciona,
         //     ordem é importante!!!
         // }
-        virtual void setPosition(const glm::vec3& pos) override {
-            this->transform = glm::translate(this->transform, pos);
+        virtual void set_position(const glm::vec3& pos) override {
+            this->transform_ = glm::translate(this->transform_, pos);
         }
-        virtual void setRotation(const glm::vec3& rot) override { transform = glm::eulerAngleYXZ(rot.y, rot.x, rot.z); }
-        virtual void setMatrix(const glm::mat4& transform) override { this->transform = transform; }
+        virtual void set_rotation(const glm::vec3& rot) override {
+            transform_ = glm::eulerAngleYXZ(rot.y, rot.x, rot.z);
+        }
+        virtual void set_matrix(const glm::mat4& transform) override { this->transform_ = transform; }
 
       private:
-        glm::mat4 transform = glm::mat4(1.0f);
+        glm::mat4 transform_ = glm::mat4(1.0f);
     };
 } // namespace ce

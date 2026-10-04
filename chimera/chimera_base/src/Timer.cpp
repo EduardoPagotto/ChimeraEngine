@@ -45,7 +45,7 @@ namespace ce {
         return 0;
     }
 
-    bool Timer::stepCount() {
+    bool Timer::step_count() {
 
         uint32_t temp = ticks();
         if (temp < elapsed_count_) {
@@ -60,7 +60,7 @@ namespace ce {
         return false;
     }
 
-    uint32_t Timer::deltaCountMS() {
+    uint32_t Timer::delta_count_ms() {
         uint32_t current = SDL_GetTicks();
         uint32_t val = current - last_ticks_;
         last_ticks_ = current;

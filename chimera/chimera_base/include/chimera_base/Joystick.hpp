@@ -36,7 +36,7 @@ namespace ce {
             return nullptr;
         }
 
-        bool getEvent(const SDL_Event& event) noexcept {
+        bool get_event(const SDL_Event& event) noexcept {
 
             switch (event.type) {
                 case SDL_EVENT_JOYSTICK_ADDED:

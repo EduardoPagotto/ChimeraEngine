@@ -67,7 +67,7 @@ void Game::on_attach() {
 
     l_fps_ = new Label("None", 0, 0, font, glm::vec4(1.0, 1.0, 1.0, 1.0));
 
-    std::shared_ptr<Tile> tile = std::dynamic_pointer_cast<Tile>(scene_->getLayes().getState("TileText"));
+    std::shared_ptr<Tile> tile = std::dynamic_pointer_cast<Tile>(scene_->getLayes().get_state("TileText"));
 
     Group* group = new Group(glm::translate(glm::mat4(1.0F), glm::vec3(-500.0F, 270.0F, 0.0F)));
     group->add(new Sprite(0.0F, 0.0F, 200.0F, 50.0F, glm::vec4(0, 0, 1, 0.25)));
@@ -89,37 +89,37 @@ void Game::on_deatach() {}
 void Game::on_update(const double& ts) {
     using namespace ce;
 
-    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
+    if (this->input_manager_->get_keyboard()->is_key_pressed(SDL_SCANCODE_ESCAPE)) {
         sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
         return;
     }
 
-    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_F1)) {
+    if (this->input_manager_->get_keyboard()->is_key_pressed(SDL_SCANCODE_F1)) {
         sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
         return;
     }
 
-    if (this->input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_UP)) {
+    if (this->input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_UP)) {
         p_corpo_rigido_->applyForce(glm::vec3(20.0, 0.0, 0.0));
     }
 
-    if (this->input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_DOWN)) {
+    if (this->input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_DOWN)) {
         p_corpo_rigido_->applyForce(glm::vec3(-20.0, 0.0, 0.0));
     }
 
-    if (this->input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_LEFT)) {
+    if (this->input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_LEFT)) {
         p_corpo_rigido_->applyForce(glm::vec3(0.0, 20.0, 0.0));
     }
 
-    if (this->input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_RIGHT)) {
+    if (this->input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_RIGHT)) {
         p_corpo_rigido_->applyForce(glm::vec3(0.0, -20.0, 0.0));
     }
 
-    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_A)) {
+    if (this->input_manager_->get_keyboard()->is_key_pressed(SDL_SCANCODE_A)) {
         p_corpo_rigido_->applyTorc(glm::vec3(0.0, 0.0, 20.0));
     }
 
-    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_S)) {
+    if (this->input_manager_->get_keyboard()->is_key_pressed(SDL_SCANCODE_S)) {
         p_corpo_rigido_->applyTorc(glm::vec3(0.0, 0.0, -20.0));
     }
 
@@ -130,7 +130,7 @@ void Game::on_update(const double& ts) {
     float propulsaoLRUD{5.0F};
     glm::vec3 propLateral(0.0F);
 
-    auto gp = this->input_manager_->getGamepad();
+    auto gp = this->input_manager_->get_gamepad();
     ce::Gamepad::AxixConfig player0Config{0.18F, 0.18F, 0.18F};
 
     if (gp->getButtonState(0, SDL_GAMEPAD_BUTTON_DPAD_UP) == Gamepad::ButtonState::Pressed) {

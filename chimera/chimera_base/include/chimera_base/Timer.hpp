@@ -7,7 +7,7 @@ namespace ce {
     /// @brief Classe de Timer
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
-    /// @date 20270731
+    /// @date 20261004
     class Timer {
       public:
         Timer() = default;
@@ -20,14 +20,14 @@ namespace ce {
         uint32_t restart();
 
         uint32_t ticks() const;
-        bool stepCount();
-        uint32_t deltaCountMS();
+        bool step_count();
+        uint32_t delta_count_ms();
 
-        bool isStarted() const { return started_; }
-        bool isPaused() const { return paused_; }
-        uint32_t getCountStep() const { return count_step_; }
-        void setElapsedCount(const uint32_t& val) { elapsed_count_ = val; }
-        double deltaTimeSecounds() { return ((double)deltaCountMS()) / 1000.0F; }
+        bool is_started() const { return started_; }
+        bool is_paused() const { return paused_; }
+        uint32_t get_count_step() const { return count_step_; }
+        void set_elapsed_count(const uint32_t& val) { elapsed_count_ = val; }
+        double delta_time_secounds() { return ((double)delta_count_ms()) / 1000.0F; }
 
       private:
         bool started_ = false;

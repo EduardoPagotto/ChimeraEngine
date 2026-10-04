@@ -59,7 +59,7 @@ void Game::on_attach() {
 
     layer_ = std::make_shared<TileLayer>(shader_);
 
-    layer_->getCamera()->setViewportSize(canvas_->width(), canvas_->height());
+    layer_->getCamera()->set_viewport_size(canvas_->width(), canvas_->height());
 
     auto asset = registry_->ctx().get<std::shared_ptr<ce::AssetManager>>();
 
@@ -83,7 +83,7 @@ void Game::on_attach() {
 
     layer_->add(l_fps_);
 
-    engine_->getStack().pushState(layer_);
+    engine_->getStack().push_state(layer_);
 }
 
 void Game::on_deatach() {
@@ -111,12 +111,12 @@ void Game::on_update(const double& ts) {
 
     l_fps_->setText(std::string("FPS: ") + std::to_string(fps_));
 
-    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
+    if (this->input_manager_->get_keyboard()->is_key_pressed(SDL_SCANCODE_ESCAPE)) {
         sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
         return;
     }
 
-    if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_F1)) {
+    if (this->input_manager_->get_keyboard()->is_key_pressed(SDL_SCANCODE_F1)) {
         sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
         return;
     }

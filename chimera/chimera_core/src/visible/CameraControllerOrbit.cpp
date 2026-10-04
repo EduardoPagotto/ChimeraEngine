@@ -23,9 +23,9 @@ namespace ce {
         min_ = cc.min;
         max_ = cc.max;
         front_ = {0.0F, 0.0F, 0.0F}; // TODO: melhorar!!
-        distance_ = glm::distance(camera_->getPosition(), this->front_);
+        distance_ = glm::distance(camera_->get_position(), this->front_);
 
-        glm::vec3 direction = glm::normalize(camera_->getPosition() - front_);
+        glm::vec3 direction = glm::normalize(camera_->get_position() - front_);
         pitch_ = glm::degrees(std::asin(direction.y));
         yaw_ = glm::degrees(std::atan2(direction.z, direction.x));
 
@@ -38,24 +38,24 @@ namespace ce {
     void CameraControllerOrbit::on_deatach() {}
 
     void CameraControllerOrbit::updateVP() {
-        if (vp_->getSize() == 1) {
-            vp_->getLeft().update(glm::lookAt(camera_->getPosition(), front_, up_), camera_->getProjection());
+        if (vp_->get_size() == 1) {
+            vp_->get_left().update(glm::lookAt(camera_->get_position(), front_, up_), camera_->get_projection());
         } else {
 
-            glm::vec3 direcao = glm::normalize(front_ - camera_->getPosition());
+            glm::vec3 direcao = glm::normalize(front_ - camera_->get_position());
             const glm::vec3 direita = glm::normalize(glm::cross(direcao, up_));
 
-            const float distancia = vp_->getNoze();
+            const float distancia = vp_->get_noze();
             const glm::vec3 deslocamento = direita * distancia;
 
-            glm::vec3 posDireita = camera_->getPosition() + deslocamento;
+            glm::vec3 posDireita = camera_->get_position() + deslocamento;
             glm::vec3 origemDireita = front_ + deslocamento;
 
-            glm::vec3 posEsquerda = camera_->getPosition() - deslocamento;
+            glm::vec3 posEsquerda = camera_->get_position() - deslocamento;
             glm::vec3 origemEsquerda = front_ - deslocamento;
 
-            vp_->getLeft().update(glm::lookAt(posEsquerda, origemEsquerda, up_), camera_->getProjection()); // Left
-            vp_->getRight().update(glm::lookAt(posDireita, origemDireita, up_), camera_->getProjection());  // Right
+            vp_->get_left().update(glm::lookAt(posEsquerda, origemEsquerda, up_), camera_->get_projection()); // Left
+            vp_->get_right().update(glm::lookAt(posDireita, origemDireita, up_), camera_->get_projection());  // Right
 
             // const glm::vec3 left_p = front - camera->getPosition(); // front and position as points
             // const glm::vec3 cross1 = glm::cross(up, left_p);
@@ -87,7 +87,7 @@ namespace ce {
             pos.z = distance_ * static_cast<float>(sin(theta));
         }
 
-        camera_->setPosition(pos);
+        camera_->set_position(pos);
     }
 
     void CameraControllerOrbit::processDistance(const int& _mz) {
@@ -133,14 +133,14 @@ namespace ce {
 
     void CameraControllerOrbit::on_update(const double& ts) {
 
-        if (input_manager_->getMouse()->isButtonDown(Mouse::MouseButton::Left)) {
+        if (input_manager_->get_mouse()->is_button_down(Mouse::MouseButton::Left)) {
 
-            const glm::ivec2 mouseMove = input_manager_->getMouse()->getDeltaXY();
+            const glm::ivec2 mouseMove = input_manager_->get_mouse()->get_delta_xy();
             this->processCameraRotation(mouseMove.x, mouseMove.y);
 
-        } else if (input_manager_->getMouse()->isButtonDown(Mouse::MouseButton::Right)) {
+        } else if (input_manager_->get_mouse()->is_button_down(Mouse::MouseButton::Right)) {
 
-            const glm::ivec2 mouseMove = input_manager_->getMouse()->getDeltaXY();
+            const glm::ivec2 mouseMove = input_manager_->get_mouse()->get_delta_xy();
             this->processDistance(mouseMove.y);
         }
 

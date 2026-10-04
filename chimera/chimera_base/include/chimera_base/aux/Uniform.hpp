@@ -28,9 +28,7 @@ namespace ce {
         std::shared_ptr<void> ptr{nullptr};
 
         Uniform() = default;
-
-        Uniform(const Uniform& o) : type(o.type), ptr(o.ptr) {}
-
+        Uniform(const Uniform& o) = default;
         virtual ~Uniform() = default;
 
         void operator=(const Uniform& o) {
@@ -38,42 +36,42 @@ namespace ce {
             ptr = o.ptr;
         }
 
-        Uniform(const std::vector<int>& val)
+        explicit Uniform(const std::vector<int>& val)
             : type(UniformType::INT_VEC), ptr(std::static_pointer_cast<void>(std::make_shared<std::vector<int>>(val))) {
         }
 
-        Uniform(const int& val)
+        explicit Uniform(const int& val)
             : type(UniformType::INT), ptr(std::static_pointer_cast<void>(std::make_shared<int>(val))) {}
 
-        Uniform(const glm::ivec2& val)
+        explicit Uniform(const glm::ivec2& val)
             : type(UniformType::IVEC2), ptr(std::static_pointer_cast<void>(std::make_shared<glm::ivec2>(val))) {}
 
-        Uniform(const glm::ivec3& val)
+        explicit Uniform(const glm::ivec3& val)
             : type(UniformType::IVEC3), ptr(std::static_pointer_cast<void>(std::make_shared<glm::ivec3>(val))) {}
 
-        Uniform(const glm::ivec4& val)
+        explicit Uniform(const glm::ivec4& val)
             : type(UniformType::IVEC4), ptr(std::static_pointer_cast<void>(std::make_shared<glm::ivec4>(val))) {}
 
-        Uniform(const std::vector<float>& val)
+        explicit Uniform(const std::vector<float>& val)
             : type(UniformType::FLOAT_VEC),
               ptr(std::static_pointer_cast<void>(std::make_shared<std::vector<float>>(val))) {}
 
-        Uniform(const float& val)
+        explicit Uniform(const float& val)
             : type(UniformType::FLOAT), ptr(std::static_pointer_cast<void>(std::make_shared<float>(val))) {}
 
-        Uniform(const glm::vec2& val)
+        explicit Uniform(const glm::vec2& val)
             : type(UniformType::VEC2), ptr(std::static_pointer_cast<void>(std::make_shared<glm::vec2>(val))) {}
 
-        Uniform(const glm::vec3& val)
+        explicit Uniform(const glm::vec3& val)
             : type(UniformType::VEC3), ptr(std::static_pointer_cast<void>(std::make_shared<glm::vec3>(val))) {}
 
-        Uniform(const glm::vec4& val)
+        explicit Uniform(const glm::vec4& val)
             : type(UniformType::VEC4), ptr(std::static_pointer_cast<void>(std::make_shared<glm::vec4>(val))) {}
 
-        Uniform(const glm::mat3& val)
+        explicit Uniform(const glm::mat3& val)
             : type(UniformType::MAT3), ptr(std::static_pointer_cast<void>(std::make_shared<glm::mat3>(val))) {}
 
-        Uniform(const glm::mat4& val)
+        explicit Uniform(const glm::mat4& val)
             : type(UniformType::MAT4), ptr(std::static_pointer_cast<void>(std::make_shared<glm::mat4>(val))) {}
     };
 

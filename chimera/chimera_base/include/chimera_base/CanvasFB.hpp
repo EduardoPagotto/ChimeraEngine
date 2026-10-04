@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera_base/ICanva.hpp"
+#include "ICanva.hpp"
 #include <SDL3/SDL.h>
 #include <cstddef>
 #include <memory>

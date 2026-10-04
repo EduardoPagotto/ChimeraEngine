@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera_base/IStateMachine.hpp"
+#include "IStateMachine.hpp"
 #include <memory>
 #include <vector>
 

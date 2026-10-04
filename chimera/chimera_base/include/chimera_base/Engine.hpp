@@ -1,8 +1,8 @@
 #pragma once
 
-#include "chimera_base/ICanva.hpp"
-#include "chimera_base/StateStack.hpp"
-#include "chimera_base/Timer.hpp"
+#include "ICanva.hpp"
+#include "StateStack.hpp"
+#include "Timer.hpp"
 #include <entt/entt.hpp>
 
 namespace ce {

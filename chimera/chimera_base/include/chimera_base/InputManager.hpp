@@ -1,9 +1,9 @@
 #pragma once
 
-#include "chimera_base/GamePad.hpp"
-#include "chimera_base/Keyboard.hpp"
-#include "chimera_base/Mouse.hpp"
-#include "chimera_base/event.hpp"
+#include "GamePad.hpp"
+#include "Keyboard.hpp"
+#include "Mouse.hpp"
+#include "event.hpp"
 #include <SDL3/SDL.h>
 #include <format>
 #include <memory>

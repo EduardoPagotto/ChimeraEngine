@@ -74,9 +74,9 @@ add_subdirectory(chimera/cevk_engine)
 
 add_subdirectory(chimera/chimera_base/)
 
-# add_subdirectory(chimera/chimera_core/)
-# add_subdirectory(chimera/chimera_collada/)
-# add_subdirectory(chimera/chimera_render/)
+add_subdirectory(chimera/chimera_core/)
+add_subdirectory(chimera/chimera_collada/)
+add_subdirectory(chimera/chimera_render/)
 
 # Simple testes app
 
@@ -88,12 +88,12 @@ add_subdirectory(samples/sdl31)
 
 #add_subdirectory(samples/loader)
 
-# add_subdirectory(samples/raycasting)
-# add_subdirectory(samples/helloworld)
-# add_subdirectory(samples/simples)
-# add_subdirectory(samples/bsptree)
-# add_subdirectory(samples/terrain)
-# add_subdirectory(samples/models3)
+add_subdirectory(samples/raycasting)
+add_subdirectory(samples/helloworld)
+add_subdirectory(samples/simples)
+add_subdirectory(samples/bsptree)
+add_subdirectory(samples/terrain)
+add_subdirectory(samples/models3)
 
 # clean
 add_custom_target (clean-all COMMAND rm -rf ${CMAKE_BINARY_DIR}/*

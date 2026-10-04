@@ -65,7 +65,7 @@ namespace ce {
         }
     }
 
-    void Scene::onDeatach() {
+    void Scene::on_deatach() {
         // vpo = nullptr;
         // phyCrt = nullptr;
     }
@@ -79,7 +79,7 @@ namespace ce {
         octree_ = std::make_shared<Octree>(aabb, 27, true); // 18
     }
 
-    void Scene::onAttach() {
+    void Scene::on_attach() {
         // Pega o ViewProjection do ECS antes da camera por caussa do vpo
         vpo_ = registry_->ctx().get<std::shared_ptr<ViewProjection>>();
         auto* ph = registry_->ctx().find<std::shared_ptr<PhysicsControl>>(); // FIXME: ver se nao existir o que retorna
@@ -218,7 +218,7 @@ namespace ce {
         scene_aabb_.setBoundary(tot_min, tot_max);
     }
 
-    void Scene::onUpdate(const double& ts) {
+    void Scene::on_update(const double& ts) {
 
         if (phy_crt_) {
             phy_crt_->stepSim(ts);
@@ -230,7 +230,7 @@ namespace ce {
         }
 
         for (auto it = layers_.begin(); it != layers_.end(); it++)
-            (*it)->onUpdate(ts);
+            (*it)->on_update(ts);
 
         createOctree(scene_aabb_);
     }
@@ -254,7 +254,7 @@ namespace ce {
         }
     }
 
-    void Scene::onEvent(const SDL_Event& event) {
+    void Scene::on_event(const SDL_Event& event) {
 
         bool gotcha{true};
 
@@ -280,7 +280,7 @@ namespace ce {
         }
 
         for (auto layer : layers_) {
-            layer->onEvent(event);
+            layer->on_event(event);
         }
     }
 
@@ -363,7 +363,7 @@ namespace ce {
         }
     }
 
-    void Scene::onRender() {
+    void Scene::on_render() {
         Renderer3d renderer(verbose_ > 0);
 
         if (verbose_ > 0) {
@@ -501,7 +501,7 @@ namespace ce {
             }
 
             for (auto it = layers_.begin(); it != layers_.end(); it++)
-                (*it)->onRender();
+                (*it)->on_render();
 
             {
                 // TODO: captura do entity no framebuffer da tela

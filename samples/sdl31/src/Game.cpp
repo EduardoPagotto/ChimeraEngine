@@ -69,7 +69,7 @@ Game::~Game() {
     pipeline_layout_.reset();
 }
 
-void Game::onAttach() {
+void Game::on_attach() {
 
     angle_ = 0.0F;
     delta_time_ = 0;
@@ -77,9 +77,9 @@ void Game::onAttach() {
     helicopter_ = this->create_mesh_model("./assets/models/Seahawk.obj");
 }
 
-void Game::onDeatach() {}
+void Game::on_deatach() {}
 
-void Game::onUpdate(const double& ts) {
+void Game::on_update(const double& ts) {
 
     if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
         sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
@@ -118,9 +118,9 @@ void Game::onUpdate(const double& ts) {
     this->update_model(helicopter_, test_mat);
 }
 
-void Game::onEvent(const SDL_Event& event) {}
+void Game::on_event(const SDL_Event& event) {}
 
-std::string Game::getName() const { return "Game"; }
+std::string Game::get_name() const { return "Game"; }
 
 //---------------------------------------------
 // Inicializaçao
@@ -321,7 +321,7 @@ size_t Game::create_mesh_model(const std::string& model_file) {
 // Loader Models
 //---------------------------------------------
 
-void Game::onRender() {
+void Game::on_render() {
 
     // -- GET NEXT IMAGE --
     ce::Frame& frame = canvas_->frames[canvas_->currentFrame];

@@ -14,7 +14,7 @@ TileLayer::TileLayer(std::shared_ptr<ce::Shader> shader)
 
 TileLayer::~TileLayer() {}
 
-void TileLayer::onEvent(const SDL_Event& event) {
+void TileLayer::on_event(const SDL_Event& event) {
     using namespace ce;
     switch (event.type) {
         case SDL_EVENT_MOUSE_BUTTON_DOWN:
@@ -34,7 +34,7 @@ void TileLayer::onEvent(const SDL_Event& event) {
 // //     eye.update(glm::inverse(transform), projectionMatrix);
 // // }
 
-void TileLayer::onRender() {
+void TileLayer::on_render() {
     glUseProgram(shader->getID());
 
     // Formula                                (float)(x * sizeW / witdh - (sizeW/2), (float)((sizeH /2) - y * sizeH /
@@ -42,6 +42,6 @@ void TileLayer::onRender() {
     shader->setUniformU("light_pos", ce::Uniform(glm::vec2((float)(x_ * 32.0f / 960.0f - 16.0f),
                                                            (float)(16.0f - y_ * 32.0f / 540.0f))));
 
-    Layer::onRender();
+    Layer::on_render();
     glUseProgram(0);
 }

@@ -7,7 +7,7 @@
 
 namespace ce {
 
-    constexpr uint32_t miniumCountDelta = 1000 / 140;
+    constexpr uint32_t minium_count_delta = 1000 / 140;
 
     /// @brief Engine
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>

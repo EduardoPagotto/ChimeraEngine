@@ -5,12 +5,12 @@ class TileLayer : public ce::Layer {
   public:
     TileLayer(std::shared_ptr<ce::Shader> shader);
     virtual ~TileLayer();
-    virtual void onAttach() override {};
-    virtual void onDeatach() override {};
-    virtual void onUpdate(const double& ts) override {};
-    virtual void onEvent(const SDL_Event& event) override;
-    virtual void onRender() override;
-    std::string getName() const override { return "GAME"; }
+    virtual void on_attach() override {};
+    virtual void on_deatach() override {};
+    virtual void on_update(const double& ts) override {};
+    virtual void on_event(const SDL_Event& event) override;
+    virtual void on_render() override;
+    std::string get_name() const override { return "GAME"; }
 
   private:
     uint16_t x_, y_;

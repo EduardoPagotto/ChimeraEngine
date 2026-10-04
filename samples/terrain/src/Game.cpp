@@ -14,7 +14,7 @@ Game::Game(std::shared_ptr<entt::registry> registry) : registry_(registry) {
 
 Game::~Game() {}
 
-void Game::onAttach() {
+void Game::on_attach() {
 
     // glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color //FIXME: colocar so scene
     glClearColor(0.1F, 0.2F, 0.4F, 1.0F); // Initialize clear color
@@ -26,11 +26,11 @@ void Game::onAttach() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Game::onDeatach() {}
+void Game::on_deatach() {}
 
-void Game::onEvent(const SDL_Event& event) {}
+void Game::on_event(const SDL_Event& event) {}
 
-void Game::onUpdate(const double& ts) {
+void Game::on_update(const double& ts) {
     using namespace ce;
 
     if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
@@ -44,4 +44,4 @@ void Game::onUpdate(const double& ts) {
     }
 }
 
-void Game::onRender() {}
+void Game::on_render() {}

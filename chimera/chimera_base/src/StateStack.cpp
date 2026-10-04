@@ -5,12 +5,12 @@ namespace ce {
 
     void StateStack::pushState(std::shared_ptr<IStateMachine> state) {
         state_insert_ = states_.emplace(state_insert_, state);
-        state->onAttach();
+        state->on_attach();
     }
 
     void StateStack::pushOverlay(std::shared_ptr<IStateMachine> overlay) {
         states_.emplace_back(overlay);
-        overlay->onAttach();
+        overlay->on_attach();
     }
 
     void StateStack::popState(std::shared_ptr<IStateMachine> state) {
@@ -18,7 +18,7 @@ namespace ce {
             states_.erase(it);
             state_insert_--;
         }
-        state->onDeatach();
+        state->on_deatach();
     }
 
     void StateStack::popOverlay(std::shared_ptr<IStateMachine> overlay) {
@@ -26,12 +26,12 @@ namespace ce {
             states_.erase(it);
         }
 
-        overlay->onDeatach();
+        overlay->on_deatach();
     }
 
     std::shared_ptr<IStateMachine> StateStack::getState(const std::string& name) {
         for (std::shared_ptr<IStateMachine> state : states_) {
-            if (state->getName() == name) {
+            if (state->get_name() == name) {
                 return state;
             }
         }

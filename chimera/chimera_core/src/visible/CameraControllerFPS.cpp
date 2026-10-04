@@ -14,7 +14,7 @@ namespace ce {
 
     CameraControllerFPS::~CameraControllerFPS() {}
 
-    void CameraControllerFPS::onAttach() {
+    void CameraControllerFPS::on_attach() {
 
         auto& cc = entity_.getComponent<CameraComponent>(registry_.get());
         camera_ = cc.camera;
@@ -27,7 +27,7 @@ namespace ce {
         this->updateVectors();
     }
 
-    void CameraControllerFPS::onDeatach() {}
+    void CameraControllerFPS::on_deatach() {}
 
     void CameraControllerFPS::updateVP() {
         if (vp_->getSize() == 1) {
@@ -76,7 +76,7 @@ namespace ce {
         camera_->setPosition(camera_->getPosition() + direction * velocity);
     }
 
-    void CameraControllerFPS::onUpdate(const double& ts) {
+    void CameraControllerFPS::on_update(const double& ts) {
         // Movement speed
         if (input_manager_->getKeyboard()->isKeyDown(SDL_SCANCODE_LSHIFT)) { // acelerar mover
 

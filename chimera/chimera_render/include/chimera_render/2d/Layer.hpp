@@ -12,8 +12,8 @@ namespace ce {
               const std::string& name);
 
         virtual ~Layer();
-        virtual void onRender() override;
-        virtual std::string getName() const override { return this->name_; }
+        virtual void on_render() override;
+        virtual std::string get_name() const override { return this->name_; }
 
         void add(IRenderable2D* renderable) { renderables_.push_back(renderable); }
         std::shared_ptr<Camera> getCamera() const { return camera; };

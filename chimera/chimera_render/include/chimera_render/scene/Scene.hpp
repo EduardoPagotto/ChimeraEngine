@@ -29,12 +29,12 @@ namespace ce {
         void setOrigem(ITrans* o) { origem_ = o; }
         StateStack& getLayes() { return this->layers_; }
         // Herdados
-        virtual void onAttach() override;
-        virtual void onDeatach() override;
-        virtual void onRender() override;
-        virtual void onUpdate(const double& ts) override;
-        virtual void onEvent(const SDL_Event& event) override;
-        std::string getName() const override { return "SCENE"; }
+        virtual void on_attach() override;
+        virtual void on_deatach() override;
+        virtual void on_render() override;
+        virtual void on_update(const double& ts) override;
+        virtual void on_event(const SDL_Event& event) override;
+        std::string get_name() const override { return "SCENE"; }
 
       private:
         void onViewportResize(const uint32_t& width, const uint32_t& height);

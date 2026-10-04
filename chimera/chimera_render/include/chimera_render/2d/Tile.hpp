@@ -12,10 +12,10 @@ namespace ce {
 
         virtual ~Tile() {}
 
-        virtual void onAttach() override {}
-        virtual void onDeatach() override {}
-        virtual void onUpdate(const double& ts) override {}
-        virtual void onEvent(const SDL_Event& event) override {}
-        virtual void onRender() override { Layer::onRender(); }
+        virtual void on_attach() override {}
+        virtual void on_deatach() override {}
+        virtual void on_update(const double& ts) override {}
+        virtual void on_event(const SDL_Event& event) override {}
+        virtual void on_render() override { Layer::on_render(); }
     };
 } // namespace ce

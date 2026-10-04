@@ -23,7 +23,7 @@ namespace ce {
         }
     }
 
-    void Layer::onRender() {
+    void Layer::on_render() {
 
         renderer_->begin(camera);
 

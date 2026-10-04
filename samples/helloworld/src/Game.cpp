@@ -48,7 +48,7 @@ Game::Game(std::shared_ptr<entt::registry> registry, ce::Engine* engine) : regis
 
 Game::~Game() {}
 
-void Game::onAttach() {
+void Game::on_attach() {
 
     // ApplicationGL::onAttach();
 
@@ -86,16 +86,16 @@ void Game::onAttach() {
     engine_->getStack().pushState(layer_);
 }
 
-void Game::onDeatach() {
+void Game::on_deatach() {
     // ApplicationGL::onDeatach();
 }
 
-void Game::onRender() {
+void Game::on_render() {
     // this->onRender(); // FIXME: ???????
     // ApplicationGL::onRender();
 }
 
-void Game::onEvent(const SDL_Event& event) {
+void Game::on_event(const SDL_Event& event) {
     using namespace ce;
 
     if (event.type == chimera_even_t01) {
@@ -107,7 +107,7 @@ void Game::onEvent(const SDL_Event& event) {
     }
 }
 
-void Game::onUpdate(const double& ts) {
+void Game::on_update(const double& ts) {
 
     l_fps_->setText(std::string("FPS: ") + std::to_string(fps_));
 

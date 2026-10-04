@@ -11,12 +11,12 @@ class Game : public ce::IStateMachine {
     virtual ~Game();
 
     // Inherited via IEvents
-    virtual void onAttach() override;
-    virtual void onDeatach() override;
-    virtual void onRender() override;
-    virtual void onUpdate(const double& ts) override;
-    virtual void onEvent(const SDL_Event& event) override;
-    virtual std::string getName() const override;
+    virtual void on_attach() override;
+    virtual void on_deatach() override;
+    virtual void on_render() override;
+    virtual void on_update(const double& ts) override;
+    virtual void on_event(const SDL_Event& event) override;
+    virtual std::string get_name() const override;
 
   private:
     void testeGamePad();

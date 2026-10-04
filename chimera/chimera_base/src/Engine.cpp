@@ -85,7 +85,7 @@ namespace ce {
                 im->handleEvent(event);
 
                 for (auto& ev : stack_) {
-                    ev->onEvent(event);
+                    ev->on_event(event);
                 }
             }
 
@@ -96,13 +96,13 @@ namespace ce {
             if (!im->getStatusPause()) { // update game
 
                 for (auto iten : stack_) {
-                    iten->onUpdate(ts);
+                    iten->on_update(ts);
                 }
 
                 canva_->before();
 
                 for (auto iten : stack_) {
-                    iten->onRender();
+                    iten->on_render();
                 }
 
                 canva_->after();
@@ -114,9 +114,9 @@ namespace ce {
             }
 
             countDelta = SDL_GetTicks() - beginCount; // frame count limit
-            if (countDelta < miniumCountDelta) {
-                SDL_Delay(miniumCountDelta - countDelta);
-                countDelta = miniumCountDelta;
+            if (countDelta < minium_count_delta) {
+                SDL_Delay(minium_count_delta - countDelta);
+                countDelta = minium_count_delta;
             }
         }
     }

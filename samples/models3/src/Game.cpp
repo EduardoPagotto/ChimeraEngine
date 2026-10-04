@@ -22,7 +22,7 @@ Game::Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::Scene> 
 
 Game::~Game() {}
 
-void Game::onEvent(const SDL_Event& event) {
+void Game::on_event(const SDL_Event& event) {
     using namespace ce;
 
     if (event.type == chimera_even_t01) {
@@ -55,7 +55,7 @@ void Game::onEvent(const SDL_Event& event) {
     }
 }
 
-void Game::onAttach() {
+void Game::on_attach() {
 
     using namespace ce;
     // Localiza objeto como o primario
@@ -84,9 +84,9 @@ void Game::onAttach() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Game::onDeatach() {}
+void Game::on_deatach() {}
 
-void Game::onUpdate(const double& ts) {
+void Game::on_update(const double& ts) {
     using namespace ce;
 
     if (this->input_manager_->getKeyboard()->isKeyPressed(SDL_SCANCODE_ESCAPE)) {
@@ -191,4 +191,4 @@ void Game::onUpdate(const double& ts) {
     l_fps_->setText(std::string("FPS: ") + std::to_string(fps_));
 }
 
-void Game::onRender() {}
+void Game::on_render() {}

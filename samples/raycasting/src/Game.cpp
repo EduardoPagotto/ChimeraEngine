@@ -19,9 +19,9 @@ Game::Game(std::shared_ptr<entt::registry> registry) : registry_(registry) {
 
 Game::~Game() {}
 
-std::string Game::getName() const { return "GAME"; }
+std::string Game::get_name() const { return "GAME"; }
 
-void Game::onAttach() {
+void Game::on_attach() {
 
     move_speed_ = 0.05;
     rot_speed_ = 0.025;
@@ -41,9 +41,9 @@ void Game::onAttach() {
     }
 }
 
-void Game::onDeatach() {}
+void Game::on_deatach() {}
 
-void Game::onEvent(const SDL_Event& event) {
+void Game::on_event(const SDL_Event& event) {
     // using namespace ce;
 
     // keyboard->getEvent(event);
@@ -97,7 +97,7 @@ void Game::testeGamePad() {
     }
 }
 
-void Game::onUpdate(const double& ts) {
+void Game::on_update(const double& ts) {
     using namespace ce;
 
     // SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "%.3f", ts);
@@ -154,7 +154,7 @@ void Game::onUpdate(const double& ts) {
     }
 }
 
-void Game::onRender() {
+void Game::on_render() {
 
     // auto gFrameBuffer = canva->getPixelsCanvas()->getPixels();
     // uint64_t aTicks = SDL_GetTicks();

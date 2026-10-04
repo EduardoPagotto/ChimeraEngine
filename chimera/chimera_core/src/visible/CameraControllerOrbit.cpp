@@ -14,7 +14,7 @@ namespace ce {
 
     CameraControllerOrbit::~CameraControllerOrbit() {}
 
-    void CameraControllerOrbit::onAttach() {
+    void CameraControllerOrbit::on_attach() {
         auto& cc = entity_.getComponent<CameraComponent>(registry_.get());
         camera_ = cc.camera;
         up_ = cc.up;
@@ -35,7 +35,7 @@ namespace ce {
         this->updateVectors();
     }
 
-    void CameraControllerOrbit::onDeatach() {}
+    void CameraControllerOrbit::on_deatach() {}
 
     void CameraControllerOrbit::updateVP() {
         if (vp_->getSize() == 1) {
@@ -131,7 +131,7 @@ namespace ce {
         }
     }
 
-    void CameraControllerOrbit::onUpdate(const double& ts) {
+    void CameraControllerOrbit::on_update(const double& ts) {
 
         if (input_manager_->getMouse()->isButtonDown(Mouse::MouseButton::Left)) {
 

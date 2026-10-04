@@ -11,12 +11,12 @@ namespace ce {
       public:
         CameraControllerFPS(std::shared_ptr<entt::registry> registry, Entity entity);
         virtual ~CameraControllerFPS();
-        void onAttach() override;
-        void onDeatach() override;
-        void onRender() override {}
-        void onUpdate(const double& ts) override;
-        void onEvent(const SDL_Event& event) override {}
-        std::string getName() const override { return "CameraControllerFPS"; }
+        void on_attach() override;
+        void on_deatach() override;
+        void on_render() override {}
+        void on_update(const double& ts) override;
+        void on_event(const SDL_Event& event) override {}
+        std::string get_name() const override { return "CameraControllerFPS"; }
 
       private:
         void updateVP();

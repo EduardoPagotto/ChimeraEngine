@@ -2,6 +2,7 @@
 #include "ICanva.hpp"
 #include <SDL3/SDL.h>
 #include <cstddef>
+#include <glm/glm.hpp>
 #include <memory>
 #include <span>
 #include <string>
@@ -50,7 +51,7 @@ namespace ce {
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
     /// @date 20260911
-    class CanvaFB : public ICanva {
+    class CanvaFB final : public ICanva {
       public:
         explicit CanvaFB(const std::string& title, int width, int height, bool full_screen = false);
         virtual ~CanvaFB();
@@ -68,9 +69,7 @@ namespace ce {
 
       private:
         bool full_screen_{false};
-        int pos_x_{0};
-        int pos_y_{0};
-
+        glm::ivec2 position_{0, 0};
         std::shared_ptr<PixelCanvas> pixel_canvas_;
 
         SDL_PixelFormat pixel_format_;

@@ -13,7 +13,7 @@ namespace ce {
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20260801
     /// @date 20261002
-    class CanvaVK : public ICanva {
+    class CanvaVK final : public ICanva {
 
       public:
         explicit CanvaVK(const std::string& name, const int& width, const int& height);

@@ -8,7 +8,7 @@
 namespace ce {
 
     inline void OpenGLDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
-                                    const GLchar* message, const void* userParam) {
+                                    const GLchar* message, const void* user_param) {
 
         std::string sev;
         switch (severity) {
@@ -39,7 +39,7 @@ namespace ce {
     }
 
     CanvasGL::CanvasGL(const std::string& title, int width, int height, bool fullScreen) // NOLINT
-        : title(title), width(width), height(height), fullScreen(fullScreen), window(nullptr) {
+        : title_(title), width_(width), height_(height), full_screen_(fullScreen), window_(nullptr) {
 
         if (!SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "wayland")) {
             throw std::runtime_error(std::format("SDL wayland Failed driver: {}", SDL_GetError()));
@@ -49,36 +49,36 @@ namespace ce {
             throw std::runtime_error("Falha SDL_Init:" + std::string(SDL_GetError()));
         }
 
-        int paramOk = 0;
+        int param_ok = 0;
         if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4)) {
-            paramOk++;
+            param_ok++;
             if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6)) {
-                paramOk++;
+                param_ok++;
                 if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE)) {
-                    paramOk++;
+                    param_ok++;
                     if (SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1)) {
-                        paramOk++;
+                        param_ok++;
                         if (SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24)) {
-                            paramOk++;
+                            param_ok++;
                         }
                     }
                 }
             }
         }
 
-        if (paramOk != 5) {
-            throw std::runtime_error(std::format("Parametro: {}  erro: {}", paramOk, std::string(SDL_GetError())));
+        if (param_ok != 5) {
+            throw std::runtime_error(std::format("Parametro: {}  erro: {}", param_ok, std::string(SDL_GetError())));
         }
 
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 
-        this->window = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
-        if (this->window == nullptr) {
+        this->window_ = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+        if (this->window_ == nullptr) {
             throw std::runtime_error("create Window:" + std::string(SDL_GetError()));
         }
 
-        this->context = SDL_GL_CreateContext(window);
-        if (this->context == nullptr) {
+        this->context_ = SDL_GL_CreateContext(window_);
+        if (this->context_ == nullptr) {
             throw std::runtime_error("create context:" + std::string(SDL_GetError()));
         }
 
@@ -99,12 +99,12 @@ namespace ce {
             }
         }
 
-        if (not SDL_GL_MakeCurrent(this->window, this->context)) {
+        if (not SDL_GL_MakeCurrent(this->window_, this->context_)) {
             throw std::runtime_error("MakeCurrent:" + std::string(SDL_GetError()));
         }
 
         // SDL_GetWindowSize(window, &width, &height);
-        SDL_GetWindowPosition(window, &posX, &posY);
+        SDL_GetWindowPosition(window_, &position_.x, &position_.y);
 
         SDL_Log("Renderer: %s", glGetString(GL_RENDERER));
         SDL_Log("OpenGL Version: %s", glGetString(GL_VERSION));
@@ -122,14 +122,14 @@ namespace ce {
     }
 
     CanvasGL::~CanvasGL() {
-        if (this->context != nullptr) {
-            SDL_GL_DestroyContext(this->context);
-            this->context = nullptr;
+        if (this->context_ != nullptr) {
+            SDL_GL_DestroyContext(this->context_);
+            this->context_ = nullptr;
         }
 
-        if (this->window != nullptr) {
-            SDL_DestroyWindow(this->window);
-            this->window = nullptr;
+        if (this->window_ != nullptr) {
+            SDL_DestroyWindow(this->window_);
+            this->window_ = nullptr;
         }
     }
 
@@ -138,24 +138,24 @@ namespace ce {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void CanvasGL::after() { SDL_GL_SwapWindow(window); }
+    void CanvasGL::after() { SDL_GL_SwapWindow(window_); }
 
-    void CanvasGL::reshape(int _width, int _height) {
-        width = _width;
-        height = _height;
+    void CanvasGL::reshape(int width, int height) {
+        width_ = width;
+        height_ = height;
     }
 
     void CanvasGL::toggleFullScreen() {
 
-        if (!fullScreen) {
-            SDL_GetWindowPosition(window, &posX, &posY);
-            SDL_SetWindowPosition(window, 0, 0);
-            SDL_SetWindowFullscreen(window, true);
+        if (!full_screen_) {
+            SDL_GetWindowPosition(window_, &position_.x, &position_.y);
+            SDL_SetWindowPosition(window_, 0, 0);
+            SDL_SetWindowFullscreen(window_, true);
         } else {
-            SDL_SetWindowFullscreen(window, false);
-            SDL_SetWindowPosition(window, posX, posY);
+            SDL_SetWindowFullscreen(window_, false);
+            SDL_SetWindowPosition(window_, position_.x, position_.y);
         }
 
-        fullScreen = !fullScreen;
+        full_screen_ = !full_screen_;
     }
 } // namespace ce

@@ -195,7 +195,7 @@ namespace ce {
             }
         }
 
-        this->onViewportResize(canvas_->getWidth(), canvas_->getHeight());
+        this->onViewportResize(canvas_->width(), canvas_->height());
 
         { // Registra Camera controllers ViewProjection deve ser localizado acima
             auto view1 = registry_.get()->view<CameraComponent>();

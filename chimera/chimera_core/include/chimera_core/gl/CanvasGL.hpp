@@ -15,10 +15,10 @@ namespace ce {
 
         virtual void before() override;
         virtual void after() override;
-        virtual void toggleFullScreen() override;
+        virtual void toggle_fullscreen() override;
         virtual void reshape(int width, int height) override;
-        virtual uint32_t getWidth() const override { return width_; }
-        virtual uint32_t getHeight() const override { return height_; }
+        virtual uint32_t width() const override { return width_; }
+        virtual uint32_t height() const override { return height_; }
 
       private:
         std::string title_;

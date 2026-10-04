@@ -59,7 +59,7 @@ void Game::onAttach() {
 
     layer_ = std::make_shared<TileLayer>(shader_);
 
-    layer_->getCamera()->setViewportSize(canvas_->getWidth(), canvas_->getHeight());
+    layer_->getCamera()->setViewportSize(canvas_->width(), canvas_->height());
 
     auto asset = registry_->ctx().get<std::shared_ptr<ce::AssetManager>>();
 

@@ -145,7 +145,7 @@ namespace ce {
         height_ = height;
     }
 
-    void CanvasGL::toggleFullScreen() {
+    void CanvasGL::toggle_fullscreen() {
 
         if (!full_screen_) {
             SDL_GetWindowPosition(window_, &position_.x, &position_.y);

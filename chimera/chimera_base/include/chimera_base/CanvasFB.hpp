@@ -58,11 +58,11 @@ namespace ce {
 
         void before() override;
         void after() override;
-        void toggleFullScreen() override;
+        void toggle_fullscreen() override;
         void reshape(int width, int height) override;
 
-        uint32_t getWidth() const override { return pixel_canvas_->getWidth(); }
-        uint32_t getHeight() const override { return pixel_canvas_->getHeight(); }
+        uint32_t width() const override { return pixel_canvas_->getWidth(); }
+        uint32_t height() const override { return pixel_canvas_->getHeight(); }
 
         [[clang::always_inline]] std::shared_ptr<PixelCanvas> getPixelsCanvas() { return pixel_canvas_; }
         [[clang::always_inline]] SDL_PixelFormat getPixelFormat() { return pixel_format_; }

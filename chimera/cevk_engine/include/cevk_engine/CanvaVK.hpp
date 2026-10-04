@@ -21,10 +21,10 @@ namespace ce {
 
         virtual void before() override;
         virtual void after() override;
-        virtual void toggleFullScreen() override;
+        virtual void toggle_fullscreen() override;
         virtual void reshape(int width, int height) override;
-        virtual uint32_t getWidth() const override { return this->swapchain.get_extent().width; }
-        virtual uint32_t getHeight() const override { return this->swapchain.get_extent().height; }
+        virtual uint32_t width() const override { return this->swapchain.get_extent().width; }
+        virtual uint32_t height() const override { return this->swapchain.get_extent().height; }
 
         std::pair<uint32_t, VkRenderPassBeginInfo> next_image_renderpass();
 

@@ -13,9 +13,9 @@ namespace ce {
         virtual ~ICanva() = default;
         virtual void before() = 0;
         virtual void after() = 0;
-        virtual void toggleFullScreen() = 0;
+        virtual void toggle_fullscreen() = 0;
         virtual void reshape(int width, int height) = 0;
-        virtual uint32_t getWidth() const = 0;
-        virtual uint32_t getHeight() const = 0;
+        virtual uint32_t width() const = 0;
+        virtual uint32_t height() const = 0;
     };
 } // namespace ce

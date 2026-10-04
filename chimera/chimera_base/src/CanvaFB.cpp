@@ -107,7 +107,7 @@ namespace ce {
         }
     }
 
-    void CanvaFB::toggleFullScreen() {
+    void CanvaFB::toggle_fullscreen() {
         if (!full_screen_) {
 
             SDL_GetWindowPosition(window_, &position_.x, &position_.y);

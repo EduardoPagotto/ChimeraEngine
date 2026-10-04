@@ -38,7 +38,7 @@ Game::Game(std::shared_ptr<entt::registry> registry) : registry_(registry) {
     const glm::vec3 cam_pos = glm::vec3(-100.0F, 150.0F, 200.0F);
     const glm::vec3 cam_center = glm::vec3(0.0F, 0.0F, -2.0F);
     const glm::vec3 cam_up = glm::vec3(0.0F, 1.0F, 0.0F);
-    float aspect = static_cast<float>(canvas_->getWidth()) / static_cast<float>(canvas_->getHeight());
+    float aspect = static_cast<float>(canvas_->width()) / static_cast<float>(canvas_->height());
 
     ubo_view_projection_.projection = glm::perspective(radix_angle, aspect, near, far);
     ubo_view_projection_.view = glm::lookAt(cam_pos, cam_center, cam_up);
@@ -106,7 +106,7 @@ void Game::onUpdate(const double& ts) {
 
     if (canvas_->eventReShape) {
         canvas_->eventReShape = false;
-        float aspect = static_cast<float>(canvas_->getWidth()) / static_cast<float>(canvas_->getHeight());
+        float aspect = static_cast<float>(canvas_->width()) / static_cast<float>(canvas_->height());
 
         const float near = 0.1F;
         const float far = 1000.0F;
@@ -168,12 +168,12 @@ void Game::create_graphics_pipeline() {
     shader->set_vertex_input(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_FALSE);
 
     // -- VIEWPORT & SCISSOR
-    const VkViewport viewport{.x = 0.0F,                                          // x start coordinate
-                              .y = 0.0F,                                          // y start coordinate
-                              .width = static_cast<float>(canvas_->getWidth()),   // width of viewport
-                              .height = static_cast<float>(canvas_->getHeight()), // height of viewport
-                              .minDepth = 0.0F,                                   // min framebuffer depth
-                              .maxDepth = 1.0F};                                  // max framebuffer depth
+    const VkViewport viewport{.x = 0.0F,                                       // x start coordinate
+                              .y = 0.0F,                                       // y start coordinate
+                              .width = static_cast<float>(canvas_->width()),   // width of viewport
+                              .height = static_cast<float>(canvas_->height()), // height of viewport
+                              .minDepth = 0.0F,                                // min framebuffer depth
+                              .maxDepth = 1.0F};                               // max framebuffer depth
 
     const VkRect2D scissor{.offset = VkOffset2D{.x = 0, .y = 0}, // Offset to use region from
                            .extent =

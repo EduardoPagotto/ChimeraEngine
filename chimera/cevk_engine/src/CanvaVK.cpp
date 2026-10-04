@@ -56,7 +56,7 @@ namespace ce {
         }
     }
 
-    void CanvaVK::toggleFullScreen() {
+    void CanvaVK::toggle_fullscreen() {
         SDL_SetWindowFullscreen(ctx_->window, !this->fullscreen_);
         this->fullscreen_ = !this->fullscreen_;
     }

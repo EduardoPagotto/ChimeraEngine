@@ -76,7 +76,7 @@ namespace ce {
                         if (event.type == chimera_even_t01) {
                             if (static_cast<EventCE>(event.user.code) == EventCE::TOGGLE_FULL_SCREEN) {
                                 SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Toggle fullscreem received");
-                                canva_->toggleFullScreen();
+                                canva_->toggle_fullscreen();
                             }
                         }
                         break;

@@ -40,9 +40,9 @@ namespace ce {
     struct TexParam {
         TexParam() = default;
         TexParam(const TexParam& o) = default;
-        TexParam(TexFormat format, TexFormat internalFormat, TexFilter minFilter, TexFilter magFilter, TexWrap wrap_r,
-                 TexWrap wrap_s, TexWrap wrap_t, TexDType type)
-            : format(format), internalFormat(internalFormat), minFilter(minFilter), magFilter(magFilter),
+        TexParam(TexFormat format, TexFormat internal_format, TexFilter min_filter, TexFilter mag_filter,
+                 TexWrap wrap_r, TexWrap wrap_s, TexWrap wrap_t, TexDType type)
+            : format(format), internalFormat(internal_format), minFilter(min_filter), magFilter(mag_filter),
               wrap_r(wrap_r), wrap_s(wrap_s), wrap_t(wrap_t), type(type), samples(1) {}
 
         TexFormat format = TexFormat::RGBA;

@@ -6,9 +6,9 @@ TileLayer::TileLayer(std::shared_ptr<ce::Shader> shader)
     : ce::Layer(new ce::BatchRender2D(), shader, std::make_shared<ce::CameraOrtho>(16.0, 16.0, -1.0f, 1.0f),
                 "TileLayer") {
 
-    glUseProgram(shader->getID());
-    shader->setUniformU("light_pos",
-                        ce::Uniform(glm::vec2(4.0f, 1.5f))); //  setUniform2f("light_pos", glm::vec2(4.0f, 1.5f));
+    glUseProgram(shader->get_id());
+    shader->set_uniform_u("light_pos",
+                          ce::Uniform(glm::vec2(4.0f, 1.5f))); //  setUniform2f("light_pos", glm::vec2(4.0f, 1.5f));
     glUseProgram(0);
 }
 
@@ -35,12 +35,12 @@ void TileLayer::on_event(const SDL_Event& event) {
 // // }
 
 void TileLayer::on_render() {
-    glUseProgram(shader->getID());
+    glUseProgram(shader->get_id());
 
     // Formula                                (float)(x * sizeW / witdh - (sizeW/2), (float)((sizeH /2) - y * sizeH /
     // height)
-    shader->setUniformU("light_pos", ce::Uniform(glm::vec2((float)(x_ * 32.0f / 960.0f - 16.0f),
-                                                           (float)(16.0f - y_ * 32.0f / 540.0f))));
+    shader->set_uniform_u("light_pos", ce::Uniform(glm::vec2((float)(x_ * 32.0f / 960.0f - 16.0f),
+                                                             (float)(16.0f - y_ * 32.0f / 540.0f))));
 
     Layer::on_render();
     glUseProgram(0);

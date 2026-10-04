@@ -63,7 +63,7 @@ void Game::on_attach() {
 
     p_corpo_rigido_ = (Solid*)tc.trans;
 
-    auto font = assets_->getFontFromIndex(0).handle();
+    auto font = assets_->get_font_from_index(0).handle();
 
     l_fps_ = new Label("None", 0, 0, font, glm::vec4(1.0, 1.0, 1.0, 1.0));
 

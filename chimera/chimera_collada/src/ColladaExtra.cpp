@@ -19,7 +19,7 @@ namespace ce {
 
                 auto asset = registry->ctx().get<std::shared_ptr<ce::AssetManager>>();
 
-                auto font = asset->loadFont(rfc.getFragment(), rfc.getPath(), size);
+                auto font = asset->load_font(rfc.getFragment(), rfc.getPath(), size);
                 font->scale = glm::vec2(scaleX, scaleY);
             }
         }

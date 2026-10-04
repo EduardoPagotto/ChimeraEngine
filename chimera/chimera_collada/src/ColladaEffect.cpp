@@ -86,7 +86,7 @@ namespace ce {
             sc.tag.name = refName;
 
             // FIXME: mudar a forma para fazer a carga real no attachment do scene
-            sc.shader = assets->loadShader(refName, shadeData).handle();
+            sc.shader = assets->load_shader(refName, shadeData).handle();
         }
     }
 
@@ -133,7 +133,7 @@ namespace ce {
 
                 pugi::xml_node first = prop.first_child();
                 if (std::string(first.name()) == "color") {
-                    pMat->setEmission(textToVec4(first.text().as_string()));
+                    pMat->set_emission(textToVec4(first.text().as_string()));
                 } else if (std::string(first.name()) == "texture") {
                     // TODO: implementar
                 }
@@ -141,14 +141,14 @@ namespace ce {
             } else if (p == "ambient") {
                 pugi::xml_node first = prop.first_child();
                 if (std::string(first.name()) == "color") {
-                    pMat->setAmbient(textToVec4(first.text().as_string()));
+                    pMat->set_ambient(textToVec4(first.text().as_string()));
                 } else if (std::string(first.name()) == "texture") {
                     // TODO: implementar
                 }
             } else if (p == "diffuse") {
                 pugi::xml_node first = prop.first_child();
                 if (std::string(first.name()) == "color") {
-                    pMat->setDiffuse(textToVec4(first.text().as_string()));
+                    pMat->set_diffuse(textToVec4(first.text().as_string()));
                 } else if (std::string(first.name()) == "texture") {
 
                     std::string texId = first.attribute("texture").value();
@@ -159,13 +159,13 @@ namespace ce {
 
                     auto assets = this->registry->ctx().get<std::shared_ptr<AssetManager>>();
 
-                    pMat->addTexture(SHADE_TEXTURE_DIFFUSE, assets->getTexture(idTex).handle());
-                    pMat->setDiffuse(glm::vec4(1.0F, 1.0F, 1.0F, 1.0F)); // FIXME: Arquivo do blender nao tem!!
+                    pMat->add_texture(SHADE_TEXTURE_DIFFUSE, assets->get_texture(idTex).handle());
+                    pMat->set_diffuse(glm::vec4(1.0F, 1.0F, 1.0F, 1.0F)); // FIXME: Arquivo do blender nao tem!!
                 }
             } else if (p == "specular") {
                 pugi::xml_node first = prop.first_child();
                 if (std::string(first.name()) == "color") {
-                    pMat->setSpecular(textToVec4(first.text().as_string()));
+                    pMat->set_specular(textToVec4(first.text().as_string()));
                 } else if (std::string(first.name()) == "texture") {
                     // TODO: implementar
                 }
@@ -175,7 +175,7 @@ namespace ce {
                 pugi::xml_node first = prop.first_child();
                 if (std::string(first.name()) == "float") {
                     float aa = first.text().as_float();
-                    pMat->setShine(aa);
+                    pMat->set_shine(aa);
                 }
 
             } else if (p == "index_of_refraction") {

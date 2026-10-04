@@ -6,23 +6,19 @@ namespace ce {
 
     class VertexArray {
 
-      private:
-        uint32_t arrayID = 0;
-        std::vector<std::shared_ptr<VertexBuffer>> vbos;
-
       public:
         VertexArray();
-
         virtual ~VertexArray();
 
         void bind() const;
-
         static void unbind();
 
-        inline void push(std::shared_ptr<VertexBuffer> buffer) { this->vbos.push_back(buffer); }
+        inline void push(std::shared_ptr<VertexBuffer> buffer) { this->vbos_.push_back(buffer); }
+        inline std::shared_ptr<VertexBuffer> get_buffer(const uint32_t& index) const { return vbos_[index]; }
+        inline std::shared_ptr<VertexBuffer> get_last() const { return vbos_.back(); }
 
-        inline std::shared_ptr<VertexBuffer> getBuffer(const uint32_t& index) const { return vbos[index]; }
-
-        inline std::shared_ptr<VertexBuffer> getLast() const { return vbos.back(); }
+      private:
+        uint32_t array_id_ = 0;
+        std::vector<std::shared_ptr<VertexBuffer>> vbos_;
     };
 } // namespace ce

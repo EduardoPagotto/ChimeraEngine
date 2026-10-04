@@ -13,23 +13,23 @@ namespace ce {
     };
 
     class DrawLine {
-      private:
-        std::shared_ptr<VertexArray> pVao;
-        std::shared_ptr<VertexBuffer> pVbo;
-        std::shared_ptr<Shader> shader;
-        std::vector<LinesValues> points;
-
       public:
         DrawLine() noexcept = default;
         virtual ~DrawLine() noexcept { destroy(); };
         inline void add(const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& color) noexcept {
-            points.push_back({p0, color});
-            points.push_back({p1, color});
+            points_.push_back({p0, color});
+            points_.push_back({p1, color});
         }
-        void addAABB(const AABB& aabb, const glm::vec3& color) noexcept;
-        void create(std::shared_ptr<Shader> shader, const uint32_t& sizeBuffer) noexcept;
+        void add_aabb(const AABB& aabb, const glm::vec3& color) noexcept;
+        void create(std::shared_ptr<Shader> shader, const uint32_t& size_buffer) noexcept;
         void destroy() noexcept;
-        void render(MapUniform& uniformsQueue) noexcept;
-        bool valid() noexcept { return pVao != nullptr; }
+        void render(MapUniform& uniforms_queue) noexcept;
+        bool valid() noexcept { return vao_ != nullptr; }
+
+      private:
+        std::shared_ptr<VertexArray> vao_;
+        std::shared_ptr<VertexBuffer> vbo_;
+        std::shared_ptr<Shader> shader_;
+        std::vector<LinesValues> points_;
     };
 } // namespace ce

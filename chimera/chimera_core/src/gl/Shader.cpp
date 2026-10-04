@@ -8,12 +8,12 @@
 
 namespace ce {
 
-    void Shader::setUniformU(const char* name, const Uniform& uv) const noexcept {
+    void Shader::set_uniform_u(const char* name, const Uniform& uv) const noexcept {
 
-        int32_t loc = getUniform(name);
+        int32_t loc = get_uniform(name);
         // SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Uniform: %s", name);
         if (loc == -1) {
-            SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%d\"", name, this->id);
+            SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%d\"", name, this->id_);
             return;
         }
 
@@ -60,7 +60,7 @@ namespace ce {
                 glUniformMatrix4fv(loc, 1, GL_FALSE, static_cast<float*>(uv.ptr.get()));
                 break;
             case UniformType::INVALID:
-                SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Uniform \"%s\" invalid in Program \"%d\"", name, this->id);
+                SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Uniform \"%s\" invalid in Program \"%d\"", name, this->id_);
                 break;
         }
 
@@ -72,19 +72,19 @@ namespace ce {
     }
 
     Shader::~Shader() noexcept {
-        glDeleteProgram(this->id);
-        this->id = 0;
-        uniformLocationCache.clear();
+        glDeleteProgram(this->id_);
+        this->id_ = 0;
+        uniform_location_cache_.clear();
     }
 
-    int32_t Shader::getUniform(const std::string& name) const noexcept {
+    int32_t Shader::get_uniform(const std::string& name) const noexcept {
 
-        if (uniformLocationCache.contains(name)) {
-            return uniformLocationCache[name];
+        if (uniform_location_cache_.contains(name)) {
+            return uniform_location_cache_[name];
         }
 
-        int32_t loc = glGetUniformLocation(this->id, name.c_str());
-        uniformLocationCache[name] = loc;
+        int32_t loc = glGetUniformLocation(this->id_, name.c_str());
+        uniform_location_cache_[name] = loc;
 
         return loc;
     }

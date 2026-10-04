@@ -196,9 +196,9 @@ namespace ce {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         BinaryStateEnable cull(GL_CULL_FACE, GL_FALSE);
         // bind shader and uniforms from model
-        glUseProgram(render_comando_->shader->getID());
+        glUseProgram(render_comando_->shader->get_id());
         for (const auto& kv : render_comando_->uniforms) {
-            render_comando_->shader->setUniformU(kv.first.c_str(), kv.second);
+            render_comando_->shader->set_uniform_u(kv.first.c_str(), kv.second);
         }
 
         for (auto i = 0; i < textures_.size(); i++) {

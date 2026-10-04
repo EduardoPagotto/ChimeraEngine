@@ -35,15 +35,15 @@ Game::Game(std::shared_ptr<entt::registry> registry, ce::Engine* engine) : regis
     auto asset = registry->ctx().get<std::shared_ptr<ce::AssetManager>>();
     TexParam tp;
 
-    asset->loadTexture("t01", "./assets/textures/grid1.png", tp);
-    asset->loadTexture("t02", "./assets/textures/grid2.png", tp);
-    asset->loadTexture("t03", "./assets/textures/grid3.png", tp);
+    asset->load_texture("t01", "./assets/textures/grid1.png", tp);
+    asset->load_texture("t02", "./assets/textures/grid2.png", tp);
+    asset->load_texture("t03", "./assets/textures/grid3.png", tp);
 
     std::unordered_map<GLenum, std::string> shadeData;
     shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Basic2D.frag";
     shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Basic2D.vert";
 
-    shader_ = asset->loadShader("Basic2D", shadeData).handle();
+    shader_ = asset->load_shader("Basic2D", shadeData).handle();
 }
 
 Game::~Game() {}
@@ -70,12 +70,12 @@ void Game::on_attach() {
             if (rand() % 4 == 0) {
                 layer_->add(new Sprite(x, y, 1.0F, 1.0F, glm::vec4(rand() % 1000 / 1000.0F, 0, 1, 1)));
             } else {
-                layer_->add(new Sprite(x, y, 1.0F, 1.0F, asset->getTextureFromIndex(rand() % 3).handle()));
+                layer_->add(new Sprite(x, y, 1.0F, 1.0F, asset->get_texture_from_index(rand() % 3).handle()));
             }
         }
     }
 
-    auto font = asset->loadFont("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22).handle();
+    auto font = asset->load_font("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22).handle();
 
     font->scale = glm::vec2(0.04, 0.04);
 

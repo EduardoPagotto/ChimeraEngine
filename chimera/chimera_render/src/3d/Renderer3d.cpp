@@ -81,31 +81,31 @@ namespace ce {
 
                 if (activeShader == nullptr) { // primeira passada
                     activeShader = command.shader;
-                    glUseProgram(activeShader->getID());
+                    glUseProgram(activeShader->get_id());
                 } else {
                     // demais passadas
                     if ((*activeShader) != (*command.shader)) { // se diferente
                         if (command.shader != nullptr) {        // se valido trocar
                             glUseProgram(0);
                             activeShader = command.shader;
-                            glUseProgram(activeShader->getID());
+                            glUseProgram(activeShader->get_id());
                         }
                     }
                 }
 
                 // generic bind in each draw call camera, light, etc
                 for (const auto& kv : uniformsQueue) {
-                    activeShader->setUniformU(kv.first.c_str(), kv.second);
+                    activeShader->set_uniform_u(kv.first.c_str(), kv.second);
                 }
 
                 // bind dos uniforms from model
                 for (const auto& kv : command.uniforms) {
-                    activeShader->setUniformU(kv.first.c_str(), kv.second);
+                    activeShader->set_uniform_u(kv.first.c_str(), kv.second);
                 }
 
                 // libera textura antes de passar as novas
                 if (command.vTex.size() == 0) {
-                    Texture::Unbind(0);
+                    Texture::unbind(0);
                 }
 
                 // bind de texturas

@@ -30,9 +30,9 @@ namespace ce {
     }
 
     uint32_t Timer::restart() {
-        uint32_t elapsedTicks = ticks();
+        const uint32_t elapsed_ticks = ticks();
         start();
-        return elapsedTicks;
+        return elapsed_ticks;
     }
 
     uint32_t Timer::ticks() const {
@@ -47,7 +47,7 @@ namespace ce {
 
     bool Timer::step_count() {
 
-        uint32_t temp = ticks();
+        const uint32_t temp = ticks();
         if (temp < elapsed_count_) {
             step_++;
         } else {
@@ -61,8 +61,8 @@ namespace ce {
     }
 
     uint32_t Timer::delta_count_ms() {
-        uint32_t current = SDL_GetTicks();
-        uint32_t val = current - last_ticks_;
+        const uint32_t current = SDL_GetTicks();
+        const uint32_t val = current - last_ticks_;
         last_ticks_ = current;
         return val;
     }

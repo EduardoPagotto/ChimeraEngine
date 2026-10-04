@@ -20,23 +20,23 @@ namespace ce {
 
     } // namespace Aux
 
-    static const uint32_t maxFrameBufferSize = 8192;
+    static const uint32_t max_frame_buffer_size = 8192;
 
-    FrameBuffer::FrameBuffer(const FrameBufferSpecification& spec) : framBufferID(0), rbo(0), spec(spec) {
+    FrameBuffer::FrameBuffer(const FrameBufferSpecification& spec) : fram_buffer_id_(0), rbo_(0), spec_(spec) {
 
-        Aux::textureParameterSetUndefined(rboSpec);
-        Aux::textureParameterSetUndefined(depthTexSpec);
+        Aux::textureParameterSetUndefined(rbo_spec_);
+        Aux::textureParameterSetUndefined(depth_tex_spec_);
 
-        for (const TexParam& texParm : spec.attachments) {
+        for (const TexParam& tex_parm : spec.attachments) {
 
-            if (!Aux::isDepthFormat(texParm.format)) {
-                colorTexSpecs.emplace_back(texParm); // color only
+            if (!Aux::isDepthFormat(tex_parm.format)) {
+                color_tex_specs_.emplace_back(tex_parm); // color only
             } else {
                 // if has filter parameters them is a texture
-                if ((texParm.minFilter != TexFilter::NONE) && (texParm.magFilter != TexFilter::NONE)) {
-                    depthTexSpec = texParm; // depth texture
-                } else {                    //
-                    rboSpec = texParm;      // is a rbo
+                if ((tex_parm.minFilter != TexFilter::NONE) && (tex_parm.magFilter != TexFilter::NONE)) {
+                    depth_tex_spec_ = tex_parm; // depth texture
+                } else {                        //
+                    rbo_spec_ = tex_parm;       // is a rbo
                 }
             }
         }
@@ -48,86 +48,86 @@ namespace ce {
 
     void FrameBuffer::destroy() {
 
-        if (framBufferID != 0U) {
-            glDeleteFramebuffers(1, &framBufferID);
-            framBufferID = 0;
+        if (fram_buffer_id_ != 0U) {
+            glDeleteFramebuffers(1, &fram_buffer_id_);
+            fram_buffer_id_ = 0;
 
-            if (!colorAttachments.empty()) {
-                for (size_t i = 0; i < colorAttachments.size(); i++) {
-                    auto tex = colorAttachments[i];
+            if (!color_attachments_.empty()) {
+                for (size_t i = 0; i < color_attachments_.size(); i++) {
+                    auto tex = color_attachments_[i];
                     tex.reset();
                 }
             }
 
-            colorAttachments.clear();
+            color_attachments_.clear();
 
-            if (rbo != 0) {
-                glDeleteRenderbuffers(1, &rbo);
-                rbo = 0;
+            if (rbo_ != 0) {
+                glDeleteRenderbuffers(1, &rbo_);
+                rbo_ = 0;
             }
 
-            rbo = 0;
+            rbo_ = 0;
         }
     }
 
     void FrameBuffer::invalidade() {
         this->destroy();
 
-        glGenFramebuffers(1, &framBufferID);
-        glBindFramebuffer(GL_FRAMEBUFFER, framBufferID);
+        glGenFramebuffers(1, &fram_buffer_id_);
+        glBindFramebuffer(GL_FRAMEBUFFER, fram_buffer_id_);
 
         // Attachment color
-        if (colorTexSpecs.size() > 0) {
-            colorAttachments.reserve(colorTexSpecs.size());
+        if (color_tex_specs_.size() > 0) {
+            color_attachments_.reserve(color_tex_specs_.size());
 
             int index = 0;
-            for (const TexParam& textureParam : colorTexSpecs) {
+            for (const TexParam& texture_param : color_tex_specs_) {
                 // const TexParam& textureParam = cas.textureParameters;
 
-                std::shared_ptr<Texture> tex = TextureLoader::CreateEmpty(spec.width, spec.height, textureParam);
-                colorAttachments.emplace_back(tex);
+                std::shared_ptr<Texture> tex = TextureLoader::create_empty(spec_.width, spec_.height, texture_param);
+                color_attachments_.emplace_back(tex);
 
-                const uint32_t tId = tex->id;
+                const uint32_t t_id = tex->id;
 
-                glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, tId, 0);
+                glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, t_id, 0);
 
                 index++;
             }
         }
 
-        if (colorAttachments.size() > 1) {
+        if (color_attachments_.size() > 1) {
             // TODO: verificar se < de 4
             GLenum buffers[4] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2,
                                  GL_COLOR_ATTACHMENT3};
-            glDrawBuffers(colorAttachments.size(), buffers);
-        } else if (colorAttachments.empty()) {
+            glDrawBuffers(color_attachments_.size(), buffers);
+        } else if (color_attachments_.empty()) {
             // so depth-pass
             glDrawBuffer(GL_NONE);
         }
 
         // depth Texture
-        if (!Aux::textureParameterIsUndefined(depthTexSpec)) {
+        if (!Aux::textureParameterIsUndefined(depth_tex_spec_)) {
 
-            depthAttachment = TextureLoader::CreateEmpty(spec.width, spec.height, depthTexSpec);
+            depth_attachment_ = TextureLoader::create_empty(spec_.width, spec_.height, depth_tex_spec_);
 
-            GLfloat borderColor[] = {1.0, 1.0, 1.0, 1.0};
-            glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+            GLfloat border_color[] = {1.0, 1.0, 1.0, 1.0};
+            glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border_color);
 
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthAttachment->id, 0);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth_attachment_->id, 0);
             glDrawBuffer(GL_NONE);
             glReadBuffer(GL_NONE);
         }
 
         // depth R.B.O.
-        if (!Aux::textureParameterIsUndefined(rboSpec)) {
+        if (!Aux::textureParameterIsUndefined(rbo_spec_)) {
 
-            TexFormat tf = rboSpec.format;          // GL_DEPTH_COMPONENT
-            TexFormat tfi = rboSpec.internalFormat; // GL_DEPTH_ATTACHMENT
+            TexFormat tf = rbo_spec_.format;          // GL_DEPTH_COMPONENT
+            TexFormat tfi = rbo_spec_.internalFormat; // GL_DEPTH_ATTACHMENT
 
-            glGenRenderbuffers(1, &rbo);
-            glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-            glRenderbufferStorage(GL_RENDERBUFFER, (GLenum)tf, spec.width, spec.height);
-            glFramebufferRenderbuffer(GL_FRAMEBUFFER, (GLenum)tfi, GL_RENDERBUFFER, rbo);
+            glGenRenderbuffers(1, &rbo_);
+            glBindRenderbuffer(GL_RENDERBUFFER, rbo_);
+            glRenderbufferStorage(GL_RENDERBUFFER, (GLenum)tf, spec_.width, spec_.height);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, (GLenum)tfi, GL_RENDERBUFFER, rbo_);
         }
 
         // Always check that our framebuffer is ok
@@ -139,15 +139,15 @@ namespace ce {
     }
 
     void FrameBuffer::bind() const {
-        glViewport(0, 0, spec.width, spec.height);
-        glBindFramebuffer(GL_FRAMEBUFFER, framBufferID);
+        glViewport(0, 0, spec_.width, spec_.height);
+        glBindFramebuffer(GL_FRAMEBUFFER, fram_buffer_id_);
 
         GLbitfield mask = 0;
-        if (!Aux::textureParameterIsUndefined(rboSpec) || !Aux::textureParameterIsUndefined(depthTexSpec)) {
+        if (!Aux::textureParameterIsUndefined(rbo_spec_) || !Aux::textureParameterIsUndefined(depth_tex_spec_)) {
             mask |= GL_DEPTH_BUFFER_BIT;
         }
 
-        if (colorAttachments.size() > 1) {
+        if (color_attachments_.size() > 1) {
             mask |= GL_COLOR_BUFFER_BIT;
         }
 
@@ -158,30 +158,30 @@ namespace ce {
 
     void FrameBuffer::resize(const uint32_t& width, const uint32_t& height) {
 
-        if (width == 0 || height == 0 || width > maxFrameBufferSize || height > maxFrameBufferSize) {
+        if (width == 0 || height == 0 || width > max_frame_buffer_size || height > max_frame_buffer_size) {
             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Framebuffer resize erros Erro");
             return;
         }
 
-        spec.width = width;
-        spec.height = height;
+        spec_.width = width;
+        spec_.height = height;
         this->invalidade();
     }
 
-    int FrameBuffer::readPixel(uint32_t attachmentIndex, int x, int y) {
+    int FrameBuffer::read_pixel(uint32_t attachment_index, int x, int y) {
 
-        int pixelData = 0;
-        glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
-        glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData); // FIXME: ver com o TexDType!!!!!!
+        int pixel_data = 0;
+        glReadBuffer(GL_COLOR_ATTACHMENT0 + attachment_index);
+        glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixel_data); // FIXME: ver com o TexDType!!!!!!
 
-        return pixelData;
+        return pixel_data;
     }
 
-    void FrameBuffer::clearAttachment(uint32_t attachmentIndex, const int value) {
+    void FrameBuffer::clear_attachment(uint32_t attachment_index, const int value) {
 
-        const TexParam& tp = colorTexSpecs[attachmentIndex];
+        const TexParam& tp = color_tex_specs_[attachment_index];
         const TexFormat& tf = tp.format;
 
-        glClearTexImage(colorAttachments[attachmentIndex]->id, 0, (GLenum)tf, GL_INT, &value);
+        glClearTexImage(color_attachments_[attachment_index]->id, 0, (GLenum)tf, GL_INT, &value);
     }
 } // namespace ce

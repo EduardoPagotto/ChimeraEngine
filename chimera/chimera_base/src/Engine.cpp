@@ -21,13 +21,13 @@ namespace ce {
 
         SDL_Event event;
         bool kill{false};
-        uint32_t beginCount{0};
-        uint32_t countDelta{7};
+        uint32_t begin_count{0};
+        uint32_t count_delta{7};
         double ts{0.0F};
 
         while (!kill) {
 
-            beginCount = SDL_GetTicks();
+            begin_count = SDL_GetTicks();
 
             im->start_frame();
 
@@ -36,17 +36,18 @@ namespace ce {
                 switch (event.type) {
                     // Windows
                     case SDL_EVENT_WINDOW_RESIZED: {
-                        const int32_t novaWidth = event.window.data1;
-                        const int32_t novaHeight = event.window.data2;
-                        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Resize screem received: %d x %d", novaWidth, novaHeight);
-                        canva_->reshape(novaWidth, novaHeight);
+                        const int32_t nova_width = event.window.data1;
+                        const int32_t nova_height = event.window.data2;
+                        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Resize screem received: %d x %d", nova_width,
+                                     nova_height);
+                        canva_->reshape(nova_width, nova_height);
 
                     } break;
                     case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED: {
-                        const int newWidth = event.window.data1;
-                        const int newHeight = event.window.data2;
+                        const int new_width = event.window.data1;
+                        const int new_height = event.window.data2;
 
-                        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Pixel change (%d x %d)", newWidth, newHeight);
+                        SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Pixel change (%d x %d)", new_width, new_height);
 
                     } break;
                     case SDL_EVENT_WINDOW_MAXIMIZED:
@@ -92,7 +93,7 @@ namespace ce {
             // Atualiza o estado das teclas que continuam pressionadas
             im->update_continuous_input();
 
-            ts = (double)countDelta / 1000.0F;
+            ts = (double)count_delta / 1000.0F;
             if (!im->get_status_pause()) { // update game
 
                 for (auto iten : stack_) {
@@ -113,10 +114,10 @@ namespace ce {
                 sendChimeraEvent(EventCE::NEW_FPS, (void*)&fps_, nullptr);
             }
 
-            countDelta = SDL_GetTicks() - beginCount; // frame count limit
-            if (countDelta < minium_count_delta) {
-                SDL_Delay(minium_count_delta - countDelta);
-                countDelta = minium_count_delta;
+            count_delta = SDL_GetTicks() - begin_count; // frame count limit
+            if (count_delta < minium_count_delta) {
+                SDL_Delay(minium_count_delta - count_delta);
+                count_delta = minium_count_delta;
             }
         }
     }

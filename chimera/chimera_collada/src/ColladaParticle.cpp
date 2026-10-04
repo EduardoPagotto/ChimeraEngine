@@ -21,6 +21,6 @@ namespace ce {
         setChildParam(nContainer, "life", pc->life);
         setChildParam(nContainer, "max", pc->max);
         setChildParam(nContainer, "respaw", pc->respaw);
-        ec.emitter->pushParticleContainer(pc);
+        ec.emitter->push_particle_container(pc);
     }
 } // namespace ce

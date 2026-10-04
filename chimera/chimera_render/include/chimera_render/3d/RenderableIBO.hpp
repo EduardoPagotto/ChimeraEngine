@@ -12,7 +12,7 @@ namespace ce {
 
         virtual ~RenderableIBO();
 
-        const uint32_t getSize() const override { return ibo_->getSize(); }
+        const uint32_t getSize() const override { return ibo_->get_size(); }
 
         std::shared_ptr<IndexBuffer> getIBO() const override { return ibo_; }
 

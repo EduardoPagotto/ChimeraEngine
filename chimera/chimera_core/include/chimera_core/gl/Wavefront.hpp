@@ -6,12 +6,12 @@
 namespace ce {
     class WaveFront {
       public:
-        explicit WaveFront(std::shared_ptr<entt::registry> registry) : registry(registry) {}
+        explicit WaveFront(std::shared_ptr<entt::registry> registry) : registry_(registry) {}
 
-        void wavefrontObjLoad(const std::string& path, Mesh* mesh, std::string& fileMath);
-        void wavefrontMtlLoad(const std::string& path, std::shared_ptr<Material> material);
+        void wavefront_obj_load(const std::string& path, Mesh* mesh, std::string& file_math);
+        void wavefront_mtl_load(const std::string& path, std::shared_ptr<Material> material);
 
       private:
-        std::shared_ptr<entt::registry> registry;
+        std::shared_ptr<entt::registry> registry_;
     };
 } // namespace ce

@@ -16,12 +16,12 @@ namespace ce {
         using result_type = std::shared_ptr<Texture>;
 
         result_type operator()(const std::string& filepath, TexParam& tp) const {
-            return TextureLoader::LoadFromFile(filepath, tp);
+            return TextureLoader::load_from_file(filepath, tp);
         }
 
-        result_type operator()(SDL_Surface* surface, TexParam& tp) const { return CreateFromSurface(surface, tp); }
+        result_type operator()(SDL_Surface* surface, TexParam& tp) const { return create_from_surface(surface, tp); }
 
-        static result_type LoadFromFile(const std::string& filepath, TexParam& tp) {
+        static result_type load_from_file(const std::string& filepath, TexParam& tp) {
             // Carrega a imagem do disco usando a nova API do SDL3
             SDL_Surface* surface = IMG_Load(filepath.c_str());
             if (surface == nullptr) {
@@ -29,7 +29,7 @@ namespace ce {
                                          std::string(SDL_GetError()));
             }
 
-            auto tex = CreateFromSurface(surface, tp);
+            auto tex = create_from_surface(surface, tp);
 
             SDL_DestroySurface(surface);
 
@@ -42,7 +42,7 @@ namespace ce {
         }
 
         // 2. NOVA FUNÇÃO AUXILIAR: Transforma qualquer SDL_Surface em Texture
-        static result_type CreateFromSurface(SDL_Surface* surface, TexParam& tp) {
+        static result_type create_from_surface(SDL_Surface* surface, TexParam& tp) {
             if (surface == nullptr) {
                 return nullptr;
             }
@@ -58,9 +58,9 @@ namespace ce {
             // tp.format = (formatDetail->Amask != 0) ? TexFormat::RGBA : TexFormat::RGB;
             // tp.internalFormat = tp.format;
 
-            InvertImageTexture(converted->pitch, converted->h, converted->pixels);
+            invert_image_texture(converted->pitch, converted->h, converted->pixels);
 
-            uint32_t textureId = TextureLoader::Init(tp, converted);
+            uint32_t texture_id = TextureLoader::init(tp, converted);
 
             int w = converted->w;
             int h = converted->h;
@@ -68,31 +68,31 @@ namespace ce {
             SDL_DestroySurface(converted);
 
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "%s",
-                         std::format("[TextureLoader] Surface id: {} size({} x {})", textureId, w, h).c_str());
+                         std::format("[TextureLoader] Surface id: {} size({} x {})", texture_id, w, h).c_str());
 
-            return std::make_shared<Texture>(textureId, w, h);
+            return std::make_shared<Texture>(texture_id, w, h);
         }
 
-        static result_type CreateEmpty(const uint32_t& width, const uint32_t& height, const TexParam& tp) {
+        static result_type create_empty(const uint32_t& width, const uint32_t& height, const TexParam& tp) {
             // Geração da textura no hardware via OpenGL 4
-            uint32_t textureId;
-            glGenTextures(1, &textureId);
-            glBindTexture(GL_TEXTURE_2D, textureId);
+            uint32_t texture_id;
+            glGenTextures(1, &texture_id);
+            glBindTexture(GL_TEXTURE_2D, texture_id);
 
             // Upload dos pixels da memória RAM para a VRAM
             glTexImage2D(GL_TEXTURE_2D, 0, static_cast<GLint>(tp.format), static_cast<GLsizei>(width),
                          static_cast<GLsizei>(height), 0, static_cast<GLuint>(tp.format), static_cast<GLuint>(tp.type),
                          nullptr);
 
-            TextureLoader::SetFilter(tp);
+            TextureLoader::set_filter(tp);
 
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "%s",
-                         std::format("[TextureLoader] Empty id: {} size({} x {})", textureId, width, height).c_str());
+                         std::format("[TextureLoader] Empty id: {} size({} x {})", texture_id, width, height).c_str());
 
-            return std::make_shared<Texture>(textureId, width, height);
+            return std::make_shared<Texture>(texture_id, width, height);
         }
 
-        static void CreateFileFromSurface(SDL_Surface* surface, const std::string& pathfile) {
+        static void create_file_from_surface(SDL_Surface* surface, const std::string& pathfile) {
 
             if (IMG_SavePNG(surface, pathfile.c_str())) {
                 SDL_Log("[TextureLoader] Saved: %s (%d x %d)", pathfile.c_str(), surface->w, surface->h);
@@ -102,8 +102,8 @@ namespace ce {
             }
         }
 
-        static bool CreateFileFromTextureGL(GLuint textureID, uint32_t width, uint32_t height,
-                                            const std::string& pathfile) {
+        static bool create_file_from_texture_gl(GLuint texture_id, uint32_t width, uint32_t height,
+                                                const std::string& pathfile) {
             // 1. Alocar buffer para receber os pixels da GPU (RGBA8888 -> 4 bytes por pixel)
             std::vector<uint8_t> pixels(static_cast<size_t>(width * height * 4));
 
@@ -111,7 +111,7 @@ namespace ce {
             GLuint fbo = 0;
             glGenFramebuffers(1, &fbo);
             glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureID, 0);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
 
             // Verificar se o FBO foi criado corretamente
             if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
@@ -131,18 +131,18 @@ namespace ce {
             glDeleteFramebuffers(1, &fbo);
 
             // 4. Inverter o buffer verticalmente (OpenGL é Bottom-Up, SDL é Top-Down)
-            std::vector<uint8_t> pixelsInvertidos(width * height * 4);
-            int rowSize = width * 4;
+            std::vector<uint8_t> pixels_invertidos(width * height * 4);
+            int row_size = width * 4;
             for (int y = 0; y < height; ++y) {
                 // Copia a linha de baixo do original para a linha de cima do invertido
-                std::copy(pixels.begin() + (y * rowSize), pixels.begin() + ((y + 1) * rowSize),
-                          pixelsInvertidos.begin() + ((height - 1 - y) * rowSize));
+                std::copy(pixels.begin() + (y * row_size), pixels.begin() + ((y + 1) * row_size),
+                          pixels_invertidos.begin() + ((height - 1 - y) * row_size));
             }
 
             // 5. Criar uma SDL_Surface a partir dos pixels invertidos usando a API do SDL3
             // Nota: O pitch é a largura em bytes (width * 4)
             SDL_Surface* surface =
-                SDL_CreateSurfaceFrom(width, height, SDL_PIXELFORMAT_RGBA8888, pixelsInvertidos.data(), rowSize);
+                SDL_CreateSurfaceFrom(width, height, SDL_PIXELFORMAT_RGBA8888, pixels_invertidos.data(), row_size);
 
             if (surface == nullptr) {
 
@@ -152,7 +152,7 @@ namespace ce {
                 return false;
             }
 
-            TextureLoader::CreateFileFromSurface(surface, pathfile);
+            TextureLoader::create_file_from_surface(surface, pathfile);
 
             SDL_DestroySurface(surface);
 
@@ -160,7 +160,7 @@ namespace ce {
         }
 
       private:
-        static void InvertImageTexture(int pitch, int height, void* image_pixels) {
+        static void invert_image_texture(int pitch, int height, void* image_pixels) {
 
             int index;
             void* temp_row;
@@ -186,7 +186,7 @@ namespace ce {
             free(temp_row);
         }
 
-        static void SetFilter(const TexParam& tp) {
+        static void set_filter(const TexParam& tp) {
             // Configuração de filtros básicos (OpenGL 4)
             if (tp.minFilter != TexFilter::NONE) {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, static_cast<GLint>(tp.minFilter));
@@ -209,19 +209,19 @@ namespace ce {
             }
         }
 
-        static uint32_t Init(TexParam& tp, SDL_Surface* converted) {
+        static uint32_t init(TexParam& tp, SDL_Surface* converted) {
             // Geração da textura no hardware via OpenGL 4
-            uint32_t textureId;
-            glGenTextures(1, &textureId);
-            glBindTexture(GL_TEXTURE_2D, textureId);
+            uint32_t texture_id;
+            glGenTextures(1, &texture_id);
+            glBindTexture(GL_TEXTURE_2D, texture_id);
 
             // Upload dos pixels da memória RAM para a VRAM
             glTexImage2D(GL_TEXTURE_2D, 0, static_cast<GLint>(tp.format), converted->w, converted->h, 0,
                          static_cast<GLuint>(tp.format), static_cast<GLuint>(tp.type), converted->pixels);
 
-            TextureLoader::SetFilter(tp);
+            TextureLoader::set_filter(tp);
 
-            return textureId;
+            return texture_id;
         }
     };
 

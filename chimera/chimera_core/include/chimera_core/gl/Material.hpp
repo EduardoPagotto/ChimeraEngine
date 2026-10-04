@@ -53,24 +53,24 @@ namespace ce {
         Material();
         virtual ~Material();
         void init();
-        void setDefaultEffect();
-        void addTexture(const std::string& uniformTexName, std::shared_ptr<Texture> texture) {
-            this->mapTex[uniformTexName] = texture;
+        void set_default_effect();
+        void add_texture(const std::string& uniform_tex_name, std::shared_ptr<Texture> texture) {
+            this->map_tex_[uniform_tex_name] = texture;
         }
-        inline void setAmbient(const glm::vec4& _color) { listMaterial[SHADE_MAT_AMBIENTE] = Uniform(_color); }
-        inline void setSpecular(const glm::vec4& _color) { listMaterial[SHADE_MAT_SPECULA] = Uniform(_color); }
-        inline void setDiffuse(const glm::vec4& _color) { listMaterial[SHADE_MAT_DIFFUSE] = Uniform(_color); }
-        inline void setEmission(const glm::vec4& _color) { listMaterial[SHADE_MAT_EMISSIVE] = Uniform(_color); }
-        inline void setShine(const float& _val) { listMaterial[SHADE_MAT_SHININESS] = Uniform(_val); }
+        inline void set_ambient(const glm::vec4& color) { list_material_[SHADE_MAT_AMBIENTE] = Uniform(color); }
+        inline void set_specular(const glm::vec4& color) { list_material_[SHADE_MAT_SPECULA] = Uniform(color); }
+        inline void set_diffuse(const glm::vec4& color) { list_material_[SHADE_MAT_DIFFUSE] = Uniform(color); }
+        inline void set_emission(const glm::vec4& color) { list_material_[SHADE_MAT_EMISSIVE] = Uniform(color); }
+        inline void set_shine(const float& val) { list_material_[SHADE_MAT_SHININESS] = Uniform(val); }
 
-        bool hasTexture() { return !mapTex.empty(); }
-        void bindMaterialInformation(MapUniform& uniforms, std::vector<std::shared_ptr<Texture>>& vTex);
-        bool const isValid() const { return valid; }
+        bool has_texture() { return !map_tex_.empty(); }
+        void bind_material_information(MapUniform& uniforms, std::vector<std::shared_ptr<Texture>>& v_tex);
+        bool const is_valid() const { return valid_; }
 
       private:
-        bool valid;
-        int tipoTexturasDisponiveis;
-        std::unordered_map<std::string, std::shared_ptr<Texture>> mapTex;
-        MapUniform listMaterial;
+        bool valid_;
+        int tipo_texturas_disponiveis_;
+        std::unordered_map<std::string, std::shared_ptr<Texture>> map_tex_;
+        MapUniform list_material_;
     };
 } // namespace ce

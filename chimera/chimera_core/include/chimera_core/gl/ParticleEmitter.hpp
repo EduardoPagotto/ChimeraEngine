@@ -11,8 +11,7 @@ namespace ce {
         float size = 0.0f, life = -1.0f, distance = 0.0f;
 
         ParticleZ() = default;
-        ParticleZ(const ParticleZ& o)
-            : pos(o.pos), speed(o.speed), color(o.color), size(o.size), life(o.life), distance(o.distance) {}
+        ParticleZ(const ParticleZ& o) = default;
         bool operator<(const ParticleZ& that) const {
             return this->distance > that.distance; // Sort in reverse order : far particles drawn first.
         }
@@ -36,28 +35,30 @@ namespace ce {
 
     class IEmitter {
       public:
-        virtual int findUnusedParticle() = 0;
+        virtual int find_unused_particle() = 0;
         virtual void reset(ParticleZ& p) = 0;
-        virtual void recycleLife(const double& ts) = 0;
+        virtual void recycle_life(const double& ts) = 0;
         virtual void decrease(ParticleZ& p, const double& ts, const uint32_t& index) = 0;
-        virtual void pushParticleContainer(std::shared_ptr<ParticleContainer> pc) = 0;
-        virtual std::shared_ptr<ParticleContainer> getContainer(uint32_t pos) = 0;
+        virtual void push_particle_container(std::shared_ptr<ParticleContainer> pc) = 0;
+        virtual std::shared_ptr<ParticleContainer> get_container(uint32_t pos) = 0;
     };
 
     class EmitterFont : public IEmitter {
       public:
-        EmitterFont(const glm::vec3& dir, const float& spread) : pc(nullptr), maindir(dir), spread(spread) {};
-        virtual int findUnusedParticle() override;
+        EmitterFont(const glm::vec3& dir, const float& spread) : pc_(nullptr), maindir_(dir), spread_(spread) {};
+        virtual int find_unused_particle() override;
         virtual void reset(ParticleZ& p) override;
-        virtual void recycleLife(const double& ts) override;
+        virtual void recycle_life(const double& ts) override;
         virtual void decrease(ParticleZ& p, const double& ts, const uint32_t& index) override;
-        virtual void pushParticleContainer(std::shared_ptr<ParticleContainer> pc) override { containers.push_back(pc); }
-        virtual std::shared_ptr<ParticleContainer> getContainer(uint32_t pos) override { return containers[pos]; }
+        virtual void push_particle_container(std::shared_ptr<ParticleContainer> pc) override {
+            containers_.push_back(pc);
+        }
+        virtual std::shared_ptr<ParticleContainer> get_container(uint32_t pos) override { return containers_[pos]; }
 
       private:
-        std::vector<std::shared_ptr<ParticleContainer>> containers;
-        std::shared_ptr<ParticleContainer> pc;
-        glm::vec3 maindir;
-        float spread;
+        std::vector<std::shared_ptr<ParticleContainer>> containers_;
+        std::shared_ptr<ParticleContainer> pc_;
+        glm::vec3 maindir_;
+        float spread_;
     };
 } // namespace ce

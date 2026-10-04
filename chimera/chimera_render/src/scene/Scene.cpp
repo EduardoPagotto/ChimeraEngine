@@ -117,13 +117,13 @@ namespace ce {
                 // Inicializa Materiais
                 if (entity.hasComponent<MaterialComponent>(registry_.get())) {
                     MaterialComponent& material = entity.getComponent<MaterialComponent>(registry_.get());
-                    if (!material.material->isValid()) {
+                    if (!material.material->is_valid()) {
                         material.material->init();
                     }
                 } else {
                     MaterialComponent& material = entity.addComponent<MaterialComponent>(registry_.get());
                     material.material = std::make_shared<Material>();
-                    material.material->setDefaultEffect();
+                    material.material->set_default_effect();
                     material.material->init();
                 }
 
@@ -169,7 +169,7 @@ namespace ce {
                         entity.addComponent<RenderableParticlesComponent>(registry_.get());
                     particleSys.enable = true;
                     RenderableParticles* p = new RenderableParticles();
-                    std::shared_ptr<ParticleContainer> pc = ec.emitter->getContainer(0); // FIXME: melhorar!!!!
+                    std::shared_ptr<ParticleContainer> pc = ec.emitter->get_container(0); // FIXME: melhorar!!!!
                     p->setParticleContainer(pc);
                     p->create();
                     particleSys.renderable = p;
@@ -226,7 +226,7 @@ namespace ce {
         }
 
         for (auto* emissor : emitters_) {
-            emissor->recycleLife(ts);
+            emissor->recycle_life(ts);
         }
 
         for (auto it = layers_.begin(); it != layers_.end(); it++)
@@ -245,7 +245,7 @@ namespace ce {
             if (!cameraComponent.fixedAspectRatio) {
 
                 for (auto renderBuffer : v_rb_) { // altera a matrix de projecao apenas na troca de resolucao
-                    cameraComponent.camera->set_viewport_size(renderBuffer->getWidth(), renderBuffer->getHeight());
+                    cameraComponent.camera->set_viewport_size(renderBuffer->width(), renderBuffer->height());
                     if (cameraComponent.primary) {
                         active_cam_ = cameraComponent.camera;
                     }
@@ -334,7 +334,7 @@ namespace ce {
             RenderCommand command;
             command.transform = tc.trans->translate_src(origem_->get_position());
             command.shader = sc.shader;
-            mc.material->bindMaterialInformation(command.uniforms, command.vTex);
+            mc.material->bind_material_information(command.uniforms, command.vTex);
 
             const glm::mat4& view = vpo_->get_sel().view;
             command.uniforms["projection"] = Uniform(renderer.getCamera()->get_projection());
@@ -357,7 +357,7 @@ namespace ce {
             RenderCommand command;
             command.transform = tc.trans->translate_src(origem_->get_position());
             command.shader = sc.shader;
-            mc.material->bindMaterialInformation(command.uniforms, command.vTex);
+            mc.material->bind_material_information(command.uniforms, command.vTex);
             command.uniforms["model"] = Uniform(command.transform);
             rc.renderable->submit(command, renderer);
         }
@@ -391,7 +391,7 @@ namespace ce {
                 renderer.uboQueue().insert(std::make_pair("shadows", Uniform(1)));
                 renderer.uboQueue().insert(std::make_pair("shadowMap", Uniform(1)));
                 renderer.uboQueue().insert(std::make_pair("lightSpaceMatrix", Uniform(shadow_data_.lightSpaceMatrix)));
-                renderer.texQueue().push_back(shadow_data_.shadowBuffer->getDepthAttachemnt());
+                renderer.texQueue().push_back(shadow_data_.shadowBuffer->get_depth_attachemnt());
             }
 
             // data load lights
@@ -434,7 +434,7 @@ namespace ce {
 
                         auto assets = this->registry_->ctx().get<std::shared_ptr<AssetManager>>();
 
-                        dl_.create(assets->loadShader("DrawLine", shadeData).handle(), 40000);
+                        dl_.create(assets->load_shader("DrawLine", shadeData).handle(), 40000);
                     }
 
                     if (octree_ != nullptr) {
@@ -443,7 +443,7 @@ namespace ce {
                         octree_->getBondaryList(list, false);
 
                         for (auto& aabb : list) {
-                            dl_.addAABB(aabb, glm::vec3(1.0, 1.0, 1.0));
+                            dl_.add_aabb(aabb, glm::vec3(1.0, 1.0, 1.0));
                         }
 
                         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Octree Size: %ld", list.size());
@@ -463,7 +463,7 @@ namespace ce {
 
                         auto assets = this->registry_->ctx().get<std::shared_ptr<AssetManager>>();
 
-                        render_lines_.create(assets->loadShader("DrawLine", shadeData).handle(), 10000);
+                        render_lines_.create(assets->load_shader("DrawLine", shadeData).handle(), 10000);
                     }
 
                     render_lines_.begin(active_cam_, vpo_, nullptr);

@@ -17,7 +17,7 @@ namespace ce {
     void RenderableIBO::draw(const bool& logData) {
 
         ibo_->bind();
-        glDrawElements(GL_TRIANGLES, ibo_->getSize(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+        glDrawElements(GL_TRIANGLES, ibo_->get_size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
 
         // if (logData == true) {
         //     glm::vec3 size = aabb.getSize();

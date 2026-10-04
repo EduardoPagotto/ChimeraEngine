@@ -81,7 +81,7 @@ namespace ce {
 
                     auto assets = this->registry->ctx().get<std::shared_ptr<AssetManager>>();
 
-                    assets->loadTexture(id, f, tp);
+                    assets->load_texture(id, f, tp);
                     return;
                 }
                 throw std::string("Textura nao encontrada: " + id);

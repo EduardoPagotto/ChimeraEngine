@@ -19,7 +19,7 @@ namespace ce {
 
         // only if in the clip-space
         if (nova.visible(frustum_) == true)
-            draw_line_.addAABB(nova, glm::vec3(1.0, 1.0, 0.0));
+            draw_line_.add_aabb(nova, glm::vec3(1.0, 1.0, 0.0));
     }
 
     void Renderer3dLines::flush() {

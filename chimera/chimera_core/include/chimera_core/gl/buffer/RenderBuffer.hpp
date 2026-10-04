@@ -7,32 +7,32 @@
 namespace ce {
 
     class RenderBuffer {
-      private:
-        uint32_t posX, posY;
-        std::shared_ptr<Shader> shader;
-        std::shared_ptr<VertexBuffer> vbo;
-        std::shared_ptr<VertexArray> vao;
-        std::shared_ptr<FrameBuffer> frameBuffer;
-
       public:
-        RenderBuffer(const uint32_t& posX, const uint32_t& posY, std::shared_ptr<FrameBuffer> fb,
+        RenderBuffer(const uint32_t& pos_x, const uint32_t& pos_y, std::shared_ptr<FrameBuffer> fb,
                      std::shared_ptr<Shader> shader);
 
         virtual ~RenderBuffer() {
-            frameBuffer.reset();
-            vbo.reset();
+            frame_buffer_.reset();
+            vbo_.reset();
         }
 
         void render();
 
         void bind();
 
-        void unbind() { frameBuffer->unbind(); }
+        void unbind() { frame_buffer_->unbind(); }
 
-        inline const uint32_t getWidth() const { return frameBuffer->getWidth(); }
+        inline const uint32_t width() const { return frame_buffer_->width(); }
 
-        inline const uint32_t getHeight() const { return frameBuffer->getHeight(); }
+        inline const uint32_t height() const { return frame_buffer_->height(); }
 
-        inline std::shared_ptr<FrameBuffer> getFramBuffer() const { return frameBuffer; }
+        inline std::shared_ptr<FrameBuffer> get_fram_buffer() const { return frame_buffer_; }
+
+      private:
+        uint32_t pos_x_, pos_y_;
+        std::shared_ptr<Shader> shader_;
+        std::shared_ptr<VertexBuffer> vbo_;
+        std::shared_ptr<VertexArray> vao_;
+        std::shared_ptr<FrameBuffer> frame_buffer_;
     };
 } // namespace ce

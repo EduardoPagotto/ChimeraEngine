@@ -23,9 +23,9 @@ namespace ce {
         WaveFront wf(registry);
 
         std::string matFile;
-        wf.wavefrontObjLoad(target, eMesh.mesh, matFile);
+        wf.wavefront_obj_load(target, eMesh.mesh, matFile);
         if (matFile.size() > 0) {
-            wf.wavefrontMtlLoad(matFile, eMaterial.material);
+            wf.wavefront_mtl_load(matFile, eMaterial.material);
         }
 
         if (pugi::xml_node nShade = geo.next_sibling(); nShade) {

@@ -3,20 +3,19 @@
 
 namespace ce {
 
-    VertexArray::VertexArray() { glGenVertexArrays(1, &arrayID); }
+    VertexArray::VertexArray() { glGenVertexArrays(1, &array_id_); }
 
     VertexArray::~VertexArray() {
 
-        for (int i = 0; i < vbos.size(); i++)
-            vbos[i].reset();
+        for (int i = 0; i < vbos_.size(); i++)
+            vbos_[i].reset();
 
-        vbos.clear();
+        vbos_.clear();
 
-        glDeleteVertexArrays(1, &arrayID);
+        glDeleteVertexArrays(1, &array_id_);
     }
 
-    void VertexArray::bind() const { glBindVertexArray(arrayID); }
-
+    void VertexArray::bind() const { glBindVertexArray(array_id_); }
     void VertexArray::unbind() { glBindVertexArray(0); }
 
 } // namespace ce

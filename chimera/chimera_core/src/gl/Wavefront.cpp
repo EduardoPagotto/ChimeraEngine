@@ -5,121 +5,122 @@
 
 namespace ce {
 
-    glm::vec4 tokensToVec4(std::vector<std::string>& textData) {
-        std::vector<float> arrayFloat;
-        for (int indice = 1; indice < textData.size(); indice++) {
-            if (textData[indice].size() > 0)
-                arrayFloat.push_back(std::stod(textData[indice]));
+    glm::vec4 tokensToVec4(std::vector<std::string>& text_data) {
+        std::vector<float> array_float;
+        for (int indice = 1; indice < text_data.size(); indice++) {
+            if (text_data[indice].size() > 0)
+                array_float.push_back(std::stod(text_data[indice]));
         }
 
-        if (arrayFloat.size() < 4)
-            return glm::vec4(arrayFloat[0], arrayFloat[1], arrayFloat[2], 1.0f);
+        if (array_float.size() < 4)
+            return glm::vec4(array_float[0], array_float[1], array_float[2], 1.0f);
 
-        return glm::vec4(arrayFloat[0], arrayFloat[1], arrayFloat[2], arrayFloat[3]);
+        return glm::vec4(array_float[0], array_float[1], array_float[2], array_float[3]);
     }
 
-    glm::vec3 tokensToVec3(unsigned start, unsigned total, std::vector<std::string>& textData) {
+    glm::vec3 tokensToVec3(unsigned start, unsigned total, std::vector<std::string>& text_data) {
 
-        std::vector<float> arrayFloat;
-        for (int indice = start; arrayFloat.size() < total; indice++) {
-            if (textData[indice].size() > 0)
-                arrayFloat.push_back(std::stod(textData[indice]));
+        std::vector<float> array_float;
+        for (int indice = start; array_float.size() < total; indice++) {
+            if (text_data[indice].size() > 0)
+                array_float.push_back(std::stod(text_data[indice]));
         }
 
-        return glm::vec3(arrayFloat[0], arrayFloat[1], arrayFloat[2]);
+        return glm::vec3(array_float[0], array_float[1], array_float[2]);
     }
 
-    glm::vec2 tokensToVec2(unsigned start, unsigned total, std::vector<std::string>& textData) {
+    glm::vec2 tokensToVec2(unsigned start, unsigned total, std::vector<std::string>& text_data) {
 
-        std::vector<float> arrayFloat;
-        for (int indice = start; arrayFloat.size() < total; indice++) {
-            if (textData[indice].size() > 0)
-                arrayFloat.push_back(std::stod(textData[indice]));
+        std::vector<float> array_float;
+        for (int indice = start; array_float.size() < total; indice++) {
+            if (text_data[indice].size() > 0)
+                array_float.push_back(std::stod(text_data[indice]));
         }
 
-        return glm::vec2(arrayFloat[0], arrayFloat[1]);
+        return glm::vec2(array_float[0], array_float[1]);
     }
 
-    void WaveFront::wavefrontMtlLoad(const std::string& path, std::shared_ptr<Material> material) {
+    void WaveFront::wavefront_mtl_load(const std::string& path, std::shared_ptr<Material> material) {
         std::ifstream file(path);
 
         if (!file.is_open())
             throw std::string("ERROR: could not open file: " + path);
 
-        std::string lineBuffer;
-        while (std::getline(file, lineBuffer)) {
-            std::string first = lineBuffer.substr(0, 1);
+        std::string line_buffer;
+        while (std::getline(file, line_buffer)) {
+            std::string first = line_buffer.substr(0, 1);
             if (first == "#")
                 continue;
 
-            std::vector<std::string> textData;
-            textToStringArray(lineBuffer, textData, ' ');
+            std::vector<std::string> text_data;
+            textToStringArray(line_buffer, text_data, ' ');
 
-            if (textData.size() == 0)
+            if (text_data.size() == 0)
                 continue;
 
-            if (textData[0] == "Ka") {
-                material->setAmbient(tokensToVec4(textData));
-            } else if (textData[0] == "Kd") {
-                material->setDiffuse(tokensToVec4(textData));
-            } else if (textData[0] == "Ks") {
-                material->setSpecular(tokensToVec4(textData));
-            } else if (textData[0] == "map_Kd") {
+            if (text_data[0] == "Ka") {
+                material->set_ambient(tokensToVec4(text_data));
+            } else if (text_data[0] == "Kd") {
+                material->set_diffuse(tokensToVec4(text_data));
+            } else if (text_data[0] == "Ks") {
+                material->set_specular(tokensToVec4(text_data));
+            } else if (text_data[0] == "map_Kd") {
 
-                auto assets = this->registry->ctx().get<std::shared_ptr<AssetManager>>();
+                auto assets = this->registry_->ctx().get<std::shared_ptr<AssetManager>>();
 
                 TexParam tp;
-                material->addTexture(SHADE_TEXTURE_DIFFUSE, assets->loadTexture(textData[1], textData[1], tp).handle());
+                material->add_texture(SHADE_TEXTURE_DIFFUSE,
+                                      assets->load_texture(text_data[1], text_data[1], tp).handle());
 
-            } else if (textData[0] == "sharpness") {
-                material->setShine(std::stod(textData[1]));
+            } else if (text_data[0] == "sharpness") {
+                material->set_shine(std::stod(text_data[1]));
             }
         }
     }
 
-    void WaveFront::wavefrontObjLoad(const std::string& path, Mesh* mesh, std::string& fileMath) {
+    void WaveFront::wavefront_obj_load(const std::string& path, Mesh* mesh, std::string& file_math) {
         std::ifstream file(path);
 
         if (!file.is_open())
             throw std::string("ERROR: could not open file: " + path);
 
-        std::vector<int> indicesComp;
-        std::string lineBuffer;
+        std::vector<int> indices_comp;
+        std::string line_buffer;
         std::vector<glm::vec3> point;
         std::vector<glm::vec3> normal;
         std::vector<glm::vec2> uv;
 
-        while (std::getline(file, lineBuffer)) {
-            std::string first = lineBuffer.substr(0, 1);
+        while (std::getline(file, line_buffer)) {
+            std::string first = line_buffer.substr(0, 1);
             if (first == "#")
                 continue;
 
-            std::vector<std::string> textData;
-            textToStringArray(lineBuffer, textData, ' ');
+            std::vector<std::string> text_data;
+            textToStringArray(line_buffer, text_data, ' ');
 
-            if (textData.size() == 0)
+            if (text_data.size() == 0)
                 continue;
 
-            if (textData[0] == "mtllib")
-                fileMath = textData[1];
-            else if (textData[0] == "v")
-                point.push_back(tokensToVec3(1, 3, textData));
-            else if (textData[0] == "vt")
-                uv.push_back(tokensToVec2(1, 2, textData));
-            else if (textData[0] == "vn")
-                normal.push_back(tokensToVec3(1, 3, textData));
-            else if (textData[0] == "f") {
+            if (text_data[0] == "mtllib")
+                file_math = text_data[1];
+            else if (text_data[0] == "v")
+                point.push_back(tokensToVec3(1, 3, text_data));
+            else if (text_data[0] == "vt")
+                uv.push_back(tokensToVec2(1, 2, text_data));
+            else if (text_data[0] == "vn")
+                normal.push_back(tokensToVec3(1, 3, text_data));
+            else if (text_data[0] == "f") {
                 int face = 0;
-                for (int indice = 1; indice < textData.size(); indice++) {
-                    if (textData[indice].size() > 0) {
+                for (int indice = 1; indice < text_data.size(); indice++) {
+                    if (text_data[indice].size() > 0) {
                         std::vector<std::string> ss;
                         if (face > 8)
                             break;
 
-                        textToStringArray(textData[indice], ss, '/');
+                        textToStringArray(text_data[indice], ss, '/');
                         for (std::string cc : ss) {
                             if (cc.size() > 0) {
-                                indicesComp.push_back(std::stod(cc) - 1);
+                                indices_comp.push_back(std::stod(cc) - 1);
                                 face++;
                             }
                         }
@@ -137,31 +138,31 @@ namespace ce {
         if (normal.size() > 0)
             semantics.push_back("NORMAL"); // 2
 
-        std::vector<uint32_t> iPoint;
-        std::vector<uint32_t> iNormal;
-        std::vector<uint32_t> iUv;
+        std::vector<uint32_t> i_point;
+        std::vector<uint32_t> i_normal;
+        std::vector<uint32_t> i_uv;
 
-        for (uint32_t l_contador = 0; l_contador < indicesComp.size(); l_contador++) {
+        for (uint32_t l_contador = 0; l_contador < indices_comp.size(); l_contador++) {
 
             uint32_t index = l_contador % semantics.size();
             const std::string& semantic = semantics[index];
 
             if (semantic == "VERTEX")
-                iPoint.push_back(indicesComp[l_contador]);
+                i_point.push_back(indices_comp[l_contador]);
             else if (semantic == "NORMAL")
-                iNormal.push_back(indicesComp[l_contador]);
+                i_normal.push_back(indices_comp[l_contador]);
             else if (semantic == "TEXCOORD")
-                iUv.push_back(indicesComp[l_contador]);
+                i_uv.push_back(indices_comp[l_contador]);
         }
 
-        for (uint32_t face = 0; face < iPoint.size(); face++) {
+        for (uint32_t face = 0; face < i_point.size(); face++) {
             mesh->vertex.push_back(
-                {point[iPoint[face]],                                     // point
-                 normal[iNormal[face]],                                   // normal
-                 (uv.size() > 0) ? uv[iUv[face]] : glm::vec2(0.0, 0.0)}); // UV se nao existir zeros!!
+                {point[i_point[face]],                                     // point
+                 normal[i_normal[face]],                                   // normal
+                 (uv.size() > 0) ? uv[i_uv[face]] : glm::vec2(0.0, 0.0)}); // UV se nao existir zeros!!
         }
 
-        for (uint32_t i = 0; i < iPoint.size(); i += 3)
+        for (uint32_t i = 0; i < i_point.size(); i += 3)
             mesh->iFace.push_back({i, i + 1, i + 2});
 
         file.close();

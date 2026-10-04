@@ -9,7 +9,7 @@ namespace ce {
         uint32_t width;
         uint32_t height;
 
-        explicit Texture(const GLuint& id, const uint32_t& width, const uint32_t& height)
+        Texture(const GLuint& id, const uint32_t& width, const uint32_t& height)
             : id(id), width(width), height(height) {}
 
         Texture(Texture&& other) noexcept : id(other.id), width(other.width), height(other.height) { other.id = 0; }
@@ -25,7 +25,7 @@ namespace ce {
             glBindTexture(GL_TEXTURE_2D, id);
         }
 
-        static void Unbind(const uint8_t& slot) {
+        static void unbind(const uint8_t& slot) {
             glActiveTexture(GL_TEXTURE0 + slot);
             glBindTexture(GL_TEXTURE_2D, 0);
         }

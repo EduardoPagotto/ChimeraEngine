@@ -4,53 +4,53 @@ namespace ce {
 
     // ref: https://pybullet.org/Bullet/phpBB3/viewtopic.php?t=11517
 
-    void DrawLine::create(std::shared_ptr<Shader> shader, const uint32_t& sizeBuffer) noexcept {
+    void DrawLine::create(std::shared_ptr<Shader> shader, const uint32_t& size_buffer) noexcept {
 
-        this->shader = shader;
-        pVao = std::make_shared<VertexArray>();
-        pVbo = std::make_shared<VertexBuffer>(BufferType::STREAM);
+        this->shader_ = shader;
+        vao_ = std::make_shared<VertexArray>();
+        vbo_ = std::make_shared<VertexBuffer>(BufferType::STREAM);
 
-        pVao->push(pVbo);
+        vao_->push(vbo_);
 
-        pVao->bind();
-        pVbo->bind();
+        vao_->bind();
+        vbo_->bind();
 
         BufferLayout layout;
         layout.Push<float>(3, false); // point
         layout.Push<float>(3, false); // color
 
-        pVbo->setLayout(layout);
-        pVbo->setData(nullptr, sizeBuffer);
+        vbo_->setLayout(layout);
+        vbo_->setData(nullptr, size_buffer);
     }
 
     void DrawLine::destroy() noexcept {
-        pVao.reset();
-        shader.reset();
-        points.clear();
+        vao_.reset();
+        shader_.reset();
+        points_.clear();
     }
 
-    void DrawLine::render(MapUniform& uniformsQueue) noexcept {
-        glUseProgram(shader->getID());
+    void DrawLine::render(MapUniform& uniforms_queue) noexcept {
+        glUseProgram(shader_->get_id());
 
-        for (const auto& kv : uniformsQueue)
-            shader->setUniformU(kv.first.c_str(), kv.second);
+        for (const auto& kv : uniforms_queue)
+            shader_->set_uniform_u(kv.first.c_str(), kv.second);
 
-        pVao->bind();
-        pVbo->bind();
+        vao_->bind();
+        vbo_->bind();
 
-        pVbo->setSubData(&points[0], 0, points.size()); // load tata dynamic
+        vbo_->setSubData(&points_[0], 0, points_.size()); // load tata dynamic
 
-        glDrawArrays(GL_LINES, 0, points.size());
+        glDrawArrays(GL_LINES, 0, points_.size());
 
-        pVbo->unbind();
-        pVao->unbind();
+        vbo_->unbind();
+        vao_->unbind();
 
         glUseProgram(0);
 
-        points.clear();
+        points_.clear();
     }
 
-    void DrawLine::addAABB(const AABB& aabb, const glm::vec3& color) noexcept {
+    void DrawLine::add_aabb(const AABB& aabb, const glm::vec3& color) noexcept {
         const std::array<glm::vec3, 8>& v = aabb.getAllVertex();
         add(v[0], v[1], color);
         add(v[2], v[3], color);

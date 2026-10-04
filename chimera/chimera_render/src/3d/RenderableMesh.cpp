@@ -35,7 +35,7 @@ namespace ce {
         std::shared_ptr<IndexBuffer> ibo =
             std::make_shared<IndexBuffer>((uint32_t*)&temp.iFace[0], temp.iFace.size() * 3);
 
-        tot_index_ = ibo->getSize();
+        tot_index_ = ibo->get_size();
 
         child_ = new RenderableIBO(vao, ibo, AABB(min, max));
     }

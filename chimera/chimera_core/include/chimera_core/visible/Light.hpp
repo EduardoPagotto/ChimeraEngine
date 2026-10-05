@@ -17,11 +17,11 @@ namespace ce {
       public:
         Light() : type_(LightType::POSITIONAL) {} // TODO: muito a fazer!!!! indice e luz necessario para o shader
         virtual ~Light() {}
-        inline void setAmbient(const glm::vec4& color) { list_prop_[SHADE_LIGHT_AMBIENT] = Uniform(color); }
-        inline void setSpecular(const glm::vec4& color) { list_prop_[SHADE_LIGHT_SPECULAR] = Uniform(color); }
-        inline void setDiffuse(const glm::vec4& color) { list_prop_[SHADE_LIGHT_DIFFUSE] = Uniform(color); }
-        inline void setType(const LightType& type) { this->type_ = type; }
-        inline void bindLight(MapUniform& uniforms, const glm::mat4& mat) {
+        inline void set_ambient(const glm::vec4& color) { list_prop_[SHADE_LIGHT_AMBIENT] = Uniform(color); }
+        inline void set_specular(const glm::vec4& color) { list_prop_[SHADE_LIGHT_SPECULAR] = Uniform(color); }
+        inline void set_diffuse(const glm::vec4& color) { list_prop_[SHADE_LIGHT_DIFFUSE] = Uniform(color); }
+        inline void set_type(const LightType& type) { this->type_ = type; }
+        inline void bind_light(MapUniform& uniforms, const glm::mat4& mat) {
             uniforms[SHADE_LIGHT_POSITION] = Uniform(glm::vec3(mat[3]));
             uniforms.insert(list_prop_.begin(), list_prop_.end());
         }

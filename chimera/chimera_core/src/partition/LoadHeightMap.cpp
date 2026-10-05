@@ -6,31 +6,32 @@
 
 namespace ce {
 
-    LoadHeightMap::LoadHeightMap(int _squareX, int _squareZ) : pImage(nullptr), squareX(_squareX), squareZ(_squareZ) {
+    LoadHeightMap::LoadHeightMap(int square_x, int square_z)
+        : p_image_(nullptr), square_x_(square_x), square_z_(square_z) {
         clean();
     }
 
     LoadHeightMap::~LoadHeightMap() { clean(); }
 
     void LoadHeightMap::clean() {
-        if (pImage != nullptr) {
-            SDL_DestroySurface(pImage);
-            pImage = nullptr;
+        if (p_image_ != nullptr) {
+            SDL_DestroySurface(p_image_);
+            p_image_ = nullptr;
         }
     }
 
-    uint32_t LoadHeightMap::getHeight(const uint32_t& w, const uint32_t& h) {
-        const uint32_t w1{w > pImage->w ? pImage->w : w};
-        const uint32_t h1{h > pImage->h ? pImage->h : h};
+    uint32_t LoadHeightMap::get_height(const uint32_t& w, const uint32_t& h) {
+        const uint32_t w1{w > p_image_->w ? p_image_->w : w};
+        const uint32_t h1{h > p_image_->h ? p_image_->h : h};
         return getpixel(w1, h1);
     }
 
     uint32_t LoadHeightMap::getpixel(const uint32_t& w, const uint32_t& h) {
 
-        const SDL_PixelFormatDetails* detail = SDL_GetPixelFormatDetails(pImage->format);
+        const SDL_PixelFormatDetails* detail = SDL_GetPixelFormatDetails(p_image_->format);
         const int bpp{detail->bytes_per_pixel};
 
-        uint8_t* p{(uint8_t*)pImage->pixels + (static_cast<size_t>(h * pImage->pitch)) +
+        uint8_t* p{(uint8_t*)p_image_->pixels + (static_cast<size_t>(h * p_image_->pitch)) +
                    (static_cast<size_t>(w * bpp))};
 
         switch (bpp) {
@@ -59,18 +60,18 @@ namespace ce {
         }
     }
 
-    glm::vec3 LoadHeightMap::defineScale(const glm::vec3& _size) {
+    glm::vec3 LoadHeightMap::define_scale(const glm::vec3& size) {
         uint32_t max;
-        minimal = max = getHeight(0, 0);
-        for (uint32_t z{0}; z < pImage->h; z++) {
-            for (uint32_t x{0}; x < pImage->w; x++) {
-                const uint32_t val{getHeight(x, z)};
+        minimal_ = max = get_height(0, 0);
+        for (uint32_t z{0}; z < p_image_->h; z++) {
+            for (uint32_t x{0}; x < p_image_->w; x++) {
+                const uint32_t val{get_height(x, z)};
 
                 max = std::max(val, max);
-                minimal = std::min(val, minimal);
+                minimal_ = std::min(val, minimal_);
             }
         }
-        return glm::vec3(_size.x / (float)pImage->w, _size.y / (float)(max - minimal), _size.z / (float)pImage->h);
+        return glm::vec3(size.x / (float)p_image_->w, size.y / (float)(max - minimal_), size.z / (float)p_image_->h);
     }
 
     // glm::vec3 LoadHeightMap::calcNormalHeight(uint32_t x, uint32_t z) {
@@ -79,117 +80,118 @@ namespace ce {
     //                                     (scale.y * getHeight(x, z - 1)) - (scale.y * getHeight(x, z + 1)))); // norz
     // }
 
-    bool LoadHeightMap::getMesh(const std::string& _fileName, Mesh& _mesh, const glm::vec3& _size) {
+    bool LoadHeightMap::get_mesh(const std::string& file_name, Mesh& mesh, const glm::vec3& size) {
 
-        pImage = IMG_Load(_fileName.c_str());
-        if (pImage == nullptr) {
-            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", _fileName.c_str());
+        p_image_ = IMG_Load(file_name.c_str());
+        if (p_image_ == nullptr) {
+            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", file_name.c_str());
             return false;
         }
 
-        const float halfH{static_cast<float>(pImage->h) / 2.0F};
-        const float haldW{static_cast<float>(pImage->w) / 2.0F};
-        const float v{1.0F / static_cast<float>(pImage->h - 1)};
-        const float u{1.0F / static_cast<float>(pImage->w - 1)};
-        const glm::vec3 scale = defineScale(_size);
+        const float half_h{static_cast<float>(p_image_->h) / 2.0F};
+        const float hald_w{static_cast<float>(p_image_->w) / 2.0F};
+        const float v{1.0F / static_cast<float>(p_image_->h - 1)};
+        const float u{1.0F / static_cast<float>(p_image_->w - 1)};
+        const glm::vec3 scale = define_scale(size);
 
-        for (uint32_t z = 0; z < pImage->h; z++) {
-            for (uint32_t x = 0; x < pImage->w; x++) {
+        for (uint32_t z = 0; z < p_image_->h; z++) {
+            for (uint32_t x = 0; x < p_image_->w; x++) {
 
                 // point, normal, UV
-                _mesh.vertex.push_back({glm::vec3(static_cast<float>(x) - haldW, getHeight(x, z) - minimal,
-                                                  halfH - static_cast<float>(z)) *
-                                            scale,
-                                        glm::vec3(0.0F),
-                                        glm::vec2(u * static_cast<float>(x), v * static_cast<float>(z))});
+                mesh.vertex.push_back({glm::vec3(static_cast<float>(x) - hald_w, get_height(x, z) - minimal_,
+                                                 half_h - static_cast<float>(z)) *
+                                           scale,
+                                       glm::vec3(0.0F),
+                                       glm::vec2(u * static_cast<float>(x), v * static_cast<float>(z))});
             }
         }
 
-        const uint32_t tot_h{static_cast<uint32_t>(pImage->h - 1)};
-        const uint32_t tot_w{static_cast<uint32_t>(pImage->w - 1)};
+        const uint32_t tot_h{static_cast<uint32_t>(p_image_->h - 1)};
+        const uint32_t tot_w{static_cast<uint32_t>(p_image_->w - 1)};
 
         for (uint32_t z{0}; z < tot_h; z++) {
             for (uint32_t x{0}; x < tot_w; x++) {
                 // triangles point
-                const uint32_t pa{getIndex(x, z)};
-                const uint32_t pb{getIndex(x + 1, z)};
-                const uint32_t pc{getIndex(x + 1, z + 1)};
-                const uint32_t pd{getIndex(x, z + 1)};
+                const uint32_t pa{get_index(x, z)};
+                const uint32_t pb{get_index(x + 1, z)};
+                const uint32_t pc{get_index(x + 1, z + 1)};
+                const uint32_t pd{get_index(x, z + 1)};
                 // Face index
-                _mesh.iFace.push_back({pa, pb, pc}); // T1
-                _mesh.iFace.push_back({pc, pd, pa}); // T2
+                mesh.iFace.push_back({pa, pb, pc}); // T1
+                mesh.iFace.push_back({pc, pd, pa}); // T2
             }
         }
 
         // Calcula normal apos todo o mapeamento de altura
-        for (uint32_t i{0}; i < _mesh.iFace.size(); i++) {
+        for (uint32_t i{0}; i < mesh.iFace.size(); i++) {
 
-            const glm::vec3& pa = _mesh.vertex[_mesh.iFace[i].x].point;
-            const glm::vec3& pb = _mesh.vertex[_mesh.iFace[i].y].point;
-            const glm::vec3& pc = _mesh.vertex[_mesh.iFace[i].z].point;
+            const glm::vec3& pa = mesh.vertex[mesh.iFace[i].x].point;
+            const glm::vec3& pb = mesh.vertex[mesh.iFace[i].y].point;
+            const glm::vec3& pc = mesh.vertex[mesh.iFace[i].z].point;
             const glm::vec3 vn = glm::normalize(glm::cross(pb - pa, pc - pa)); // CROSS(U,V)
 
-            _mesh.vertex[_mesh.iFace[i].x].normal = vn;
-            _mesh.vertex[_mesh.iFace[i].y].normal = vn;
-            _mesh.vertex[_mesh.iFace[i].z].normal = vn;
+            mesh.vertex[mesh.iFace[i].x].normal = vn;
+            mesh.vertex[mesh.iFace[i].y].normal = vn;
+            mesh.vertex[mesh.iFace[i].z].normal = vn;
         }
 
-        meshDebug(_mesh, false);
+        meshDebug(mesh, false);
 
-        this->width = pImage->w;
-        this->height = pImage->h;
+        this->width_ = p_image_->w;
+        this->height_ = p_image_->h;
 
         return true;
     }
 
-    void LoadHeightMap::split(TrisIndex& vertexIndexIn, std::vector<TrisIndex>& vTrisIndexOut) const {
+    void LoadHeightMap::split(TrisIndex& vertex_index_in, std::vector<TrisIndex>& v_tris_index_out) const {
 
         bool done{false};
-        uint32_t startHeight{0};
-        uint32_t startWidth{0};
+        uint32_t start_height{0};
+        uint32_t start_width{0};
         uint32_t contador{0};
-        const uint32_t totalHeight{(height - 1) * 2};
-        const uint32_t totalWidth{(width - 1) * 2};
-        const uint32_t squareHeight{squareZ};
-        const uint32_t squareWidth{squareX * 2};
-        const uint32_t thresholdWidht{totalHeight * squareZ};
+        const uint32_t total_height{(height_ - 1) * 2};
+        const uint32_t total_width{(width_ - 1) * 2};
+        const uint32_t square_height{square_z_};
+        const uint32_t square_width{square_x_ * 2};
+        const uint32_t threshold_widht{total_height * square_z_};
 
         while (!done) {
 
-            uint32_t endHeight = startHeight + squareHeight;
-            uint32_t endWidth = startWidth + squareWidth;
-            const uint32_t testeA = (startHeight * totalHeight) + startWidth;
+            uint32_t end_height = start_height + square_height;
+            uint32_t end_width = start_width + square_width;
+            const uint32_t teste_a = (start_height * total_height) + start_width;
 
-            if (testeA >= vertexIndexIn.size()) { // all faces
+            if (teste_a >= vertex_index_in.size()) { // all faces
                 done = true;
                 continue;
             }
 
-            endHeight = std::min(endHeight, height - 1);
-            endWidth = std::min(endWidth, totalWidth);
+            end_height = std::min(end_height, height_ - 1);
+            end_width = std::min(end_width, total_width);
 
             TrisIndex node;
 
-            uint32_t face;                                         //, base;
-            for (uint32_t h = startHeight; h < endHeight; h++) {   // z
-                for (uint32_t w = startWidth; w < endWidth; w++) { // x
-                    face = ((h * totalHeight) + w);
+            uint32_t face;                                           //, base;
+            for (uint32_t h = start_height; h < end_height; h++) {   // z
+                for (uint32_t w = start_width; w < end_width; w++) { // x
+                    face = ((h * total_height) + w);
                     // base = face * 3;
-                    node.push_back(glm::uvec3(vertexIndexIn[face].x, vertexIndexIn[face].y, vertexIndexIn[face].z));
+                    node.push_back(
+                        glm::uvec3(vertex_index_in[face].x, vertex_index_in[face].y, vertex_index_in[face].z));
                     contador++;
                 }
             }
 
-            if (contador >= thresholdWidht) {
-                startHeight = endHeight;
+            if (contador >= threshold_widht) {
+                start_height = end_height;
                 contador = 0;
-                startWidth = 0;
+                start_width = 0;
             } else {
-                startWidth = endWidth;
+                start_width = end_width;
             }
 
             if (node.size() != 0) {
-                vTrisIndexOut.push_back(node);
+                v_tris_index_out.push_back(node);
             } else {
                 done = true;
             }

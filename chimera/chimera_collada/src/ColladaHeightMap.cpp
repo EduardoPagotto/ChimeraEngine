@@ -17,7 +17,7 @@ namespace ce {
 
         LoadHeightMap loader(square_x, square_z);
 
-        loader.getMesh(target, *mc.mesh, size);
+        loader.get_mesh(target, *mc.mesh, size);
 
         loader.split(mc.mesh->iFace, mc.vTrisIndex);
         mc.type = getMeshTypeFromString(geo.attribute("partition").value());

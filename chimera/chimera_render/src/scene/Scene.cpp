@@ -400,7 +400,7 @@ namespace ce {
                 auto& lc = lightView.get<LightComponent>(entity);
                 auto& tc = registry_.get()->get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
                 if (lc.global) {                                         // biding light prop
-                    lc.light->bindLight(renderer.uboQueue(), tc.trans->get_matrix());
+                    lc.light->bind_light(renderer.uboQueue(), tc.trans->get_matrix());
                 }
             }
 

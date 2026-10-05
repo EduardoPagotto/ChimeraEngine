@@ -19,11 +19,11 @@ namespace ce {
         std::string get_name() const override { return "CameraControllerOrbit"; }
 
       private:
-        void updateVP();
-        void updateVectors();
-        void processCameraRotation(const int& xOffset, const int& yOffset, bool constrainPitch = true);
-        void processDistance(const int& _mz);
-        void invertPitch();
+        void update_vp();
+        void update_vectors();
+        void process_camera_rotation(const int& x_offset, const int& y_offset, bool constrain_pitch = true);
+        void process_distance(const int& mz);
+        void invert_pitch();
 
         float pitch_, yaw_, distance_, min_, max_;
         glm::vec3 up_, front_;

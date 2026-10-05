@@ -53,17 +53,17 @@ namespace ce {
     enum class MeshType { SIMPLE = 0, ARRAY = 1, BSTREE = 2 };
 
     MeshType getMeshTypeFromString(const std::string& text);
-    void meshToTriangle(Mesh& m, std::list<std::shared_ptr<Triangle>>& vTris);
-    void meshReindex(Mesh& inData, Mesh& outData);
-    void meshDebug(const Mesh& m, bool _showAll);
-    void meshSerialize(Mesh& inData, Mesh& outData);
-    void idxSimplifieVec3(std::vector<glm::vec3>& in, std::vector<glm::vec3>& out, std::vector<uint32_t>& idxIn,
-                          std::vector<uint32_t>& idxOut);
-    void idxSimplifieVec2(std::vector<glm::vec2>& in, std::vector<glm::vec2>& out, std::vector<uint32_t>& idxIn,
-                          std::vector<uint32_t>& idxOut);
+    void meshToTriangle(Mesh& m, std::list<std::shared_ptr<Triangle>>& v_tris);
+    void meshReindex(Mesh& in_data, Mesh& out_data);
+    void meshDebug(const Mesh& m, bool show_all);
+    void meshSerialize(Mesh& in_data, Mesh& out_data);
+    void idxSimplifieVec3(std::vector<glm::vec3>& in, std::vector<glm::vec3>& out, std::vector<uint32_t>& idx_in,
+                          std::vector<uint32_t>& idx_out);
+    void idxSimplifieVec2(std::vector<glm::vec2>& in, std::vector<glm::vec2>& out, std::vector<uint32_t>& idx_in,
+                          std::vector<uint32_t>& idx_out);
 
-    std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexBoundaries(std::vector<VertexData>& vArray);
-    std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexIndexedBoundaries(std::vector<VertexData>& vArray,
+    std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexBoundaries(std::vector<VertexData>& v_array);
+    std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexIndexedBoundaries(std::vector<VertexData>& v_array,
                                                                         TrisIndex& tris);
 
 } // namespace ce

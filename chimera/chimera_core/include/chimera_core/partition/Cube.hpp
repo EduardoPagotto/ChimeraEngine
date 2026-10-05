@@ -39,32 +39,36 @@ namespace ce {
       public:
         Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max);
         virtual ~Cube();
-        void setNeighbor(DEEP deep, CARDINAL card, Cube* pCube);
+        void set_neighbor(DEEP deep, CARDINAL card, Cube* p_cube);
         void create(Mesh* mesh);
 
-      private:
-        void newWall();
-        void newRamp(bool isFloor, CARDINAL card);
-        void newDiag();
-        void newFloor();
-        void newCeeling();
-        void newRampNSEW(SPACE space);
+        inline const SPACE get_space() const { return this->space_; }
 
-        inline const SPACE getSpace() const { return this->space_; }
-
-        inline bool emptySpace() const {
+        inline bool empty_space() const {
             return ((this->space_ == SPACE::EMPTY) || (this->space_ == SPACE::FLOOR) ||
                     (this->space_ == SPACE::CEILING) || (this->space_ == SPACE::FC));
         }
 
-        CARDINAL emptyQuadrantDiag(DEEP deep, bool invert);
-        const bool hasNeighbor(DEEP deep, CARDINAL card, SPACE space);
+        CARDINAL empty_quadrant_diag(DEEP deep, bool invert);
+        const bool has_neighbor(DEEP deep, CARDINAL card, SPACE space);
 
-        void newFlatFloorCeeling(bool isFloor, CARDINAL card);
-        void addFace(bool clockwise, int numFace, int numTex);
+        void new_flat_floor_ceeling(bool is_floor, CARDINAL card);
+        void add_face(bool clockwise, int num_face, int num_tex);
 
       private:
-        Cube *pNorth{nullptr}, *pEast{nullptr}, *pSouth{nullptr}, *pWest{nullptr}, *pUp{nullptr}, *pDown{nullptr};
+        void new_wall();
+        void new_ramp(bool is_floor, CARDINAL card);
+        void new_diag();
+        void new_floor();
+        void new_ceeling();
+        void new_ramp_nsew(SPACE space);
+
+        Cube* p_north_{nullptr};
+        Cube* p_east_{nullptr};
+        Cube* p_south_{nullptr};
+        Cube* p_west_{nullptr};
+        Cube* p_up_{nullptr};
+        Cube* p_down_{nullptr};
         Mesh* mesh_{nullptr};
         SPACE space_;
     };
@@ -72,9 +76,9 @@ namespace ce {
     void initCubeBase();
     void cleanupCubeBase();
     glm::ivec3 getCardinalPos(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos);
-    glm::vec3 minimal(const float& sizeBlock, const glm::vec3 halfBlock, const glm::ivec3& pos);
+    glm::vec3 minimal(const float& size_block, const glm::vec3 half_block, const glm::ivec3& pos);
     uint32_t getIndexArrayPos(const glm::ivec3& pos, const glm::ivec3& size);
     Cube* getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos, const glm::ivec3& size,
-                          std::vector<Cube*>& vpCube);
-    void linkCubes(const glm::ivec3& size, std::vector<Cube*>& vpCube);
+                          std::vector<Cube*>& vp_cube);
+    void linkCubes(const glm::ivec3& size, std::vector<Cube*>& vp_cube);
 } // namespace ce

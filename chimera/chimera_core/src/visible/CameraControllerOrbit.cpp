@@ -32,12 +32,12 @@ namespace ce {
         cc.pitch = pitch_;
         cc.yaw = yaw_;
 
-        this->updateVectors();
+        this->update_vectors();
     }
 
     void CameraControllerOrbit::on_deatach() {}
 
-    void CameraControllerOrbit::updateVP() {
+    void CameraControllerOrbit::update_vp() {
         if (vp_->get_size() == 1) {
             vp_->get_left().update(glm::lookAt(camera_->get_position(), front_, up_), camera_->get_projection());
         } else {
@@ -48,14 +48,14 @@ namespace ce {
             const float distancia = vp_->get_noze();
             const glm::vec3 deslocamento = direita * distancia;
 
-            glm::vec3 posDireita = camera_->get_position() + deslocamento;
-            glm::vec3 origemDireita = front_ + deslocamento;
+            glm::vec3 pos_direita = camera_->get_position() + deslocamento;
+            glm::vec3 origem_direita = front_ + deslocamento;
 
-            glm::vec3 posEsquerda = camera_->get_position() - deslocamento;
-            glm::vec3 origemEsquerda = front_ - deslocamento;
+            glm::vec3 pos_esquerda = camera_->get_position() - deslocamento;
+            glm::vec3 origem_esquerda = front_ - deslocamento;
 
-            vp_->get_left().update(glm::lookAt(posEsquerda, origemEsquerda, up_), camera_->get_projection()); // Left
-            vp_->get_right().update(glm::lookAt(posDireita, origemDireita, up_), camera_->get_projection());  // Right
+            vp_->get_left().update(glm::lookAt(pos_esquerda, origem_esquerda, up_), camera_->get_projection()); // Left
+            vp_->get_right().update(glm::lookAt(pos_direita, origem_direita, up_), camera_->get_projection());  // Right
 
             // const glm::vec3 left_p = front - camera->getPosition(); // front and position as points
             // const glm::vec3 cross1 = glm::cross(up, left_p);
@@ -72,7 +72,7 @@ namespace ce {
         }
     }
 
-    void CameraControllerOrbit::updateVectors() {
+    void CameraControllerOrbit::update_vectors() {
 
         const float theta = glm::radians(yaw_); // yaw * 0.017453293f; ( yaw * (PI/180) )
         const float phi = glm::radians(pitch_); // pitch * 0.017453293f;
@@ -90,9 +90,9 @@ namespace ce {
         camera_->set_position(pos);
     }
 
-    void CameraControllerOrbit::processDistance(const int& _mz) {
+    void CameraControllerOrbit::process_distance(const int& mz) {
 
-        distance_ += static_cast<float>(_mz);
+        distance_ += static_cast<float>(mz);
 
         if (distance_ < min_) { // NOLINT
             distance_ = min_;
@@ -103,14 +103,15 @@ namespace ce {
         }
     }
 
-    void CameraControllerOrbit::processCameraRotation(const int& xOffset, const int& yOffset, bool constrainPitch) {
+    void CameraControllerOrbit::process_camera_rotation(const int& x_offset, const int& y_offset,
+                                                        bool constrain_pitch) {
 
         if (this->up_.y == 1) {
-            yaw_ -= (float)xOffset;
-            pitch_ -= (float)yOffset;
+            yaw_ -= (float)x_offset;
+            pitch_ -= (float)y_offset;
 
             // Constrain the pitch
-            if (constrainPitch) {
+            if (constrain_pitch) {
                 if (pitch_ < 1.0F) { // NOLINT
                     pitch_ = 1.0F;
                 }
@@ -122,8 +123,8 @@ namespace ce {
 
         } else { // this->->up.z == 1 ou -1
 
-            yaw_ += (float)yOffset;
-            pitch_ += (float)xOffset;
+            yaw_ += (float)y_offset;
+            pitch_ += (float)x_offset;
             // if (yaw < 1.0f)
             //     yaw = 1.0f;
             // if (yaw > 179.0f)
@@ -135,22 +136,22 @@ namespace ce {
 
         if (input_manager_->get_mouse()->is_button_down(Mouse::MouseButton::Left)) {
 
-            const glm::ivec2 mouseMove = input_manager_->get_mouse()->get_delta_xy();
-            this->processCameraRotation(mouseMove.x, mouseMove.y);
+            const glm::ivec2 mouse_move = input_manager_->get_mouse()->get_delta_xy();
+            this->process_camera_rotation(mouse_move.x, mouse_move.y);
 
         } else if (input_manager_->get_mouse()->is_button_down(Mouse::MouseButton::Right)) {
 
-            const glm::ivec2 mouseMove = input_manager_->get_mouse()->get_delta_xy();
-            this->processDistance(mouseMove.y);
+            const glm::ivec2 mouse_move = input_manager_->get_mouse()->get_delta_xy();
+            this->process_distance(mouse_move.y);
         }
 
-        this->updateVectors();
-        this->updateVP();
+        this->update_vectors();
+        this->update_vp();
     }
 
-    void CameraControllerOrbit::invertPitch() {
+    void CameraControllerOrbit::invert_pitch() {
         pitch_ = -pitch_;
-        this->updateVectors();
+        this->update_vectors();
     }
 
 } // namespace ce

@@ -19,12 +19,12 @@ namespace ce {
         std::string get_name() const override { return "CameraControllerFPS"; }
 
       private:
-        void updateVP();
-        void updateVectors();
-        void processCameraRotation(double xOffset, double yOffset, bool constrainPitch);
-        void processCameraMovement(glm::vec3& direction, float deltaTime);
-        void invertPitch();
-        void processCameraFOV(const float& offset);
+        void update_vp();
+        void update_vectors();
+        void process_camera_rotation(double x_offset, double y_offset, bool constrain_pitch);
+        void process_camera_movement(glm::vec3& direction, float delta_time);
+        void invert_pitch();
+        void process_camera_fov(const float& offset);
 
         float pitch_, yaw_, movement_speed_;
         glm::vec3 up_, front_, world_up_, right_;

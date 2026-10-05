@@ -58,7 +58,7 @@ namespace ce {
         this->buffer_ = (VertexDataSimple*)p_vbo_->map();
     }
 
-    float BatchRender2D::submitTexture(std::shared_ptr<Texture> texture) {
+    float BatchRender2D::submit_texture(std::shared_ptr<Texture> texture) {
         float result = 0.0F;
         bool found = false;
         for (uint i = 0; i < textures_.size(); i++) {
@@ -83,50 +83,50 @@ namespace ce {
 
     void BatchRender2D::submit(IRenderable2D* renderable) {
 
-        const Prop2D& prop = ((Renderable2D*)renderable)->getProp(); // Perigo
+        const Prop2D& prop = ((Renderable2D*)renderable)->get_prop(); // Perigo
         const glm::vec3& position = prop.position;
         const glm::vec2& size = prop.size;
         const glm::vec4& color = prop.color;
         const std::vector<glm::vec2>& uv = prop.uv;
 
-        float textureSlot = 0.0F; // float ts = 0.0f;
+        float texture_slot = 0.0F; // float ts = 0.0f;
         if (prop.texture != nullptr) {
-            textureSlot = this->submitTexture(prop.texture);
+            texture_slot = this->submit_texture(prop.texture);
         }
 
         buffer_->point =
             stack_.multipl_vec3(position); //  glm::vec3(transformationStack.back() * glm::vec4(position, 1.0f));
         buffer_->uv = uv[0];
-        buffer_->tid = textureSlot;
+        buffer_->tid = texture_slot;
         buffer_->color = color;
         buffer_++;
 
         buffer_->point = stack_.multipl_vec3(glm::vec3(position.x, position.y + size.y, position.z));
         buffer_->uv = uv[1];
-        buffer_->tid = textureSlot;
+        buffer_->tid = texture_slot;
         buffer_->color = color;
         buffer_++;
 
         buffer_->point = stack_.multipl_vec3(glm::vec3(position.x + size.x, position.y + size.y, position.z));
         buffer_->uv = uv[2];
-        buffer_->tid = textureSlot;
+        buffer_->tid = texture_slot;
         buffer_->color = color;
         buffer_++;
 
         buffer_->point = stack_.multipl_vec3(glm::vec3(position.x + size.x, position.y, position.z));
         buffer_->uv = uv[3];
-        buffer_->tid = textureSlot;
+        buffer_->tid = texture_slot;
         buffer_->color = color;
         buffer_++;
 
         index_count_ += 6;
     }
 
-    void BatchRender2D::drawString(std::shared_ptr<Font> font, const std::string& text, const glm::vec3& pos,
-                                   const glm::vec4& color) {
+    void BatchRender2D::draw_string(std::shared_ptr<Font> font, const std::string& text, const glm::vec3& pos,
+                                    const glm::vec4& color) {
 
         // float textureSlot = 0.0F; // float ts = 0.0f;
-        const float textureSlot = this->submitTexture(font->texture);
+        const float texture_slot = this->submit_texture(font->texture);
 
         const glm::vec2& scale = font->scale;
         float x = pos.x;
@@ -155,25 +155,25 @@ namespace ce {
 
                 buffer_->point = stack_.multipl_vec3(glm::vec3(x0, y0, 0.0F));
                 buffer_->uv = glm::vec2(u0, v0);
-                buffer_->tid = textureSlot;
+                buffer_->tid = texture_slot;
                 buffer_->color = color;
                 buffer_++;
 
                 buffer_->point = stack_.multipl_vec3(glm::vec3(x0, y1, 0.0F));
                 buffer_->uv = glm::vec2(u0, v1); // glm::vec2(u0, v1);
-                buffer_->tid = textureSlot;
+                buffer_->tid = texture_slot;
                 buffer_->color = color;
                 buffer_++;
 
                 buffer_->point = stack_.multipl_vec3(glm::vec3(x1, y1, 0.0F));
                 buffer_->uv = glm::vec2(u1, v1);
-                buffer_->tid = textureSlot;
+                buffer_->tid = texture_slot;
                 buffer_->color = color;
                 buffer_++;
 
                 buffer_->point = stack_.multipl_vec3(glm::vec3(x1, y0, 0.0F));
                 buffer_->uv = glm::vec2(u1, v0);
-                buffer_->tid = textureSlot;
+                buffer_->tid = texture_slot;
                 buffer_->color = color;
                 buffer_++;
 

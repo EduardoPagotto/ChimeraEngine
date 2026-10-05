@@ -36,15 +36,15 @@ namespace ce {
 
         virtual void flush() override;
 
-        virtual void drawString(std::shared_ptr<Font> font, const std::string& text, const glm::vec3& pos,
-                                const glm::vec4& color) override;
+        virtual void draw_string(std::shared_ptr<Font> font, const std::string& text, const glm::vec3& pos,
+                                 const glm::vec4& color) override;
 
-        inline virtual TransformationStack& getStack() override { return stack_; };
+        inline virtual TransformationStack& get_stack() override { return stack_; };
 
-        inline virtual void setCommandRender(struct RenderCommand* command) override { render_comando_ = command; }
+        inline virtual void set_command_render(struct RenderCommand* command) override { render_comando_ = command; }
 
       private:
-        float submitTexture(std::shared_ptr<Texture> texture);
+        float submit_texture(std::shared_ptr<Texture> texture);
 
         TransformationStack stack_;
         std::shared_ptr<IndexBuffer> ibo_;

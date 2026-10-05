@@ -43,8 +43,8 @@ void Game::on_event(const SDL_Event& event) {
                 SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao OFF: %d -> %d", *n1, *n2);
             } break;
             case ce::EventCE::NEW_FPS: {
-                uint32_t* pFps = (uint32_t*)event.user.data1;
-                fps_ = *pFps;
+                uint32_t* p_fps = (uint32_t*)event.user.data1;
+                fps_ = *p_fps;
                 // glm::vec3 val1 = pCorpoRigido->getPosition();
                 // sPosicaoObj = "pos:(" + std::to_string(val1.x) + "," + std::to_string(val1.y) + "," +
                 // std::to_string(val1.z) + ")";
@@ -127,38 +127,38 @@ void Game::on_update(const double& ts) {
         scene_->setOrigem(p_corpo_rigido_);
     }
 
-    float propulsaoLRUD{5.0F};
-    glm::vec3 propLateral(0.0F);
+    float propulsao_lrud{5.0F};
+    glm::vec3 prop_lateral(0.0F);
 
     auto gp = this->input_manager_->get_gamepad();
-    ce::Gamepad::AxixConfig player0Config{0.18F, 0.18F, 0.18F};
+    ce::Gamepad::AxixConfig player0_config{0.18F, 0.18F, 0.18F};
 
     if (gp->get_button_state(0, SDL_GAMEPAD_BUTTON_DPAD_UP) == Gamepad::ButtonState::Pressed) {
-        propLateral.z = propulsaoLRUD;
+        prop_lateral.z = propulsao_lrud;
     }
 
     if (gp->get_button_state(0, SDL_GAMEPAD_BUTTON_DPAD_DOWN) == Gamepad::ButtonState::Pressed) {
-        propLateral.z = -propulsaoLRUD;
+        prop_lateral.z = -propulsao_lrud;
     }
 
     if (gp->get_button_state(0, SDL_GAMEPAD_BUTTON_DPAD_LEFT) == Gamepad::ButtonState::Pressed) {
-        propLateral.x = propulsaoLRUD;
+        prop_lateral.x = propulsao_lrud;
     }
 
     if (gp->get_button_state(0, SDL_GAMEPAD_BUTTON_DPAD_RIGHT) == Gamepad::ButtonState::Pressed) {
-        propLateral.x = -propulsaoLRUD;
+        prop_lateral.x = -propulsao_lrud;
     }
 
-    glm::vec2 leftStick = gp->get_left_stick(0, player0Config);
-    glm::vec2 rightStick = gp->get_right_stick(0, player0Config);
+    glm::vec2 left_stick = gp->get_left_stick(0, player0_config);
+    glm::vec2 right_stick = gp->get_right_stick(0, player0_config);
 
     // int16_t deadZone = 128;
-    glm::vec3 rotacao{leftStick.y, rightStick.x, leftStick.x};
+    glm::vec3 rotacao{left_stick.y, right_stick.x, left_stick.x};
     // glm::vec3 rotacao{axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTY), deadZone, 0x8000),
     //                   axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTX), deadZone, 0x8000),
     //                   axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTX), deadZone, 0x8000)};
 
-    float acc = rightStick.y;
+    float acc = right_stick.y;
     // float acc = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTY), deadZone, 0x8000); // ACC RIGHTX
 
     glm::vec3 throttle{0.0,               // X
@@ -174,21 +174,21 @@ void Game::on_update(const double& ts) {
     }
 
     glm::vec3 zero(0.0F);
-    if ((rotacao != zero) || (throttle != zero) || (propLateral != zero)) {
+    if ((rotacao != zero) || (throttle != zero) || (prop_lateral != zero)) {
         float torque = -0.5F;
 
-        glm::vec3 rFinal = rotacao * torque;
-        glm::vec3 vFinal = propLateral + throttle;
+        glm::vec3 r_final = rotacao * torque;
+        glm::vec3 v_final = prop_lateral + throttle;
 
-        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Torque: %f %f %f", rFinal.x, rFinal.y, rFinal.z);
-        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Forca : %f %f %f", vFinal.x, vFinal.y, vFinal.z);
+        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Torque: %f %f %f", r_final.x, r_final.y, r_final.z);
+        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Forca : %f %f %f", v_final.x, v_final.y, v_final.z);
 
-        p_corpo_rigido_->apply_force(vFinal);
-        p_corpo_rigido_->apply_torc(rFinal);
+        p_corpo_rigido_->apply_force(v_final);
+        p_corpo_rigido_->apply_torc(r_final);
     }
     //}
 
-    l_fps_->setText(std::string("FPS: ") + std::to_string(fps_));
+    l_fps_->set_text(std::string("FPS: ") + std::to_string(fps_));
 }
 
 void Game::on_render() {}

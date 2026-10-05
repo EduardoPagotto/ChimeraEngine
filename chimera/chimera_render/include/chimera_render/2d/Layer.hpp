@@ -16,7 +16,7 @@ namespace ce {
         virtual std::string get_name() const override { return this->name_; }
 
         void add(IRenderable2D* renderable) { renderables_.push_back(renderable); }
-        std::shared_ptr<Camera> getCamera() const { return camera; };
+        std::shared_ptr<Camera> get_camera() const { return camera; };
 
       protected:
         std::shared_ptr<Shader> shader;

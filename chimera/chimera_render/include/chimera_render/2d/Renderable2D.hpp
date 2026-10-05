@@ -13,7 +13,7 @@ namespace ce {
             prop2d.size = size;
             prop2d.color = color;
             prop2d.texture = nullptr;
-            prop2d.uv = Renderable2D::getDefaultUVs();
+            prop2d.uv = Renderable2D::get_default_u_vs();
         }
 
         Renderable2D(const glm::vec3& pos, const glm::vec2& size, std::shared_ptr<Texture> texture) {
@@ -21,13 +21,13 @@ namespace ce {
             prop2d.size = size;
             prop2d.color = glm::vec4(1, 1, 1, 1);
             prop2d.texture = texture;
-            prop2d.uv = Renderable2D::getDefaultUVs();
+            prop2d.uv = Renderable2D::get_default_u_vs();
         }
 
         virtual ~Renderable2D() {}
         virtual void submit(IRenderer2D& renderer) override { renderer.submit(this); }
 
-        static const std::vector<glm::vec2>& getDefaultUVs() {
+        static const std::vector<glm::vec2>& get_default_u_vs() {
             static std::vector<glm::vec2> results;
             if (!results.size()) {
                 results.push_back(glm::vec2(0, 1));
@@ -38,7 +38,7 @@ namespace ce {
             return results;
         }
 
-        const Prop2D& getProp() const { return prop2d; }
+        const Prop2D& get_prop() const { return prop2d; }
 
       protected:
         Prop2D prop2d;

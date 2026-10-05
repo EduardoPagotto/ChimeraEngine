@@ -12,11 +12,11 @@ namespace ce {
 
         virtual void submit(IRenderer2D& renderer) override {
 
-            renderer.getStack().push(transformation_matrix_);
+            renderer.get_stack().push(transformation_matrix_);
             for (auto renderable : renderables_)
                 renderable->submit(renderer);
 
-            renderer.getStack().pop();
+            renderer.get_stack().pop();
         }
 
         inline void add(IRenderable2D* renderable) { renderables_.push_back(renderable); }

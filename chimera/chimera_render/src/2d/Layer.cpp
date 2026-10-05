@@ -31,7 +31,7 @@ namespace ce {
         rc.shader = shader;
         rc.uniforms["pr_matrix"] = Uniform(camera->get_projection());
         //  rc.uniforms["textures"] = Uniform(32, texIDs);
-        renderer_->setCommandRender(&rc);
+        renderer_->set_command_render(&rc);
 
         for (auto* renderable : renderables_) {
             renderable->submit(*renderer_);

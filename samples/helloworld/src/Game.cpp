@@ -39,11 +39,11 @@ Game::Game(std::shared_ptr<entt::registry> registry, ce::Engine* engine) : regis
     asset->load_texture("t02", "./assets/textures/grid2.png", tp);
     asset->load_texture("t03", "./assets/textures/grid3.png", tp);
 
-    std::unordered_map<GLenum, std::string> shadeData;
-    shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Basic2D.frag";
-    shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Basic2D.vert";
+    std::unordered_map<GLenum, std::string> shade_data;
+    shade_data[GL_FRAGMENT_SHADER] = "./assets/shaders/Basic2D.frag";
+    shade_data[GL_VERTEX_SHADER] = "./assets/shaders/Basic2D.vert";
 
-    shader_ = asset->load_shader("Basic2D", shadeData).handle();
+    shader_ = asset->load_shader("Basic2D", shade_data).handle();
 }
 
 Game::~Game() {}
@@ -59,7 +59,7 @@ void Game::on_attach() {
 
     layer_ = std::make_shared<TileLayer>(shader_);
 
-    layer_->getCamera()->set_viewport_size(canvas_->width(), canvas_->height());
+    layer_->get_camera()->set_viewport_size(canvas_->width(), canvas_->height());
 
     auto asset = registry_->ctx().get<std::shared_ptr<ce::AssetManager>>();
 
@@ -100,8 +100,8 @@ void Game::on_event(const SDL_Event& event) {
 
     if (event.type == chimera_even_t01) {
         if (static_cast<EventCE>(event.user.code) == EventCE::NEW_FPS) {
-            uint32_t* pFps = (uint32_t*)event.user.data1;
-            fps_ = *pFps;
+            uint32_t* p_fps = (uint32_t*)event.user.data1;
+            fps_ = *p_fps;
             SDL_Log("FPS: %d", fps_);
         }
     }
@@ -109,7 +109,7 @@ void Game::on_event(const SDL_Event& event) {
 
 void Game::on_update(const double& ts) {
 
-    l_fps_->setText(std::string("FPS: ") + std::to_string(fps_));
+    l_fps_->set_text(std::string("FPS: ") + std::to_string(fps_));
 
     if (this->input_manager_->get_keyboard()->is_key_pressed(SDL_SCANCODE_ESCAPE)) {
         sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);

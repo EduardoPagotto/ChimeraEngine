@@ -36,7 +36,7 @@ namespace ce {
         float ts = n_tec.child("time_step").text().as_float();
 
         std::vector<float> l_array_f;
-        textToFloatArray(s_grav, l_array_f);
+        text_to_float_array(s_grav, l_array_f);
         pc->set_gravity(btVector3(l_array_f[0], l_array_f[1], l_array_f[2]));
         // pc.stepSim(ts); FIXME: remover e ver se funciona!!!!!!
 
@@ -96,26 +96,26 @@ namespace ce {
                     if (std::string s_shape = n_shape.name(); s_shape == "sphere") {
 
                         std::string rad = n_shape.child("radius").text().as_string();
-                        textToFloatArray(rad, array_float);
+                        text_to_float_array(rad, array_float);
                         solid->set_shape_sphere(array_float[0]);
 
                     } else if (s_shape == "plane") {
 
                         std::string rad = n_shape.child("equation").text().as_string();
-                        textToFloatArray(rad, array_float);
+                        text_to_float_array(rad, array_float);
                         solid->set_shape_plane(glm::vec3(array_float[0], array_float[1], array_float[2]),
                                                array_float[3]);
 
                     } else if (s_shape == "box") { // FIXME: ver no colada para usar o parametro correto
 
                         std::string s_box = n_shape.first_child().text().as_string();
-                        textToFloatArray(s_box, array_float);
+                        text_to_float_array(s_box, array_float);
                         solid->set_shape_box(glm::vec3(array_float[0], array_float[1], array_float[2]));
 
                     } else if (s_shape == "cylinder") {
 
                         std::string s_ci = n_shape.first_child().text().as_string();
-                        textToFloatArray(s_ci, array_float);
+                        text_to_float_array(s_ci, array_float);
                         solid->set_shape_cilinder(glm::vec3(array_float[0], array_float[1], array_float[2]));
 
                     } else if (s_shape == "mesh") {

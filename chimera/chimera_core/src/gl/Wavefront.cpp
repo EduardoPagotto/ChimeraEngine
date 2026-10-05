@@ -53,7 +53,7 @@ namespace ce {
                 continue;
 
             std::vector<std::string> text_data;
-            textToStringArray(line_buffer, text_data, ' ');
+            text_to_string_array(line_buffer, text_data, ' ');
 
             if (text_data.size() == 0)
                 continue;
@@ -96,7 +96,7 @@ namespace ce {
                 continue;
 
             std::vector<std::string> text_data;
-            textToStringArray(line_buffer, text_data, ' ');
+            text_to_string_array(line_buffer, text_data, ' ');
 
             if (text_data.size() == 0)
                 continue;
@@ -117,7 +117,7 @@ namespace ce {
                         if (face > 8)
                             break;
 
-                        textToStringArray(text_data[indice], ss, '/');
+                        text_to_string_array(text_data[indice], ss, '/');
                         for (std::string cc : ss) {
                             if (cc.size() > 0) {
                                 indices_comp.push_back(std::stod(cc) - 1);

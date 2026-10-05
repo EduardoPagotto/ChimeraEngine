@@ -94,7 +94,7 @@ namespace ce {
                 }
 
                 for (auto p : points_) {
-                    if (isNearV3(p, point))
+                    if (is_near_v3(p, point))
                         return true;
                 }
             }

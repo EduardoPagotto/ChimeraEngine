@@ -104,12 +104,12 @@ void Game::on_update(const double& ts) {
     l_fps_->set_text(std::string("FPS: ") + std::to_string(fps_));
 
     if (this->input_manager_->get_keyboard()->is_key_pressed(SDL_SCANCODE_ESCAPE)) {
-        sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
+        send_chimera_event(ce::EventCE::FLOW_STOP, nullptr, nullptr);
         return;
     }
 
     if (this->input_manager_->get_keyboard()->is_key_pressed(SDL_SCANCODE_F1)) {
-        sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
+        send_chimera_event(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
         return;
     }
 }

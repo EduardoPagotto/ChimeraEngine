@@ -47,7 +47,7 @@ namespace ce {
             vertex[6] = glm::vec3(min.x, max.y, max.z); // AabbBondery::TNW 6
             vertex[7] = max; // glm::vec3(max.x, max.y, max.z); // AabbBondery::TNE 7 Maximal point (back)
 
-            this->size_ = getSizeMinMax(min, max);
+            this->size_ = get_size_min_max(min, max);
             this->position_ = min + (this->size_ / 2.0F);
         }
 

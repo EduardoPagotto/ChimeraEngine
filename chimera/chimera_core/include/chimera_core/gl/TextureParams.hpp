@@ -58,7 +58,7 @@ namespace ce {
 
     namespace Aux {
         [[maybe_unused]]
-        static void textureParameterSetUndefined(TexParam& val) {
+        static void texture_parameter_set_undefined(TexParam& val) {
             val.format = TexFormat::NONE;
             val.internalFormat = TexFormat::NONE;
             val.minFilter = TexFilter::NONE;
@@ -70,7 +70,7 @@ namespace ce {
         }
 
         [[maybe_unused]]
-        static bool textureParameterIsUndefined(const TexParam& val) {
+        static bool texture_parameter_is_undefined(const TexParam& val) {
             return (val.format == TexFormat::NONE && val.internalFormat == TexFormat::NONE);
         }
     } // namespace Aux

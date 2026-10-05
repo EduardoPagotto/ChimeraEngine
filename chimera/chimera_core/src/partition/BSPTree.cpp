@@ -49,7 +49,7 @@ namespace ce {
 
         std::list<std::shared_ptr<Triangle>> vtris;
 
-        meshToTriangle(mesh, vtris);
+        mesh_to_triangle(mesh, vtris);
 
         vertex_.assign(mesh.vertex.begin(), mesh.vertex.end());
 

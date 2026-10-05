@@ -52,12 +52,12 @@ namespace ce {
                     } break;
                     case SDL_EVENT_WINDOW_MAXIMIZED:
                     case SDL_EVENT_WINDOW_RESTORED: {
-                        sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr);
+                        send_chimera_event(EventCE::FLOW_RESUME, nullptr, nullptr);
                         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Windows restored/maximized");
 
                     } break;
                     case SDL_EVENT_WINDOW_MINIMIZED: {
-                        sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr);
+                        send_chimera_event(EventCE::FLOW_PAUSE, nullptr, nullptr);
                         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Windows minimized");
 
                     } break;
@@ -111,7 +111,7 @@ namespace ce {
 
             if (timer_fps_.step_count()) { // count FPS each second
                 fps_ = timer_fps_.get_count_step();
-                sendChimeraEvent(EventCE::NEW_FPS, (void*)&fps_, nullptr);
+                send_chimera_event(EventCE::NEW_FPS, (void*)&fps_, nullptr);
             }
 
             count_delta = SDL_GetTicks() - begin_count; // frame count limit

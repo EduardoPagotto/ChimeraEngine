@@ -12,7 +12,7 @@ namespace ce {
         e_mesh.tag.id = id;
         e_mesh.tag.name = name;
         // eMesh.tag.serial = Collada::getNewSerial();
-        e_mesh.type = getMeshTypeFromString(geo.attribute("partition").value());
+        e_mesh.type = get_mesh_type_from_string(geo.attribute("partition").value());
         std::string target = geo.attribute("target").value();
 
         MaterialComponent& e_material = entity.add_component<MaterialComponent>(registry.get());

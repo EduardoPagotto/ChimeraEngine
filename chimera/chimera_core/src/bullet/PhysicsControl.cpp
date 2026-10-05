@@ -141,7 +141,7 @@ namespace ce {
                 if (contact_actives_.find((*it).first) == contact_actives_.end()) {
 
                     if (check_allow_collision((*it).second.first) == true) {
-                        sendChimeraEvent(EventCE::COLLIDE_START, (*it).second.first, (*it).second.second);
+                        send_chimera_event(EventCE::COLLIDE_START, (*it).second.first, (*it).second.second);
                     }
 
                 } else {
@@ -156,7 +156,7 @@ namespace ce {
                 if (new_contacts.find((*it).first) == new_contacts.end()) {
 
                     if (check_allow_collision((*it).second.first) == true) {
-                        sendChimeraEvent(EventCE::COLLIDE_OFF, (*it).second.first, (*it).second.second);
+                        send_chimera_event(EventCE::COLLIDE_OFF, (*it).second.first, (*it).second.second);
                     }
                 }
             }

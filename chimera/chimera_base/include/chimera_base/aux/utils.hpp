@@ -23,7 +23,7 @@ namespace ce {
     }
 
     // TODO: REMOVER
-    inline void utilsReadFile(const std::string& filepath, std::string& result) {
+    inline void utils_read_file(const std::string& filepath, std::string& result) {
         std::ifstream in(filepath, std::ios::in | std::ios::binary);
         if (in) {
             in.seekg(0, std::ios::end);
@@ -37,7 +37,7 @@ namespace ce {
         }
     }
 
-    inline std::string extractNameByFile(const std::string& filepath) {
+    inline std::string extract_name_by_file(const std::string& filepath) {
         auto last_slash = filepath.find_last_of("/\\");
         last_slash = last_slash == std::string::npos ? 0 : last_slash + 1;
 
@@ -46,25 +46,25 @@ namespace ce {
         return filepath.substr(last_slash, count);
     }
 
-    inline void textToStringArray(const std::string& s_in, std::vector<std::string>& v_out, char delimiter) {
+    inline void text_to_string_array(const std::string& s_in, std::vector<std::string>& v_out, char delimiter) {
         std::string token;
         std::istringstream token_stream(s_in);
         while (std::getline(token_stream, token, delimiter))
             v_out.push_back(token);
     }
 
-    inline void textToFloatArray(const std::string& text, std::vector<float>& array_float) {
+    inline void text_to_float_array(const std::string& text, std::vector<float>& array_float) {
         std::vector<std::string> text_data;
-        textToStringArray(text, text_data, ' ');
+        text_to_string_array(text, text_data, ' ');
         for (const std::string& val : text_data) {
             if (val.size() != 0)
                 array_float.push_back(std::stod(val));
         }
     }
 
-    inline void textToUIntArray(const std::string& text, std::vector<uint32_t>& array_i) {
+    inline void text_to_u_int_array(const std::string& text, std::vector<uint32_t>& array_i) {
         std::vector<std::string> text_data;
-        textToStringArray(text, text_data, ' ');
+        text_to_string_array(text, text_data, ' ');
         for (const std::string& val : text_data)
             array_i.push_back(static_cast<uint32_t>(std::stoul(val)));
     }

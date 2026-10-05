@@ -104,12 +104,12 @@ void Game::on_update(const double& ts) {
     teste_game_pad();
 
     if (this->input_manager_->get_keyboard()->is_key_pressed(SDL_SCANCODE_ESCAPE)) {
-        sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
+        send_chimera_event(ce::EventCE::FLOW_STOP, nullptr, nullptr);
         return;
     }
 
     if (this->input_manager_->get_keyboard()->is_key_pressed(SDL_SCANCODE_F1)) {
-        sendChimeraEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
+        send_chimera_event(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
         return;
     }
 

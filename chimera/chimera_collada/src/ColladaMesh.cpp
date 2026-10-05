@@ -24,7 +24,7 @@ namespace ce {
 
                 std::vector<float> v;
                 pugi::xml_node n_list = source.child("float_array");
-                textToFloatArray(n_list.text().as_string(), v);
+                text_to_float_array(n_list.text().as_string(), v);
 
                 if (id.find("-positions") != std::string::npos) {
 
@@ -57,7 +57,7 @@ namespace ce {
                     } else if (input_name == "p") {
 
                         std::vector<uint32_t> array_index;
-                        textToUIntArray(n_input.text().as_string(), array_index);
+                        text_to_u_int_array(n_input.text().as_string(), array_index);
 
                         std::vector<uint32_t> i_point;
                         std::vector<uint32_t> i_normal;

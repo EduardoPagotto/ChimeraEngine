@@ -140,7 +140,7 @@ namespace ce {
                     rc.renderable = new RenderableBsp(*mesh.mesh);
                 }
 
-                auto [min, max, size] = vertexBoundaries(mesh.mesh->vertex);
+                auto [min, max, size] = vertex_boundaries(mesh.mesh->vertex);
 
                 if (entity.has_component<TransComponent>(registry_.get())) {
                     // Ajuste de fisica se existir

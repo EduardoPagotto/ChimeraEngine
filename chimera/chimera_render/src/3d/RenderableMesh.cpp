@@ -8,7 +8,7 @@ namespace ce {
     RenderableMesh::RenderableMesh(Mesh* mesh) : Renderable3D() {
 
         Mesh temp;
-        meshReindex(*mesh, temp);
+        mesh_reindex(*mesh, temp);
 
         // Create VAO, VBO and IBO
         vao = std::make_shared<VertexArray>();
@@ -28,7 +28,7 @@ namespace ce {
         vao->push(vbo);
         vao->unbind();
 
-        auto [min, max, size] = vertexIndexedBoundaries(temp.vertex, temp.iFace);
+        auto [min, max, size] = vertex_indexed_boundaries(temp.vertex, temp.iFace);
 
         aabb_.set_boundary(min, max);
 

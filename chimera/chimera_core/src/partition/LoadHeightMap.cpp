@@ -135,7 +135,7 @@ namespace ce {
             mesh.vertex[mesh.iFace[i].z].normal = vn;
         }
 
-        meshDebug(mesh, false);
+        mesh_debug(mesh, false);
 
         this->width_ = p_image_->w;
         this->height_ = p_image_->h;

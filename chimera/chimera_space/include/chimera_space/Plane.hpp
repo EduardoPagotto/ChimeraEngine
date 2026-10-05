@@ -28,14 +28,14 @@ namespace ce {
 
         bool collinear_normal(const glm::vec3& normal) const noexcept {
             const glm::vec3 sub = this->normal_ - normal;
-            return isLessEpsilon(sub.x + sub.y + sub.z);
+            return is_less_epsilon(sub.x + sub.y + sub.z);
         }
 
         SIDE classify_point(const glm::vec3& point) const noexcept {
             const glm::vec3 dir = this->point_ - point;
             const float clip_test = glm::dot(dir, this->normal_);
 
-            if (isLessEpsilon(clip_test)) {
+            if (is_less_epsilon(clip_test)) {
                 return SIDE::CP_ONPLANE;
             }
 
@@ -58,7 +58,7 @@ namespace ce {
             clip_test.z = glm::dot((this->point_ - p_c), this->normal_); // Clip Test poin C
 
             for (uint8_t i = 0; i < 3; i++) {
-                if (isLessEpsilon(clip_test[i])) {
+                if (is_less_epsilon(clip_test[i])) {
                     clip_test[i] = 0.0F;
                     on_plane++;
                     infront++;

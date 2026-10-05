@@ -4,7 +4,7 @@
 
 namespace ce {
 
-    MeshType getMeshTypeFromString(const std::string& text) {
+    MeshType get_mesh_type_from_string(const std::string& text) {
         if (text == "ARRAY") {
             return MeshType::ARRAY;
         } else if (text == "BSPTREE") {
@@ -14,7 +14,7 @@ namespace ce {
         return MeshType::SIMPLE;
     }
 
-    void meshToTriangle(Mesh& m, std::list<std::shared_ptr<Triangle>>& v_tris) {
+    void mesh_to_triangle(Mesh& m, std::list<std::shared_ptr<Triangle>>& v_tris) {
         for (uint32_t i = 0; i < m.iFace.size(); i++) {
             const glm::vec3 acc =
                 m.vertex[m.iFace[i].x].normal + m.vertex[m.iFace[i].y].normal + m.vertex[m.iFace[i].z].normal;
@@ -22,8 +22,8 @@ namespace ce {
         }
     }
 
-    void idxSimplifieVec2(std::vector<glm::vec2>& in, std::vector<glm::vec2>& out, std::vector<uint32_t>& idx_in,
-                          std::vector<uint32_t>& idx_out) {
+    void idx_simplifie_vec2(std::vector<glm::vec2>& in, std::vector<glm::vec2>& out, std::vector<uint32_t>& idx_in,
+                            std::vector<uint32_t>& idx_out) {
 
         // percorrer todos os vertices
         bool find;
@@ -32,7 +32,7 @@ namespace ce {
             find = false;
             const glm::vec2& p1 = in[idx_in[i]];
             for (uint32_t j = 0; j < idx_out.size(); j++) {
-                if (const glm::vec2& p2 = out[j]; isNearV2(p1, p2)) { // Procura por similar
+                if (const glm::vec2& p2 = out[j]; is_near_v2(p1, p2)) { // Procura por similar
                     idx_out.push_back(j);
                     find = true;
                     break;
@@ -51,8 +51,8 @@ namespace ce {
                      idx_out.size() / 3);
     }
 
-    void idxSimplifieVec3(std::vector<glm::vec3>& in, std::vector<glm::vec3>& out, std::vector<uint32_t>& idx_in,
-                          std::vector<uint32_t>& idx_out) {
+    void idx_simplifie_vec3(std::vector<glm::vec3>& in, std::vector<glm::vec3>& out, std::vector<uint32_t>& idx_in,
+                            std::vector<uint32_t>& idx_out) {
 
         // percorrer todos os vertices
         bool find;
@@ -63,7 +63,7 @@ namespace ce {
             const glm::vec3& p1 = in[idx_in[i]];
 
             for (uint32_t j = 0; j < idx_out.size(); j++) {
-                if (const glm::vec3& p2 = out[j]; isNearV3(p1, p2)) {
+                if (const glm::vec3& p2 = out[j]; is_near_v3(p1, p2)) {
                     idx_out.push_back(j);
                     find = true;
                     break;
@@ -82,7 +82,7 @@ namespace ce {
                      idx_out.size() / 3);
     }
 
-    void meshSerialize(Mesh& in_data, Mesh& out_data) {
+    void mesh_serialize(Mesh& in_data, Mesh& out_data) {
 
         out_data.vertex.reserve(in_data.iFace.size() * 3); // Reserve Vertex(point, normal, tex)
 
@@ -102,7 +102,7 @@ namespace ce {
                      out_data.vertex.size(), out_data.iFace.size());
     }
 
-    void meshReindex(Mesh& in_data, Mesh& out_data) {
+    void mesh_reindex(Mesh& in_data, Mesh& out_data) {
 
         std::vector<uint32_t> idx_face;
         idx_face.reserve(in_data.iFace.size() * 3);
@@ -123,9 +123,10 @@ namespace ce {
             // Procura por similar
             find = false;
             for (uint32_t j = 0; j < index.size(); j++) { // FIXME: trocar por vertexdata comp!!!!!
-                if (isNearV3(in_data.vertex[idx_face[i]].point, out_data.vertex[index[j]].point) &&   // compara pontos
-                    isNearV3(in_data.vertex[idx_face[i]].normal, out_data.vertex[index[j]].normal) && // compara normal
-                    isNearV2(in_data.vertex[idx_face[i]].uv, out_data.vertex[index[j]].uv)) {         // compara uv
+                if (is_near_v3(in_data.vertex[idx_face[i]].point, out_data.vertex[index[j]].point) && // compara pontos
+                    is_near_v3(in_data.vertex[idx_face[i]].normal,
+                               out_data.vertex[index[j]].normal) &&                             // compara normal
+                    is_near_v2(in_data.vertex[idx_face[i]].uv, out_data.vertex[index[j]].uv)) { // compara uv
 
                     index.push_back(index[j]); // copia valor de index[j] que é repetido
                     find = true;
@@ -153,7 +154,7 @@ namespace ce {
                      out_data.vertex.size(), out_data.iFace.size());
     }
 
-    void meshDebug(const Mesh& m, bool show_all) {
+    void mesh_debug(const Mesh& m, bool show_all) {
 
         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex : %03d, Faces  : %03d", (int)m.vertex.size(),
                      (int)m.iFace.size());
@@ -172,7 +173,7 @@ namespace ce {
         }
     }
 
-    std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexBoundaries(std::vector<VertexData>& v_array) {
+    std::tuple<glm::vec3, glm::vec3, glm::vec3> vertex_boundaries(std::vector<VertexData>& v_array) {
         glm::vec3 min, max;
         if (v_array.size() > 0) {
             min = v_array[0].point;
@@ -184,11 +185,11 @@ namespace ce {
             max = glm::max(max, v.point);
         }
 
-        return {min, max, getSizeMinMax(min, max)};
+        return {min, max, get_size_min_max(min, max)};
     }
 
-    std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexIndexedBoundaries(std::vector<VertexData>& v_array,
-                                                                        TrisIndex& tris) {
+    std::tuple<glm::vec3, glm::vec3, glm::vec3> vertex_indexed_boundaries(std::vector<VertexData>& v_array,
+                                                                          TrisIndex& tris) {
         glm::vec3 min, max;
         if (tris.size() > 0) {
             max = min = v_array[tris[0].x].point;
@@ -206,6 +207,6 @@ namespace ce {
             max = glm::max(max, v_array[i.z].point);
         }
 
-        return {min, max, getSizeMinMax(min, max)};
+        return {min, max, get_size_min_max(min, max)};
     }
 } // namespace ce

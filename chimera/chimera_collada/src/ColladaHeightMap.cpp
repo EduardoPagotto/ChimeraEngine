@@ -20,6 +20,6 @@ namespace ce {
         loader.get_mesh(target, *mc.mesh, size);
 
         loader.split(mc.mesh->iFace, mc.vTrisIndex);
-        mc.type = getMeshTypeFromString(geo.attribute("partition").value());
+        mc.type = get_mesh_type_from_string(geo.attribute("partition").value());
     }
 } // namespace ce

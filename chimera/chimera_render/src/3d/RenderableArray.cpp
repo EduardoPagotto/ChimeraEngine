@@ -28,7 +28,7 @@ namespace ce {
 
         for (auto ptr_tris_index : v_ptr_tris_index) {
 
-            auto [min, max, size] = vertexIndexedBoundaries(mesh->vertex, ptr_tris_index);
+            auto [min, max, size] = vertex_indexed_boundaries(mesh->vertex, ptr_tris_index);
 
             std::shared_ptr<IndexBuffer> ibo =
                 std::make_shared<IndexBuffer>((uint32_t*)&ptr_tris_index[0], ptr_tris_index.size() * 3);
@@ -42,7 +42,7 @@ namespace ce {
 
         vao->unbind();
 
-        auto [min, max, size] = vertexBoundaries(mesh->vertex);
+        auto [min, max, size] = vertex_boundaries(mesh->vertex);
 
         aabb_.set_boundary(min, max);
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Childs: %ld", v_child_.size());

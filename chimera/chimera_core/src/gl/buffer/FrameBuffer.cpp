@@ -24,8 +24,8 @@ namespace ce {
 
     FrameBuffer::FrameBuffer(const FrameBufferSpecification& spec) : fram_buffer_id_(0), rbo_(0), spec_(spec) {
 
-        Aux::textureParameterSetUndefined(rbo_spec_);
-        Aux::textureParameterSetUndefined(depth_tex_spec_);
+        Aux::texture_parameter_set_undefined(rbo_spec_);
+        Aux::texture_parameter_set_undefined(depth_tex_spec_);
 
         for (const TexParam& tex_parm : spec.attachments) {
 
@@ -106,7 +106,7 @@ namespace ce {
         }
 
         // depth Texture
-        if (!Aux::textureParameterIsUndefined(depth_tex_spec_)) {
+        if (!Aux::texture_parameter_is_undefined(depth_tex_spec_)) {
 
             depth_attachment_ = TextureLoader::create_empty(spec_.width, spec_.height, depth_tex_spec_);
 
@@ -119,7 +119,7 @@ namespace ce {
         }
 
         // depth R.B.O.
-        if (!Aux::textureParameterIsUndefined(rbo_spec_)) {
+        if (!Aux::texture_parameter_is_undefined(rbo_spec_)) {
 
             TexFormat tf = rbo_spec_.format;          // GL_DEPTH_COMPONENT
             TexFormat tfi = rbo_spec_.internalFormat; // GL_DEPTH_ATTACHMENT
@@ -143,7 +143,7 @@ namespace ce {
         glBindFramebuffer(GL_FRAMEBUFFER, fram_buffer_id_);
 
         GLbitfield mask = 0;
-        if (!Aux::textureParameterIsUndefined(rbo_spec_) || !Aux::textureParameterIsUndefined(depth_tex_spec_)) {
+        if (!Aux::texture_parameter_is_undefined(rbo_spec_) || !Aux::texture_parameter_is_undefined(depth_tex_spec_)) {
             mask |= GL_DEPTH_BUFFER_BIT;
         }
 

@@ -9,7 +9,7 @@ namespace ce {
         mc.tag.id = id;
         mc.tag.name = name;
         // mc.tag.serial = Collada::getNewSerial();
-        mc.type = getMeshTypeFromString(geo.attribute("partition").value());
+        mc.type = get_mesh_type_from_string(geo.attribute("partition").value());
 
         uint32_t width = static_cast<uint32_t>(std::stoul(geo.attribute("width").value()));
         uint32_t height = static_cast<uint32_t>(std::stoul(geo.attribute("height").value()));
@@ -71,7 +71,7 @@ namespace ce {
             p_cube->create(&temp_mesh); // cria mesh com dados dos cubos
 
         // aqui
-        meshSerialize(temp_mesh, *mc.mesh);
+        mesh_serialize(temp_mesh, *mc.mesh);
 
         cleanupCubeBase();            // limpa dados de criacao do cubo base
         for (auto p_cube : vp_cube) { // limpas cubos de contrucao e vetor de cubos

@@ -8,7 +8,7 @@ namespace ce {
 
     const glm::vec4 textToVec4(const std::string& text) {
         std::vector<float> array_float;
-        textToFloatArray(text, array_float);
+        text_to_float_array(text, array_float);
         if (array_float.size() == 4)
             return glm::vec4(array_float[0], array_float[1], array_float[2], array_float[3]);
 
@@ -17,7 +17,7 @@ namespace ce {
 
     const glm::vec3 textToVec3(const std::string& text) {
         std::vector<float> array_float;
-        textToFloatArray(text, array_float);
+        text_to_float_array(text, array_float);
 
         return glm::vec3(array_float[0], array_float[1], array_float[2]);
     }
@@ -25,7 +25,7 @@ namespace ce {
     const glm::mat4 textToMat4(const std::string& text) {
 
         std::vector<float> array_float;
-        textToFloatArray(text, array_float);
+        text_to_float_array(text, array_float);
 
         if (array_float.size() != 16)
             throw std::string("Tamanho da Matrix invalido" + std::to_string(array_float.size()));

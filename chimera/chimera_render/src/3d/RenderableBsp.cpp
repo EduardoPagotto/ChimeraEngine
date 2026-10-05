@@ -8,7 +8,7 @@ namespace ce {
     RenderableBsp::RenderableBsp(Mesh& mesh) : Renderable3D(), tot_index_(0) {
 
         Mesh mesh_final;
-        meshReindex(mesh, mesh_final);
+        mesh_reindex(mesh, mesh_final);
 
         BspTree bsp_tree;
         std::vector<TrisIndex> v_tris;
@@ -35,7 +35,7 @@ namespace ce {
         // Add all leafs and create IBO
         for (auto tris_index : v_tris) {
 
-            auto [min, max, size] = vertexIndexedBoundaries(mesh_final.vertex, tris_index);
+            auto [min, max, size] = vertex_indexed_boundaries(mesh_final.vertex, tris_index);
 
             std::shared_ptr<IndexBuffer> ibo =
                 std::make_shared<IndexBuffer>((uint32_t*)&tris_index[0], tris_index.size() * 3);
@@ -46,7 +46,7 @@ namespace ce {
 
         vao->unbind();
 
-        auto [min, max, size] = vertexBoundaries(mesh_final.vertex);
+        auto [min, max, size] = vertex_boundaries(mesh_final.vertex);
         aabb_.set_boundary(min, max);
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Childs: %ld", this->v_child_.size());
     }

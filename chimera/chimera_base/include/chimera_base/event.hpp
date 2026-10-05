@@ -26,7 +26,7 @@ namespace ce {
     /// @param param_a pointerA
     /// @param param_b PointerB
     /// @return True if ok
-    inline void sendChimeraEvent(const EventCE& user_event, void* param_a, void* param_b) {
+    inline void send_chimera_event(const EventCE& user_event, void* param_a, void* param_b) {
         SDL_Event event;
         SDL_zero(event);
         event.type = chimera_even_t01;

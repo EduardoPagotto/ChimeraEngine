@@ -10,9 +10,9 @@ namespace ce {
         virtual ~Constraint() = default;
 
       private:
-        Solid* pPhysicsA = nullptr;
-        Solid* pPhysicsB = nullptr;
-        btTransform transformA;
-        btTransform transformB;
+        Solid* p_physics_a_{nullptr};
+        Solid* p_physics_b_{nullptr};
+        btTransform transform_a_;
+        btTransform transform_b_;
     };
 } // namespace ce

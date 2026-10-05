@@ -4,7 +4,7 @@
 
 namespace ce {
 
-    RenderableDynamic::RenderableDynamic(const uint32_t& max) : max_(max) {
+    RenderableDynamic::RenderableDynamic(const uint32_t& max) {
 
         vao = std::make_shared<VertexArray>();
 

@@ -33,7 +33,7 @@ namespace ce {
                        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
         // Copy from staging buffer to GPU access buffer
-        aux::CopyBuffer(logical_, queue, command_buffer, staging_buffer.get(), buffer_.get(), buffer_size);
+        aux::copy_buffer(logical_, queue, command_buffer, staging_buffer.get(), buffer_.get(), buffer_size);
     }
 
 } // namespace ce

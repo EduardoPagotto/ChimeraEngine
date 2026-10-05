@@ -50,7 +50,7 @@ namespace ce {
         vkDestroyDevice(this->logical, nullptr);
 
         if (validation_enabled_) {
-            DestroyDebugReportCallbackEXT(this->instance, this->callback_, nullptr);
+            destroy_debug_report_callback_ext(this->instance, this->callback_, nullptr);
         }
 
         vkDestroyInstance(this->instance, nullptr);
@@ -112,7 +112,7 @@ namespace ce {
             }
 
             // check if queue family indices are in valid state, stop searching if so
-            if (indices.isValid()) {
+            if (indices.is_valid()) {
                 break;
             }
 
@@ -259,12 +259,12 @@ namespace ce {
             .sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT,
             .flags = VK_DEBUG_REPORT_ERROR_BIT_EXT |
                      VK_DEBUG_REPORT_WARNING_BIT_EXT, // Which validation reports should initiate callback
-            .pfnCallback = DebugCallback              // Pointer to callback function itself
+            .pfnCallback = debug_callback             // Pointer to callback function itself
         };
 
         // Create debug callback with custom create function
 
-        if (CreateDebugReportCallbackEXT(this->instance, &callback_create_info, nullptr, &this->callback_) !=
+        if (create_debug_report_callback_ext(this->instance, &callback_create_info, nullptr, &this->callback_) !=
             VK_SUCCESS) {
             throw std::runtime_error("Failed to create Debug Callback!");
         }
@@ -469,7 +469,7 @@ namespace ce {
             swap_chain_valid = !swap_chain_details.presentationModes.empty() && !swap_chain_details.formats.empty();
         }
 
-        return indices.isValid() && extensions_supported && swap_chain_valid &&
+        return indices.is_valid() && extensions_supported && swap_chain_valid &&
                (device_features.samplerAnisotropy == VK_TRUE);
     }
 

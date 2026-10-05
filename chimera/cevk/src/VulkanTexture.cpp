@@ -42,16 +42,16 @@ namespace ce {
 
         // COPY DATA TO IMAGE
         // Transition image to be DST for copy operation
-        aux::TransitionImageLayout(ctx->logical, ctx->graphicsQueue, ctx->commandPool, tex_img->getImage(),
-                                   VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+        aux::transition_image_layout(ctx->logical, ctx->graphicsQueue, ctx->commandPool, tex_img->getImage(),
+                                     VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
         // Copy image data
-        aux::CopyImageBuffer(ctx->logical, ctx->graphicsQueue, ctx->commandPool, image_staging_buffer.get(),
-                             tex_img->getImage(), tex_width, tex_height);
+        aux::copy_image_buffer(ctx->logical, ctx->graphicsQueue, ctx->commandPool, image_staging_buffer.get(),
+                               tex_img->getImage(), tex_width, tex_height);
 
         // Transition image to be shader readable for shader
-        aux::TransitionImageLayout(ctx->logical, ctx->graphicsQueue, ctx->commandPool, tex_img->getImage(),
-                                   VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        aux::transition_image_layout(ctx->logical, ctx->graphicsQueue, ctx->commandPool, tex_img->getImage(),
+                                     VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
         tex_img->createImageView(VK_IMAGE_ASPECT_COLOR_BIT);
         return std::make_shared<VulkanTexture>(tex_img);

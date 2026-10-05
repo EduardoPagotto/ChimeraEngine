@@ -27,14 +27,14 @@ namespace ce {
 
     namespace aux {
 
-        void CopyBuffer(VkDevice device, VkQueue queue, VkCommandPool commandpool, VkBuffer src_buffer,
-                        VkBuffer dst_buffer, VkDeviceSize buffer_size);
+        void copy_buffer(VkDevice device, VkQueue queue, VkCommandPool commandpool, VkBuffer src_buffer,
+                         VkBuffer dst_buffer, VkDeviceSize buffer_size);
 
-        void CopyImageBuffer(VkDevice device, VkQueue queue, VkCommandPool commandpool, VkBuffer src_buffer,
-                             VkImage image, uint32_t width, uint32_t height);
+        void copy_image_buffer(VkDevice device, VkQueue queue, VkCommandPool commandpool, VkBuffer src_buffer,
+                               VkImage image, uint32_t width, uint32_t height);
 
-        void TransitionImageLayout(VkDevice device, VkQueue queue, VkCommandPool commandpool, VkImage image,
-                                   VkImageLayout old_layout, VkImageLayout new_layout);
+        void transition_image_layout(VkDevice device, VkQueue queue, VkCommandPool commandpool, VkImage image,
+                                     VkImageLayout old_layout, VkImageLayout new_layout);
     } // namespace aux
 
 } // namespace ce

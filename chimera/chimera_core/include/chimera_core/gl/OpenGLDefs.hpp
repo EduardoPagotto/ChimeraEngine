@@ -5,6 +5,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
+// NOLINTBEGIN
+//
 // ============================================================================
 // 1. TODAS AS DEFINIÇÕES DE TIPOS E CONSTANTES EXIGIDAS PELO OPENGL (MANUAL)
 // ============================================================================
@@ -372,57 +374,59 @@ inline void CarregarOpenGL() { // NOLINT
     LOAD_PROC(PFNGLDEBUGMESSAGECALLBACKPROC, glDebugMessageCallback_ptr);
 }
 
+// NOLINTEND
+
 namespace ce {
 
     class DepthFuncSetter {
       public:
-        DepthFuncSetter(GLenum f) : changed(false) {
-            glGetIntegerv(GL_DEPTH_FUNC, &oldSetting);
-            if (f != oldSetting) {
+        DepthFuncSetter(GLenum f) : changed_(false) {
+            glGetIntegerv(GL_DEPTH_FUNC, &old_setting_);
+            if (f != old_setting_) {
                 glDepthFunc(f);
-                changed = true;
+                changed_ = true;
             }
         }
 
         ~DepthFuncSetter() {
-            if (changed) {
-                glDepthFunc(oldSetting);
+            if (changed_) {
+                glDepthFunc(old_setting_);
             }
         }
 
       private:
-        GLint oldSetting;
-        bool changed;
+        GLint old_setting_;
+        bool changed_;
     };
 
     class BinaryStateEnable {
       public:
-        BinaryStateEnable(const GLenum& attr, const GLboolean& newState) : changed(false), attr(attr) {
-            glGetBooleanv(attr, &oldState);
-            if (newState != oldState) {
-                if (newState == GL_TRUE) {
+        BinaryStateEnable(const GLenum& attr, const GLboolean& new_state) : changed_(false), attr_(attr) {
+            glGetBooleanv(attr, &old_state_);
+            if (new_state != old_state_) {
+                if (new_state == GL_TRUE) {
                     glEnable(attr);
                 } else {
                     glDisable(attr);
                 }
 
-                changed = true;
+                changed_ = true;
             }
         }
 
         ~BinaryStateEnable() {
-            if (changed) {
-                if (oldState == GL_TRUE) {
-                    glEnable(attr);
+            if (changed_) {
+                if (old_state_ == GL_TRUE) {
+                    glEnable(attr_);
                 } else {
-                    glDisable(attr);
+                    glDisable(attr_);
                 }
             }
         }
 
       private:
-        bool changed;
-        GLboolean oldState;
-        GLint attr;
+        bool changed_;
+        GLboolean old_state_;
+        GLint attr_;
     };
 } // namespace ce

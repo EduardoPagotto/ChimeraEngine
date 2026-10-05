@@ -14,7 +14,6 @@ namespace ce {
         void render(VertexData* p_vertice, const uint32_t& size);
 
       private:
-        uint32_t max_;
         std::shared_ptr<VertexBuffer> vbo_;
     };
 } // namespace ce

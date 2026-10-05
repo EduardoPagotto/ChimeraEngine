@@ -29,12 +29,12 @@ CheckOptions:
   # Classes (Padrão PascalCase/CamelCase ex: MyClass)
   - key:             readability-identifier-naming.ClassCase
     value:           CamelCase
-  # Concepts do C++20 (A Standard Library usa snake_case, ex: std::floating_point)
+  # Concepts do C++20 (A Standard Library usa lower_case, ex: std::floating_point)
   - key:             readability-identifier-naming.ConceptCase
-    value:           snake_case
+    value:           lower_case
   # Funções Globais e Estáticas (Estilo std::, ex: do_something)
   - key:             readability-identifier-naming.FunctionCase
-    value:           snake_case
+    value:           lower_case
   # Ativa a checagem para membros (atributos) de classe privados
   - key: readability-identifier-naming.PrivateMemberCase
     value: 'lower_case'
@@ -50,7 +50,7 @@ CheckOptions:
     value:           lower_case
   - key:             readability-identifier-naming.PublicMethodCase
     value:           lower_case
-  # Variáveis Locais e Parâmetros (Altamente recomendado em snake_case)
+  # Variáveis Locais e Parâmetros (Altamente recomendado em lower_case)
   - key:             readability-identifier-naming.ParameterCase
     value:           lower_case
   - key:             readability-identifier-naming.VariableCase

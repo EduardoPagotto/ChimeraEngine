@@ -30,7 +30,7 @@ namespace ce {
         int graphicsFamily = -1;     // Location of graphics Queue Family
         int presentationFamily = -1; // Location of Presentation Queue family
         // check if queue families are valid
-        [[nodiscard]] bool isValid() const { return (graphicsFamily >= 0) && (presentationFamily >= 0); }
+        [[nodiscard]] bool is_valid() const { return (graphicsFamily >= 0) && (presentationFamily >= 0); }
     };
 
 } // namespace ce

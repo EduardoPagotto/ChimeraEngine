@@ -77,8 +77,8 @@ namespace ce {
 
     namespace aux {
 
-        void CopyBuffer(VkDevice device, VkQueue queue, VkCommandPool commandpool, VkBuffer src_buffer,
-                        VkBuffer dst_buffer, VkDeviceSize buffer_size) {
+        void copy_buffer(VkDevice device, VkQueue queue, VkCommandPool commandpool, VkBuffer src_buffer,
+                         VkBuffer dst_buffer, VkDeviceSize buffer_size) {
 
             CmdBuffer cmdbuffer(device, commandpool);
             cmdbuffer.begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
@@ -93,8 +93,8 @@ namespace ce {
             cmdbuffer.submit_queue(queue);
         }
 
-        void CopyImageBuffer(VkDevice device, VkQueue queue, VkCommandPool commandpool, VkBuffer src_buffer,
-                             VkImage image, uint32_t width, uint32_t height) {
+        void copy_image_buffer(VkDevice device, VkQueue queue, VkCommandPool commandpool, VkBuffer src_buffer,
+                               VkImage image, uint32_t width, uint32_t height) {
             // Create Buffer
             CmdBuffer cmdbuffer(device, commandpool);
             cmdbuffer.begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
@@ -122,8 +122,8 @@ namespace ce {
             cmdbuffer.submit_queue(queue);
         }
 
-        void TransitionImageLayout(VkDevice device, VkQueue queue, VkCommandPool commandpool, VkImage image,
-                                   VkImageLayout old_layout, VkImageLayout new_layout) {
+        void transition_image_layout(VkDevice device, VkQueue queue, VkCommandPool commandpool, VkImage image,
+                                     VkImageLayout old_layout, VkImageLayout new_layout) {
             // Create buffer
             CmdBuffer cmdbuffer(device, commandpool);
             cmdbuffer.begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);

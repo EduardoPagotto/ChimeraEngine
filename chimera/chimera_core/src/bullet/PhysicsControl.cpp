@@ -20,8 +20,8 @@ namespace ce {
     }
 
     PhysicsControl::~PhysicsControl() {
-        removeAllObjs();
-        clearAllShapes();
+        remove_all_objs();
+        clear_all_shapes();
 
         delete discret_dynamics_world_;
         delete solver_;
@@ -30,7 +30,7 @@ namespace ce {
         delete broad_phase_;
     }
 
-    void PhysicsControl::stepSim(const double& ts) { discret_dynamics_world_->stepSimulation(ts); }
+    void PhysicsControl::step_sim(const double& ts) { discret_dynamics_world_->stepSimulation(ts); }
 
     void PhysicsControl::doTickCallBack(btDynamicsWorld* world, btScalar timeStep) {
 
@@ -53,7 +53,7 @@ namespace ce {
         // return;
     }
 
-    void PhysicsControl::removeAllObjs() {
+    void PhysicsControl::remove_all_objs() {
         // remove the rigidbodies from the dynamics world and delete them
         for (int i = discret_dynamics_world_->getNumCollisionObjects() - 1; i >= 0; i--) {
 
@@ -69,7 +69,7 @@ namespace ce {
         }
     }
 
-    void PhysicsControl::clearAllShapes() {
+    void PhysicsControl::clear_all_shapes() {
         // // delete collision shapes
         // for (int j = 0; j < m_collisionShapes.size(); j++) {
         //     btCollisionShape* pShape = m_collisionShapes[j];
@@ -80,7 +80,7 @@ namespace ce {
 
     bool PhysicsControl::checkAllowCollision(uint32_t* entity) { return true; }
 
-    void PhysicsControl::checkCollisions() {
+    void PhysicsControl::check_collisions() {
 
         std::map<btCollisionObject*, std::pair<uint32_t*, uint32_t*>> new_contacts;
 

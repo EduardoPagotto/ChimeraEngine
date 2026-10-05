@@ -221,8 +221,8 @@ namespace ce {
     void Scene::on_update(const double& ts) {
 
         if (phy_crt_) {
-            phy_crt_->stepSim(ts);
-            phy_crt_->checkCollisions();
+            phy_crt_->step_sim(ts);
+            phy_crt_->check_collisions();
         }
 
         for (auto* emissor : emitters_) {

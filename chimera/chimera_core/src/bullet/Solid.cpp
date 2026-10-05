@@ -62,7 +62,7 @@ namespace ce {
         p_rigid_body_->setContactProcessingThreshold(BT_LARGE_FLOAT);
 
         // pWorld->discretDynamicsWorld->addRigidBody ( pRigidBody, 1, 1 );
-        p_world_->getWorld()->addRigidBody(p_rigid_body_, 1, 1);
+        p_world_->get_world()->addRigidBody(p_rigid_body_, 1, 1);
     }
 
     void Solid::setIndexVertexArray(btTriangleIndexVertexArray* index_vertex_array) {

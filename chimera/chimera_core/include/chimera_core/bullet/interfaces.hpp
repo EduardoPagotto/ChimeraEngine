@@ -8,11 +8,11 @@ namespace ce {
     class IPhysicsControl {
       public:
         virtual ~IPhysicsControl() = default;
-        virtual void clearAllShapes(void) = 0;
-        virtual void removeAllObjs(void) = 0;
-        virtual void stepSim(const double& ts) = 0;
-        virtual void checkCollisions() = 0;
-        virtual void setGravity(const btVector3& _vet) = 0;
-        virtual btDiscreteDynamicsWorld* getWorld() = 0;
+        virtual void clear_all_shapes(void) = 0;
+        virtual void remove_all_objs(void) = 0;
+        virtual void step_sim(const double& ts) = 0;
+        virtual void check_collisions() = 0;
+        virtual void set_gravity(const btVector3& _vet) = 0;
+        virtual btDiscreteDynamicsWorld* get_world() = 0;
     };
 } // namespace ce

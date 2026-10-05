@@ -37,7 +37,7 @@ namespace ce {
 
         std::vector<float> l_arrayF;
         textToFloatArray(sGrav, l_arrayF);
-        pc->setGravity(btVector3(l_arrayF[0], l_arrayF[1], l_arrayF[2]));
+        pc->set_gravity(btVector3(l_arrayF[0], l_arrayF[1], l_arrayF[2]));
         // pc.stepSim(ts); FIXME: remover e ver se funciona!!!!!!
 
         pugi::xml_node nInstace = node.child("instance_physics_model");

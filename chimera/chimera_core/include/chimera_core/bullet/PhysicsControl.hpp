@@ -12,12 +12,12 @@ namespace ce {
       public:
         PhysicsControl();
         virtual ~PhysicsControl() override;
-        virtual void clearAllShapes() override;
-        virtual void removeAllObjs() override;
-        virtual void stepSim(const double& ts) override;
-        virtual void checkCollisions() override;
-        virtual void setGravity(const btVector3& _vet) override { discret_dynamics_world_->setGravity(_vet); }
-        virtual btDiscreteDynamicsWorld* getWorld() override { return discret_dynamics_world_; }
+        virtual void clear_all_shapes() override;
+        virtual void remove_all_objs() override;
+        virtual void step_sim(const double& ts) override;
+        virtual void check_collisions() override;
+        virtual void set_gravity(const btVector3& _vet) override { discret_dynamics_world_->setGravity(_vet); }
+        virtual btDiscreteDynamicsWorld* get_world() override { return discret_dynamics_world_; }
 
       private:
         btBroadphaseInterface* broad_phase_;

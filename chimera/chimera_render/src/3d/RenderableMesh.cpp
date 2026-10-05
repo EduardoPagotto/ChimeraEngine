@@ -30,7 +30,7 @@ namespace ce {
 
         auto [min, max, size] = vertexIndexedBoundaries(temp.vertex, temp.iFace);
 
-        aabb_.setBoundary(min, max);
+        aabb_.set_boundary(min, max);
 
         std::shared_ptr<IndexBuffer> ibo =
             std::make_shared<IndexBuffer>((uint32_t*)&temp.iFace[0], temp.iFace.size() * 3);

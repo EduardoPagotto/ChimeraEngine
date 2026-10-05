@@ -82,10 +82,10 @@ namespace ce {
 
             for (std::shared_ptr<Triangle> current_poly : v_triangle) {
                 if (current_poly != th) {
-                    SIDE result = hyper_plane.classifyPoly(vertex_[current_poly->idx.s].point, // PA
-                                                           vertex_[current_poly->idx.t].point, // PB
-                                                           vertex_[current_poly->idx.p].point, // PC
-                                                           temp); // Clip Test Result (A,B,C)
+                    SIDE result = hyper_plane.classify_poly(vertex_[current_poly->idx.s].point, // PA
+                                                            vertex_[current_poly->idx.t].point, // PB
+                                                            vertex_[current_poly->idx.p].point, // PC
+                                                            temp); // Clip Test Result (A,B,C)
                     switch (result) {
                         case SIDE::CP_ONPLANE:
                             break;
@@ -212,10 +212,10 @@ namespace ce {
                 v_triangle.pop_back();
                 glm::vec3 result;
                 SIDE clip_test =
-                    tree->hyperPlane.classifyPoly(vertex_[poly->idx.s].point, // PA old poly.vertex[0].point
-                                                  vertex_[poly->idx.t].point, // PB
-                                                  vertex_[poly->idx.p].point, // PC
-                                                  result);                    // Clip Test Result (A,B,C)
+                    tree->hyperPlane.classify_poly(vertex_[poly->idx.s].point, // PA old poly.vertex[0].point
+                                                   vertex_[poly->idx.t].point, // PB
+                                                   vertex_[poly->idx.p].point, // PC
+                                                   result);                    // Clip Test Result (A,B,C)
                 switch (clip_test) {
                     case SIDE::CP_BACK:
                         back_list.push_front(poly);
@@ -224,7 +224,7 @@ namespace ce {
                         front_list.push_front(poly);
                         break;
                     case SIDE::CP_ONPLANE: {
-                        if (tree->hyperPlane.collinearNormal(poly->normal) == true)
+                        if (tree->hyperPlane.collinear_normal(poly->normal) == true)
                             front_list.push_front(poly);
                         else
                             back_list.push_front(poly);

@@ -13,7 +13,7 @@ namespace ce {
         explicit Octree(const glm::vec3& pos, const glm::vec3& size, Octree* parent) noexcept
             : p_parent_(parent), capacity_(parent->capacity_), leaf_mode_(parent->leaf_mode_), deep_(parent->deep_ + 1),
               serial_(serial_master++) {
-            boundary_.setPosition(pos, size);
+            boundary_.set_position(pos, size);
         }
 
         explicit Octree(const AABB& boundary, const uint32_t& capacity, const bool& leafMode) noexcept
@@ -62,12 +62,12 @@ namespace ce {
 
         void insertAABB(const AABB& aabb, const uint32_t& index) noexcept {
 
-            const std::array<glm::vec3, 8>& vList = aabb.getAllVertex();
+            const std::array<glm::vec3, 8>& vList = aabb.get_all_vertex();
             for (const glm::vec3& p : vList) {
                 this->insert(p, index);
             }
 
-            this->insert(aabb.getPosition(), index);
+            this->insert(aabb.get_position(), index);
         }
 
         void query(const AABB& aabb, std::vector<glm::vec3>& found) noexcept {
@@ -132,10 +132,10 @@ namespace ce {
       private:
         void subdivide() noexcept {
 
-            const glm::vec3 s = boundary_.getSize() / 2.0f;
+            const glm::vec3 s = boundary_.get_size() / 2.0f;
             const glm::vec3 h = s / 2.0f;
-            const glm::vec3 max = boundary_.getPosition() + h;
-            const glm::vec3 min = boundary_.getPosition() - h;
+            const glm::vec3 max = boundary_.get_position() + h;
+            const glm::vec3 min = boundary_.get_position() - h;
 
             childs_.push_back(std::make_unique<Octree>(glm::vec3(min.x, min.y, min.z), s, this)); // AabbBondery::BSW 0
             childs_.push_back(std::make_unique<Octree>(glm::vec3(max.x, min.y, min.z), s, this)); // AabbBondery::BSE 1

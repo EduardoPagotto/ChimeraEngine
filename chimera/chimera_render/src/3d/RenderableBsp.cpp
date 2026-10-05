@@ -47,7 +47,7 @@ namespace ce {
         vao->unbind();
 
         auto [min, max, size] = vertexBoundaries(meshFinal.vertex);
-        aabb_.setBoundary(min, max);
+        aabb_.set_boundary(min, max);
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Childs: %ld", this->v_child_.size());
     }
 
@@ -57,7 +57,7 @@ namespace ce {
                                      std::vector<Renderable3D*>& childDraw) {
         // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
         if ((tree != nullptr) && (tree->isSolid == false)) {
-            switch (SIDE result = tree->hyperPlane.classifyPoint(cameraPos); result) {
+            switch (SIDE result = tree->hyperPlane.classify_point(cameraPos); result) {
                 case SIDE::CP_FRONT: {
                     traverseTree(cameraPos, tree->back, childDraw);
                     if (tree->isLeaf == true) // set to draw Polygon
@@ -124,8 +124,8 @@ namespace ce {
             return !tree->isSolid;
         }
 
-        const SIDE PointA = tree->hyperPlane.classifyPoint(Start);
-        const SIDE PointB = tree->hyperPlane.classifyPoint(End);
+        const SIDE PointA = tree->hyperPlane.classify_point(Start);
+        const SIDE PointB = tree->hyperPlane.classify_point(End);
 
         if ((PointA == SIDE::CP_ONPLANE) && (PointB == SIDE::CP_ONPLANE)) {
             return lineOfSight(Start, End, tree->front);

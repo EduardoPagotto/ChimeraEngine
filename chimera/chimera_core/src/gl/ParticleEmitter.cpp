@@ -46,7 +46,7 @@ namespace ce {
                 }
             }
             // TODO: continuar o AABB sem necessidade de emisor
-            pc_->aabb.setBoundary(min, max);
+            pc_->aabb.set_boundary(min, max);
 
             // Ordenar em relacao a posicao da camera, back to front
             std::sort(pc_->container.begin(), pc_->container.end());

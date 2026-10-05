@@ -43,14 +43,14 @@ namespace ce {
             return heap_.at(0);
         }
 
-        void reBuild() noexcept {
+        void re_build() noexcept {
             // TODO: Testar
-            int halfSize = heap_.size() / 2;
-            for (int index = halfSize; index > 0; index--)
+            int half_size = heap_.size() / 2;
+            for (int index = half_size; index > 0; index--)
                 heapify_down(index);
         }
 
-        void getRaw(std::vector<T>& v) noexcept {
+        void get_raw(std::vector<T>& v) noexcept {
             for (int index = 0; index < heap_.size(); index++)
                 v.push_back(heap_[index]);
         }
@@ -59,26 +59,26 @@ namespace ce {
             int altura = -1;
             int indice = 0;
             while (indice < heap_.size()) {
-                indice = this->leftChildIndex(indice);
+                indice = this->left_child_index(indice);
                 altura++;
             }
             return altura;
         }
 
-        void preOrdem(const int& indice, std::vector<T>& v) noexcept {
+        void pre_ordem(const int& indice, std::vector<T>& v) noexcept {
             if (indice < heap_.size()) {
                 v.push_back(heap_[indice]);
-                this->preOrdem(this->leftChildIndex(indice), v);
-                this->preOrdem(this->rightChildIndex(indice), v);
+                this->pre_ordem(this->left_child_index(indice), v);
+                this->pre_ordem(this->right_child_index(indice), v);
             }
         }
 
       private:
-        inline const int parentIndex(const int& i) const noexcept { return (i - 1) / 2; }
+        inline const int parent_index(const int& i) const noexcept { return (i - 1) / 2; }
 
-        inline const int leftChildIndex(const int& i) const noexcept { return (2 * i + 1); }
+        inline const int left_child_index(const int& i) const noexcept { return (2 * i + 1); }
 
-        inline const int rightChildIndex(const int& i) const noexcept { return (2 * i + 2); }
+        inline const int right_child_index(const int& i) const noexcept { return (2 * i + 2); }
 
         void swap(const int& i0, const int& i1) noexcept {
             int temp = heap_[i0];
@@ -90,38 +90,38 @@ namespace ce {
         /// @param indice
         void heapify_down(const int& indice) noexcept {
 
-            const int leftIndex = this->leftChildIndex(indice);
-            const int rightIndex = this->rightChildIndex(indice);
-            int newIndex = indice;
+            const int left_index = this->left_child_index(indice);
+            const int right_index = this->right_child_index(indice);
+            int new_index = indice;
 
             if (this->max_) {
-                if (leftIndex < heap_.size() && heap_[leftIndex] > heap_[indice])
-                    newIndex = leftIndex;
-                if (rightIndex < heap_.size() && heap_[rightIndex] > heap_[newIndex])
-                    newIndex = rightIndex;
+                if (left_index < heap_.size() && heap_[left_index] > heap_[indice])
+                    new_index = left_index;
+                if (right_index < heap_.size() && heap_[right_index] > heap_[new_index])
+                    new_index = right_index;
             } else {
-                if (leftIndex < heap_.size() && heap_[leftIndex] < heap_[indice])
-                    newIndex = leftIndex;
-                if (rightIndex < heap_.size() && heap_[rightIndex] < heap_[newIndex])
-                    newIndex = rightIndex;
+                if (left_index < heap_.size() && heap_[left_index] < heap_[indice])
+                    new_index = left_index;
+                if (right_index < heap_.size() && heap_[right_index] < heap_[new_index])
+                    new_index = right_index;
             }
 
-            if (newIndex != indice) {
-                swap(indice, newIndex);
-                heapify_down(newIndex);
+            if (new_index != indice) {
+                swap(indice, new_index);
+                heapify_down(new_index);
             }
         }
 
         /// @brief Recursive heapify-up algorithm
         /// @param indice
         void heapify_up(const int& indice) noexcept {
-            const T& t1 = heap_[this->parentIndex(indice)];
+            const T& t1 = heap_[this->parent_index(indice)];
             const T& t2 = heap_[indice];
 
-            const bool doSwap = this->max_ ? (t1 < t2) : (t1 > t2);
-            if (indice && doSwap) {
-                swap(indice, this->parentIndex(indice));
-                heapify_up(this->parentIndex(indice));
+            const bool do_swap = this->max_ ? (t1 < t2) : (t1 > t2);
+            if (indice && do_swap) {
+                swap(indice, this->parent_index(indice));
+                heapify_up(this->parent_index(indice));
             }
         }
 

@@ -20,23 +20,23 @@ namespace ce {
     class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
       public:
         explicit AABB() noexcept = default;
-        explicit AABB(const AABB& _cpy) noexcept = default;
-        explicit AABB(const glm::vec3& min, const glm::vec3& max) noexcept { this->setBoundary(min, max); }
+        explicit AABB(const AABB& cpy) noexcept = default;
+        explicit AABB(const glm::vec3& min, const glm::vec3& max) noexcept { this->set_boundary(min, max); }
 
         virtual ~AABB() = default;
 
-        bool visible(const Frustum& _frustum) const noexcept { return _frustum.aabbVisible(vertex); }
+        bool visible(const Frustum& frustum) const noexcept { return frustum.aabb_visible(vertex); }
 
-        glm::vec3 getPosition() const { return position_; }
+        glm::vec3 get_position() const { return position_; }
 
-        glm::vec3 getSize() const { return size_; }
+        glm::vec3 get_size() const { return size_; }
 
-        void setPosition(const glm::vec3& pos, const glm::vec3& size) noexcept {
-            const glm::vec3 halfV = (size / 2.0F);
-            setBoundary((pos - halfV), (pos + halfV)); // min and max
+        void set_position(const glm::vec3& pos, const glm::vec3& size) noexcept {
+            const glm::vec3 half_v = (size / 2.0F);
+            set_boundary((pos - half_v), (pos + half_v)); // min and max
         }
 
-        void setBoundary(const glm::vec3& min, const glm::vec3& max) noexcept {
+        void set_boundary(const glm::vec3& min, const glm::vec3& max) noexcept {
 
             vertex[0] = min; // glm::vec3(min.x, min.y, min.z); // AabbBondery::BSW 0 Minimal point (front)
             vertex[1] = glm::vec3(max.x, min.y, min.z); // AabbBondery::BSE 1
@@ -77,7 +77,7 @@ namespace ce {
             return AABB(min, max);
         }
 
-        const std::array<glm::vec3, 8>& getAllVertex() const { return vertex; }
+        const std::array<glm::vec3, 8>& get_all_vertex() const { return vertex; }
 
         // FIXME: dot normal posicao para distancia (calcula do AABB em relacao ao frustum)
         // float distance(const Frustum& _frustum) const noexcept { return _frustum.AABBDistance(vertex); }

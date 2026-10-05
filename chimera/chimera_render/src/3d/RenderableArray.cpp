@@ -44,7 +44,7 @@ namespace ce {
 
         auto [min, max, size] = vertexBoundaries(mesh->vertex);
 
-        aabb_.setBoundary(min, max);
+        aabb_.set_boundary(min, max);
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Childs: %ld", v_child_.size());
     }
 

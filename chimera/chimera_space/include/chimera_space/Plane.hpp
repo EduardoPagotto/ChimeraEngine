@@ -11,66 +11,66 @@ namespace ce {
         explicit Plane() noexcept = default;
         explicit Plane(const Plane& o) noexcept = default;
         explicit Plane(const glm::vec3& point, const glm::vec3& normal) noexcept : point_(point), normal_(normal) {
-            this->calcND();
+            this->calc_nd();
         }
 
         explicit Plane(const glm::vec3& pa, const glm::vec3& pb, const glm::vec3& pc) noexcept : point_(pa) {
             normal_ = glm::normalize(glm::cross(pb - pa, pc - pa));
-            this->calcND();
+            this->calc_nd();
         }
 
         virtual ~Plane() noexcept = default;
 
         Plane& operator=(const Plane& o) noexcept = default;
 
-        glm::vec3 getPoint() const { return this->point_; }
-        glm::vec3 getNormal() const { return this->normal_; }
+        glm::vec3 get_point() const { return this->point_; }
+        glm::vec3 get_normal() const { return this->normal_; }
 
-        bool collinearNormal(const glm::vec3& normal) const noexcept {
+        bool collinear_normal(const glm::vec3& normal) const noexcept {
             const glm::vec3 sub = this->normal_ - normal;
             return isLessEpsilon(sub.x + sub.y + sub.z);
         }
 
-        SIDE classifyPoint(const glm::vec3& point) const noexcept {
+        SIDE classify_point(const glm::vec3& point) const noexcept {
             const glm::vec3 dir = this->point_ - point;
-            const float clipTest = glm::dot(dir, this->normal_);
+            const float clip_test = glm::dot(dir, this->normal_);
 
-            if (isLessEpsilon(clipTest)) {
+            if (isLessEpsilon(clip_test)) {
                 return SIDE::CP_ONPLANE;
             }
 
-            if (clipTest < 0.0F) {
+            if (clip_test < 0.0F) {
                 return SIDE::CP_FRONT;
             }
 
             return SIDE::CP_BACK;
         }
 
-        SIDE classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC,
-                          glm::vec3& clipTest) const noexcept {
+        SIDE classify_poly(const glm::vec3& p_a, const glm::vec3& p_b, const glm::vec3& p_c,
+                           glm::vec3& clip_test) const noexcept {
 
             uint8_t infront{0};
             uint8_t behind{0};
-            uint8_t onPlane{0};
+            uint8_t on_plane{0};
 
-            clipTest.x = glm::dot((this->point_ - pA), this->normal_); // Clip Test poin A
-            clipTest.y = glm::dot((this->point_ - pB), this->normal_); // Clip Test poin B
-            clipTest.z = glm::dot((this->point_ - pC), this->normal_); // Clip Test poin C
+            clip_test.x = glm::dot((this->point_ - p_a), this->normal_); // Clip Test poin A
+            clip_test.y = glm::dot((this->point_ - p_b), this->normal_); // Clip Test poin B
+            clip_test.z = glm::dot((this->point_ - p_c), this->normal_); // Clip Test poin C
 
             for (uint8_t i = 0; i < 3; i++) {
-                if (isLessEpsilon(clipTest[i])) {
-                    clipTest[i] = 0.0F;
-                    onPlane++;
+                if (isLessEpsilon(clip_test[i])) {
+                    clip_test[i] = 0.0F;
+                    on_plane++;
                     infront++;
                     behind++;
-                } else if (clipTest[i] > 0.0F) {
+                } else if (clip_test[i] > 0.0F) {
                     behind++;
                 } else { // clipTest[i] < 0.0F
                     infront++;
                 }
             }
 
-            if (onPlane == 3) {
+            if (on_plane == 3) {
                 return SIDE::CP_ONPLANE;
             }
 
@@ -94,8 +94,8 @@ namespace ce {
                 return false;
             }
 
-            const glm::vec3 L1 = this->point_ - p0;
-            const float dist_from_plane = glm::dot(L1, this->normal_);
+            const glm::vec3 l1 = this->point_ - p0;
+            const float dist_from_plane = glm::dot(l1, this->normal_);
             percentage = dist_from_plane / linelength;
 
             if (percentage < 0.0F) {
@@ -110,8 +110,8 @@ namespace ce {
             return true;
         }
 
-        bool aabbBehind(const std::array<glm::vec3, 8>& vList) const noexcept {
-            return glm::dot(normal_, vList[o_]) < nd_;
+        bool aabb_behind(const std::array<glm::vec3, 8>& v_list) const noexcept {
+            return glm::dot(normal_, v_list[o_]) < nd_;
         }
 
         // FIXME: dot normal posicao para distancia (calcula do AABB em relacao ao frustum)
@@ -119,7 +119,7 @@ namespace ce {
         // vList[O]); }
 
       private:
-        void calcND() noexcept {
+        void calc_nd() noexcept {
             nd_ = dot(normal_, point_);
             o_ = normal_.z < 0.0F ? (normal_.y < 0.0F ? (normal_.x < 0.0F ? 0 : 1) : (normal_.x < 0.0F ? 2 : 3))
                                   : (normal_.y < 0.0F ? (normal_.x < 0.0F ? 4 : 5) : (normal_.x < 0.0F ? 6 : 7));

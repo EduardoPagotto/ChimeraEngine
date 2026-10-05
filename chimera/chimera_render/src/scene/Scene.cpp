@@ -216,7 +216,7 @@ namespace ce {
         }
 
         origem_ = new Transform(); // FIXME: coisa feia!!!!
-        scene_aabb_.setBoundary(tot_min, tot_max);
+        scene_aabb_.set_boundary(tot_min, tot_max);
     }
 
     void Scene::on_update(const double& ts) {

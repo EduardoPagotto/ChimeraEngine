@@ -67,7 +67,7 @@ void Game::on_attach() {
 
     l_fps_ = new Label("None", 0, 0, font, glm::vec4(1.0, 1.0, 1.0, 1.0));
 
-    std::shared_ptr<Tile> tile = std::dynamic_pointer_cast<Tile>(scene_->getLayes().get_state("TileText"));
+    std::shared_ptr<Tile> tile = std::dynamic_pointer_cast<Tile>(scene_->get_layes().get_state("TileText"));
 
     Group* group = new Group(glm::translate(glm::mat4(1.0F), glm::vec3(-500.0F, 270.0F, 0.0F)));
     group->add(new Sprite(0.0F, 0.0F, 200.0F, 50.0F, glm::vec4(0, 0, 1, 0.25)));
@@ -124,7 +124,7 @@ void Game::on_update(const double& ts) {
     }
 
     if (p_corpo_rigido_ != nullptr) {
-        scene_->setOrigem(p_corpo_rigido_);
+        scene_->set_origem(p_corpo_rigido_);
     }
 
     float propulsao_lrud{5.0F};

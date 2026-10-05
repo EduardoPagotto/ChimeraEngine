@@ -26,8 +26,8 @@ namespace ce {
       public:
         Scene(std::shared_ptr<entt::registry> registry);
         virtual ~Scene();
-        void setOrigem(ITrans* o) { origem_ = o; }
-        StateStack& getLayes() { return this->layers_; }
+        void set_origem(ITrans* o) { origem_ = o; }
+        StateStack& get_layes() { return this->layers_; }
         // Herdados
         virtual void on_attach() override;
         virtual void on_deatach() override;
@@ -37,14 +37,14 @@ namespace ce {
         std::string get_name() const override { return "SCENE"; }
 
       private:
-        void onViewportResize(const uint32_t& width, const uint32_t& height);
-        void createRenderBuffer(const uint8_t& size, const uint32_t& width, const uint32_t& height);
-        void execRenderPass(IRenderer3d& renderer);
-        void execEmitterPass(IRenderer3d& renderer);
-        void renderShadow(IRenderer3d& renderer);
-        std::shared_ptr<RenderBuffer> initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width,
-                                             const uint32_t& height);
-        void createOctree(const AABB& aabb);
+        void on_viewport_resize(const uint32_t& width, const uint32_t& height);
+        void create_render_buffer(const uint8_t& size, const uint32_t& width, const uint32_t& height);
+        void exec_render_pass(IRenderer3d& renderer);
+        void exec_emitter_pass(IRenderer3d& renderer);
+        void render_shadow(IRenderer3d& renderer);
+        std::shared_ptr<RenderBuffer> init_rb(const uint32_t& init_w, const uint32_t& init_h, const uint32_t& width,
+                                              const uint32_t& height);
+        void create_octree(const AABB& aabb);
 
         std::shared_ptr<ViewProjection> vpo_;
         std::shared_ptr<IPhysicsControl> phy_crt_;

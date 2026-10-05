@@ -27,7 +27,7 @@ namespace ce {
         vbo_.reset();
     }
 
-    void RenderableDynamic::render(VertexData* pVertice,
+    void RenderableDynamic::render(VertexData* p_vertice,
                                    const uint32_t& size) { // FIXME: ver como fazer!!!! falta dados
         vao->bind();
         vbo_->bind();

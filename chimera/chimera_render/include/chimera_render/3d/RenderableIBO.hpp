@@ -20,7 +20,7 @@ namespace ce {
 
         void submit(RenderCommand& command, IRenderer3d& renderer) override;
 
-        void draw(const bool& logData) override;
+        void draw(const bool& log_data) override;
 
       private:
         std::shared_ptr<IndexBuffer> ibo_;

@@ -35,34 +35,34 @@ namespace ce {
         }
     }
 
-    std::shared_ptr<RenderBuffer> Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width,
-                                                const uint32_t& height) {
+    std::shared_ptr<RenderBuffer> Scene::init_rb(const uint32_t& init_w, const uint32_t& init_h, const uint32_t& width,
+                                                 const uint32_t& height) {
         if (!e_render_bufer_spec_) {
             throw std::string("RenderBuffer nao encontrado");
         }
 
         // Define o framebuffer de desenho
-        FrameBufferSpecification& fbSpec =
+        FrameBufferSpecification& fb_spec =
             e_render_bufer_spec_.get_component<FrameBufferSpecification>(registry_.get());
-        fbSpec.width = width;
-        fbSpec.height = height;
+        fb_spec.width = width;
+        fb_spec.height = height;
         auto& sc = e_render_bufer_spec_.get_component<ShaderComponent>(registry_.get());
-        return make_shared<RenderBuffer>(initW, initH, std::make_shared<FrameBuffer>(fbSpec), sc.shader);
+        return make_shared<RenderBuffer>(init_w, init_h, std::make_shared<FrameBuffer>(fb_spec), sc.shader);
     }
 
-    void Scene::createRenderBuffer(const uint8_t& size, const uint32_t& width, const uint32_t& height) {
+    void Scene::create_render_buffer(const uint8_t& size, const uint32_t& width, const uint32_t& height) {
 
         for (auto& rb : v_rb_) {
             rb.reset();
         }
 
         v_rb_.clear();
-        uint32_t halfHidth = width / 2;
+        uint32_t half_hidth = width / 2;
         if (size == 2) {
-            v_rb_.push_back(initRB(0, 0, halfHidth, height));         // left
-            v_rb_.push_back(initRB(halfHidth, 0, halfHidth, height)); // right
+            v_rb_.push_back(init_rb(0, 0, half_hidth, height));          // left
+            v_rb_.push_back(init_rb(half_hidth, 0, half_hidth, height)); // right
         } else {
-            v_rb_.push_back(initRB(0, 0, width, height)); // full only
+            v_rb_.push_back(init_rb(0, 0, width, height)); // full only
         }
     }
 
@@ -71,7 +71,7 @@ namespace ce {
         // phyCrt = nullptr;
     }
 
-    void Scene::createOctree(const AABB& aabb) {
+    void Scene::create_octree(const AABB& aabb) {
 
         if (octree_ != nullptr) {
             octree_.reset();
@@ -97,18 +97,18 @@ namespace ce {
         int tot_mesh = 0;
 
         // lista as tags nas entidades registradas
-        for (auto entityID : registry_.get()->view<entt::entity>()) {
-            Entity entity(entityID);
+        for (auto entity_id : registry_.get()->view<entt::entity>()) {
+            Entity entity(entity_id);
             auto& tc = entity.get_component<TagInfo>(registry_.get());
             SDL_Log("Tag: %s Id: %s", tc.name.c_str(), tc.id.c_str());
 
             if (tc.name == "TileText") {
-                CameraComponent& cCam = entity.get_component<CameraComponent>(registry_.get());
+                CameraComponent& c_cam = entity.get_component<CameraComponent>(registry_.get());
                 auto& sc = entity.get_component<ShaderComponent>(registry_.get());
                 // TileComponent& tc = entity.addComponent<TileComponent>();
 
                 // TODO: passar tile camera para smart
-                layers_.push_state(std::make_shared<Tile>("TileText", &batch_render2_d_, sc.shader, cCam.camera));
+                layers_.push_state(std::make_shared<Tile>("TileText", &batch_render2_d_, sc.shader, c_cam.camera));
             }
 
             // Se for um mesh inicializar componente
@@ -132,8 +132,10 @@ namespace ce {
                 Renderable3dComponent& rc = entity.add_component<Renderable3dComponent>(registry_.get());
                 if (mesh.type == MeshType::SIMPLE) {
                     rc.renderable = new RenderableMesh(mesh.mesh);
+
                 } else if (mesh.type == MeshType::ARRAY) {
                     rc.renderable = new RenderableArray(mesh.vTrisIndex, mesh.mesh);
+
                 } else if (mesh.type == MeshType::BSTREE) {
                     rc.renderable = new RenderableBsp(*mesh.mesh);
                 }
@@ -166,28 +168,28 @@ namespace ce {
             if (entity.has_component<EmitterComponent>(registry_.get())) {
                 EmitterComponent& ec = entity.get_component<EmitterComponent>(registry_.get());
                 if (!entity.has_component<RenderableParticlesComponent>(registry_.get())) {
-                    RenderableParticlesComponent& particleSys =
+                    RenderableParticlesComponent& particle_sys =
                         entity.add_component<RenderableParticlesComponent>(registry_.get());
-                    particleSys.enable = true;
+                    particle_sys.enable = true;
                     RenderableParticles* p = new RenderableParticles();
                     std::shared_ptr<ParticleContainer> pc = ec.emitter->get_container(0); // FIXME: melhorar!!!!
-                    p->setParticleContainer(pc);
+                    p->set_particle_container(pc);
                     p->create();
-                    particleSys.renderable = p;
+                    particle_sys.renderable = p;
                     emitters_.push_back(ec.emitter);
                 }
             }
 
             if (entity.has_component<FrameBufferSpecification>(registry_.get())) {
-                FrameBufferSpecification& fbSpec = entity.get_component<FrameBufferSpecification>(registry_.get());
+                FrameBufferSpecification& fb_spec = entity.get_component<FrameBufferSpecification>(registry_.get());
                 if (tc.name == "shadow01") { // init shadow data
 
                     auto& sc = entity.get_component<ShaderComponent>(registry_.get());
                     CameraComponent& cc = entity.get_component<CameraComponent>(registry_.get());
-                    cc.camera->set_viewport_size(fbSpec.width, fbSpec.height);
+                    cc.camera->set_viewport_size(fb_spec.width, fb_spec.height);
                     shadow_data_.shader = sc.shader; // entity.getComponent<Shader>();
                     shadow_data_.lightProjection = cc.camera->get_projection();
-                    shadow_data_.shadowBuffer = std::make_shared<FrameBuffer>(fbSpec);
+                    shadow_data_.shadowBuffer = std::make_shared<FrameBuffer>(fb_spec);
 
                 } else if (tc.name == "RenderBufferMaster") {
 
@@ -196,7 +198,7 @@ namespace ce {
             }
         }
 
-        this->onViewportResize(canvas_->width(), canvas_->height());
+        this->on_viewport_resize(canvas_->width(), canvas_->height());
 
         { // Registra Camera controllers ViewProjection deve ser localizado acima
             auto view1 = registry_.get()->view<CameraComponent>();
@@ -233,22 +235,22 @@ namespace ce {
         for (auto it = layers_.begin(); it != layers_.end(); it++)
             (*it)->on_update(ts);
 
-        createOctree(scene_aabb_);
+        create_octree(scene_aabb_);
     }
 
-    void Scene::onViewportResize(const uint32_t& width, const uint32_t& height) {
+    void Scene::on_viewport_resize(const uint32_t& width, const uint32_t& height) {
 
-        createRenderBuffer(vpo_->get_size(), width, height);
+        create_render_buffer(vpo_->get_size(), width, height);
 
         auto view = registry_.get()->view<CameraComponent>();
         for (auto entity : view) {
-            auto& cameraComponent = view.get<CameraComponent>(entity);
-            if (!cameraComponent.fixedAspectRatio) {
+            auto& camera_component = view.get<CameraComponent>(entity);
+            if (!camera_component.fixedAspectRatio) {
 
-                for (auto renderBuffer : v_rb_) { // altera a matrix de projecao apenas na troca de resolucao
-                    cameraComponent.camera->set_viewport_size(renderBuffer->width(), renderBuffer->height());
-                    if (cameraComponent.primary) {
-                        active_cam_ = cameraComponent.camera;
+                for (auto render_buffer : v_rb_) { // altera a matrix de projecao apenas na troca de resolucao
+                    camera_component.camera->set_viewport_size(render_buffer->width(), render_buffer->height());
+                    if (camera_component.primary) {
+                        active_cam_ = camera_component.camera;
                     }
                 }
             }
@@ -261,7 +263,7 @@ namespace ce {
 
         switch (event.type) {
             case SDL_EVENT_WINDOW_RESIZED: {
-                onViewportResize(event.window.data1, event.window.data2);
+                on_viewport_resize(event.window.data1, event.window.data2);
             } break;
             case SDL_EVENT_KEY_DOWN: { // TODO: removar daqui para update!
                 switch (event.key.key) {
@@ -285,19 +287,19 @@ namespace ce {
         }
     }
 
-    void Scene::renderShadow(IRenderer3d& renderer) {
+    void Scene::render_shadow(IRenderer3d& renderer) {
 
         renderer.begin(active_cam_, vpo_, nullptr);
         {
-            auto lightViewEnt = registry_.get()->view<LightComponent>();
-            for (auto entity : lightViewEnt) {
-                auto& lc = lightViewEnt.get<LightComponent>(entity);
+            auto light_view_ent = registry_.get()->view<LightComponent>();
+            for (auto entity : light_view_ent) {
+                auto& lc = light_view_ent.get<LightComponent>(entity);
                 auto& tc = registry_.get()->get<TransComponent>(entity); // Lento
                 if (lc.global) {
                     // FIXME: usar o direcionm depois no segundo parametro
-                    glm::mat4 lightView =
+                    glm::mat4 light_view =
                         glm::lookAt(tc.trans->get_position(), glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
-                    shadow_data_.lightSpaceMatrix = shadow_data_.lightProjection * lightView;
+                    shadow_data_.lightSpaceMatrix = shadow_data_.lightProjection * light_view;
                 }
             }
 
@@ -321,7 +323,7 @@ namespace ce {
         shadow_data_.shadowBuffer->unbind();
     }
 
-    void Scene::execEmitterPass(IRenderer3d& renderer) {
+    void Scene::exec_emitter_pass(IRenderer3d& renderer) {
         auto view = registry_.get()->view<RenderableParticlesComponent>();
         for (auto entity : view) {
             RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
@@ -347,7 +349,7 @@ namespace ce {
         }
     }
 
-    void Scene::execRenderPass(IRenderer3d& renderer) {
+    void Scene::exec_render_pass(IRenderer3d& renderer) {
         // ref:
         // https://github.com/skypjack/entt/wiki/Crash-Course:-entity-component-system/465d90e0f5961adc460cd9d1e9358370987fbcd3#views-and-groups
         auto group = registry_.get()->view<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>();
@@ -374,10 +376,10 @@ namespace ce {
 
         // render a shadows in framebuffer
         if (shadow_data_.shadowBuffer)
-            renderShadow(renderer);
+            render_shadow(renderer);
 
         uint8_t count = 0;
-        for (auto renderBuffer : v_rb_) {
+        for (auto render_buffer : v_rb_) {
 
             vpo_->set_index(count);
             count++;
@@ -392,23 +394,23 @@ namespace ce {
                 renderer.ubo_queue().insert(std::make_pair("shadows", Uniform(1)));
                 renderer.ubo_queue().insert(std::make_pair("shadowMap", Uniform(1)));
                 renderer.ubo_queue().insert(std::make_pair("lightSpaceMatrix", Uniform(shadow_data_.lightSpaceMatrix)));
-                renderer.texQueue().push_back(shadow_data_.shadowBuffer->get_depth_attachemnt());
+                renderer.tex_queue().push_back(shadow_data_.shadowBuffer->get_depth_attachemnt());
             }
 
             // data load lights
-            auto lightView = registry_.get()->view<LightComponent>();
-            for (auto entity : lightView) {
-                auto& lc = lightView.get<LightComponent>(entity);
+            auto light_view = registry_.get()->view<LightComponent>();
+            for (auto entity : light_view) {
+                auto& lc = light_view.get<LightComponent>(entity);
                 auto& tc = registry_.get()->get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
                 if (lc.global) {                                         // biding light prop
                     lc.light->bind_light(renderer.ubo_queue(), tc.trans->get_matrix());
                 }
             }
 
-            renderBuffer->bind(); // bind renderbuffer to draw we're not using the stencil buffer now
+            render_buffer->bind(); // bind renderbuffer to draw we're not using the stencil buffer now
 
             renderer.begin(active_cam_, vpo_, octree_);
-            this->execRenderPass(renderer);
+            this->exec_render_pass(renderer);
             renderer.end();
             renderer.flush();
 
@@ -416,11 +418,11 @@ namespace ce {
                 // inicializa state machine do opengl
                 BinaryStateEnable depth(GL_DEPTH_TEST, GL_TRUE);
                 BinaryStateEnable blender(GL_BLEND, GL_TRUE);
-                DepthFuncSetter depthFunc(GL_LESS); // Accept fragment if it closer to the camera than the former one
+                DepthFuncSetter depth_func(GL_LESS); // Accept fragment if it closer to the camera than the former one
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
                 renderer.begin(active_cam_, vpo_, nullptr);
-                this->execEmitterPass(renderer);
+                this->exec_emitter_pass(renderer);
                 renderer.end();
                 renderer.flush();
             }
@@ -429,13 +431,13 @@ namespace ce {
                 if (verbose_ == 1) { // DEBUG OCTREE
 
                     if (!dl_.valid()) {
-                        std::unordered_map<GLenum, std::string> shadeData;
-                        shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
-                        shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
+                        std::unordered_map<GLenum, std::string> shade_data;
+                        shade_data[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
+                        shade_data[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
 
                         auto assets = this->registry_->ctx().get<std::shared_ptr<AssetManager>>();
 
-                        dl_.create(assets->load_shader("DrawLine", shadeData).handle(), 40000);
+                        dl_.create(assets->load_shader("DrawLine", shade_data).handle(), 40000);
                     }
 
                     if (octree_ != nullptr) {
@@ -458,13 +460,13 @@ namespace ce {
                 } else if (verbose_ == 2) { // DEBUG AABB
 
                     if (!render_lines_.valid()) {
-                        std::unordered_map<GLenum, std::string> shadeData;
-                        shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
-                        shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
+                        std::unordered_map<GLenum, std::string> shade_data;
+                        shade_data[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
+                        shade_data[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
 
                         auto assets = this->registry_->ctx().get<std::shared_ptr<AssetManager>>();
 
-                        render_lines_.create(assets->load_shader("DrawLine", shadeData).handle(), 10000);
+                        render_lines_.create(assets->load_shader("DrawLine", shade_data).handle(), 10000);
                     }
 
                     render_lines_.begin(active_cam_, vpo_, nullptr);
@@ -512,8 +514,8 @@ namespace ce {
                 // SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "mouse(X: %d / Y: %d): %d", pos.x, pos.y, val);
             }
 
-            renderBuffer->unbind();
-            renderBuffer->render();
+            render_buffer->unbind();
+            render_buffer->render();
         }
     }
 } // namespace ce

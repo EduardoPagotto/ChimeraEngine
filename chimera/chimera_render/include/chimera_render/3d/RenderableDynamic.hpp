@@ -11,7 +11,7 @@ namespace ce {
 
         virtual ~RenderableDynamic();
 
-        void render(VertexData* pVertice, const uint32_t& size);
+        void render(VertexData* p_vertice, const uint32_t& size);
 
       private:
         uint32_t max_;

@@ -14,7 +14,7 @@ namespace ce {
 
     void RenderableIBO::submit(RenderCommand& command, IRenderer3d& renderer) { renderer.submit(command, this, 0); }
 
-    void RenderableIBO::draw(const bool& logData) {
+    void RenderableIBO::draw(const bool& log_data) {
 
         ibo_->bind();
         glDrawElements(GL_TRIANGLES, ibo_->get_size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));

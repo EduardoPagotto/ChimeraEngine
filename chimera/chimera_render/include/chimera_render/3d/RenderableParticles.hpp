@@ -21,13 +21,13 @@ namespace ce {
 
         void submit(RenderCommand& command, IRenderer3d& renderer) override;
 
-        void draw(const bool& logData) override;
+        void draw(const bool& log_data) override;
 
         void create();
 
         void destroy();
 
-        void setParticleContainer(std::shared_ptr<ParticleContainer> pc) { this->pc_ = pc; }
+        void set_particle_container(std::shared_ptr<ParticleContainer> pc) { this->pc_ = pc; }
 
       private:
         std::shared_ptr<VertexBuffer> vbo_vex_;

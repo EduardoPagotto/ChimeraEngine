@@ -9,7 +9,7 @@ namespace ce {
 
     class Renderer3d : public IRenderer3d {
       public:
-        Renderer3d(const bool& logData);
+        Renderer3d(const bool& log_data);
 
         virtual ~Renderer3d();
 
@@ -22,7 +22,7 @@ namespace ce {
 
         virtual void flush() override;
 
-        virtual inline std::vector<std::shared_ptr<Texture>>& texQueue() { return texture_queue_; }
+        virtual inline std::vector<std::shared_ptr<Texture>>& tex_queue() { return texture_queue_; }
 
       private:
         std::queue<uint32_t> q_renderable_indexes_;

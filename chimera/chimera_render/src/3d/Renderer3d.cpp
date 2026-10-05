@@ -5,7 +5,7 @@
 
 namespace ce {
 
-    Renderer3d::Renderer3d(const bool& logData) : log_data_(logData) {
+    Renderer3d::Renderer3d(const bool& log_data) : log_data_(log_data) {
         v_renderable_.reserve(500);
         v_render_command_.reserve(50);
         texture_queue_.reserve(32);
@@ -25,16 +25,16 @@ namespace ce {
     void Renderer3d::end() {
 
         if (octree_ != nullptr) {
-            std::queue<uint32_t> qIndexes;
-            octree_->visible(frustum_, qIndexes);
+            std::queue<uint32_t> q_indexes;
+            octree_->visible(frustum_, q_indexes);
 
             if (log_data_) {
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Octree Visible Indexes: %ld", qIndexes.size());
+                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Octree Visible Indexes: %ld", q_indexes.size());
             }
 
-            while (!qIndexes.empty()) {
-                q_renderable_indexes_.push(qIndexes.front());
-                qIndexes.pop();
+            while (!q_indexes.empty()) {
+                q_renderable_indexes_.push(q_indexes.front());
+                q_indexes.pop();
             }
         }
     }
@@ -65,42 +65,42 @@ namespace ce {
 
     void Renderer3d::flush() {
 
-        std::shared_ptr<Shader> activeShader;
-        std::shared_ptr<VertexArray> pLastVao;
+        std::shared_ptr<Shader> active_shader;
+        std::shared_ptr<VertexArray> p_last_vao;
 
         while (!q_renderable_indexes_.empty()) {
             auto& r = v_renderable_[q_renderable_indexes_.front()];
-            if (r->get_vao() != pLastVao) { // Diferente  do anterior
-                if (pLastVao != nullptr) {  // desvincula o anterior
-                    pLastVao->unbind();
+            if (r->get_vao() != p_last_vao) { // Diferente  do anterior
+                if (p_last_vao != nullptr) {  // desvincula o anterior
+                    p_last_vao->unbind();
                 }
 
                 const RenderCommand& command = v_render_command_[r->get_index_aux_command()];
                 r->get_vao()->bind(); // vincula novo modelo
-                pLastVao = r->get_vao();
+                p_last_vao = r->get_vao();
 
-                if (activeShader == nullptr) { // primeira passada
-                    activeShader = command.shader;
-                    glUseProgram(activeShader->get_id());
+                if (active_shader == nullptr) { // primeira passada
+                    active_shader = command.shader;
+                    glUseProgram(active_shader->get_id());
                 } else {
                     // demais passadas
-                    if ((*activeShader) != (*command.shader)) { // se diferente
-                        if (command.shader != nullptr) {        // se valido trocar
+                    if ((*active_shader) != (*command.shader)) { // se diferente
+                        if (command.shader != nullptr) {         // se valido trocar
                             glUseProgram(0);
-                            activeShader = command.shader;
-                            glUseProgram(activeShader->get_id());
+                            active_shader = command.shader;
+                            glUseProgram(active_shader->get_id());
                         }
                     }
                 }
 
                 // generic bind in each draw call camera, light, etc
                 for (const auto& kv : uniformsQueue) {
-                    activeShader->set_uniform_u(kv.first.c_str(), kv.second);
+                    active_shader->set_uniform_u(kv.first.c_str(), kv.second);
                 }
 
                 // bind dos uniforms from model
                 for (const auto& kv : command.uniforms) {
-                    activeShader->set_uniform_u(kv.first.c_str(), kv.second);
+                    active_shader->set_uniform_u(kv.first.c_str(), kv.second);
                 }
 
                 // libera textura antes de passar as novas
@@ -124,7 +124,7 @@ namespace ce {
             q_renderable_indexes_.pop();
         }
 
-        pLastVao->unbind();
+        p_last_vao->unbind();
 
         uniformsQueue.clear();     // limpa comandos communs a todos VAO's
         texture_queue_.clear();    // limpa fila de texturas

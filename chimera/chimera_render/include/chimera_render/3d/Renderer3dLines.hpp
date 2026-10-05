@@ -24,8 +24,8 @@ namespace ce {
 
         void destroy() noexcept { draw_line_.destroy(); };
 
-        void create(std::shared_ptr<Shader> shader, const uint32_t& sizeBuffer) noexcept {
-            draw_line_.create(shader, sizeBuffer);
+        void create(std::shared_ptr<Shader> shader, const uint32_t& size_buffer) noexcept {
+            draw_line_.create(shader, size_buffer);
         };
 
       private:

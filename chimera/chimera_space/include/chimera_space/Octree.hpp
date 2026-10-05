@@ -16,8 +16,8 @@ namespace ce {
             boundary_.set_position(pos, size);
         }
 
-        explicit Octree(const AABB& boundary, const uint32_t& capacity, const bool& leafMode) noexcept
-            : p_parent_(nullptr), capacity_(capacity), leaf_mode_(leafMode), deep_(0), serial_(serial_master++),
+        explicit Octree(const AABB& boundary, const uint32_t& capacity, const bool& leaf_mode) noexcept
+            : p_parent_(nullptr), capacity_(capacity), leaf_mode_(leaf_mode), deep_(0), serial_(serial_master++),
               boundary_(boundary) {}
 
         virtual ~Octree() noexcept { destroy(); }
@@ -51,19 +51,19 @@ namespace ce {
 
             if (leaf_mode_) {
                 for (std::size_t i = 0; i < points_.size(); i++)
-                    this->insertNew(points_[i], indexes_[i]);
+                    this->insert_new(points_[i], indexes_[i]);
 
                 points_.clear();
                 indexes_.clear();
             }
 
-            return this->insertNew(point, index);
+            return this->insert_new(point, index);
         }
 
-        void insertAABB(const AABB& aabb, const uint32_t& index) noexcept {
+        void insert_aabb(const AABB& aabb, const uint32_t& index) noexcept {
 
-            const std::array<glm::vec3, 8>& vList = aabb.get_all_vertex();
-            for (const glm::vec3& p : vList) {
+            const std::array<glm::vec3, 8>& v_list = aabb.get_all_vertex();
+            for (const glm::vec3& p : v_list) {
                 this->insert(p, index);
             }
 
@@ -85,11 +85,11 @@ namespace ce {
             }
         }
 
-        bool hasPoint(const glm::vec3& point) noexcept {
+        bool has_point(const glm::vec3& point) noexcept {
 
             if (boundary_.contains(point) == true) {
                 for (auto& octree : childs_) {
-                    if (octree->hasPoint(point))
+                    if (octree->has_point(point))
                         return true;
                 }
 
@@ -102,28 +102,28 @@ namespace ce {
         }
 
         void visible(const Frustum& frustum, std::queue<uint32_t>& qIndexes) noexcept {
-            HeapQ<uint32_t> heapQ(false);
-            this->_visible(frustum, heapQ);
+            HeapQ<uint32_t> heap_q(false);
+            this->visible(frustum, heap_q);
 
             uint32_t last = -1;
-            while (heapQ.empty() == false) {
-                uint32_t n = heapQ.top();
+            while (heap_q.empty() == false) {
+                uint32_t n = heap_q.top();
                 if (n != last) {
                     qIndexes.push(n);
                     last = n;
                 }
-                heapQ.pop();
+                heap_q.pop();
             }
         }
 
-        void getBondaryList(std::vector<AABB>& list, const bool& showEmpty) noexcept {
+        void get_bondary_list(std::vector<AABB>& list, const bool& show_empty) noexcept {
 
             if (!childs_.empty()) {
                 for (auto& octree : childs_) {
-                    octree->getBondaryList(list, showEmpty);
+                    octree->get_bondary_list(list, show_empty);
                 }
             } else {
-                if ((points_.size() > 0) || (showEmpty)) {
+                if ((points_.size() > 0) || (show_empty)) {
                     list.push_back(boundary_);
                 }
             }
@@ -147,24 +147,24 @@ namespace ce {
             childs_.push_back(std::make_unique<Octree>(glm::vec3(max.x, max.y, max.z), s, this)); // AabbBondery::TNE 7
         }
 
-        void _visible(const Frustum& frustum, HeapQ<uint32_t>& qIndexes) noexcept {
+        void visible(const Frustum& frustum, HeapQ<uint32_t>& q_indexes) noexcept {
 
             if (boundary_.visible(frustum)) {
                 for (auto& octree : childs_) {
-                    octree->_visible(frustum, qIndexes);
+                    octree->visible(frustum, q_indexes);
                 }
 
                 uint32_t last = -1;
                 for (auto& i : this->indexes_) {
                     if (i != last) {
-                        qIndexes.push(i);
+                        q_indexes.push(i);
                         last = i;
                     }
                 }
             }
         }
 
-        bool insertNew(const glm::vec3& point, const uint32_t& index) noexcept {
+        bool insert_new(const glm::vec3& point, const uint32_t& index) noexcept {
             for (auto& octree : childs_) {
                 if (octree->insert(point, index))
                     return true;

@@ -441,7 +441,7 @@ namespace ce {
                     if (octree_ != nullptr) {
 
                         std::vector<AABB> list;
-                        octree_->getBondaryList(list, false);
+                        octree_->get_bondary_list(list, false);
 
                         for (auto& aabb : list) {
                             dl_.add_aabb(aabb, glm::vec3(1.0, 1.0, 1.0));

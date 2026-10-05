@@ -52,7 +52,7 @@ namespace ce {
 
         // Registro de todo AABB's com indice de Renderable3D
         if (this->octree != nullptr) {
-            this->octree->insertAABB(nova, vRenderable.size());
+            this->octree->insert_aabb(nova, vRenderable.size());
         } else {
             // adicione apenas o que esta no clip-space
             if (nova.visible(frustum)) {

@@ -11,12 +11,12 @@ namespace ce {
         vao->bind();
         // The VBO containing the 4 vertices of the particles. Thanks to instancing, they will be shared by all
         // particles.
-        static const glm::vec3 vVertex[] = {glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.5f, -0.5f, 0.0f),
-                                            glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec3(0.5f, 0.5f, 0.0f)};
+        static const glm::vec3 v_vertex[] = {glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.5f, -0.5f, 0.0f),
+                                             glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec3(0.5f, 0.5f, 0.0f)};
 
         // VBO square vertex static, others (posiciton an size / color) is empty (NULL) buffer and it will be updated
         // later, each frame.
-        vbo_vex_ = std::make_shared<VertexBuffer>(BufferType::STATIC, sizeof(glm::vec3) * 4, (void*)vVertex);
+        vbo_vex_ = std::make_shared<VertexBuffer>(BufferType::STATIC, sizeof(glm::vec3) * 4, (void*)v_vertex);
         vbo_pos_ = std::make_shared<VertexBuffer>(BufferType::STREAM, max * sizeof(glm::vec4), nullptr);
         vbo_cor_ = std::make_shared<VertexBuffer>(BufferType::STREAM, max * 4 * sizeof(GLubyte), nullptr);
 
@@ -53,11 +53,11 @@ namespace ce {
     void RenderableParticles::submit(RenderCommand& command, IRenderer3d& renderer) {
 
         pc_->cameraPos =
-            glm::inverse(renderer.getViewProjection()->get_sel().view)[3]; // depois mover para o statemachine!!!
+            glm::inverse(renderer.get_view_projection()->get_sel().view)[3]; // depois mover para o statemachine!!!
         renderer.submit(command, this, 0);
     }
 
-    void RenderableParticles::draw(const bool& logData) {
+    void RenderableParticles::draw(const bool& log_data) {
 
         // particlesCount = recycleParticleLife();
 

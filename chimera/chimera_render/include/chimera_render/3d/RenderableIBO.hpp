@@ -12,11 +12,11 @@ namespace ce {
 
         virtual ~RenderableIBO();
 
-        const uint32_t getSize() const override { return ibo_->get_size(); }
+        const uint32_t get_size() const override { return ibo_->get_size(); }
 
-        std::shared_ptr<IndexBuffer> getIBO() const override { return ibo_; }
+        std::shared_ptr<IndexBuffer> get_ibo() const override { return ibo_; }
 
-        const AABB& getAABB() const override { return aabb_; }
+        const AABB& get_aabb() const override { return aabb_; }
 
         void submit(RenderCommand& command, IRenderer3d& renderer) override;
 

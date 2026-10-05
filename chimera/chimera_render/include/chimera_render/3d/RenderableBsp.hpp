@@ -14,11 +14,11 @@ namespace ce {
 
         virtual ~RenderableBsp();
 
-        const uint32_t getSize() const override { return tot_index_; }
+        const uint32_t get_size() const override { return tot_index_; }
 
-        std::shared_ptr<IndexBuffer> getIBO() const override { return nullptr; }
+        std::shared_ptr<IndexBuffer> get_ibo() const override { return nullptr; }
 
-        const AABB& getAABB() const override { return aabb_; }
+        const AABB& get_aabb() const override { return aabb_; }
 
         void submit(RenderCommand& command, IRenderer3d& renderer) override;
 
@@ -27,10 +27,10 @@ namespace ce {
 
         void collapse(BSPTreeNode* tree);
 
-        void traverseTree(const glm::vec3& cameraPos, BSPTreeNode* tree, std::vector<Renderable3D*>& childDraw);
+        void traverse_tree(const glm::vec3& camera_pos, BSPTreeNode* tree, std::vector<Renderable3D*>& child_draw);
 
         // TODO: Testar!!!!!!
-        bool lineOfSight(const glm::vec3& Start, const glm::vec3& End, BSPTreeNode* tree);
+        bool line_of_sight(const glm::vec3& start, const glm::vec3& end, BSPTreeNode* tree);
 
       private:
         std::vector<Renderable3D*> v_child_;

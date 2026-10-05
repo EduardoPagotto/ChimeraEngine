@@ -19,24 +19,24 @@ namespace ce {
 
         virtual ~Renderable3D() { vao.reset(); }
 
-        virtual void draw(const bool& logData) {
-            if (logData)
+        virtual void draw(const bool& log_data) {
+            if (log_data)
                 SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Renderable3D draw");
         }
 
-        virtual const uint32_t getSize() const = 0;
+        virtual const uint32_t get_size() const = 0;
 
-        virtual const AABB& getAABB() const = 0;
+        virtual const AABB& get_aabb() const = 0;
 
-        virtual std::shared_ptr<IndexBuffer> getIBO() const = 0;
+        virtual std::shared_ptr<IndexBuffer> get_ibo() const = 0;
 
         virtual void submit(RenderCommand& command, IRenderer3d& renderer) = 0;
 
-        inline std::shared_ptr<VertexArray> getVao() const { return vao; }
+        inline std::shared_ptr<VertexArray> get_vao() const { return vao; }
 
-        inline void setIndexAuxCommand(const uint32_t& command) { indexAuxCommand = command; }
+        inline void set_index_aux_command(const uint32_t& command) { indexAuxCommand = command; }
 
-        inline const uint32_t getIndexAuxCommand() const { return indexAuxCommand; }
+        inline const uint32_t get_index_aux_command() const { return indexAuxCommand; }
 
       protected:
         uint32_t indexAuxCommand = 0;
@@ -47,7 +47,7 @@ namespace ce {
       public:
         IRenderer3d() {
             uniformsQueue.reserve(500);
-        } // FIXME: ViewProjection pode ser subistituido pela matix memso ???
+        } // FIXME: ViewProjection pode ser subistituido pela matrix mesmo ???
 
         virtual ~IRenderer3d() = default;
 
@@ -60,13 +60,13 @@ namespace ce {
 
         virtual void flush() = 0;
 
-        inline std::shared_ptr<Camera> getCamera() const { return camera; }
+        inline std::shared_ptr<Camera> get_camera() const { return camera; }
 
-        inline std::shared_ptr<ViewProjection> getViewProjection() const { return vpo; }
+        inline std::shared_ptr<ViewProjection> get_view_projection() const { return vpo; }
 
-        inline TransformationStack& getStack() { return stack; };
+        inline TransformationStack& get_stack() { return stack; };
 
-        inline MapUniform& uboQueue() { return uniformsQueue; }
+        inline MapUniform& ubo_queue() { return uniformsQueue; }
 
       protected:
         std::shared_ptr<Camera> camera;

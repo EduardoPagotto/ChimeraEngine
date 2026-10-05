@@ -13,11 +13,11 @@ namespace ce {
 
         virtual ~RenderableParticles();
 
-        const uint32_t getSize() const override { return pc_->particlesCount; }
+        const uint32_t get_size() const override { return pc_->particlesCount; }
 
-        std::shared_ptr<IndexBuffer> getIBO() const override { return nullptr; }
+        std::shared_ptr<IndexBuffer> get_ibo() const override { return nullptr; }
 
-        const AABB& getAABB() const override { return pc_->aabb; }
+        const AABB& get_aabb() const override { return pc_->aabb; }
 
         void submit(RenderCommand& command, IRenderer3d& renderer) override;
 

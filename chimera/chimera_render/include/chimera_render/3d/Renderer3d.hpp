@@ -22,15 +22,15 @@ namespace ce {
 
         virtual void flush() override;
 
-        virtual inline std::vector<std::shared_ptr<Texture>>& texQueue() { return textureQueue; }
+        virtual inline std::vector<std::shared_ptr<Texture>>& texQueue() { return texture_queue_; }
 
       private:
-        std::queue<uint32_t> qRenderableIndexes;
-        std::vector<RenderCommand> vRenderCommand;
-        std::vector<Renderable3D*> vRenderable;
-        std::vector<std::shared_ptr<Texture>> textureQueue;
-        std::shared_ptr<Octree> octree;
-        Frustum frustum;
-        bool logData;
+        std::queue<uint32_t> q_renderable_indexes_;
+        std::vector<RenderCommand> v_render_command_;
+        std::vector<Renderable3D*> v_renderable_;
+        std::vector<std::shared_ptr<Texture>> texture_queue_;
+        std::shared_ptr<Octree> octree_;
+        Frustum frustum_;
+        bool log_data_;
     };
 } // namespace ce

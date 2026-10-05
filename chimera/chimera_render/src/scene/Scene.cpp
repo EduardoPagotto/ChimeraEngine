@@ -338,7 +338,7 @@ namespace ce {
             mc.material->bind_material_information(command.uniforms, command.vTex);
 
             const glm::mat4& view = vpo_->get_sel().view;
-            command.uniforms["projection"] = Uniform(renderer.getCamera()->get_projection());
+            command.uniforms["projection"] = Uniform(renderer.get_camera()->get_projection());
             command.uniforms["view"] = Uniform(view);
             command.uniforms["CameraRight_worldspace"] = Uniform(glm::vec3(view[0][0], view[1][0], view[2][0]));
             command.uniforms["CameraUp_worldspace"] = Uniform(glm::vec3(view[0][1], view[1][1], view[2][1]));
@@ -383,15 +383,15 @@ namespace ce {
             count++;
 
             // data load used by all
-            renderer.uboQueue().insert(std::make_pair("projection", Uniform(active_cam_->get_projection())));
-            renderer.uboQueue().insert(std::make_pair("view", Uniform(vpo_->get_sel().view)));
+            renderer.ubo_queue().insert(std::make_pair("projection", Uniform(active_cam_->get_projection())));
+            renderer.ubo_queue().insert(std::make_pair("view", Uniform(vpo_->get_sel().view)));
 
             // data load shadows props to renderer in shade of models!!!!
             if (shadow_data_.shadowBuffer) {
-                renderer.uboQueue().insert(std::make_pair("viewPos", Uniform(active_cam_->get_position())));
-                renderer.uboQueue().insert(std::make_pair("shadows", Uniform(1)));
-                renderer.uboQueue().insert(std::make_pair("shadowMap", Uniform(1)));
-                renderer.uboQueue().insert(std::make_pair("lightSpaceMatrix", Uniform(shadow_data_.lightSpaceMatrix)));
+                renderer.ubo_queue().insert(std::make_pair("viewPos", Uniform(active_cam_->get_position())));
+                renderer.ubo_queue().insert(std::make_pair("shadows", Uniform(1)));
+                renderer.ubo_queue().insert(std::make_pair("shadowMap", Uniform(1)));
+                renderer.ubo_queue().insert(std::make_pair("lightSpaceMatrix", Uniform(shadow_data_.lightSpaceMatrix)));
                 renderer.texQueue().push_back(shadow_data_.shadowBuffer->get_depth_attachemnt());
             }
 
@@ -401,7 +401,7 @@ namespace ce {
                 auto& lc = lightView.get<LightComponent>(entity);
                 auto& tc = registry_.get()->get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
                 if (lc.global) {                                         // biding light prop
-                    lc.light->bind_light(renderer.uboQueue(), tc.trans->get_matrix());
+                    lc.light->bind_light(renderer.ubo_queue(), tc.trans->get_matrix());
                 }
             }
 
@@ -469,9 +469,9 @@ namespace ce {
 
                     render_lines_.begin(active_cam_, vpo_, nullptr);
 
-                    render_lines_.uboQueue().insert(
+                    render_lines_.ubo_queue().insert(
                         std::make_pair("projection", Uniform(active_cam_->get_projection())));
-                    render_lines_.uboQueue().insert(std::make_pair("view", Uniform(vpo_->get_sel().view)));
+                    render_lines_.ubo_queue().insert(std::make_pair("view", Uniform(vpo_->get_sel().view)));
 
                     auto group = registry_.get()->group<TransComponent, Renderable3dComponent>();
                     for (auto entity : group) {

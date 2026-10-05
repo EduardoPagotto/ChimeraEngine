@@ -5,10 +5,10 @@
 
 namespace ce {
 
-    Renderer3d::Renderer3d(const bool& logData) : logData(logData) {
-        vRenderable.reserve(500);
-        vRenderCommand.reserve(50);
-        textureQueue.reserve(32);
+    Renderer3d::Renderer3d(const bool& logData) : log_data_(logData) {
+        v_renderable_.reserve(500);
+        v_render_command_.reserve(50);
+        texture_queue_.reserve(32);
     }
 
     Renderer3d::~Renderer3d() {}
@@ -18,22 +18,22 @@ namespace ce {
 
         this->camera = camera;
         this->vpo = vpo;
-        this->octree = octree;
-        frustum.set(vpo->get_sel().viewProjectionInverse);
+        this->octree_ = octree;
+        frustum_.set(vpo->get_sel().viewProjectionInverse);
     }
 
     void Renderer3d::end() {
 
-        if (octree != nullptr) {
+        if (octree_ != nullptr) {
             std::queue<uint32_t> qIndexes;
-            octree->visible(frustum, qIndexes);
+            octree_->visible(frustum_, qIndexes);
 
-            if (logData) {
+            if (log_data_) {
                 SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Octree Visible Indexes: %ld", qIndexes.size());
             }
 
             while (!qIndexes.empty()) {
-                qRenderableIndexes.push(qIndexes.front());
+                q_renderable_indexes_.push(qIndexes.front());
                 qIndexes.pop();
             }
         }
@@ -42,25 +42,25 @@ namespace ce {
     void Renderer3d::submit(const RenderCommand& command, Renderable3D* renderable, const uint32_t& count) {
 
         if (count == 0) {
-            vRenderCommand.push_back(command);
+            v_render_command_.push_back(command);
         }
 
-        renderable->setIndexAuxCommand(vRenderCommand.size() - 1);
+        renderable->set_index_aux_command(v_render_command_.size() - 1);
 
         // Transformation model matrix AABB to know if in frustrum Camera
-        AABB nova = renderable->getAABB().transformation(command.transform);
+        AABB nova = renderable->get_aabb().transformation(command.transform);
 
         // Registro de todo AABB's com indice de Renderable3D
-        if (this->octree != nullptr) {
-            this->octree->insert_aabb(nova, vRenderable.size());
+        if (this->octree_ != nullptr) {
+            this->octree_->insert_aabb(nova, v_renderable_.size());
         } else {
             // adicione apenas o que esta no clip-space
-            if (nova.visible(frustum)) {
-                qRenderableIndexes.push(vRenderable.size());
+            if (nova.visible(frustum_)) {
+                q_renderable_indexes_.push(v_renderable_.size());
             }
         }
 
-        vRenderable.push_back(renderable);
+        v_renderable_.push_back(renderable);
     }
 
     void Renderer3d::flush() {
@@ -68,16 +68,16 @@ namespace ce {
         std::shared_ptr<Shader> activeShader;
         std::shared_ptr<VertexArray> pLastVao;
 
-        while (!qRenderableIndexes.empty()) {
-            auto& r = vRenderable[qRenderableIndexes.front()];
-            if (r->getVao() != pLastVao) { // Diferente  do anterior
-                if (pLastVao != nullptr) { // desvincula o anterior
+        while (!q_renderable_indexes_.empty()) {
+            auto& r = v_renderable_[q_renderable_indexes_.front()];
+            if (r->get_vao() != pLastVao) { // Diferente  do anterior
+                if (pLastVao != nullptr) {  // desvincula o anterior
                     pLastVao->unbind();
                 }
 
-                const RenderCommand& command = vRenderCommand[r->getIndexAuxCommand()];
-                r->getVao()->bind(); // vincula novo modelo
-                pLastVao = r->getVao();
+                const RenderCommand& command = v_render_command_[r->get_index_aux_command()];
+                r->get_vao()->bind(); // vincula novo modelo
+                pLastVao = r->get_vao();
 
                 if (activeShader == nullptr) { // primeira passada
                     activeShader = command.shader;
@@ -114,22 +114,22 @@ namespace ce {
                 }
 
                 // bind de texturas globais
-                for (uint8_t i = 0; i < textureQueue.size(); i++) {
-                    textureQueue[i]->bind(command.vTex.size() + i);
+                for (uint8_t i = 0; i < texture_queue_.size(); i++) {
+                    texture_queue_[i]->bind(command.vTex.size() + i);
                 }
             }
 
-            r->draw(logData); // aqui
+            r->draw(log_data_); // aqui
 
-            qRenderableIndexes.pop();
+            q_renderable_indexes_.pop();
         }
 
         pLastVao->unbind();
 
-        uniformsQueue.clear();  // limpa comandos communs a todos VAO's
-        textureQueue.clear();   // limpa fila de texturas
-        vRenderable.clear();    // limpa array de desenho
-        vRenderCommand.clear(); // Limpa rendercommand
+        uniformsQueue.clear();     // limpa comandos communs a todos VAO's
+        texture_queue_.clear();    // limpa fila de texturas
+        v_renderable_.clear();     // limpa array de desenho
+        v_render_command_.clear(); // Limpa rendercommand
     }
 
 } // namespace ce

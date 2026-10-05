@@ -8,17 +8,17 @@ namespace ce {
 
     class RenderableArray : public Renderable3D {
       public:
-        RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* mesh);
+        RenderableArray(std::vector<TrisIndex>& v_ptr_tris_index, Mesh* mesh);
 
         virtual ~RenderableArray();
 
         void submit(RenderCommand& command, IRenderer3d& renderer) override;
 
-        const uint32_t getSize() const override { return tot_index_; }
+        const uint32_t get_size() const override { return tot_index_; }
 
-        std::shared_ptr<IndexBuffer> getIBO() const override { return nullptr; }
+        std::shared_ptr<IndexBuffer> get_ibo() const override { return nullptr; }
 
-        const AABB& getAABB() const override { return aabb_; }
+        const AABB& get_aabb() const override { return aabb_; }
 
       private:
         std::vector<Renderable3D*> v_child_;

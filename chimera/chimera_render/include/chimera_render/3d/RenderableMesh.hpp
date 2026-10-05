@@ -13,11 +13,11 @@ namespace ce {
 
         virtual ~RenderableMesh();
 
-        const uint32_t getSize() const override { return tot_index_; }
+        const uint32_t get_size() const override { return tot_index_; }
 
-        std::shared_ptr<IndexBuffer> getIBO() const override { return nullptr; }
+        std::shared_ptr<IndexBuffer> get_ibo() const override { return nullptr; }
 
-        const AABB& getAABB() const override { return aabb_; }
+        const AABB& get_aabb() const override { return aabb_; }
 
         void submit(RenderCommand& command, IRenderer3d& renderer) override;
 

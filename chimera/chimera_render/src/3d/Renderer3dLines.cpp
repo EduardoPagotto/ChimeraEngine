@@ -15,7 +15,7 @@ namespace ce {
 
     void Renderer3dLines::submit(const RenderCommand& command, Renderable3D* renderable, const uint32_t& count) {
         // Transformation model matrix AABB to know if in frustrum Camera
-        const AABB nova = renderable->getAABB().transformation(command.transform);
+        const AABB nova = renderable->get_aabb().transformation(command.transform);
 
         // only if in the clip-space
         if (nova.visible(frustum_) == true)

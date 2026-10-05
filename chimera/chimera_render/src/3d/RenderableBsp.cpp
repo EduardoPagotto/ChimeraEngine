@@ -7,12 +7,12 @@ namespace ce {
 
     RenderableBsp::RenderableBsp(Mesh& mesh) : Renderable3D(), tot_index_(0) {
 
-        Mesh meshFinal;
-        meshReindex(mesh, meshFinal);
+        Mesh mesh_final;
+        meshReindex(mesh, mesh_final);
 
-        BspTree bspTree;
-        std::vector<TrisIndex> vTris;
-        root_ = bspTree.create(meshFinal, vTris);
+        BspTree bsp_tree;
+        std::vector<TrisIndex> v_tris;
+        root_ = bsp_tree.create(mesh_final, v_tris);
 
         // create VAO and VBO
         vao = std::make_shared<VertexArray>();
@@ -27,18 +27,18 @@ namespace ce {
         layout.push<float>(2, false);
 
         vbo->set_layout(layout);
-        vbo->set_data(&meshFinal.vertex[0], meshFinal.vertex.size());
+        vbo->set_data(&mesh_final.vertex[0], mesh_final.vertex.size());
         vbo->unbind();
 
         vao->push(vbo);
 
         // Add all leafs and create IBO
-        for (auto trisIndex : vTris) {
+        for (auto tris_index : v_tris) {
 
-            auto [min, max, size] = vertexIndexedBoundaries(meshFinal.vertex, trisIndex);
+            auto [min, max, size] = vertexIndexedBoundaries(mesh_final.vertex, tris_index);
 
             std::shared_ptr<IndexBuffer> ibo =
-                std::make_shared<IndexBuffer>((uint32_t*)&trisIndex[0], trisIndex.size() * 3);
+                std::make_shared<IndexBuffer>((uint32_t*)&tris_index[0], tris_index.size() * 3);
 
             Renderable3D* r = new RenderableIBO(vao, ibo, AABB(min, max));
             v_child_.push_back(r);
@@ -46,48 +46,48 @@ namespace ce {
 
         vao->unbind();
 
-        auto [min, max, size] = vertexBoundaries(meshFinal.vertex);
+        auto [min, max, size] = vertexBoundaries(mesh_final.vertex);
         aabb_.set_boundary(min, max);
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Childs: %ld", this->v_child_.size());
     }
 
     RenderableBsp::~RenderableBsp() { this->destroy(); }
 
-    void RenderableBsp::traverseTree(const glm::vec3& cameraPos, BSPTreeNode* tree,
-                                     std::vector<Renderable3D*>& childDraw) {
+    void RenderableBsp::traverse_tree(const glm::vec3& camera_pos, BSPTreeNode* tree,
+                                      std::vector<Renderable3D*>& child_draw) {
         // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
         if ((tree != nullptr) && (tree->isSolid == false)) {
-            switch (SIDE result = tree->hyperPlane.classify_point(cameraPos); result) {
+            switch (SIDE result = tree->hyperPlane.classify_point(camera_pos); result) {
                 case SIDE::CP_FRONT: {
-                    traverseTree(cameraPos, tree->back, childDraw);
+                    traverse_tree(camera_pos, tree->back, child_draw);
                     if (tree->isLeaf == true) // set to draw Polygon
-                        childDraw.push_back(v_child_[tree->leafIndex]);
+                        child_draw.push_back(v_child_[tree->leafIndex]);
 
-                    traverseTree(cameraPos, tree->front, childDraw);
+                    traverse_tree(camera_pos, tree->front, child_draw);
                 } break;
                 case SIDE::CP_BACK: {
-                    traverseTree(cameraPos, tree->front, childDraw);
+                    traverse_tree(camera_pos, tree->front, child_draw);
                     if (tree->isLeaf == true) // set to draw Polygon
-                        childDraw.push_back(v_child_[tree->leafIndex]);
+                        child_draw.push_back(v_child_[tree->leafIndex]);
 
-                    traverseTree(cameraPos, tree->back, childDraw);
+                    traverse_tree(camera_pos, tree->back, child_draw);
                 } break;
                 default: { // SIDE::CP_ONPLANE  // the eye point is on the partition hyperPlane...
-                    traverseTree(cameraPos, tree->front, childDraw);
-                    traverseTree(cameraPos, tree->back, childDraw);
+                    traverse_tree(camera_pos, tree->front, child_draw);
+                    traverse_tree(camera_pos, tree->back, child_draw);
                 } break;
             }
         }
     }
 
     void RenderableBsp::submit(RenderCommand& command, IRenderer3d& renderer) {
-        std::vector<Renderable3D*> childDraw;
-        const glm::vec3 cameraPos = renderer.getCamera()->get_position();
-        traverseTree(cameraPos, root_, childDraw);
-        for (uint32_t c = 0; c < childDraw.size(); c++)
-            renderer.submit(command, childDraw[c], c);
+        std::vector<Renderable3D*> child_draw;
+        const glm::vec3 camera_pos = renderer.get_camera()->get_position();
+        traverse_tree(camera_pos, root_, child_draw);
+        for (uint32_t c = 0; c < child_draw.size(); c++)
+            renderer.submit(command, child_draw[c], c);
 
-        childDraw.clear();
+        child_draw.clear();
     }
 
     void RenderableBsp::destroy() {
@@ -117,35 +117,35 @@ namespace ce {
         }
     }
 
-    bool RenderableBsp::lineOfSight(const glm::vec3& Start, const glm::vec3& End, BSPTreeNode* tree) {
+    bool RenderableBsp::line_of_sight(const glm::vec3& start, const glm::vec3& end, BSPTreeNode* tree) {
         float temp;
         glm::vec3 intersection;
         if (tree->isLeaf == true) {
             return !tree->isSolid;
         }
 
-        const SIDE PointA = tree->hyperPlane.classify_point(Start);
-        const SIDE PointB = tree->hyperPlane.classify_point(End);
+        const SIDE point_a = tree->hyperPlane.classify_point(start);
+        const SIDE point_b = tree->hyperPlane.classify_point(end);
 
-        if ((PointA == SIDE::CP_ONPLANE) && (PointB == SIDE::CP_ONPLANE)) {
-            return lineOfSight(Start, End, tree->front);
+        if ((point_a == SIDE::CP_ONPLANE) && (point_b == SIDE::CP_ONPLANE)) {
+            return line_of_sight(start, end, tree->front);
         }
 
-        if ((PointA == SIDE::CP_FRONT) && (PointB == SIDE::CP_BACK)) {
-            tree->hyperPlane.intersect(Start, End, intersection, temp);
-            return lineOfSight(Start, intersection, tree->front) && lineOfSight(End, intersection, tree->back);
+        if ((point_a == SIDE::CP_FRONT) && (point_b == SIDE::CP_BACK)) {
+            tree->hyperPlane.intersect(start, end, intersection, temp);
+            return line_of_sight(start, intersection, tree->front) && line_of_sight(end, intersection, tree->back);
         }
 
-        if ((PointA == SIDE::CP_BACK) && (PointB == SIDE::CP_FRONT)) {
-            tree->hyperPlane.intersect(Start, End, intersection, temp);
-            return lineOfSight(End, intersection, tree->front) && lineOfSight(Start, intersection, tree->back);
+        if ((point_a == SIDE::CP_BACK) && (point_b == SIDE::CP_FRONT)) {
+            tree->hyperPlane.intersect(start, end, intersection, temp);
+            return line_of_sight(end, intersection, tree->front) && line_of_sight(start, intersection, tree->back);
         }
 
         // if we get here one of the points is on the hyperPlane
-        if ((PointA == SIDE::CP_FRONT) || (PointB == SIDE::CP_FRONT)) {
-            return lineOfSight(Start, End, tree->front);
+        if ((point_a == SIDE::CP_FRONT) || (point_b == SIDE::CP_FRONT)) {
+            return line_of_sight(start, end, tree->front);
         } else {
-            return lineOfSight(Start, End, tree->back);
+            return line_of_sight(start, end, tree->back);
         }
         return true;
     }

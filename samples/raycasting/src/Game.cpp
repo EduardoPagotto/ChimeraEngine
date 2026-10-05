@@ -58,7 +58,7 @@ void Game::on_event(const SDL_Event& event) {
     // }
 }
 
-void Game::testeGamePad() {
+void Game::teste_game_pad() {
 
     using namespace ce;
 
@@ -78,22 +78,22 @@ void Game::testeGamePad() {
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Botao liberado");
     }
 
-    glm::vec2 leftStick = gp->get_left_stick(0, player0_config_);
-    if (glm::length(leftStick) > 0.0F) {
-        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick Esquerdo -> X: %f | Y: %f", leftStick.x,
-                     leftStick.y);
+    glm::vec2 left_stick = gp->get_left_stick(0, player0_config_);
+    if (glm::length(left_stick) > 0.0F) {
+        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick Esquerdo -> X: %f | Y: %f", left_stick.x,
+                     left_stick.y);
     }
 
-    glm::vec2 rightStick = gp->get_right_stick(0, player0_config_);
-    if (glm::length(rightStick) > 0.0F) {
-        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick Direito -> X: %f | Y: %f", rightStick.x,
-                     rightStick.y);
+    glm::vec2 right_stick = gp->get_right_stick(0, player0_config_);
+    if (glm::length(right_stick) > 0.0F) {
+        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick Direito -> X: %f | Y: %f", right_stick.x,
+                     right_stick.y);
     }
 
-    glm::vec2 trigerStick = gp->get_trigger_stick(0, player0_config_);
-    if (glm::length(trigerStick) > 0.0F) {
-        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick trigerStick -> X: %f | Y: %f", trigerStick.x,
-                     trigerStick.y);
+    glm::vec2 triger_stick = gp->get_trigger_stick(0, player0_config_);
+    if (glm::length(triger_stick) > 0.0F) {
+        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "[Player 0] Movendo Stick trigerStick -> X: %f | Y: %f", triger_stick.x,
+                     triger_stick.y);
     }
 }
 
@@ -101,7 +101,7 @@ void Game::on_update(const double& ts) {
     using namespace ce;
 
     // SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "%.3f", ts);
-    testeGamePad();
+    teste_game_pad();
 
     if (this->input_manager_->get_keyboard()->is_key_pressed(SDL_SCANCODE_ESCAPE)) {
         sendChimeraEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
@@ -136,18 +136,18 @@ void Game::on_update(const double& ts) {
     }
 
     if (this->input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_A)) {
-        double oldDirX = state_->dir.x;
+        double old_dir_x = state_->dir.x;
         state_->dir.x = state_->dir.x * cos(rot_speed_) - state_->dir.y * sin(rot_speed_);
-        state_->dir.y = oldDirX * sin(rot_speed_) + state_->dir.y * cos(rot_speed_);
+        state_->dir.y = old_dir_x * sin(rot_speed_) + state_->dir.y * cos(rot_speed_);
         double oldcamx = state_->cam.x;
         state_->cam.x = state_->cam.x * cos(rot_speed_) - state_->cam.y * sin(rot_speed_);
         state_->cam.y = oldcamx * sin(rot_speed_) + state_->cam.y * cos(rot_speed_);
     }
 
     if (this->input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_D)) {
-        double oldDirX = state_->dir.x;
+        double old_dir_x = state_->dir.x;
         state_->dir.x = state_->dir.x * cos(-rot_speed_) - state_->dir.y * sin(-rot_speed_);
-        state_->dir.y = oldDirX * sin(-rot_speed_) + state_->dir.y * cos(-rot_speed_);
+        state_->dir.y = old_dir_x * sin(-rot_speed_) + state_->dir.y * cos(-rot_speed_);
         double oldcamx = state_->cam.x;
         state_->cam.x = state_->cam.x * cos(-rot_speed_) - state_->cam.y * sin(-rot_speed_);
         state_->cam.y = oldcamx * sin(-rot_speed_) + state_->cam.y * cos(-rot_speed_);

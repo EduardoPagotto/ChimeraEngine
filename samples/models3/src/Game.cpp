@@ -7,7 +7,6 @@
 #include "chimera_render/2d/Tile.hpp"
 #include <SDL3/SDL_gamepad.h>
 #include <SDL3/SDL_scancode.h>
-// #include "chimera_base/utils.hpp"
 
 Game::Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::Scene> scene)
     : registry_(registry), scene_(scene), p_corpo_rigido_(nullptr) {

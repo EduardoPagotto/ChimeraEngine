@@ -19,7 +19,7 @@ class Game : public ce::IStateMachine {
     virtual std::string get_name() const override;
 
   private:
-    void testeGamePad();
+    void teste_game_pad();
 
     State* state_{nullptr};
     World* world_{nullptr};

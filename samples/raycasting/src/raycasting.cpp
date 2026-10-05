@@ -46,7 +46,7 @@ bool LoadWorld(const char filename[], World* world) {
     return true;
 }
 
-void DrawColumn(RayHit what, World world, std::shared_ptr<ce::PixelCanvas> pixelCanvas, uint32_t column) {
+void DrawColumn(RayHit what, World world, std::shared_ptr<ce::PixelCanvas> pixel_canvas, uint32_t column) {
     // tipo de bloco detectado
 
     auto pos = what.map.x + what.map.y * world.width;
@@ -56,23 +56,23 @@ void DrawColumn(RayHit what, World world, std::shared_ptr<ce::PixelCanvas> pixel
 
     uint8_t type = world.data[pos];
 
-    const SDL_PixelFormatDetails* details = SDL_GetPixelFormatDetails(pixelCanvas->pixel_format());
+    const SDL_PixelFormatDetails* details = SDL_GetPixelFormatDetails(pixel_canvas->pixel_format());
 
     // selecione cor com base no tipo de bloco
-    uint32_t corVal = 0;
+    uint32_t cor_val = 0;
 
     switch (type) {
         case 1:
-            corVal = SDL_MapRGBA(details, nullptr, 0, 255, 0, 255); // green
+            cor_val = SDL_MapRGBA(details, nullptr, 0, 255, 0, 255); // green
             break;
         case 2:
-            corVal = SDL_MapRGBA(details, nullptr, 155, 155, 155, 255); // gray
+            cor_val = SDL_MapRGBA(details, nullptr, 155, 155, 155, 255); // gray
             break;
         case 3:
-            corVal = SDL_MapRGBA(details, nullptr, 0, 0, 255, 255); // blue
+            cor_val = SDL_MapRGBA(details, nullptr, 0, 0, 255, 255); // blue
             break;
         case 4:
-            corVal = SDL_MapRGBA(details, nullptr, 255, 0, 0, 255); // red
+            cor_val = SDL_MapRGBA(details, nullptr, 255, 0, 0, 255); // red
             break;
         default:
             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Pixel incompativel");
@@ -80,18 +80,18 @@ void DrawColumn(RayHit what, World world, std::shared_ptr<ce::PixelCanvas> pixel
     }
 
     // calcular a altura da coluna
-    uint32_t colh = abs(int(pixelCanvas->height() / what.distance));
+    uint32_t colh = abs(int(pixel_canvas->height() / what.distance));
     uint32_t cropup = 0;
     uint32_t cropdown = 0;
     uint32_t index = 0;
 
-    if (colh > pixelCanvas->height()) // se for maior que a tela, corte
+    if (colh > pixel_canvas->height()) // se for maior que a tela, corte
     {
         index = column;
-        cropup = (colh - pixelCanvas->height()) / 2;
+        cropup = (colh - pixel_canvas->height()) / 2;
         cropdown = cropup + 1;
     } else {
-        index = column + (((pixelCanvas->height() - colh) / 2) * pixelCanvas->width());
+        index = column + (((pixel_canvas->height() - colh) / 2) * pixel_canvas->width());
         cropup = 0;
         cropdown = 0;
     }
@@ -99,46 +99,46 @@ void DrawColumn(RayHit what, World world, std::shared_ptr<ce::PixelCanvas> pixel
     // desenhar coluna
     for (uint32_t c = cropup; c < (colh - cropdown); c++) {
         // desenhe o pixel da cor selecionada
-        pixelCanvas->pixels()[index] = corVal;
-        index += pixelCanvas->width();
+        pixel_canvas->pixels()[index] = cor_val;
+        index += pixel_canvas->width();
     }
 }
 
-void RenderScene(State state, World world, std::shared_ptr<ce::PixelCanvas> pixelCanvas) {
+void RenderScene(State state, World world, std::shared_ptr<ce::PixelCanvas> pixel_canvas) {
 
-    for (uint32_t column = 0; column < pixelCanvas->width(); column++) // Para cada coluna
+    for (uint32_t column = 0; column < pixel_canvas->width(); column++) // Para cada coluna
     {
         // calcular a posição e direção do feixe
-        float cameraX = 2 * column / float(pixelCanvas->width()) - 1;
-        glm::vec2 rayPos = state.pos;
-        glm::vec2 rayDir = state.dir + state.cam * cameraX;
+        float camera_x = 2 * column / float(pixel_canvas->width()) - 1;
+        glm::vec2 ray_pos = state.pos;
+        glm::vec2 ray_dir = state.dir + state.cam * camera_x;
 
         // o bloco atual onde estamos
-        glm::ivec2 map = rayPos;
+        glm::ivec2 map = ray_pos;
 
         // comprimento do feixe da posição atual para o próximo bloco
-        glm::vec2 sideDist;
+        glm::vec2 side_dist;
 
         // comprimento do raio de um bloco para outro
-        glm::vec2 deltaDist(sqrt(1 + (rayDir.y * rayDir.y) / (rayDir.x * rayDir.x)),
-                            sqrt(1 + (rayDir.x * rayDir.x) / (rayDir.y * rayDir.y)));
+        glm::vec2 delta_dist(sqrt(1 + (ray_dir.y * ray_dir.y) / (ray_dir.x * ray_dir.x)),
+                             sqrt(1 + (ray_dir.x * ray_dir.x) / (ray_dir.y * ray_dir.y)));
 
         // direção para onde ir (+1 ou -1), tanto para X quanto para Y
         glm::ivec2 step(0, 0);
-        if (rayDir.x < 0) {
+        if (ray_dir.x < 0) {
             step.x = -1;
-            sideDist.x = (rayPos.x - map.x) * deltaDist.x;
+            side_dist.x = (ray_pos.x - map.x) * delta_dist.x;
         } else {
             step.x = 1;
-            sideDist.x = (map.x + 1.0 - rayPos.x) * deltaDist.x;
+            side_dist.x = (map.x + 1.0 - ray_pos.x) * delta_dist.x;
         }
 
-        if (rayDir.y < 0) {
+        if (ray_dir.y < 0) {
             step.y = -1;
-            sideDist.y = (rayPos.y - map.y) * deltaDist.y;
+            side_dist.y = (ray_pos.y - map.y) * delta_dist.y;
         } else {
             step.y = 1;
-            sideDist.y = (map.y + 1.0 - rayPos.y) * deltaDist.y;
+            side_dist.y = (map.y + 1.0 - ray_pos.y) * delta_dist.y;
         }
 
         // vamos lançar o raio
@@ -152,12 +152,12 @@ void RenderScene(State state, World world, std::shared_ptr<ce::PixelCanvas> pixe
         while (world.data[pos] == 0) // até nos encontrarmos com uma parede ...
         {
             // vamos para o próximo bloco no mapa
-            if (sideDist.x < sideDist.y) {
-                sideDist.x += deltaDist.x;
+            if (side_dist.x < side_dist.y) {
+                side_dist.x += delta_dist.x;
                 map.x += step.x;
                 side = 0;
             } else {
-                sideDist.y += deltaDist.y;
+                side_dist.y += delta_dist.y;
                 map.y += step.y;
                 side = 1;
             }
@@ -165,22 +165,22 @@ void RenderScene(State state, World world, std::shared_ptr<ce::PixelCanvas> pixe
             pos = map.x + map.y * world.width;
         }
 
-        double perpWallDist;
+        double perp_wall_dist;
         // cálculo do comprimento do raio
         if (side == 0) {
-            perpWallDist = fabs((map.x - rayPos.x + (1 - step.x) / 2) / rayDir.x);
+            perp_wall_dist = fabs((map.x - ray_pos.x + (1 - step.x) / 2) / ray_dir.x);
         } else {
-            perpWallDist = fabs((map.y - rayPos.y + (1 - step.y) / 2) / rayDir.y);
+            perp_wall_dist = fabs((map.y - ray_pos.y + (1 - step.y) / 2) / ray_dir.y);
         }
 
         // cobrar RayHit com as informações para desenhar a coluna
         RayHit what;
-        what.distance = perpWallDist;
+        what.distance = perp_wall_dist;
         what.map = map;
         what.side = side;
-        what.rayDir = rayDir;
+        what.rayDir = ray_dir;
 
         // desenhe a coluna
-        DrawColumn(what, world, pixelCanvas, column);
+        DrawColumn(what, world, pixel_canvas, column);
     }
 }

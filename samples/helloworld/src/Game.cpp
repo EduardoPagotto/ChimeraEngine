@@ -5,14 +5,6 @@
 #include "chimera_core/gl/AssetManager.hpp"
 #include "chimera_render/2d/Label.hpp"
 #include "chimera_render/2d/Sprite.hpp"
-// #include "chimera_base/Transform.hpp"
-// #include "chimera_base/event.hpp"
-// #include "chimera_core/gl/AssetManager.hpp"
-// #include "chimera_core/gl/FontMng.hpp"
-// #include "chimera_core/gl/ShaderMng.hpp"
-// #include "chimera_core/gl/TextureLoader.hpp"
-// #include "chimera_render/2d/Group.hpp"
-// #include <time.h>
 
 Game::Game(std::shared_ptr<entt::registry> registry, ce::Engine* engine) : registry_(registry), engine_(engine) {
 

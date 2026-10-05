@@ -82,7 +82,7 @@ namespace ce {
         if (shadeData.size() > 1) {
             auto assets = this->registry->ctx().get<std::shared_ptr<AssetManager>>();
 
-            ShaderComponent& sc = entity.addComponent<ShaderComponent>(registry.get());
+            ShaderComponent& sc = entity.add_component<ShaderComponent>(registry.get());
             sc.tag.name = refName;
 
             // FIXME: mudar a forma para fazer a carga real no attachment do scene
@@ -118,8 +118,8 @@ namespace ce {
     void ColladaEffect::setMaterial(const pugi::xml_node& node, TexParam& tp) {
 
         std::shared_ptr<Material> pMat;
-        if (entity.hasComponent<MaterialComponent>(registry.get())) {
-            MaterialComponent& mc = entity.getComponent<MaterialComponent>(registry.get());
+        if (entity.has_component<MaterialComponent>(registry.get())) {
+            MaterialComponent& mc = entity.get_component<MaterialComponent>(registry.get());
             pMat = mc.material;
         } else {
             return;

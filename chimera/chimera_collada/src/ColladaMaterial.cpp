@@ -5,7 +5,7 @@
 namespace ce {
     void ColladaMaterial::create(Entity& entity, const pugi::xml_node& node) {
 
-        MaterialComponent& eMaterial = entity.addComponent<MaterialComponent>(registry.get());
+        MaterialComponent& eMaterial = entity.add_component<MaterialComponent>(registry.get());
         eMaterial.tag.id = node.attribute("id").value();
         eMaterial.tag.name = node.attribute("name").value();
         eMaterial.material = std::make_shared<Material>();

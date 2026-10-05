@@ -13,7 +13,7 @@ namespace ce {
         Entity(const Entity& other) = default;
         Entity(entt::entity novo) : handle_(novo) {}
 
-        static Entity Create(entt::registry* r, const std::string& name, const std::string& id) {
+        static Entity create(entt::registry* r, const std::string& name, const std::string& id) {
             entt::entity handle = r->create();
 
             r->emplace<TagInfo>(handle, name, id);
@@ -25,11 +25,11 @@ namespace ce {
         //     return *this;
         // }
 
-        static entt::entity FindEntity(entt::registry* r, const std::string& tag, bool isName = true) {
+        static entt::entity find_entity(entt::registry* r, const std::string& tag, bool is_name = true) {
             auto view = r->view<TagInfo>();
             for (auto ent : view) {
                 TagInfo& ee = r->get<TagInfo>(ent);
-                if (isName) {
+                if (is_name) {
                     if (ee.name == tag) {
                         return ent;
                     }
@@ -44,11 +44,11 @@ namespace ce {
         }
 
         template <typename T>
-        static T& FindComponent(entt::registry* r, const std::string& tag, bool isName = true) {
+        static T& find_component(entt::registry* r, const std::string& tag, bool is_name = true) {
             auto view = r->view<T>();
             for (auto ent : view) {
                 TagInfo& ee = r->get<TagInfo>(ent);
-                if (isName) {
+                if (is_name) {
                     if (ee.name == tag) {
                         return r->get<T>(ent);
                     }
@@ -59,7 +59,7 @@ namespace ce {
                 }
             }
 
-            if (isName) {
+            if (is_name) {
                 throw std::invalid_argument(std::string("name not found: ") + tag);
             }
 
@@ -72,22 +72,22 @@ namespace ce {
         }
 
         template <typename T>
-        bool hasComponent(entt::registry* r) const {
+        bool has_component(entt::registry* r) const {
             return r->all_of<T>(handle_);
         }
 
         template <typename T, typename... Args>
-        T& addComponent(entt::registry* r, Args&&... args) {
+        T& add_component(entt::registry* r, Args&&... args) {
             return r->emplace<T>(handle_, std::forward<Args>(args)...);
         }
 
         template <typename T>
-        T& getComponent(entt::registry* r) {
+        T& get_component(entt::registry* r) {
             return r->get<T>(handle_);
         }
 
         template <typename T>
-        void removeComponent(entt::registry* r) {
+        void remove_component(entt::registry* r) {
             r->remove<T>(handle_);
         }
 

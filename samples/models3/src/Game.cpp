@@ -59,7 +59,7 @@ void Game::on_attach() {
 
     using namespace ce;
     // Localiza objeto como o primario
-    TransComponent& tc = Entity::FindComponent<TransComponent>(registry_.get(), "Zoltan");
+    TransComponent& tc = Entity::find_component<TransComponent>(registry_.get(), "Zoltan");
 
     p_corpo_rigido_ = (Solid*)tc.trans;
 

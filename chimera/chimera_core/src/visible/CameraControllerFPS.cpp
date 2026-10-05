@@ -16,7 +16,7 @@ namespace ce {
 
     void CameraControllerFPS::on_attach() {
 
-        auto& cc = entity_.getComponent<CameraComponent>(registry_.get());
+        auto& cc = entity_.get_component<CameraComponent>(registry_.get());
         camera_ = cc.camera;
         up_ = cc.up;
         world_up_ = cc.up;

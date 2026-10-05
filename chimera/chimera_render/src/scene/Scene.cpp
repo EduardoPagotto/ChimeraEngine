@@ -42,10 +42,11 @@ namespace ce {
         }
 
         // Define o framebuffer de desenho
-        FrameBufferSpecification& fbSpec = e_render_bufer_spec_.getComponent<FrameBufferSpecification>(registry_.get());
+        FrameBufferSpecification& fbSpec =
+            e_render_bufer_spec_.get_component<FrameBufferSpecification>(registry_.get());
         fbSpec.width = width;
         fbSpec.height = height;
-        auto& sc = e_render_bufer_spec_.getComponent<ShaderComponent>(registry_.get());
+        auto& sc = e_render_bufer_spec_.get_component<ShaderComponent>(registry_.get());
         return make_shared<RenderBuffer>(initW, initH, std::make_shared<FrameBuffer>(fbSpec), sc.shader);
     }
 
@@ -98,12 +99,12 @@ namespace ce {
         // lista as tags nas entidades registradas
         for (auto entityID : registry_.get()->view<entt::entity>()) {
             Entity entity(entityID);
-            auto& tc = entity.getComponent<TagInfo>(registry_.get());
+            auto& tc = entity.get_component<TagInfo>(registry_.get());
             SDL_Log("Tag: %s Id: %s", tc.name.c_str(), tc.id.c_str());
 
             if (tc.name == "TileText") {
-                CameraComponent& cCam = entity.getComponent<CameraComponent>(registry_.get());
-                auto& sc = entity.getComponent<ShaderComponent>(registry_.get());
+                CameraComponent& cCam = entity.get_component<CameraComponent>(registry_.get());
+                auto& sc = entity.get_component<ShaderComponent>(registry_.get());
                 // TileComponent& tc = entity.addComponent<TileComponent>();
 
                 // TODO: passar tile camera para smart
@@ -111,24 +112,24 @@ namespace ce {
             }
 
             // Se for um mesh inicializar componente
-            if (entity.hasComponent<MeshComponent>(registry_.get())) {
-                MeshComponent& mesh = entity.getComponent<MeshComponent>(registry_.get());
+            if (entity.has_component<MeshComponent>(registry_.get())) {
+                MeshComponent& mesh = entity.get_component<MeshComponent>(registry_.get());
 
                 // Inicializa Materiais
-                if (entity.hasComponent<MaterialComponent>(registry_.get())) {
-                    MaterialComponent& material = entity.getComponent<MaterialComponent>(registry_.get());
+                if (entity.has_component<MaterialComponent>(registry_.get())) {
+                    MaterialComponent& material = entity.get_component<MaterialComponent>(registry_.get());
                     if (!material.material->is_valid()) {
                         material.material->init();
                     }
                 } else {
-                    MaterialComponent& material = entity.addComponent<MaterialComponent>(registry_.get());
+                    MaterialComponent& material = entity.add_component<MaterialComponent>(registry_.get());
                     material.material = std::make_shared<Material>();
                     material.material->set_default_effect();
                     material.material->init();
                 }
 
                 // Cria componentes renderizaveis
-                Renderable3dComponent& rc = entity.addComponent<Renderable3dComponent>(registry_.get());
+                Renderable3dComponent& rc = entity.add_component<Renderable3dComponent>(registry_.get());
                 if (mesh.type == MeshType::SIMPLE) {
                     rc.renderable = new RenderableMesh(mesh.mesh);
                 } else if (mesh.type == MeshType::ARRAY) {
@@ -139,9 +140,9 @@ namespace ce {
 
                 auto [min, max, size] = vertexBoundaries(mesh.mesh->vertex);
 
-                if (entity.hasComponent<TransComponent>(registry_.get())) {
+                if (entity.has_component<TransComponent>(registry_.get())) {
                     // Ajuste de fisica se existir
-                    TransComponent& tc = entity.getComponent<TransComponent>(registry_.get());
+                    TransComponent& tc = entity.get_component<TransComponent>(registry_.get());
                     if (tc.solid) {
                         // Cria rigidBody iniciaza transformacao e inicializa shape se ele nao existir
                         Solid* solid = (Solid*)tc.trans;
@@ -162,11 +163,11 @@ namespace ce {
             }
 
             // Se existir particulas
-            if (entity.hasComponent<EmitterComponent>(registry_.get())) {
-                EmitterComponent& ec = entity.getComponent<EmitterComponent>(registry_.get());
-                if (!entity.hasComponent<RenderableParticlesComponent>(registry_.get())) {
+            if (entity.has_component<EmitterComponent>(registry_.get())) {
+                EmitterComponent& ec = entity.get_component<EmitterComponent>(registry_.get());
+                if (!entity.has_component<RenderableParticlesComponent>(registry_.get())) {
                     RenderableParticlesComponent& particleSys =
-                        entity.addComponent<RenderableParticlesComponent>(registry_.get());
+                        entity.add_component<RenderableParticlesComponent>(registry_.get());
                     particleSys.enable = true;
                     RenderableParticles* p = new RenderableParticles();
                     std::shared_ptr<ParticleContainer> pc = ec.emitter->get_container(0); // FIXME: melhorar!!!!
@@ -177,12 +178,12 @@ namespace ce {
                 }
             }
 
-            if (entity.hasComponent<FrameBufferSpecification>(registry_.get())) {
-                FrameBufferSpecification& fbSpec = entity.getComponent<FrameBufferSpecification>(registry_.get());
+            if (entity.has_component<FrameBufferSpecification>(registry_.get())) {
+                FrameBufferSpecification& fbSpec = entity.get_component<FrameBufferSpecification>(registry_.get());
                 if (tc.name == "shadow01") { // init shadow data
 
-                    auto& sc = entity.getComponent<ShaderComponent>(registry_.get());
-                    CameraComponent& cc = entity.getComponent<CameraComponent>(registry_.get());
+                    auto& sc = entity.get_component<ShaderComponent>(registry_.get());
+                    CameraComponent& cc = entity.get_component<CameraComponent>(registry_.get());
                     cc.camera->set_viewport_size(fbSpec.width, fbSpec.height);
                     shadow_data_.shader = sc.shader; // entity.getComponent<Shader>();
                     shadow_data_.lightProjection = cc.camera->get_projection();
@@ -202,7 +203,7 @@ namespace ce {
             for (auto entity : view1) {
                 Entity e(entity);
 
-                auto& cc = e.getComponent<CameraComponent>(registry_.get());
+                auto& cc = e.get_component<CameraComponent>(registry_.get());
                 if (cc.camKind == CamKind::FPS) {
                     layers_.push_state(std::make_shared<CameraControllerFPS>(registry_, e));
                 } else if (cc.camKind == CamKind::ORBIT) {
@@ -327,9 +328,9 @@ namespace ce {
             Renderable3D* renderable = rc.renderable;
 
             Entity e(entity);
-            TransComponent& tc = e.getComponent<TransComponent>(registry_.get()); // FIXME: group this!!!
-            auto& sc = e.getComponent<ShaderComponent>(registry_.get());
-            MaterialComponent& mc = e.getComponent<MaterialComponent>(registry_.get());
+            TransComponent& tc = e.get_component<TransComponent>(registry_.get()); // FIXME: group this!!!
+            auto& sc = e.get_component<ShaderComponent>(registry_.get());
+            MaterialComponent& mc = e.get_component<MaterialComponent>(registry_.get());
 
             RenderCommand command;
             command.transform = tc.trans->translate_src(origem_->get_position());
@@ -487,7 +488,7 @@ namespace ce {
                         Renderable3D* renderable = rc.renderable;
 
                         Entity e(entity);
-                        TransComponent& tc = e.getComponent<TransComponent>(registry_.get()); // FIXME: group this!!!
+                        TransComponent& tc = e.get_component<TransComponent>(registry_.get()); // FIXME: group this!!!
 
                         RenderCommand command;
                         command.transform = tc.trans->translate_src(origem_->get_position());

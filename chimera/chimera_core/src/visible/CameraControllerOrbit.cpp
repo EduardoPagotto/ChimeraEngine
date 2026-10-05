@@ -15,7 +15,7 @@ namespace ce {
     CameraControllerOrbit::~CameraControllerOrbit() {}
 
     void CameraControllerOrbit::on_attach() {
-        auto& cc = entity_.getComponent<CameraComponent>(registry_.get());
+        auto& cc = entity_.get_component<CameraComponent>(registry_.get());
         camera_ = cc.camera;
         up_ = cc.up;
         // pitch = cc.pitch;

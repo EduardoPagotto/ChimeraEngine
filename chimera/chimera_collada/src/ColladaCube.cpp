@@ -5,7 +5,7 @@
 namespace ce {
     void ColladaCube::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node geo) {
 
-        MeshComponent& mc = entity.addComponent<MeshComponent>(registry.get());
+        MeshComponent& mc = entity.add_component<MeshComponent>(registry.get());
         mc.tag.id = id;
         mc.tag.name = name;
         // mc.tag.serial = Collada::getNewSerial();

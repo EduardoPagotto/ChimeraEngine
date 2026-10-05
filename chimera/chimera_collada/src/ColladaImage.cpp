@@ -42,8 +42,8 @@ namespace ce {
         std::string id = node.attribute("id").value();
 
         FrameBufferSpecification* fb = nullptr;
-        if (entity.hasComponent<FrameBufferSpecification>(registry.get()) == true) {
-            FrameBufferSpecification& frames = entity.getComponent<FrameBufferSpecification>(registry.get());
+        if (entity.has_component<FrameBufferSpecification>(registry.get()) == true) {
+            FrameBufferSpecification& frames = entity.get_component<FrameBufferSpecification>(registry.get());
             fb = &frames;
         }
 

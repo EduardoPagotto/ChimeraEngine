@@ -58,7 +58,7 @@ Game::~Game() {
 
     // free(modelTransferSpace);
     for (auto& model : model_list_) {
-        model.destroyMeshModel();
+        model.destroy_mesh_model();
     }
 
     texture_mng_.reset();
@@ -270,7 +270,7 @@ void Game::update_model(size_t model_id, glm::mat4 new_model) {
         return;
     }
 
-    this->model_list_[model_id].setModel(new_model);
+    this->model_list_[model_id].set_model(new_model);
 }
 
 size_t Game::create_mesh_model(const std::string& model_file) {
@@ -285,7 +285,7 @@ size_t Game::create_mesh_model(const std::string& model_file) {
     }
 
     // Get vector of all material with 1:1 ID placement
-    std::vector<std::string> texture_names = ce::MeshModel::LoadMaterials(scene);
+    std::vector<std::string> texture_names = ce::MeshModel::load_materials(scene);
 
     // Convesion from the material list IDs to our Descriptor Array IDs
     std::vector<int> mat_to_tex(texture_names.size());
@@ -307,7 +307,7 @@ size_t Game::create_mesh_model(const std::string& model_file) {
     }
 
     // Load in all our meshes
-    std::vector<ce::Mesh> model_meshes = ce::MeshModel::LoadNode(
+    std::vector<ce::Mesh> model_meshes = ce::MeshModel::load_node(
         ctx_->physical, ctx_->logical, ctx_->graphicsQueue, ctx_->commandPool, scene->mRootNode, scene, mat_to_tex);
 
     // Create mesh model and add to list
@@ -343,20 +343,20 @@ void Game::on_render() {
         ce::MeshModel this_model = model_list_[j];
 
         cmd.push_constants(this->pipeline_layout_->get(), VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ce::Model),
-                           &this_model.getModel2());
+                           &this_model.get_model2());
 
-        for (size_t k = 0; k < this_model.getMeshCount(); k++) {
+        for (size_t k = 0; k < this_model.get_mesh_count(); k++) {
 
             ce::DescriptorSet& sampler_ubo_ds =
-                this->texture_mng_->get_uniform_sampler().get_descriptor_set(this_model.getMesh(k)->get_tex_id());
+                this->texture_mng_->get_uniform_sampler().get_descriptor_set(this_model.get_mesh(k)->get_tex_id());
 
-            cmd.add_vertex_buffer({0}, this_model.getMesh(k)->get_vertex_buffer());
+            cmd.add_vertex_buffer({0}, this_model.get_mesh(k)->get_vertex_buffer());
             cmd.bind_vertex_buffer(0);
-            cmd.bind_index_buffer({0}, this_model.getMesh(k)->get_index_buffer());
+            cmd.bind_index_buffer({0}, this_model.get_mesh(k)->get_index_buffer());
             cmd.add_descriptor_set(vp_ubo_ds.get());
             cmd.add_descriptor_set(sampler_ubo_ds.get());
             cmd.bind_descriptor_sets(this->pipeline_layout_->get());
-            cmd.draw_indexed(this_model.getMesh(k)->get_index_count(), 1, 0, 0, 0);
+            cmd.draw_indexed(this_model.get_mesh(k)->get_index_count(), 1, 0, 0, 0);
             cmd.clear_temps();
         }
     }

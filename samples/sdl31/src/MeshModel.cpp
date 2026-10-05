@@ -5,25 +5,25 @@
 namespace ce {
 
     MeshModel::MeshModel(const std::vector<Mesh>& new_mesh_list) {
-        meshList = new_mesh_list;
-        model = glm::mat4(1.0F);
+        mesh_list_ = new_mesh_list;
+        model_ = glm::mat4(1.0F);
     }
 
-    Mesh* MeshModel::getMesh(const size_t& index) {
+    Mesh* MeshModel::get_mesh(const size_t& index) {
 
-        if (index > meshList.size()) {
+        if (index > mesh_list_.size()) {
             throw std::runtime_error("Attempted to access invalid Mesh index!");
         }
 
-        return &this->meshList[index];
+        return &this->mesh_list_[index];
     }
 
-    void MeshModel::destroyMeshModel() {
-        for (auto& mesh : this->meshList) {
+    void MeshModel::destroy_mesh_model() {
+        for (auto& mesh : this->mesh_list_) {
             mesh.destroy_buffers();
         }
     }
-    std::vector<std::string> MeshModel::LoadMaterials(const aiScene* scene) {
+    std::vector<std::string> MeshModel::load_materials(const aiScene* scene) {
 
         // Create 1:1 sized list of textures
         std::vector<std::string> texture_list(scene->mNumMaterials);
@@ -58,31 +58,31 @@ namespace ce {
         return texture_list;
     }
 
-    std::vector<Mesh> MeshModel::LoadNode(VkPhysicalDevice physical, VkDevice logical, VkQueue queue,
-                                          VkCommandPool command_pool, aiNode* node, const aiScene* scene,
-                                          std::vector<int>& mat_to_text) {
+    std::vector<Mesh> MeshModel::load_node(VkPhysicalDevice physical, VkDevice logical, VkQueue queue,
+                                           VkCommandPool command_pool, aiNode* node, const aiScene* scene,
+                                           std::vector<int>& mat_to_text) {
         //
         std::vector<Mesh> mesh_list;
 
         // Go through each mesh at this node and create it, then add it to our meshList
         for (size_t i = 0; i < node->mNumMeshes; i++) {
-            mesh_list.push_back(
-                LoadMesh(physical, logical, queue, command_pool, scene->mMeshes[node->mMeshes[i]], scene, mat_to_text));
+            mesh_list.push_back(load_mesh(physical, logical, queue, command_pool, scene->mMeshes[node->mMeshes[i]],
+                                          scene, mat_to_text));
         }
 
         // Go through each attached to this node and load it, then append their meshes to this node's mesh list
         for (size_t i = 0; i < node->mNumChildren; i++) {
             //
             std::vector<Mesh> new_list =
-                LoadNode(physical, logical, queue, command_pool, node->mChildren[i], scene, mat_to_text);
+                load_node(physical, logical, queue, command_pool, node->mChildren[i], scene, mat_to_text);
             mesh_list.insert(mesh_list.end(), new_list.begin(), new_list.end());
         }
 
         return mesh_list;
     }
 
-    Mesh MeshModel::LoadMesh(VkPhysicalDevice physical, VkDevice logical, VkQueue queue, VkCommandPool command_pool,
-                             aiMesh* mesh, const aiScene* scene, std::vector<int> mat_to_text) {
+    Mesh MeshModel::load_mesh(VkPhysicalDevice physical, VkDevice logical, VkQueue queue, VkCommandPool command_pool,
+                              aiMesh* mesh, const aiScene* scene, std::vector<int> mat_to_text) {
         //
         std::vector<Vertex> vertices;
         std::vector<uint32_t> indices;

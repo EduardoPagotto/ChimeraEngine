@@ -8,6 +8,6 @@ namespace ce {
         ColladaMesh(std::shared_ptr<entt::registry> registry, ColladaDom& dom, const std::string& url)
             : Collada(registry, dom, url) {}
         virtual ~ColladaMesh() = default;
-        void create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node nMesh);
+        void create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node n_mesh);
     };
 } // namespace ce

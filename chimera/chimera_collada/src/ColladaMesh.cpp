@@ -3,19 +3,19 @@
 #include "chimera_ecs/MeshComponent.hpp"
 
 namespace ce {
-    void ColladaMesh::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node nMesh) {
+    void ColladaMesh::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node n_mesh) {
 
-        MeshComponent& eMesh = entity.add_component<MeshComponent>(registry.get());
-        eMesh.mesh = new Mesh();
-        eMesh.tag.id = id;
-        eMesh.tag.name = name;
+        MeshComponent& e_mesh = entity.add_component<MeshComponent>(registry.get());
+        e_mesh.mesh = new Mesh();
+        e_mesh.tag.id = id;
+        e_mesh.tag.name = name;
         // eMesh.tag.serial = Collada::getNewSerial();
 
         std::vector<glm::vec3> point;
         std::vector<glm::vec3> normal;
         std::vector<glm::vec2> uv;
 
-        for (pugi::xml_node source = nMesh.first_child(); source; source = source.next_sibling()) {
+        for (pugi::xml_node source = n_mesh.first_child(); source; source = source.next_sibling()) {
 
             std::string name = source.name();
             std::string id = source.attribute("id").value();
@@ -23,8 +23,8 @@ namespace ce {
             if (name == "source") {
 
                 std::vector<float> v;
-                pugi::xml_node nList = source.child("float_array");
-                textToFloatArray(nList.text().as_string(), v);
+                pugi::xml_node n_list = source.child("float_array");
+                textToFloatArray(n_list.text().as_string(), v);
 
                 if (id.find("-positions") != std::string::npos) {
 
@@ -47,47 +47,47 @@ namespace ce {
 
                 std::vector<std::string> semantics;
 
-                for (pugi::xml_node nInput = source.first_child(); nInput; nInput = nInput.next_sibling()) {
-                    std::string inputName = nInput.name();
-                    if (inputName == "input") {
+                for (pugi::xml_node n_input = source.first_child(); n_input; n_input = n_input.next_sibling()) {
+                    std::string input_name = n_input.name();
+                    if (input_name == "input") {
 
-                        semantics.push_back(nInput.attribute("semantic").value());
+                        semantics.push_back(n_input.attribute("semantic").value());
 
-                    } else if (inputName == "vcount") {
-                    } else if (inputName == "p") {
+                    } else if (input_name == "vcount") {
+                    } else if (input_name == "p") {
 
-                        std::vector<uint32_t> arrayIndex;
-                        textToUIntArray(nInput.text().as_string(), arrayIndex);
+                        std::vector<uint32_t> array_index;
+                        textToUIntArray(n_input.text().as_string(), array_index);
 
-                        std::vector<uint32_t> iPoint;
-                        std::vector<uint32_t> iNormal;
-                        std::vector<uint32_t> iUv;
+                        std::vector<uint32_t> i_point;
+                        std::vector<uint32_t> i_normal;
+                        std::vector<uint32_t> i_uv;
 
-                        for (uint32_t l_contador = 0; l_contador < arrayIndex.size(); l_contador++) {
+                        for (uint32_t l_contador = 0; l_contador < array_index.size(); l_contador++) {
 
                             uint32_t index = l_contador % semantics.size();
                             const std::string& semantic = semantics[index];
 
                             if (semantic == "VERTEX") {
-                                iPoint.push_back(arrayIndex[l_contador]);
+                                i_point.push_back(array_index[l_contador]);
                             } else if (semantic == "NORMAL") {
-                                iNormal.push_back(arrayIndex[l_contador]);
+                                i_normal.push_back(array_index[l_contador]);
                             } else if (semantic == "TEXCOORD") {
-                                iUv.push_back(arrayIndex[l_contador]);
+                                i_uv.push_back(array_index[l_contador]);
                             }
                         }
 
-                        for (uint32_t face = 0; face < iPoint.size(); face++) {
-                            eMesh.mesh->vertex.push_back(
-                                {point[iPoint[face]],                                     // point
-                                 normal[iNormal[face]],                                   // normal
-                                 (uv.size() > 0) ? uv[iUv[face]] : glm::vec2(0.0, 0.0)}); // UV se nao existir zeros!!
+                        for (uint32_t face = 0; face < i_point.size(); face++) {
+                            e_mesh.mesh->vertex.push_back(
+                                {point[i_point[face]],                                     // point
+                                 normal[i_normal[face]],                                   // normal
+                                 (uv.size() > 0) ? uv[i_uv[face]] : glm::vec2(0.0, 0.0)}); // UV se nao existir zeros!!
                         }
 
-                        for (uint32_t i = 0; i < iPoint.size(); i += 3)
-                            eMesh.mesh->iFace.push_back({i, i + 1, i + 2});
+                        for (uint32_t i = 0; i < i_point.size(); i += 3)
+                            e_mesh.mesh->iFace.push_back({i, i + 1, i + 2});
 
-                        arrayIndex.clear();
+                        array_index.clear();
                     }
                 }
                 semantics.clear();

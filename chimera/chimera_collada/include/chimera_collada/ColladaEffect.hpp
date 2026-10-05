@@ -13,14 +13,14 @@ namespace ce {
             mapa_tex_.clear();
             mapa2d_.clear();
         }
-        void create(const std::string& refName, Entity& entity, pugi::xml_node node);
+        void create(const std::string& ref_name, Entity& entity, pugi::xml_node node);
 
       private:
-        void setShader(const std::string& refName, const pugi::xml_node& node);
-        bool setTextureParam(const pugi::xml_node& n, TexParam& tp);
-        void setImageParms(const pugi::xml_node& node);
-        void setMaterial(const pugi::xml_node& node, TexParam& tp);
-        Entity entity;
+        void set_shader(const std::string& ref_name, const pugi::xml_node& node);
+        bool set_texture_param(const pugi::xml_node& n, TexParam& tp);
+        void set_image_parms(const pugi::xml_node& node);
+        void set_material(const pugi::xml_node& node, TexParam& tp);
+        Entity entity_;
 
         std::unordered_map<std::string, std::string> mapa_tex_;
         std::unordered_map<std::string, std::string> mapa2d_;

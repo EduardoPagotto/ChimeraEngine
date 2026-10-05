@@ -1,6 +1,5 @@
 #include "chimera_collada/ColladaImage.hpp"
 #include "chimera_core/gl/AssetManager.hpp"
-#include "chimera_core/gl/TextureLoader.hpp"
 #include "chimera_core/gl/buffer/FrameBuffer.hpp"
 
 namespace ce {
@@ -47,27 +46,27 @@ namespace ce {
             fb = &frames;
         }
 
-        for (pugi::xml_node nImg = node.first_child(); nImg; nImg = nImg.next_sibling()) {
-            std::string field = nImg.name();
+        for (pugi::xml_node n_img = node.first_child(); n_img; n_img = n_img.next_sibling()) {
+            std::string field = n_img.name();
             if (field == "create_2d") {
 
                 uint32_t width = 128, height = 128;
-                pugi::xml_node nSize = nImg.child("size_exact");
-                if (nSize != nullptr) {
-                    width = static_cast<uint32_t>(std::stoul(nSize.attribute("width").value()));
-                    height = static_cast<uint32_t>(std::stoul(nSize.attribute("height").value()));
+                pugi::xml_node n_size = n_img.child("size_exact");
+                if (n_size != nullptr) {
+                    width = static_cast<uint32_t>(std::stoul(n_size.attribute("width").value()));
+                    height = static_cast<uint32_t>(std::stoul(n_size.attribute("height").value()));
                 }
 
-                if (pugi::xml_node nFormat = nImg.child("format"); nFormat != nullptr) {
-                    if (pugi::xml_node nHint = nFormat.child("hint"); nHint != nullptr) {
-                        setChannelTexFormat(nHint.attribute("channels").value(), tp.format);
-                        setChannelTexFormat(nHint.attribute("channelsInternal").value(), tp.internalFormat);
-                        setRange(nHint.attribute("range").value(), tp.type);
+                if (pugi::xml_node n_format = n_img.child("format"); n_format != nullptr) {
+                    if (pugi::xml_node n_hint = n_format.child("hint"); n_hint != nullptr) {
+                        setChannelTexFormat(n_hint.attribute("channels").value(), tp.format);
+                        setChannelTexFormat(n_hint.attribute("channelsInternal").value(), tp.internalFormat);
+                        setRange(n_hint.attribute("range").value(), tp.type);
                     }
                 }
 
                 if (fb != nullptr) {
-                    if (nSize != nullptr) {
+                    if (n_size != nullptr) {
                         fb->width = width;
                         fb->height = height;
                     }
@@ -75,8 +74,8 @@ namespace ce {
                 }
 
             } else if (field == "init_from") {
-                if (pugi::xml_text pathFile = nImg.text(); pathFile != nullptr) {
-                    std::string f = pathFile.as_string();
+                if (pugi::xml_text path_file = n_img.text(); path_file != nullptr) {
+                    std::string f = path_file.as_string();
                     SDL_Log("Nova textura %s, Key: %s", f.c_str(), id.c_str());
 
                     auto assets = this->registry->ctx().get<std::shared_ptr<AssetManager>>();

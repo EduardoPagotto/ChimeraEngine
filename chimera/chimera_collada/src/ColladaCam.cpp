@@ -3,7 +3,7 @@
 #include "chimera_ecs/TransComponent.hpp"
 
 namespace ce {
-    void ColladaCam::createExtra(Entity& entity, pugi::xml_node node) { // FIXME: remover entity e usar o serviceLoc
+    void ColladaCam::create_extra(Entity& entity, pugi::xml_node node) { // FIXME: remover entity e usar o serviceLoc
 
         std::string nn = node.name();
 
@@ -20,51 +20,51 @@ namespace ce {
             setChildParam(orbital, "fixedAspectRatio", cc.fixedAspectRatio);
         }
 
-        if (pugi::xml_node nFPS = getExtra(node, "FPS"); nFPS != nullptr) {
+        if (pugi::xml_node n_fps = getExtra(node, "FPS"); n_fps != nullptr) {
 
             cc.camKind = CamKind::FPS;
-            setChildParam(nFPS, "up", cc.up);
-            setChildParam(nFPS, "yaw", cc.yaw);
-            setChildParam(nFPS, "pitch", cc.pitch);
-            setChildParam(nFPS, "primary", cc.primary);
-            setChildParam(nFPS, "fixedAspectRatio", cc.fixedAspectRatio);
+            setChildParam(n_fps, "up", cc.up);
+            setChildParam(n_fps, "yaw", cc.yaw);
+            setChildParam(n_fps, "pitch", cc.pitch);
+            setChildParam(n_fps, "primary", cc.primary);
+            setChildParam(n_fps, "fixedAspectRatio", cc.fixedAspectRatio);
         }
 
-        if (pugi::xml_node nStatic = getExtra(node, "static"); nStatic != nullptr) {
+        if (pugi::xml_node n_static = getExtra(node, "static"); n_static != nullptr) {
 
             cc.camKind = CamKind::STATIC;
-            setChildParam(nStatic, "primary", cc.primary);
-            setChildParam(nStatic, "fixedAspectRatio", cc.fixedAspectRatio);
+            setChildParam(n_static, "primary", cc.primary);
+            setChildParam(n_static, "fixedAspectRatio", cc.fixedAspectRatio);
         }
     }
 
-    void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) {
+    void ColladaCam::create(Entity& entity, pugi::xml_node node_cam) {
 
         CameraComponent& cc = entity.add_component<CameraComponent>(registry.get());
-        cc.tag.id = nodeCam.attribute("id").value();
-        cc.tag.name = nodeCam.attribute("name").value();
+        cc.tag.id = node_cam.attribute("id").value();
+        cc.tag.name = node_cam.attribute("name").value();
         // cc.tag.serial = Collada::getNewSerial();
 
-        for (pugi::xml_node node = nodeCam.first_child(); node; node = node.next_sibling()) {
+        for (pugi::xml_node node = node_cam.first_child(); node; node = node.next_sibling()) {
             if (std::string("optics") == node.name()) {
 
                 float znear = 0.5f, zfar = 1000.0f;
-                const pugi::xml_node nCamType = node.child("technique_common").first_child();
-                if (std::string("perspective") == nCamType.name()) {
+                const pugi::xml_node n_cam_type = node.child("technique_common").first_child();
+                if (std::string("perspective") == n_cam_type.name()) {
 
                     float xfov = 45.0f;
-                    setChildParam(nCamType, "xfov", xfov);
-                    setChildParam(nCamType, "znear", znear);
-                    setChildParam(nCamType, "zfar", zfar);
+                    setChildParam(n_cam_type, "xfov", xfov);
+                    setChildParam(n_cam_type, "znear", znear);
+                    setChildParam(n_cam_type, "zfar", zfar);
                     cc.camera = std::make_shared<CameraPerspective>(xfov, znear, zfar);
 
-                } else if (std::string("orthographic") == nCamType.name()) {
+                } else if (std::string("orthographic") == n_cam_type.name()) {
 
                     float xmag = 512.0f, ymag = 512.0f;
-                    setChildParam(nCamType, "xmag", xmag);
-                    setChildParam(nCamType, "ymag", ymag);
-                    setChildParam(nCamType, "znear", znear);
-                    setChildParam(nCamType, "zfar", zfar);
+                    setChildParam(n_cam_type, "xmag", xmag);
+                    setChildParam(n_cam_type, "ymag", ymag);
+                    setChildParam(n_cam_type, "znear", znear);
+                    setChildParam(n_cam_type, "zfar", zfar);
                     cc.camera = std::make_shared<CameraOrtho>(xmag, ymag, znear, zfar);
                 }
 

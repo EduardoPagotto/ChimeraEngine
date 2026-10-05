@@ -7,40 +7,40 @@
 namespace ce {
 
     const glm::vec4 textToVec4(const std::string& text) {
-        std::vector<float> arrayFloat;
-        textToFloatArray(text, arrayFloat);
-        if (arrayFloat.size() == 4)
-            return glm::vec4(arrayFloat[0], arrayFloat[1], arrayFloat[2], arrayFloat[3]);
+        std::vector<float> array_float;
+        textToFloatArray(text, array_float);
+        if (array_float.size() == 4)
+            return glm::vec4(array_float[0], array_float[1], array_float[2], array_float[3]);
 
-        return glm::vec4(arrayFloat[0], arrayFloat[1], arrayFloat[2], 1.0f);
+        return glm::vec4(array_float[0], array_float[1], array_float[2], 1.0f);
     }
 
     const glm::vec3 textToVec3(const std::string& text) {
-        std::vector<float> arrayFloat;
-        textToFloatArray(text, arrayFloat);
+        std::vector<float> array_float;
+        textToFloatArray(text, array_float);
 
-        return glm::vec3(arrayFloat[0], arrayFloat[1], arrayFloat[2]);
+        return glm::vec3(array_float[0], array_float[1], array_float[2]);
     }
 
     const glm::mat4 textToMat4(const std::string& text) {
 
-        std::vector<float> arrayFloat;
-        textToFloatArray(text, arrayFloat);
+        std::vector<float> array_float;
+        textToFloatArray(text, array_float);
 
-        if (arrayFloat.size() != 16)
-            throw std::string("Tamanho da Matrix invalido" + std::to_string(arrayFloat.size()));
+        if (array_float.size() != 16)
+            throw std::string("Tamanho da Matrix invalido" + std::to_string(array_float.size()));
 
-        float ponteiroFloat[16];
+        float ponteiro_float[16];
         int indice = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 int pos = i + (4 * j);
-                ponteiroFloat[pos] = arrayFloat[indice];
+                ponteiro_float[pos] = array_float[indice];
                 indice++;
             }
         }
 
-        return glm::make_mat4(&ponteiroFloat[0]);
+        return glm::make_mat4(&ponteiro_float[0]);
     }
 
     //--
@@ -49,84 +49,85 @@ namespace ce {
         : registry(registry) {
 
         RFC3986 rfc(url);
-        if (rfc.isInvalid() == true)
+        if (rfc.is_invalid() == true)
             throw std::string("URL " + url + " invalida");
 
-        if (rfc.getScheme() == RFC3986_SCHEME::LOCAL)
+        if (rfc.get_scheme() == RFC3986_SCHEME::LOCAL)
             colladaDom = dom;
         else {
 
-            for (auto domCache : Collada::vColladaDom) {
-                if (domCache.file == rfc.getPath()) {
-                    colladaDom = domCache;
-                    fragment_ = rfc.getFragment();
-                    SDL_Log("Arquivo %s cache, id: %s", colladaDom.file.c_str(), rfc.getFragment().c_str());
+            for (auto dom_cache : Collada::v_collada_dom) {
+                if (dom_cache.file == rfc.get_path()) {
+                    colladaDom = dom_cache;
+                    fragment_ = rfc.get_fragment();
+                    SDL_Log("Arquivo %s cache, id: %s", colladaDom.file.c_str(), rfc.get_fragment().c_str());
                     return;
                 }
             }
 
-            colladaDom.file = rfc.getPath();
+            colladaDom.file = rfc.get_path();
             colladaDom.pDoc = new pugi::xml_document();
             pugi::xml_parse_result result = colladaDom.pDoc->load_file(colladaDom.file.c_str());
             if (result.status != pugi::status_ok)
                 throw std::string("Arquivo " + colladaDom.file + " erro: %s" + std::string(result.description()));
 
-            SDL_Log("Arquivo %s novo, id: %s Status: %s", colladaDom.file.c_str(), rfc.getFragment().c_str(),
+            SDL_Log("Arquivo %s novo, id: %s Status: %s", colladaDom.file.c_str(), rfc.get_fragment().c_str(),
                     result.description());
             colladaDom.root = colladaDom.pDoc->child("COLLADA");
 
-            Collada::vColladaDom.push_back(colladaDom);
+            Collada::v_collada_dom.push_back(colladaDom);
         }
 
-        fragment_ = rfc.getFragment();
+        fragment_ = rfc.get_fragment();
     }
 
     void Collada::destroy() {
 
-        for (ColladaDom dom : vColladaDom)
+        for (ColladaDom dom : v_collada_dom)
             dom.pDoc->reset();
 
-        while (vColladaDom.size() != 0) {
-            std::vector<ColladaDom>::iterator it = vColladaDom.begin();
+        while (v_collada_dom.size() != 0) {
+            std::vector<ColladaDom>::iterator it = v_collada_dom.begin();
             delete (*it).pDoc;
             (*it).pDoc = nullptr;
 
-            vColladaDom.erase(it);
+            v_collada_dom.erase(it);
         }
     }
 
-    const pugi::xml_node Collada::getLibrary(const std::string& libraryName) {
-        return getLibraryKey(libraryName, fragment_);
+    const pugi::xml_node Collada::get_library(const std::string& library_name) {
+        return get_library_key(library_name, fragment_);
     }
 
-    const pugi::xml_node Collada::getLibraryKey(const std::string& libraryName, const std::string& key) {
+    const pugi::xml_node Collada::get_library_key(const std::string& library_name, const std::string& key) {
         for (pugi::xml_node n = colladaDom.root.first_child(); n; n = n.next_sibling()) {
             std::string name = n.name();
-            if (name == libraryName) {
+            if (name == library_name) {
 
                 for (pugi::xml_node t = n.first_child(); t; t = t.next_sibling()) {
                     if (std::string id = t.attribute("id").value(); id == key) {
-                        SDL_Log("%s: %s id: %s", libraryName.c_str(), t.name(), id.c_str());
+                        SDL_Log("%s: %s id: %s", library_name.c_str(), t.name(), id.c_str());
                         return t;
                     }
                 }
             }
         }
 
-        throw std::string(libraryName + " não encontrado id: " + key);
+        throw std::string(library_name + " não encontrado id: " + key);
     }
 
-    const pugi::xml_node Collada::getLibraryUrl(const std::string& libraryName, const std::string& url) {
+    const pugi::xml_node Collada::get_library_url(const std::string& library_name, const std::string& url) {
         std::size_t found = url.find('#');
         std::string key = (found != std::string::npos) ? url.substr(found + 1, std::string::npos) : url;
-        return getLibraryKey(libraryName, key);
+        return get_library_key(library_name, key);
     }
 
     const pugi::xml_node getExtra(const pugi::xml_node node, const std::string& name) {
 
-        for (pugi::xml_node nTec = node.first_child(); nTec; nTec = nTec.next_sibling()) {
-            if ((strcmp(nTec.name(), "technique") == 0) and (strcmp(nTec.attribute("profile").value(), "chimera") == 0))
-                return nTec.child(name.c_str());
+        for (pugi::xml_node n_tec = node.first_child(); n_tec; n_tec = n_tec.next_sibling()) {
+            if ((strcmp(n_tec.name(), "technique") == 0) and
+                (strcmp(n_tec.attribute("profile").value(), "chimera") == 0))
+                return n_tec.child(name.c_str());
         }
 
         return pugi::xml_node();

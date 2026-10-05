@@ -19,7 +19,7 @@ namespace ce {
 
                 auto asset = registry->ctx().get<std::shared_ptr<ce::AssetManager>>();
 
-                auto font = asset->load_font(rfc.getFragment(), rfc.getPath(), size);
+                auto font = asset->load_font(rfc.get_fragment(), rfc.get_path(), size);
                 font->scale = glm::vec2(scaleX, scaleY);
             }
         }
@@ -40,13 +40,13 @@ namespace ce {
 
                         std::string refName = next.child("technique_hint").attribute("ref").value();
                         ColladaEffect cf(registry, colladaDom, url);
-                        cf.create(refName, entity, cf.getLibrary("library_effects"));
+                        cf.create(refName, entity, cf.get_library("library_effects"));
 
                     } else if (name == "instance_camera") {
 
                         ColladaCam cc(registry, colladaDom, url);
-                        cc.create(entity, cc.getLibrary("library_cameras"));
-                        cc.createExtra(entity, next.first_child());
+                        cc.create(entity, cc.get_library("library_cameras"));
+                        cc.create_extra(entity, next.first_child());
                     }
                 }
             }

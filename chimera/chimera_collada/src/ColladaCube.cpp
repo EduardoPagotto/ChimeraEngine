@@ -14,16 +14,16 @@ namespace ce {
         uint32_t width = static_cast<uint32_t>(std::stoul(geo.attribute("width").value()));
         uint32_t height = static_cast<uint32_t>(std::stoul(geo.attribute("height").value()));
         uint32_t floor = static_cast<uint32_t>(std::stoul(geo.attribute("floor").value()));
-        float sizeBlock = std::stod(geo.attribute("size").value());
+        float size_block = std::stod(geo.attribute("size").value());
 
         // carregando campos do mapa
         pugi::xml_node nl = geo.first_child();
-        std::vector<Cube*> vpCube;
+        std::vector<Cube*> vp_cube;
         glm::ivec3 pos(0);
         glm::ivec3 size(width, floor, height);
-        glm::vec3 halfBlock((size.x * sizeBlock) / 2.0f,  //(w/2)
-                            (size.y * sizeBlock) / 2.0f,  //(d/2)
-                            (size.z * sizeBlock) / 2.0f); //(h/2)
+        glm::vec3 half_block((size.x * size_block) / 2.0f,  //(w/2)
+                             (size.y * size_block) / 2.0f,  //(d/2)
+                             (size.z * size_block) / 2.0f); //(h/2)
 
         // processa o Maze
         for (pos.y = 0; pos.y < size.y; pos.y++) {
@@ -41,43 +41,43 @@ namespace ce {
                 if (h != pos.z)
                     throw std::string("height do maze incorreto");
 
-                std::string sBuffer = nl.text().as_string();
-                const char* buffer = sBuffer.c_str();
+                std::string s_buffer = nl.text().as_string();
+                const char* buffer = s_buffer.c_str();
 
                 for (pos.x = 0; pos.x < size.x; pos.x++) {
 
-                    Cube* pCube = nullptr;
-                    glm::vec3 min = minimal(sizeBlock, halfBlock, pos);
-                    glm::vec3 max = min + sizeBlock;
+                    Cube* p_cube = nullptr;
+                    glm::vec3 min = minimal(size_block, half_block, pos);
+                    glm::vec3 max = min + size_block;
 
-                    if (sBuffer.size() > pos.x)
-                        pCube = new Cube(buffer[pos.x], min, max);
+                    if (s_buffer.size() > pos.x)
+                        p_cube = new Cube(buffer[pos.x], min, max);
                     else
-                        pCube = new Cube(' ', min, max); // Erro campo faltando
+                        p_cube = new Cube(' ', min, max); // Erro campo faltando
 
-                    vpCube.push_back(pCube);
+                    vp_cube.push_back(p_cube);
                 }
 
                 nl = nl.next_sibling();
             }
         }
 
-        linkCubes(size, vpCube);
+        linkCubes(size, vp_cube);
 
         // carrega posicoes, texturas, e seq textura defaults do cubo base
         initCubeBase();
-        Mesh tempMesh;
-        for (auto pCube : vpCube)
-            pCube->create(&tempMesh); // cria mesh com dados dos cubos
+        Mesh temp_mesh;
+        for (auto p_cube : vp_cube)
+            p_cube->create(&temp_mesh); // cria mesh com dados dos cubos
 
         // aqui
-        meshSerialize(tempMesh, *mc.mesh);
+        meshSerialize(temp_mesh, *mc.mesh);
 
-        cleanupCubeBase();          // limpa dados de criacao do cubo base
-        for (auto pCube : vpCube) { // limpas cubos de contrucao e vetor de cubos
-            delete pCube;
-            pCube = nullptr;
+        cleanupCubeBase();            // limpa dados de criacao do cubo base
+        for (auto p_cube : vp_cube) { // limpas cubos de contrucao e vetor de cubos
+            delete p_cube;
+            p_cube = nullptr;
         }
-        vpCube.clear();
+        vp_cube.clear();
     }
 } // namespace ce

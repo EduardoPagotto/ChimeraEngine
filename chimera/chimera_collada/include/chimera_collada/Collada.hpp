@@ -11,11 +11,11 @@ namespace ce {
       public:
         Collada(std::shared_ptr<entt::registry> registry, ColladaDom& dom, const std::string& url);
         virtual ~Collada() = default;
-        const pugi::xml_node getLibraryUrl(const std::string& libraryName, const std::string& url);
-        const pugi::xml_node getLibrary(const std::string& libraryName);
-        static uint32_t getNewSerial() { return ++serial; }
+        const pugi::xml_node get_library_url(const std::string& library_name, const std::string& url);
+        const pugi::xml_node get_library(const std::string& library_name);
+        static uint32_t get_new_serial() { return ++serial; }
         static void destroy();
-        inline static std::vector<ColladaDom> vColladaDom;
+        inline static std::vector<ColladaDom> v_collada_dom;
 
       protected:
         std::shared_ptr<entt::registry> registry;
@@ -24,7 +24,7 @@ namespace ce {
         std::string fragment_;
 
       private:
-        const pugi::xml_node getLibraryKey(const std::string& libraryName, const std::string& key);
+        const pugi::xml_node get_library_key(const std::string& library_name, const std::string& key);
     };
 
     const glm::vec3 textToVec3(const std::string& text);

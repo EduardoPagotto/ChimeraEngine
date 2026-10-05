@@ -9,7 +9,7 @@
 
 namespace ce {
 
-    const pugi::xml_node ColladaPhysicScene::findModel(pugi::xml_node node, const std::string& body) {
+    const pugi::xml_node ColladaPhysicScene::find_model(pugi::xml_node node, const std::string& body) {
 
         for (pugi::xml_node n = node.first_child(); n; n = n.next_sibling()) {
 
@@ -21,7 +21,7 @@ namespace ce {
         throw std::string(body + " nao encontrado nos modelos fisicos");
     }
 
-    void ColladaPhysicScene::loadAll(pugi::xml_node node) {
+    void ColladaPhysicScene::load_all(pugi::xml_node node) {
 
         std::string id = node.attribute("id").value();
         std::string name = node.attribute("name").value();
@@ -29,29 +29,29 @@ namespace ce {
         auto pc = std::make_shared<PhysicsControl>();
         registry->ctx().emplace<std::shared_ptr<PhysicsControl>>(pc);
 
-        pugi::xml_node nTec = node.child("technique_common");
-        std::string sGrav = nTec.child("gravity").text().as_string();
+        pugi::xml_node n_tec = node.child("technique_common");
+        std::string s_grav = n_tec.child("gravity").text().as_string();
 
         [[maybe_unused]]
-        float ts = nTec.child("time_step").text().as_float();
+        float ts = n_tec.child("time_step").text().as_float();
 
-        std::vector<float> l_arrayF;
-        textToFloatArray(sGrav, l_arrayF);
-        pc->set_gravity(btVector3(l_arrayF[0], l_arrayF[1], l_arrayF[2]));
+        std::vector<float> l_array_f;
+        textToFloatArray(s_grav, l_array_f);
+        pc->set_gravity(btVector3(l_array_f[0], l_array_f[1], l_array_f[2]));
         // pc.stepSim(ts); FIXME: remover e ver se funciona!!!!!!
 
-        pugi::xml_node nInstace = node.child("instance_physics_model");
-        std::string val = nInstace.name();
-        std::string url = nInstace.attribute("url").value();
-        pugi::xml_node models = getLibraryUrl("library_physics_models", url);
+        pugi::xml_node n_instace = node.child("instance_physics_model");
+        std::string val = n_instace.name();
+        std::string url = n_instace.attribute("url").value();
+        pugi::xml_node models = get_library_url("library_physics_models", url);
 
-        for (pugi::xml_node nRb = nInstace.first_child(); nRb; nRb = nRb.next_sibling()) {
+        for (pugi::xml_node n_rb = n_instace.first_child(); n_rb; n_rb = n_rb.next_sibling()) {
 
-            std::string body = nRb.attribute("body").value();
-            std::string target = nRb.attribute("target").value();
+            std::string body = n_rb.attribute("body").value();
+            std::string target = n_rb.attribute("target").value();
 
-            pugi::xml_node nTec = findModel(models, body);
-            if (nTec == nullptr) {
+            pugi::xml_node n_tec = find_model(models, body);
+            if (n_tec == nullptr) {
                 SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s não encontrado target: %s", body.c_str(),
                              target.c_str());
                 continue;
@@ -74,50 +74,51 @@ namespace ce {
                     tc.trans = solid; // carrega novo objeto de transformacao
 
                     [[maybe_unused]]
-                    bool dynamic = nTec.child("dynamic").text().as_bool();
-                    float mass = nTec.child("mass").text().as_float();
+                    bool dynamic = n_tec.child("dynamic").text().as_bool();
+                    float mass = n_tec.child("mass").text().as_float();
 
                     solid->set_mass(mass);
 
                     // Material
-                    std::string url = nTec.child("instance_physics_material").attribute("url").value();
+                    std::string url = n_tec.child("instance_physics_material").attribute("url").value();
 
-                    pugi::xml_node nPm = getLibraryUrl("library_physics_materials", url);
-                    pugi::xml_node nTc = nPm.child("technique_common");
+                    pugi::xml_node n_pm = get_library_url("library_physics_materials", url);
+                    pugi::xml_node n_tc = n_pm.child("technique_common");
 
-                    solid->set_restitution(nTc.child("restitution").text().as_float());
-                    solid->set_friction_dynamic(nTc.child("dynamic_friction").text().as_float());
-                    solid->set_friction_static(nTc.child("static_friction").text().as_float());
+                    solid->set_restitution(n_tc.child("restitution").text().as_float());
+                    solid->set_friction_dynamic(n_tc.child("dynamic_friction").text().as_float());
+                    solid->set_friction_static(n_tc.child("static_friction").text().as_float());
 
                     // Shape
-                    pugi::xml_node nShape = nTec.child("shape").first_child();
+                    pugi::xml_node n_shape = n_tec.child("shape").first_child();
 
-                    std::vector<float> arrayFloat;
-                    if (std::string sShape = nShape.name(); sShape == "sphere") {
+                    std::vector<float> array_float;
+                    if (std::string s_shape = n_shape.name(); s_shape == "sphere") {
 
-                        std::string rad = nShape.child("radius").text().as_string();
-                        textToFloatArray(rad, arrayFloat);
-                        solid->set_shape_sphere(arrayFloat[0]);
+                        std::string rad = n_shape.child("radius").text().as_string();
+                        textToFloatArray(rad, array_float);
+                        solid->set_shape_sphere(array_float[0]);
 
-                    } else if (sShape == "plane") {
+                    } else if (s_shape == "plane") {
 
-                        std::string rad = nShape.child("equation").text().as_string();
-                        textToFloatArray(rad, arrayFloat);
-                        solid->set_shape_plane(glm::vec3(arrayFloat[0], arrayFloat[1], arrayFloat[2]), arrayFloat[3]);
+                        std::string rad = n_shape.child("equation").text().as_string();
+                        textToFloatArray(rad, array_float);
+                        solid->set_shape_plane(glm::vec3(array_float[0], array_float[1], array_float[2]),
+                                               array_float[3]);
 
-                    } else if (sShape == "box") { // FIXME: ver no colada para usar o parametro correto
+                    } else if (s_shape == "box") { // FIXME: ver no colada para usar o parametro correto
 
-                        std::string sBox = nShape.first_child().text().as_string();
-                        textToFloatArray(sBox, arrayFloat);
-                        solid->set_shape_box(glm::vec3(arrayFloat[0], arrayFloat[1], arrayFloat[2]));
+                        std::string s_box = n_shape.first_child().text().as_string();
+                        textToFloatArray(s_box, array_float);
+                        solid->set_shape_box(glm::vec3(array_float[0], array_float[1], array_float[2]));
 
-                    } else if (sShape == "cylinder") {
+                    } else if (s_shape == "cylinder") {
 
-                        std::string sCi = nShape.first_child().text().as_string();
-                        textToFloatArray(sCi, arrayFloat);
-                        solid->set_shape_cilinder(glm::vec3(arrayFloat[0], arrayFloat[1], arrayFloat[2]));
+                        std::string s_ci = n_shape.first_child().text().as_string();
+                        textToFloatArray(s_ci, array_float);
+                        solid->set_shape_cilinder(glm::vec3(array_float[0], array_float[1], array_float[2]));
 
-                    } else if (sShape == "mesh") {
+                    } else if (s_shape == "mesh") {
 
                         // if (mc.mesh != nullptr) {
                         //     btTriangleIndexVertexArray* indexVertexArray =

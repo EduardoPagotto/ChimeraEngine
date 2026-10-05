@@ -21,7 +21,7 @@ namespace ce {
         SDL_Log("Load arquivo: %s Status: %s", file.c_str(), result.description());
         dom.root = dom.pDoc->child("COLLADA");
 
-        Collada::vColladaDom.push_back(dom); // arquivo inicial
+        Collada::v_collada_dom.push_back(dom); // arquivo inicial
 
         return dom;
     }
@@ -41,12 +41,12 @@ namespace ce {
             } else if (instance == "instance_visual_scene") {
 
                 ColladaVisualScene vs(registry, dom, url);
-                vs.loadAll(vs.getLibrary("library_visual_scenes"));
+                vs.load_all(vs.get_library("library_visual_scenes"));
 
             } else if (instance == "instance_physics_scene") {
 
                 ColladaPhysicScene ps(registry, dom, url);
-                ps.loadAll(ps.getLibrary("library_physics_scenes"));
+                ps.load_all(ps.get_library("library_physics_scenes"));
             }
         }
     }

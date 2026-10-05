@@ -8,7 +8,7 @@ namespace ce {
         ColladaLight(std::shared_ptr<entt::registry> registry, ColladaDom& dom, const std::string& url)
             : Collada(registry, dom, url) {}
         virtual ~ColladaLight() = default;
-        void create(Entity& entity, pugi::xml_node nodeLight);
+        void create(Entity& entity, pugi::xml_node node_light);
     };
 
 } // namespace ce

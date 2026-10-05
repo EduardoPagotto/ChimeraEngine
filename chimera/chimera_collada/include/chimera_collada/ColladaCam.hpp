@@ -9,8 +9,8 @@ namespace ce {
             : Collada(registry, dom, url) {};
 
         virtual ~ColladaCam() {}
-        void create(Entity& entity, pugi::xml_node nodeCam);
-        void createExtra(Entity& entity, pugi::xml_node node);
+        void create(Entity& entity, pugi::xml_node node_cam);
+        void create_extra(Entity& entity, pugi::xml_node node);
     };
 
 } // namespace ce

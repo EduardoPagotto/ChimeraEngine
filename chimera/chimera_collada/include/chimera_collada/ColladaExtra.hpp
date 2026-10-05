@@ -8,6 +8,6 @@ namespace ce {
             : Collada(registry, dom, url) {};
 
         virtual ~ColladaExtra() {}
-        void create(pugi::xml_node nodeExtra);
+        void create(pugi::xml_node node_extra);
     };
 } // namespace ce

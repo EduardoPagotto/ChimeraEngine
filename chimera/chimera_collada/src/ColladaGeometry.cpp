@@ -16,25 +16,25 @@ namespace ce {
             cf.create(id, name, entity, mesh);
 
         } else {
-            const pugi::xml_node nExtra = geo.child("extra");
-            if (const pugi::xml_node nObj = getExtra(nExtra, "external_obj"); nObj != nullptr) {
+            const pugi::xml_node n_extra = geo.child("extra");
+            if (const pugi::xml_node n_obj = getExtra(n_extra, "external_obj"); n_obj != nullptr) {
                 ColladaWaveFront cf(registry, colladaDom, "#vazio");
-                cf.create(id, name, entity, nObj);
+                cf.create(id, name, entity, n_obj);
             }
 
-            if (const pugi::xml_node nCube = getExtra(nExtra, "external_cube"); nCube) {
+            if (const pugi::xml_node n_cube = getExtra(n_extra, "external_cube"); n_cube) {
                 ColladaCube cc(registry, colladaDom, "#vazio");
-                cc.create(id, name, entity, nCube);
+                cc.create(id, name, entity, n_cube);
             }
 
-            if (const pugi::xml_node nHeight = getExtra(nExtra, "external_height"); nHeight) {
+            if (const pugi::xml_node n_height = getExtra(n_extra, "external_height"); n_height) {
                 ColladaHeightMap ch(registry, colladaDom, "#vazio");
-                ch.create(id, name, entity, nHeight);
+                ch.create(id, name, entity, n_height);
             }
 
-            if (const pugi::xml_node nParticle = getExtra(nExtra, "particle"); nParticle) {
+            if (const pugi::xml_node n_particle = getExtra(n_extra, "particle"); n_particle) {
                 ColladaParticle cp(registry, colladaDom, "#vazio");
-                cp.create(id, name, entity, nParticle);
+                cp.create(id, name, entity, n_particle);
             }
         }
     }

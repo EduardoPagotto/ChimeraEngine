@@ -12,34 +12,34 @@ namespace ce {
         pugi::xml_node vs = dom.root.child("scene");
         if (const pugi::xml_node extra = vs.child("extra"); extra != nullptr) {
 
-            if (const pugi::xml_node nTiles = getExtra(extra, "tiles"); nTiles != nullptr) {
+            if (const pugi::xml_node n_tiles = getExtra(extra, "tiles"); n_tiles != nullptr) {
 
-                for (pugi::xml_node nTile = nTiles.first_child(); nTile; nTile = nTile.next_sibling()) {
+                for (pugi::xml_node n_tile = n_tiles.first_child(); n_tile; n_tile = n_tile.next_sibling()) {
 
-                    Entity entity =
-                        Entity::create(registry.get(), nTile.attribute("name").value(), nTile.attribute("id").value());
+                    Entity entity = Entity::create(registry.get(), n_tile.attribute("name").value(),
+                                                   n_tile.attribute("id").value());
 
-                    for (pugi::xml_node node = nTile.first_child(); node; node = node.next_sibling()) {
+                    for (pugi::xml_node node = n_tile.first_child(); node; node = node.next_sibling()) {
 
                         std::string url = node.attribute("url").value();
                         if (std::string name = node.name(); name == "instance_camera") {
 
                             ColladaCam cc(registry, dom, url);
-                            cc.create(entity, cc.getLibrary("library_cameras"));
-                            cc.createExtra(entity, node.first_child());
+                            cc.create(entity, cc.get_library("library_cameras"));
+                            cc.create_extra(entity, node.first_child());
 
                         } else if (name == "instance_effect") {
 
-                            std::string refName = node.child("technique_hint").attribute("ref").value();
+                            std::string ref_name = node.child("technique_hint").attribute("ref").value();
                             ColladaEffect cs(registry, dom, url);
-                            cs.create(refName, entity, cs.getLibrary("library_effects"));
+                            cs.create(ref_name, entity, cs.get_library("library_effects"));
                         }
                     }
 
                     [[maybe_unused]]
-                    CameraComponent& cCam = entity.get_component<CameraComponent>(registry.get());
-                    auto& shaderCom = entity.get_component<ShaderComponent>(registry.get());
-                    std::shared_ptr<Shader> shader = shaderCom.shader;
+                    CameraComponent& c_cam = entity.get_component<CameraComponent>(registry.get());
+                    auto& shader_com = entity.get_component<ShaderComponent>(registry.get());
+                    std::shared_ptr<Shader> shader = shader_com.shader;
                 }
             }
         }

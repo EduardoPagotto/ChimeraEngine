@@ -8,11 +8,11 @@ namespace ce {
         ColladaVisualScene(std::shared_ptr<entt::registry> registry, ColladaDom& dom, const std::string& url)
             : Collada(registry, dom, url) {}
         virtual ~ColladaVisualScene() = default;
-        void loadNode(pugi::xml_node node);
-        void loadAll(pugi::xml_node node);
+        void load_node(pugi::xml_node node);
+        void load_all(pugi::xml_node node);
 
       private:
-        void nodeData(pugi::xml_node node, Entity entity);
+        void node_data(pugi::xml_node node, Entity entity);
     };
 
 } // namespace ce

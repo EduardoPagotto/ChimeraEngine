@@ -33,7 +33,7 @@ namespace ce {
         return TexWrap::NONE;
     }
 
-    void ColladaEffect::setShader(const std::string& refName, const pugi::xml_node& node) {
+    void ColladaEffect::set_shader(const std::string& refName, const pugi::xml_node& node) {
         pugi::xml_node tech = node.child("technique");
 
         if ((refName.size() > 0) && (std::string(tech.attribute("sid").value()) != refName))
@@ -82,7 +82,7 @@ namespace ce {
         if (shadeData.size() > 1) {
             auto assets = this->registry->ctx().get<std::shared_ptr<AssetManager>>();
 
-            ShaderComponent& sc = entity.add_component<ShaderComponent>(registry.get());
+            ShaderComponent& sc = entity_.add_component<ShaderComponent>(registry.get());
             sc.tag.name = refName;
 
             // FIXME: mudar a forma para fazer a carga real no attachment do scene
@@ -90,7 +90,7 @@ namespace ce {
         }
     }
 
-    bool ColladaEffect::setTextureParam(const pugi::xml_node& n, TexParam& tp) {
+    bool ColladaEffect::set_texture_param(const pugi::xml_node& n, TexParam& tp) {
         for (pugi::xml_node ntPara = n.first_child(); ntPara; ntPara = ntPara.next_sibling()) {
             std::string sParam = ntPara.name();
             std::string sParamVal = ntPara.text().as_string();
@@ -108,18 +108,18 @@ namespace ce {
 
                 std::string url = ntPara.attribute("url").value();
                 ColladaImage ci(registry, colladaDom, url);
-                ci.create(entity, tp, ci.getLibrary("library_images"));
+                ci.create(entity_, tp, ci.get_library("library_images"));
                 return true;
             }
         }
         return false;
     }
 
-    void ColladaEffect::setMaterial(const pugi::xml_node& node, TexParam& tp) {
+    void ColladaEffect::set_material(const pugi::xml_node& node, TexParam& tp) {
 
         std::shared_ptr<Material> pMat;
-        if (entity.has_component<MaterialComponent>(registry.get())) {
-            MaterialComponent& mc = entity.get_component<MaterialComponent>(registry.get());
+        if (entity_.has_component<MaterialComponent>(registry.get())) {
+            MaterialComponent& mc = entity_.get_component<MaterialComponent>(registry.get());
             pMat = mc.material;
         } else {
             return;
@@ -155,7 +155,7 @@ namespace ce {
                     std::string idTex = mapa_tex_[mapa2d_[texId]];
 
                     ColladaImage ci(registry, colladaDom, idTex);
-                    ci.create(entity, tp, ci.getLibrary("library_images"));
+                    ci.create(entity_, tp, ci.get_library("library_images"));
 
                     auto assets = this->registry->ctx().get<std::shared_ptr<AssetManager>>();
 
@@ -184,7 +184,7 @@ namespace ce {
         }
     }
 
-    void ColladaEffect::setImageParms(const pugi::xml_node& node) {
+    void ColladaEffect::set_image_parms(const pugi::xml_node& node) {
 
         for (pugi::xml_node param = node.first_child(); param; param = param.next_sibling()) {
 
@@ -200,7 +200,7 @@ namespace ce {
                     mapa_tex_[sid] = keyImage;
 
                 } else if (sVal1 == "sampler2D") {
-                    if (setTextureParam(val1, tp) == false) {
+                    if (set_texture_param(val1, tp) == false) {
                         std::string keyMap = val1.child("source").text().as_string();
                         mapa2d_[sid] = keyMap;
                     }
@@ -208,26 +208,26 @@ namespace ce {
                     // nao e textura e FR
                     tp.format = TexFormat::DEPTH_COMPONENT;
                     tp.internalFormat = TexFormat::DEPTH_COMPONENT;
-                    setTextureParam(val1, tp);
+                    set_texture_param(val1, tp);
                 }
             } else if (sProf == "technique") {
-                setMaterial(param, tp);
+                set_material(param, tp);
             }
         }
     }
 
     void ColladaEffect::create(const std::string& refName, Entity& entity, pugi::xml_node node) {
-        this->entity = entity;
+        this->entity_ = entity;
         for (pugi::xml_node nProf = node.first_child(); nProf; nProf = nProf.next_sibling()) {
             if (std::string nameProf = nProf.name(); nameProf == "profile_GLSL") {
-                setShader(refName, nProf);
+                set_shader(refName, nProf);
             } else if (nameProf == "profile_COMMON") {
-                setImageParms(nProf);
+                set_image_parms(nProf);
             } else if (nameProf == "extra") {
                 if (const pugi::xml_node nFX = getExtra(nProf, "instance_effect"); nFX != nullptr) {
                     std::string url = nFX.attribute("url").value();
                     ColladaEffect cf(registry, colladaDom, url);
-                    cf.create("", entity, cf.getLibrary("library_effects"));
+                    cf.create("", entity, cf.get_library("library_effects"));
                 }
             }
         }

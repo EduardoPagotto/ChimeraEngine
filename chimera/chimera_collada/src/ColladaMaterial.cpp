@@ -5,16 +5,16 @@
 namespace ce {
     void ColladaMaterial::create(Entity& entity, const pugi::xml_node& node) {
 
-        MaterialComponent& eMaterial = entity.add_component<MaterialComponent>(registry.get());
-        eMaterial.tag.id = node.attribute("id").value();
-        eMaterial.tag.name = node.attribute("name").value();
-        eMaterial.material = std::make_shared<Material>();
+        MaterialComponent& e_material = entity.add_component<MaterialComponent>(registry.get());
+        e_material.tag.id = node.attribute("id").value();
+        e_material.tag.name = node.attribute("name").value();
+        e_material.material = std::make_shared<Material>();
 
-        pugi::xml_node nEffect = node.child("instance_effect");
-        std::string url = nEffect.attribute("url").value();
-        std::string refName = nEffect.child("technique_hint").attribute("ref").value();
+        pugi::xml_node n_effect = node.child("instance_effect");
+        std::string url = n_effect.attribute("url").value();
+        std::string ref_name = n_effect.child("technique_hint").attribute("ref").value();
 
         ColladaEffect cf(registry, colladaDom, url);
-        cf.create(refName, entity, cf.getLibrary("library_effects"));
+        cf.create(ref_name, entity, cf.get_library("library_effects"));
     }
 } // namespace ce

@@ -3,13 +3,13 @@
 
 namespace ce {
     void ColladaParticle::create(const std::string& id, const std::string& name, Entity& entity,
-                                 pugi::xml_node nParticle) {
+                                 pugi::xml_node n_particle) {
 
         glm::vec dir = glm::vec3(0, 0, 10);
         float spread = 1.5f;
-        const pugi::xml_node& nEmiter = nParticle.child("emmiter_font");
-        setChildParam(nEmiter, "maindir", dir);
-        setChildParam(nEmiter, "spread", spread);
+        const pugi::xml_node& n_emiter = n_particle.child("emmiter_font");
+        setChildParam(n_emiter, "maindir", dir);
+        setChildParam(n_emiter, "spread", spread);
 
         EmitterComponent& ec = entity.add_component<EmitterComponent>(registry.get());
         ec.tag.id = id;
@@ -17,10 +17,10 @@ namespace ce {
         ec.emitter = new EmitterFont(dir, spread); // EF to R
 
         std::shared_ptr<ParticleContainer> pc = std::make_shared<ParticleContainer>();
-        const pugi::xml_node& nContainer = nParticle.child("container");
-        setChildParam(nContainer, "life", pc->life);
-        setChildParam(nContainer, "max", pc->max);
-        setChildParam(nContainer, "respaw", pc->respaw);
+        const pugi::xml_node& n_container = n_particle.child("container");
+        setChildParam(n_container, "life", pc->life);
+        setChildParam(n_container, "max", pc->max);
+        setChildParam(n_container, "respaw", pc->respaw);
         ec.emitter->push_particle_container(pc);
     }
 } // namespace ce

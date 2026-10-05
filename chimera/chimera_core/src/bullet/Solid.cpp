@@ -38,8 +38,8 @@ namespace ce {
 
     void Solid::init(const glm::vec3& size) {
 
-        if (isShapeDefine() == false)
-            setShapeBox(size);
+        if (is_shape_define() == false)
+            set_shape_box(size);
 
         btVector3 local_inertia(0.0, 0.0, 0.0);
         if (mass_ != 0.0f) {
@@ -65,7 +65,7 @@ namespace ce {
         p_world_->get_world()->addRigidBody(p_rigid_body_, 1, 1);
     }
 
-    void Solid::setIndexVertexArray(btTriangleIndexVertexArray* index_vertex_array) {
+    void Solid::set_index_vertex_array(btTriangleIndexVertexArray* index_vertex_array) {
 
         trimesh_ = new btGImpactMeshShape(index_vertex_array);
         trimesh_->setLocalScaling(btVector3(1.f, 1.f, 1.f));
@@ -134,12 +134,12 @@ namespace ce {
         p_motion_state_ = new btDefaultMotionState(transform);
     }
 
-    void Solid::applyTorc(const glm::vec3& _torque) {
+    void Solid::apply_torc(const glm::vec3& torque) {
         // pRigidBody->applyTorque(_torque);
 
         p_rigid_body_->applyTorque(
             p_rigid_body_->getInvInertiaTensorWorld().inverse() *
-            (p_rigid_body_->getWorldTransform().getBasis() * btVector3(_torque.x, _torque.y, _torque.z)));
+            (p_rigid_body_->getWorldTransform().getBasis() * btVector3(torque.x, torque.y, torque.z)));
 
         // pRigidBody->getInvInertiaTensorWorld().inverse()*(pRigidBody->getWorldTransform().getBasis()
         // * _torque);
@@ -147,7 +147,7 @@ namespace ce {
         // * _torque);
     }
 
-    void Solid::applyForce(const glm::vec3& prop) {
+    void Solid::apply_force(const glm::vec3& prop) {
         // Jeito um
         // btTransform boxTrans;
         // pRigidBody->getMotionState()->getWorldTransform(boxTrans);
@@ -155,12 +155,12 @@ namespace ce {
         // pRigidBody->applyCentralForce(correctedForce);
 
         // Jeito 2
-        btMatrix3x3& boxRot = p_rigid_body_->getWorldTransform().getBasis();
+        btMatrix3x3& box_rot = p_rigid_body_->getWorldTransform().getBasis();
 
         btVector3 l_prop(prop.x, prop.y, prop.z);
 
-        btVector3 correctedForce = boxRot * (l_prop);
-        p_rigid_body_->applyCentralForce(correctedForce);
+        btVector3 corrected_force = box_rot * (l_prop);
+        p_rigid_body_->applyCentralForce(corrected_force);
     }
 
     // Transformacao quando Euley nao apagar

@@ -27,26 +27,26 @@ namespace ce {
         // prop init FIXME: melhorar!!! ainda confuso
         void init(const glm::vec3& size); // usado no scene no final da inicializacao
         // prop shape
-        inline void setShapeBox(const glm::vec3& size) {
+        inline void set_shape_box(const glm::vec3& size) {
             p_shape_collision_ = new btBoxShape(btVector3(size.x, size.y, size.z));
         }
-        inline void setShapeCilinder(const glm::vec3& val) {
+        inline void set_shape_cilinder(const glm::vec3& val) {
             p_shape_collision_ = new btCylinderShape(btVector3(val.x, val.y, val.z));
         }
-        inline void setShapePlane(const glm::vec3& val, const float& constant) {
+        inline void set_shape_plane(const glm::vec3& val, const float& constant) {
             p_shape_collision_ = new btStaticPlaneShape(btVector3(val.x, val.y, val.z), constant);
         }
-        inline void setShapeSphere(float raio) { p_shape_collision_ = new btSphereShape((btScalar)raio); }
-        void setIndexVertexArray(btTriangleIndexVertexArray* index_vertex_array);
-        bool isShapeDefine() { return (p_shape_collision_ != nullptr ? true : false); }
+        inline void set_shape_sphere(float raio) { p_shape_collision_ = new btSphereShape((btScalar)raio); }
+        void set_index_vertex_array(btTriangleIndexVertexArray* index_vertex_array);
+        bool is_shape_define() { return (p_shape_collision_ != nullptr ? true : false); }
 
-        inline void setMass(const float& mass) { mass_ = mass; }
+        inline void set_mass(const float& mass) { mass_ = mass; }
 
-        void applyForce(const glm::vec3& prop);
-        void applyTorc(const glm::vec3& torque);
-        inline void setFrictionDynamic(const float& friction) { friction_dynamic_ = friction; }
-        inline void setFrictionStatic(const float& friction) { friction_static_ = friction; }
-        inline void setRestitution(const float& restitution) { restitution_ = restitution; }
+        void apply_force(const glm::vec3& prop);
+        void apply_torc(const glm::vec3& torque);
+        inline void set_friction_dynamic(const float& friction) { friction_dynamic_ = friction; }
+        inline void set_friction_static(const float& friction) { friction_static_ = friction; }
+        inline void set_restitution(const float& restitution) { restitution_ = restitution; }
 
       private:
         btScalar mass_;

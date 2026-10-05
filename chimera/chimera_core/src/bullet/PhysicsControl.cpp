@@ -15,7 +15,7 @@ namespace ce {
         discret_dynamics_world_ = new btDiscreteDynamicsWorld(dispatcher_, broad_phase_, solver_, collision_config_);
 
         // true para forca aplicada apenas dentro docallback
-        discret_dynamics_world_->setInternalTickCallback(PhysicsControl::doTickCallBack, static_cast<void*>(this),
+        discret_dynamics_world_->setInternalTickCallback(PhysicsControl::do_tick_call_back, static_cast<void*>(this),
                                                          false);
     }
 
@@ -32,13 +32,13 @@ namespace ce {
 
     void PhysicsControl::step_sim(const double& ts) { discret_dynamics_world_->stepSimulation(ts); }
 
-    void PhysicsControl::doTickCallBack(btDynamicsWorld* world, btScalar timeStep) {
+    void PhysicsControl::do_tick_call_back(btDynamicsWorld* world, btScalar time_step) {
 
         PhysicsControl* w = static_cast<PhysicsControl*>(world->getWorldUserInfo());
-        w->processTickCallBack(timeStep);
+        w->process_tick_call_back(time_step);
     }
 
-    void PhysicsControl::processTickCallBack(btScalar timeStep) {
+    void PhysicsControl::process_tick_call_back(btScalar time_step) {
 
         // btCollisionObjectArray objects = discretDynamicsWorld->getCollisionObjectArray();
         // discretDynamicsWorld->clearForces();
@@ -57,15 +57,15 @@ namespace ce {
         // remove the rigidbodies from the dynamics world and delete them
         for (int i = discret_dynamics_world_->getNumCollisionObjects() - 1; i >= 0; i--) {
 
-            btCollisionObject* pObj = discret_dynamics_world_->getCollisionObjectArray()[i];
-            btRigidBody* pBody = btRigidBody::upcast(pObj);
+            btCollisionObject* p_obj = discret_dynamics_world_->getCollisionObjectArray()[i];
+            btRigidBody* p_body = btRigidBody::upcast(p_obj);
 
-            if (pBody && pBody->getMotionState()) {
-                delete pBody->getMotionState();
+            if (p_body && p_body->getMotionState()) {
+                delete p_body->getMotionState();
             }
 
-            discret_dynamics_world_->removeCollisionObject(pObj);
-            delete pObj;
+            discret_dynamics_world_->removeCollisionObject(p_obj);
+            delete p_obj;
         }
     }
 
@@ -78,36 +78,36 @@ namespace ce {
         // }
     }
 
-    bool PhysicsControl::checkAllowCollision(uint32_t* entity) { return true; }
+    bool PhysicsControl::check_allow_collision(uint32_t* entity) { return true; }
 
     void PhysicsControl::check_collisions() {
 
         std::map<btCollisionObject*, std::pair<uint32_t*, uint32_t*>> new_contacts;
 
-        int numManifolds = discret_dynamics_world_->getDispatcher()->getNumManifolds();
+        int num_manifolds = discret_dynamics_world_->getDispatcher()->getNumManifolds();
 
-        for (int i = 0; i < numManifolds; i++) {
+        for (int i = 0; i < num_manifolds; i++) {
 
-            btPersistentManifold* contactManiFold =
+            btPersistentManifold* contact_mani_fold =
                 discret_dynamics_world_->getDispatcher()->getManifoldByIndexInternal(i);
 
-            btCollisionObject* objA = (btCollisionObject*)contactManiFold->getBody0();
-            btCollisionObject* objB = (btCollisionObject*)contactManiFold->getBody1();
+            btCollisionObject* obj_a = (btCollisionObject*)contact_mani_fold->getBody0();
+            btCollisionObject* obj_b = (btCollisionObject*)contact_mani_fold->getBody1();
 
-            int numContacts = contactManiFold->getNumContacts();
-            for (int j = 0; j < numContacts; j++) {
+            int num_contacts = contact_mani_fold->getNumContacts();
+            for (int j = 0; j < num_contacts; j++) {
 
-                if (btManifoldPoint& pt = contactManiFold->getContactPoint(j); pt.getDistance() < 0.0f) {
+                if (btManifoldPoint& pt = contact_mani_fold->getContactPoint(j); pt.getDistance() < 0.0f) {
 
-                    if (new_contacts.find(objB) == new_contacts.end()) {
+                    if (new_contacts.find(obj_b) == new_contacts.end()) {
 
-                        uint32_t* entityB = (uint32_t*)objB->getUserPointer(); // rigidbody contem o dado
-                        uint32_t* entityA = (uint32_t*)objA->getUserPointer(); // rigidbody contem o dado
+                        uint32_t* entity_b = (uint32_t*)obj_b->getUserPointer(); // rigidbody contem o dado
+                        uint32_t* entity_a = (uint32_t*)obj_a->getUserPointer(); // rigidbody contem o dado
 
-                        if (entityB) {
-                            if (checkAllowCollision(entityB) == true) {
-                                new_contacts[objB] = std::pair<uint32_t*, uint32_t*>(static_cast<uint32_t*>(entityA),
-                                                                                     static_cast<uint32_t*>(entityB));
+                        if (entity_b) {
+                            if (check_allow_collision(entity_b) == true) {
+                                new_contacts[obj_b] = std::pair<uint32_t*, uint32_t*>(static_cast<uint32_t*>(entity_a),
+                                                                                      static_cast<uint32_t*>(entity_b));
                             }
                             // new_contacts[objB] =
                             //     std::make_pair<uint32_t*, uint32_t*>(static_cast<uint32_t*>(entityA),
@@ -115,15 +115,15 @@ namespace ce {
                         }
                     }
 
-                    if (new_contacts.find(objA) == new_contacts.end()) {
+                    if (new_contacts.find(obj_a) == new_contacts.end()) {
 
-                        uint32_t* entityA = (uint32_t*)objA->getUserPointer(); // rigidbody contem o dado
-                        uint32_t* entityB = (uint32_t*)objB->getUserPointer(); // rigidbody contem o dado
+                        uint32_t* entity_a = (uint32_t*)obj_a->getUserPointer(); // rigidbody contem o dado
+                        uint32_t* entity_b = (uint32_t*)obj_b->getUserPointer(); // rigidbody contem o dado
 
-                        if (entityA) {
-                            if (checkAllowCollision(entityA) == true) {
-                                new_contacts[objA] = std::pair<uint32_t*, uint32_t*>(static_cast<uint32_t*>(entityB),
-                                                                                     static_cast<uint32_t*>(entityA));
+                        if (entity_a) {
+                            if (check_allow_collision(entity_a) == true) {
+                                new_contacts[obj_a] = std::pair<uint32_t*, uint32_t*>(static_cast<uint32_t*>(entity_b),
+                                                                                      static_cast<uint32_t*>(entity_a));
                             }
                             // new_contacts[objA] =
                             //     std::make_pair<uint32_t*, uint32_t*>(static_cast<uint32_t*>(entityB),
@@ -140,7 +140,7 @@ namespace ce {
             for (it = new_contacts.begin(); it != new_contacts.end(); it++) {
                 if (contact_actives_.find((*it).first) == contact_actives_.end()) {
 
-                    if (checkAllowCollision((*it).second.first) == true) {
+                    if (check_allow_collision((*it).second.first) == true) {
                         sendChimeraEvent(EventCE::COLLIDE_START, (*it).second.first, (*it).second.second);
                     }
 
@@ -155,7 +155,7 @@ namespace ce {
             for (it = contact_actives_.begin(); it != contact_actives_.end(); it++) {
                 if (new_contacts.find((*it).first) == new_contacts.end()) {
 
-                    if (checkAllowCollision((*it).second.first) == true) {
+                    if (check_allow_collision((*it).second.first) == true) {
                         sendChimeraEvent(EventCE::COLLIDE_OFF, (*it).second.first, (*it).second.second);
                     }
                 }

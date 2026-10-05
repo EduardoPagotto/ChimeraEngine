@@ -100,27 +100,27 @@ void Game::on_update(const double& ts) {
     }
 
     if (this->input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_UP)) {
-        p_corpo_rigido_->applyForce(glm::vec3(20.0, 0.0, 0.0));
+        p_corpo_rigido_->apply_force(glm::vec3(20.0, 0.0, 0.0));
     }
 
     if (this->input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_DOWN)) {
-        p_corpo_rigido_->applyForce(glm::vec3(-20.0, 0.0, 0.0));
+        p_corpo_rigido_->apply_force(glm::vec3(-20.0, 0.0, 0.0));
     }
 
     if (this->input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_LEFT)) {
-        p_corpo_rigido_->applyForce(glm::vec3(0.0, 20.0, 0.0));
+        p_corpo_rigido_->apply_force(glm::vec3(0.0, 20.0, 0.0));
     }
 
     if (this->input_manager_->get_keyboard()->is_key_down(SDL_SCANCODE_RIGHT)) {
-        p_corpo_rigido_->applyForce(glm::vec3(0.0, -20.0, 0.0));
+        p_corpo_rigido_->apply_force(glm::vec3(0.0, -20.0, 0.0));
     }
 
     if (this->input_manager_->get_keyboard()->is_key_pressed(SDL_SCANCODE_A)) {
-        p_corpo_rigido_->applyTorc(glm::vec3(0.0, 0.0, 20.0));
+        p_corpo_rigido_->apply_torc(glm::vec3(0.0, 0.0, 20.0));
     }
 
     if (this->input_manager_->get_keyboard()->is_key_pressed(SDL_SCANCODE_S)) {
-        p_corpo_rigido_->applyTorc(glm::vec3(0.0, 0.0, -20.0));
+        p_corpo_rigido_->apply_torc(glm::vec3(0.0, 0.0, -20.0));
     }
 
     if (p_corpo_rigido_ != nullptr) {
@@ -183,8 +183,8 @@ void Game::on_update(const double& ts) {
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Torque: %f %f %f", rFinal.x, rFinal.y, rFinal.z);
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Forca : %f %f %f", vFinal.x, vFinal.y, vFinal.z);
 
-        p_corpo_rigido_->applyForce(vFinal);
-        p_corpo_rigido_->applyTorc(rFinal);
+        p_corpo_rigido_->apply_force(vFinal);
+        p_corpo_rigido_->apply_torc(rFinal);
     }
     //}
 

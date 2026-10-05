@@ -77,7 +77,7 @@ namespace ce {
                     bool dynamic = nTec.child("dynamic").text().as_bool();
                     float mass = nTec.child("mass").text().as_float();
 
-                    solid->setMass(mass);
+                    solid->set_mass(mass);
 
                     // Material
                     std::string url = nTec.child("instance_physics_material").attribute("url").value();
@@ -85,9 +85,9 @@ namespace ce {
                     pugi::xml_node nPm = getLibraryUrl("library_physics_materials", url);
                     pugi::xml_node nTc = nPm.child("technique_common");
 
-                    solid->setRestitution(nTc.child("restitution").text().as_float());
-                    solid->setFrictionDynamic(nTc.child("dynamic_friction").text().as_float());
-                    solid->setFrictionStatic(nTc.child("static_friction").text().as_float());
+                    solid->set_restitution(nTc.child("restitution").text().as_float());
+                    solid->set_friction_dynamic(nTc.child("dynamic_friction").text().as_float());
+                    solid->set_friction_static(nTc.child("static_friction").text().as_float());
 
                     // Shape
                     pugi::xml_node nShape = nTec.child("shape").first_child();
@@ -97,25 +97,25 @@ namespace ce {
 
                         std::string rad = nShape.child("radius").text().as_string();
                         textToFloatArray(rad, arrayFloat);
-                        solid->setShapeSphere(arrayFloat[0]);
+                        solid->set_shape_sphere(arrayFloat[0]);
 
                     } else if (sShape == "plane") {
 
                         std::string rad = nShape.child("equation").text().as_string();
                         textToFloatArray(rad, arrayFloat);
-                        solid->setShapePlane(glm::vec3(arrayFloat[0], arrayFloat[1], arrayFloat[2]), arrayFloat[3]);
+                        solid->set_shape_plane(glm::vec3(arrayFloat[0], arrayFloat[1], arrayFloat[2]), arrayFloat[3]);
 
                     } else if (sShape == "box") { // FIXME: ver no colada para usar o parametro correto
 
                         std::string sBox = nShape.first_child().text().as_string();
                         textToFloatArray(sBox, arrayFloat);
-                        solid->setShapeBox(glm::vec3(arrayFloat[0], arrayFloat[1], arrayFloat[2]));
+                        solid->set_shape_box(glm::vec3(arrayFloat[0], arrayFloat[1], arrayFloat[2]));
 
                     } else if (sShape == "cylinder") {
 
                         std::string sCi = nShape.first_child().text().as_string();
                         textToFloatArray(sCi, arrayFloat);
-                        solid->setShapeCilinder(glm::vec3(arrayFloat[0], arrayFloat[1], arrayFloat[2]));
+                        solid->set_shape_cilinder(glm::vec3(arrayFloat[0], arrayFloat[1], arrayFloat[2]));
 
                     } else if (sShape == "mesh") {
 

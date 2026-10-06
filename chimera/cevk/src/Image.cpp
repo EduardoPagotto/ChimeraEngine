@@ -5,8 +5,8 @@
 namespace ce {
     Image::~Image() { destroy(); }
 
-    void Image::createImage(uint32_t with, uint32_t height, VkFormat format, VkImageTiling tiling,
-                            VkImageUsageFlags use_flags, VkMemoryPropertyFlags prop_flags) {
+    void Image::create_image(uint32_t with, uint32_t height, VkFormat format, VkImageTiling tiling,
+                             VkImageUsageFlags use_flags, VkMemoryPropertyFlags prop_flags) {
         // CREATE IMAGE
         // Image Create Info
         const VkImageCreateInfo image_create_info{
@@ -52,14 +52,14 @@ namespace ce {
         is_imported_ = false;
     }
 
-    void Image::createImageViewImportedImage(VkImage image, VkFormat format, VkImageAspectFlags aspect_flags) {
+    void Image::create_image_view_imported_image(VkImage image, VkFormat format, VkImageAspectFlags aspect_flags) {
         image_ = image;
         format_ = format;
         is_imported_ = true;
-        createImageView(aspect_flags);
+        create_image_view(aspect_flags);
     }
 
-    void Image::createImageView(VkImageAspectFlags aspect_flags) {
+    void Image::create_image_view(VkImageAspectFlags aspect_flags) {
         //
         const VkImageViewCreateInfo view_create_info{
             .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,  //

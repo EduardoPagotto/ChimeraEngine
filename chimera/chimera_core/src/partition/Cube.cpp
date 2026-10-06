@@ -6,7 +6,7 @@ namespace ce {
     static TrisIndex t_tex_index;
     static std::vector<glm::vec2> t_tex_seq;
 
-    void initCubeBase() {
+    void init_cube_base() {
         t_vert_index.push_back(glm::uvec3(0, 1, 3)); // f00 N0
         t_vert_index.push_back(glm::uvec3(1, 3, 2)); // f01 N1
         t_vert_index.push_back(glm::uvec3(3, 2, 0)); // f02 N2
@@ -73,13 +73,13 @@ namespace ce {
         t_tex_seq.push_back(glm::vec2(1, 1)); // 3
     }
 
-    void cleanupCubeBase() {
+    void cleanup_cube_base() {
         t_vert_index.clear();
         t_tex_index.clear();
         t_tex_seq.clear();
     }
 
-    glm::ivec3 getCardinalPos(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos) {
+    glm::ivec3 get_cardinal_pos(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos) {
         glm::ivec3 val{pos};
         switch (deep) {
             case DEEP::UP:
@@ -129,13 +129,13 @@ namespace ce {
         return val;
     }
 
-    Cube* getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos, const glm::ivec3& size,
-                          std::vector<Cube*>& vp_cube) {
+    Cube* get_cube_neighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos, const glm::ivec3& size,
+                            std::vector<Cube*>& vp_cube) {
 
-        const glm::ivec3 val{getCardinalPos(deep, card, glm::ivec3(1), pos)};
+        const glm::ivec3 val{get_cardinal_pos(deep, card, glm::ivec3(1), pos)};
         // get Valid position
         if ((val.z >= 0) && (val.z < size.z) && (val.x >= 0) && (val.x < size.x) && (val.y >= 0) && (val.y < size.y))
-            return vp_cube[getIndexArrayPos(val, size)];
+            return vp_cube[get_index_array_pos(val, size)];
 
         return nullptr;
     }
@@ -147,7 +147,7 @@ namespace ce {
         return glm::vec3(x_min, y_min, z_min);
     }
 
-    uint32_t getIndexArrayPos(const glm::ivec3& pos, const glm::ivec3& size) {
+    uint32_t get_index_array_pos(const glm::ivec3& pos, const glm::ivec3& size) {
         return pos.x + (pos.z * size.x) + (pos.y * size.x * size.z);
     }
 
@@ -158,34 +158,34 @@ namespace ce {
         space_ = (caracter == 0x20) ? SPACE::EMPTY : (SPACE)(caracter - 0x30);
     }
 
-    void linkCubes(const glm::ivec3& size, std::vector<Cube*>& vp_cube) {
+    void link_cubes(const glm::ivec3& size, std::vector<Cube*>& vp_cube) {
         glm::ivec3 pos(0);
         for (pos.y = 0; pos.y < size.y; pos.y++) {
             for (pos.z = 0; pos.z < size.z; pos.z++) {
                 for (pos.x = 0; pos.x < size.x; pos.x++) {
-                    Cube* p_cube = vp_cube[getIndexArrayPos(pos, size)];
+                    Cube* p_cube = vp_cube[get_index_array_pos(pos, size)];
 
-                    Cube* p_before = getCubeNeighbor(DEEP::DOWN, CARDINAL::NONE, pos, size, vp_cube);
+                    Cube* p_before = get_cube_neighbor(DEEP::DOWN, CARDINAL::NONE, pos, size, vp_cube);
                     if (p_before != nullptr)
                         p_cube->set_neighbor(DEEP::DOWN, CARDINAL::NONE, p_before);
 
-                    p_before = getCubeNeighbor(DEEP::UP, CARDINAL::NONE, pos, size, vp_cube);
+                    p_before = get_cube_neighbor(DEEP::UP, CARDINAL::NONE, pos, size, vp_cube);
                     if (p_before != nullptr)
                         p_cube->set_neighbor(DEEP::UP, CARDINAL::NONE, p_before);
 
-                    p_before = getCubeNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, pos, size, vp_cube);
+                    p_before = get_cube_neighbor(DEEP::MIDDLE, CARDINAL::NORTH, pos, size, vp_cube);
                     if (p_before != nullptr)
                         p_cube->set_neighbor(DEEP::MIDDLE, CARDINAL::NORTH, p_before);
 
-                    p_before = getCubeNeighbor(DEEP::MIDDLE, CARDINAL::EAST, pos, size, vp_cube);
+                    p_before = get_cube_neighbor(DEEP::MIDDLE, CARDINAL::EAST, pos, size, vp_cube);
                     if (p_before != nullptr)
                         p_cube->set_neighbor(DEEP::MIDDLE, CARDINAL::EAST, p_before);
 
-                    p_before = getCubeNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, pos, size, vp_cube);
+                    p_before = get_cube_neighbor(DEEP::MIDDLE, CARDINAL::SOUTH, pos, size, vp_cube);
                     if (p_before != nullptr)
                         p_cube->set_neighbor(DEEP::MIDDLE, CARDINAL::SOUTH, p_before);
 
-                    p_before = getCubeNeighbor(DEEP::MIDDLE, CARDINAL::WEST, pos, size, vp_cube);
+                    p_before = get_cube_neighbor(DEEP::MIDDLE, CARDINAL::WEST, pos, size, vp_cube);
                     if (p_before != nullptr)
                         p_cube->set_neighbor(DEEP::MIDDLE, CARDINAL::WEST, p_before);
                 }
@@ -194,8 +194,6 @@ namespace ce {
     }
 
     //-----
-
-    Cube::~Cube() {}
 
     void Cube::set_neighbor(DEEP deep, CARDINAL card, Cube* p_cube) {
 

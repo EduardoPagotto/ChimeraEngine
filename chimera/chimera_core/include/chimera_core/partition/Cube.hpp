@@ -38,7 +38,7 @@ namespace ce {
     class Cube : public AABB {
       public:
         Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max);
-        virtual ~Cube();
+        virtual ~Cube() = default;
         void set_neighbor(DEEP deep, CARDINAL card, Cube* p_cube);
         void create(Mesh* mesh);
 
@@ -73,12 +73,12 @@ namespace ce {
         SPACE space_;
     };
 
-    void initCubeBase();
-    void cleanupCubeBase();
-    glm::ivec3 getCardinalPos(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos);
+    void init_cube_base();
+    void cleanup_cube_base();
+    glm::ivec3 get_cardinal_pos(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos);
     glm::vec3 minimal(const float& size_block, const glm::vec3 half_block, const glm::ivec3& pos);
-    uint32_t getIndexArrayPos(const glm::ivec3& pos, const glm::ivec3& size);
-    Cube* getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos, const glm::ivec3& size,
-                          std::vector<Cube*>& vp_cube);
-    void linkCubes(const glm::ivec3& size, std::vector<Cube*>& vp_cube);
+    uint32_t get_index_array_pos(const glm::ivec3& pos, const glm::ivec3& size);
+    Cube* get_cube_neighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos, const glm::ivec3& size,
+                            std::vector<Cube*>& vp_cube);
+    void link_cubes(const glm::ivec3& size, std::vector<Cube*>& vp_cube);
 } // namespace ce

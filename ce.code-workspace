@@ -152,7 +152,7 @@
 			"--background-index",
 			// "--header-insertion=never",
 			"--compile-commands-dir=${workspaceFolder}/build", // Aponta para a pasta onde o CMake gera o compile_commands.json
-			//"--header-insertion=iwyu"
+			"--header-insertion=iwyu"
 		],
 		// "editor.codeActionsOnSave": {
         // 	"source.fixAll.clang-tidy": "explicit"

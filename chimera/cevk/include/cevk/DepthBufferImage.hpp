@@ -51,15 +51,15 @@ namespace ce {
 
             // Create Depth Buffer Image
             depth_buffer_img_ = std::make_shared<Image>(ctx->physical, ctx->logical);
-            depth_buffer_img_->createImage(extent.width, extent.height, depth_format, VK_IMAGE_TILING_OPTIMAL,
-                                           VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-                                           VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+            depth_buffer_img_->create_image(extent.width, extent.height, depth_format, VK_IMAGE_TILING_OPTIMAL,
+                                            VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+                                            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
             // Create Depth Buffer Image View
-            depth_buffer_img_->createImageView(VK_IMAGE_ASPECT_DEPTH_BIT);
+            depth_buffer_img_->create_image_view(VK_IMAGE_ASPECT_DEPTH_BIT);
         }
 
-        VkImageView& get_image_view() { return depth_buffer_img_->getImageView(); }
+        VkImageView& get_image_view() { return depth_buffer_img_->get_image_view(); }
 
       private:
         std::shared_ptr<Image> depth_buffer_img_{nullptr};

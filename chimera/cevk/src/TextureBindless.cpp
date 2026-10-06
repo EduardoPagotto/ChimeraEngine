@@ -66,8 +66,8 @@ namespace ce {
 
         //   Atualiza o Descriptor Set global colocando esta nova imagem no seu respectivo índice
         VkDescriptorImageInfo image_info = {
-            .sampler = tex_sampler_.get(),           // Pode usar um sampler global ou um específico por textura
-            .imageView = tex->get()->getImageView(), // imageView,
+            .sampler = tex_sampler_.get(),             // Pode usar um sampler global ou um específico por textura
+            .imageView = tex->get()->get_image_view(), // imageView,
             .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
         };
 

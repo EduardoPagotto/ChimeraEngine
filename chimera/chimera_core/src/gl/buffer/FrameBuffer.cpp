@@ -6,7 +6,7 @@ namespace ce {
 
     namespace Aux {
 
-        static bool isDepthFormat(TexFormat format) {
+        static bool is_depth_format(TexFormat format) {
             switch (format) {
                 case TexFormat::DEPTH_COMPONENT:
                 case TexFormat::DEPTH24STENCIL8:
@@ -29,7 +29,7 @@ namespace ce {
 
         for (const TexParam& tex_parm : spec.attachments) {
 
-            if (!Aux::isDepthFormat(tex_parm.format)) {
+            if (!Aux::is_depth_format(tex_parm.format)) {
                 color_tex_specs_.emplace_back(tex_parm); // color only
             } else {
                 // if has filter parameters them is a texture

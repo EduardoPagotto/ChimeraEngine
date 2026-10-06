@@ -36,24 +36,24 @@ namespace ce {
         // create image to hold final texture
         std::shared_ptr<Image> tex_img = std::make_shared<Image>(ctx->physical, ctx->logical);
 
-        tex_img->createImage(tex_width, tex_height, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_TILING_OPTIMAL,
-                             VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-                             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+        tex_img->create_image(tex_width, tex_height, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_TILING_OPTIMAL,
+                              VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+                              VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
         // COPY DATA TO IMAGE
         // Transition image to be DST for copy operation
-        aux::transition_image_layout(ctx->logical, ctx->graphicsQueue, ctx->commandPool, tex_img->getImage(),
+        aux::transition_image_layout(ctx->logical, ctx->graphicsQueue, ctx->commandPool, tex_img->get_image(),
                                      VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
         // Copy image data
         aux::copy_image_buffer(ctx->logical, ctx->graphicsQueue, ctx->commandPool, image_staging_buffer.get(),
-                               tex_img->getImage(), tex_width, tex_height);
+                               tex_img->get_image(), tex_width, tex_height);
 
         // Transition image to be shader readable for shader
-        aux::transition_image_layout(ctx->logical, ctx->graphicsQueue, ctx->commandPool, tex_img->getImage(),
+        aux::transition_image_layout(ctx->logical, ctx->graphicsQueue, ctx->commandPool, tex_img->get_image(),
                                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-        tex_img->createImageView(VK_IMAGE_ASPECT_COLOR_BIT);
+        tex_img->create_image_view(VK_IMAGE_ASPECT_COLOR_BIT);
         return std::make_shared<VulkanTexture>(tex_img);
     }
 } // namespace ce

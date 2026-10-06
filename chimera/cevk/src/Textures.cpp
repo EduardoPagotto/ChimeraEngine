@@ -53,7 +53,7 @@ namespace ce {
         // Texture Image info
         const VkDescriptorImageInfo image_info{
             .sampler = tex_sampler_.get(),                          // Image layout when in use
-            .imageView = tex_image_obj->getImageView(),             // Sampler to use for set
+            .imageView = tex_image_obj->get_image_view(),           // Sampler to use for set
             .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL // Image to bind to set
         };
 

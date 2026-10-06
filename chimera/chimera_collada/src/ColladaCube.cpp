@@ -62,10 +62,10 @@ namespace ce {
             }
         }
 
-        linkCubes(size, vp_cube);
+        link_cubes(size, vp_cube);
 
         // carrega posicoes, texturas, e seq textura defaults do cubo base
-        initCubeBase();
+        init_cube_base();
         Mesh temp_mesh;
         for (auto p_cube : vp_cube)
             p_cube->create(&temp_mesh); // cria mesh com dados dos cubos
@@ -73,7 +73,7 @@ namespace ce {
         // aqui
         mesh_serialize(temp_mesh, *mc.mesh);
 
-        cleanupCubeBase();            // limpa dados de criacao do cubo base
+        cleanup_cube_base();          // limpa dados de criacao do cubo base
         for (auto p_cube : vp_cube) { // limpas cubos de contrucao e vetor de cubos
             delete p_cube;
             p_cube = nullptr;

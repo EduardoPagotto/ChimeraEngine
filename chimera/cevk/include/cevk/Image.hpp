@@ -16,16 +16,16 @@ namespace ce {
 
         void destroy();
 
-        void createImage(uint32_t with, uint32_t height, VkFormat format, VkImageTiling tiling,
-                         VkImageUsageFlags use_flags, VkMemoryPropertyFlags prop_flags);
+        void create_image(uint32_t with, uint32_t height, VkFormat format, VkImageTiling tiling,
+                          VkImageUsageFlags use_flags, VkMemoryPropertyFlags prop_flags);
 
-        void createImageViewImportedImage(VkImage image, VkFormat format, VkImageAspectFlags aspect_flags);
+        void create_image_view_imported_image(VkImage image, VkFormat format, VkImageAspectFlags aspect_flags);
 
-        void createImageView(VkImageAspectFlags aspect_flags);
+        void create_image_view(VkImageAspectFlags aspect_flags);
 
-        VkImageView& getImageView() { return image_view_; }
-        VkImage& getImage() { return image_; }
-        VkDeviceMemory& getImageMemory() { return image_memory_; }
+        VkImageView& get_image_view() { return image_view_; }
+        VkImage& get_image() { return image_; }
+        VkDeviceMemory& get_image_memory() { return image_memory_; }
 
       private:
         bool is_imported_{false};

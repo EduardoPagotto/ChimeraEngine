@@ -14,31 +14,31 @@ namespace ce {
                 if (newparticles > 160)
                     newparticles = 160;
 
-                int particleIndex = 0;
+                int particle_index = 0;
                 for (int i = 0; i < newparticles; i++) {
-                    particleIndex = find_unused_particle();
-                    if (particleIndex < 0) {
+                    particle_index = find_unused_particle();
+                    if (particle_index < 0) {
                         pc_->count++;
                         if (pc_->respaw)
-                            particleIndex = 0;
+                            particle_index = 0;
                         else
                             break;
                     }
 
-                    ParticleZ& p = pc_->container[particleIndex];
+                    ParticleZ& p = pc_->container[particle_index];
                     this->reset(p);
                 }
             }
 
             // Simulate all particles
-            int ParticlesCount = 0;
+            int particles_count = 0;
             glm::vec3 min = glm::vec3(0.0f);
             glm::vec3 max = glm::vec3(0.0f);
             for (uint32_t i = 0; i < pc_->container.size(); i++) {
                 ParticleZ& p = pc_->container[i];
                 if (p.life > 0) { // stil alive
-                    this->decrease(p, ts, ParticlesCount);
-                    ParticlesCount++;
+                    this->decrease(p, ts, particles_count);
+                    particles_count++;
 
                     // computa os bonderys
                     min = glm::min(min, p.pos);
@@ -52,7 +52,7 @@ namespace ce {
             std::sort(pc_->container.begin(), pc_->container.end());
 
             // printf("%d \n",ParticlesCount);
-            pc_->particlesCount = ParticlesCount;
+            pc_->particlesCount = particles_count;
         }
     }
     int EmitterFont::find_unused_particle() {

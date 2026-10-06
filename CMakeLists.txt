@@ -35,7 +35,7 @@ add_subdirectory(configured)
     )
 #endif()
 
-# # Locate the clang-tidy executable on the system
+# Locate the clang-tidy executable on the system
 # find_program(CLANG_TIDY_EXE NAMES "clang-tidy")
 # if(CLANG_TIDY_EXE)
 #     # This forces clang-tidy to run on all target source files whenever you build

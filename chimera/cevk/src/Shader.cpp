@@ -74,8 +74,8 @@ namespace ce {
             static_cast<uint32_t>(attribute_descriptions_.size());
         vertex_input_create_info_.pVertexAttributeDescriptions =
             attribute_descriptions_.data(); // Listof Vertex Attribute Description
-        ;                                         //  (data format and where
-        ;                                         // to bind to/from)
+        ;                                   //  (data format and where
+        ;                                   // to bind to/from)
 
         //
         // -- INPUT ASSEMBLY --
@@ -87,7 +87,7 @@ namespace ce {
 
     namespace aux {
 
-        std::vector<char> readFile(const std::filesystem::path& filename) {
+        std::vector<char> read_file(const std::filesystem::path& filename) {
 
             std::ifstream file(filename, std::ios::binary | std::ios::ate);
             if (!file.is_open()) {

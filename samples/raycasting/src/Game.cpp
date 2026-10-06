@@ -17,8 +17,6 @@ Game::Game(std::shared_ptr<entt::registry> registry) : registry_(registry) {
     this->input_manager_ = registry->ctx().get<std::shared_ptr<ce::InputManager>>();
 }
 
-Game::~Game() {}
-
 std::string Game::get_name() const { return "GAME"; }
 
 void Game::on_attach() {

@@ -4,7 +4,7 @@
 namespace ce {
 
     template <class T>
-    void swapFace(T& a, T& b) {
+    void swap_face(T& a, T& b) {
         T c = b;
         b = a;
         a = c;
@@ -131,15 +131,15 @@ namespace ce {
 
         // Normaliza Triangulo para que o corte do triangulo esteja nos segmentos de reta CA e CB (corte em a e b)
         if (fx.x * fx.z >= 0) {                        // corte em a e c (rotaciona pontos sentido horario) ABC => BCA
-            swapFace(b, c);                            // troca b com c
-            swapFace(a, b);                            // troca a com b
+            swap_face(b, c);                           // troca b com c
+            swap_face(a, b);                           // troca a com b
             vert_a_uv = vertex_[p_triangle->idx.p].uv; // old c
             vert_b_uv = vertex_[p_triangle->idx.s].uv; // old a
             vert_c_uv = vertex_[p_triangle->idx.t].uv; // old b
 
         } else if (fx.y * fx.z >= 0) { // corte em b e c (totaciona pontos sentido anti-horario)  ABC => CAB
-            swapFace(a, c);            // troca A com C
-            swapFace(a, b);            // troca a com b
+            swap_face(a, c);           // troca A com C
+            swap_face(a, b);           // troca a com b
             vert_a_uv = vertex_[p_triangle->idx.t].uv; // old b
             vert_b_uv = vertex_[p_triangle->idx.p].uv; // old c
             vert_c_uv = vertex_[p_triangle->idx.s].uv; // old a

@@ -12,8 +12,6 @@ namespace ce {
         this->vp_ = registry->ctx().get<std::shared_ptr<ViewProjection>>();
     }
 
-    CameraControllerFPS::~CameraControllerFPS() {}
-
     void CameraControllerFPS::on_attach() {
 
         auto& cc = entity_.get_component<CameraComponent>(registry_.get());

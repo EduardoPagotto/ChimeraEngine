@@ -152,8 +152,8 @@ void Game::create_graphics_pipeline() {
 
     // Read in SPIR-V code shaders, Vertex Stage creation information and Fragment Stage creation information
     std::shared_ptr<ce::Shader> shader = std::make_shared<ce::Shader>(ctx_->logical);
-    shader->add_code(VK_SHADER_STAGE_VERTEX_BIT, ce::aux::readFile("./bin/vert.spv"));
-    shader->add_code(VK_SHADER_STAGE_FRAGMENT_BIT, ce::aux::readFile("./bin/frag.spv"));
+    shader->add_code(VK_SHADER_STAGE_VERTEX_BIT, ce::aux::read_file("./bin/vert.spv"));
+    shader->add_code(VK_SHADER_STAGE_FRAGMENT_BIT, ce::aux::read_file("./bin/frag.spv"));
 
     // How the data for a sigle vertex (including info such as position, colour, texture coords, normals, etc..) is as a
     // whole

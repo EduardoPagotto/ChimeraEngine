@@ -4,7 +4,7 @@
 
 namespace ce {
 
-    static void setRange(const std::string& range, TexDType& type) {
+    static void set_range(const std::string& range, TexDType& type) {
         if (range == "FLOAT")
             type = TexDType::FLOAT;
         else if (range == "UINT")
@@ -13,7 +13,7 @@ namespace ce {
             type = TexDType::UNSIGNED_SHORT; // TODO: ver todos os outros tipos!!!!!
     }
 
-    static void setChannelTexFormat(const std::string& channel, TexFormat& format) {
+    static void set_channel_tex_format(const std::string& channel, TexFormat& format) {
         if (channel == "RGB")
             format = TexFormat::RGB;
         else if (channel == "RGBA")
@@ -59,9 +59,9 @@ namespace ce {
 
                 if (pugi::xml_node n_format = n_img.child("format"); n_format != nullptr) {
                     if (pugi::xml_node n_hint = n_format.child("hint"); n_hint != nullptr) {
-                        setChannelTexFormat(n_hint.attribute("channels").value(), tp.format);
-                        setChannelTexFormat(n_hint.attribute("channelsInternal").value(), tp.internalFormat);
-                        setRange(n_hint.attribute("range").value(), tp.type);
+                        set_channel_tex_format(n_hint.attribute("channels").value(), tp.format);
+                        set_channel_tex_format(n_hint.attribute("channelsInternal").value(), tp.internalFormat);
+                        set_range(n_hint.attribute("range").value(), tp.type);
                     }
                 }
 

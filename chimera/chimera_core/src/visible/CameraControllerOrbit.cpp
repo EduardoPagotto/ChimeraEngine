@@ -12,8 +12,6 @@ namespace ce {
         this->input_manager_ = registry->ctx().get<std::shared_ptr<InputManager>>();
     }
 
-    CameraControllerOrbit::~CameraControllerOrbit() {}
-
     void CameraControllerOrbit::on_attach() {
         auto& cc = entity_.get_component<CameraComponent>(registry_.get());
         camera_ = cc.camera;

@@ -7,40 +7,40 @@
 
 namespace ce {
 
-    void ColladaExtra::create(pugi::xml_node nodeExtra) {
+    void ColladaExtra::create(pugi::xml_node node_extra) {
 
-        if (const pugi::xml_node nFonts = getExtra(nodeExtra, "fonts"); nFonts != nullptr) {
-            for (pugi::xml_node nFont = nFonts.first_child(); nFont; nFont = nFont.next_sibling()) {
+        if (const pugi::xml_node n_fonts = getExtra(node_extra, "fonts"); n_fonts != nullptr) {
+            for (pugi::xml_node n_font = n_fonts.first_child(); n_font; n_font = n_font.next_sibling()) {
 
-                RFC3986 rfc(nFont.attribute("url").value());
-                int size = static_cast<int>(std::stoul(nFont.attribute("size").value()));
-                float scaleX = std::stod(nFont.attribute("scaleX").value());
-                float scaleY = std::stod(nFont.attribute("scaleY").value());
+                RFC3986 rfc(n_font.attribute("url").value());
+                int size = static_cast<int>(std::stoul(n_font.attribute("size").value()));
+                float scale_x = std::stod(n_font.attribute("scaleX").value());
+                float scale_y = std::stod(n_font.attribute("scaleY").value());
 
                 auto asset = registry->ctx().get<std::shared_ptr<ce::AssetManager>>();
 
                 auto font = asset->load_font(rfc.get_fragment(), rfc.get_path(), size);
-                font->scale = glm::vec2(scaleX, scaleY);
+                font->scale = glm::vec2(scale_x, scale_y);
             }
         }
 
-        if (const pugi::xml_node nFbs = getExtra(nodeExtra, "framebuffers"); nFbs != nullptr) {
-            for (pugi::xml_node nFb = nFbs.first_child(); nFb; nFb = nFb.next_sibling()) {
+        if (const pugi::xml_node n_fbs = getExtra(node_extra, "framebuffers"); n_fbs != nullptr) {
+            for (pugi::xml_node n_fb = n_fbs.first_child(); n_fb; n_fb = n_fb.next_sibling()) {
 
-                std::string entName = nFb.attribute("name").value();
-                std::string entId = nFb.attribute("id").value();
-                Entity entity = Entity::create(registry.get(), entName, entId);
+                std::string ent_name = n_fb.attribute("name").value();
+                std::string ent_id = n_fb.attribute("id").value();
+                Entity entity = Entity::create(registry.get(), ent_name, ent_id);
 
                 [[maybe_unused]]
                 FrameBufferSpecification& fb = entity.add_component<FrameBufferSpecification>(registry.get());
-                for (pugi::xml_node next = nFb.first_child(); next; next = next.next_sibling()) {
+                for (pugi::xml_node next = n_fb.first_child(); next; next = next.next_sibling()) {
                     std::string name = next.name();
                     std::string url = next.attribute("url").value();
                     if (name == "instance_effect") {
 
-                        std::string refName = next.child("technique_hint").attribute("ref").value();
+                        std::string ref_name = next.child("technique_hint").attribute("ref").value();
                         ColladaEffect cf(registry, colladaDom, url);
-                        cf.create(refName, entity, cf.get_library("library_effects"));
+                        cf.create(ref_name, entity, cf.get_library("library_effects"));
 
                     } else if (name == "instance_camera") {
 

@@ -5,7 +5,7 @@
 
 namespace ce {
 
-    glm::vec4 tokensToVec4(std::vector<std::string>& text_data) {
+    glm::vec4 tokens_to_vec4(std::vector<std::string>& text_data) {
         std::vector<float> array_float;
         for (int indice = 1; indice < text_data.size(); indice++) {
             if (text_data[indice].size() > 0)
@@ -18,7 +18,7 @@ namespace ce {
         return glm::vec4(array_float[0], array_float[1], array_float[2], array_float[3]);
     }
 
-    glm::vec3 tokensToVec3(unsigned start, unsigned total, std::vector<std::string>& text_data) {
+    glm::vec3 tokens_to_vec3(unsigned start, unsigned total, std::vector<std::string>& text_data) {
 
         std::vector<float> array_float;
         for (int indice = start; array_float.size() < total; indice++) {
@@ -29,7 +29,7 @@ namespace ce {
         return glm::vec3(array_float[0], array_float[1], array_float[2]);
     }
 
-    glm::vec2 tokensToVec2(unsigned start, unsigned total, std::vector<std::string>& text_data) {
+    glm::vec2 tokens_to_vec2(unsigned start, unsigned total, std::vector<std::string>& text_data) {
 
         std::vector<float> array_float;
         for (int indice = start; array_float.size() < total; indice++) {
@@ -59,11 +59,11 @@ namespace ce {
                 continue;
 
             if (text_data[0] == "Ka") {
-                material->set_ambient(tokensToVec4(text_data));
+                material->set_ambient(tokens_to_vec4(text_data));
             } else if (text_data[0] == "Kd") {
-                material->set_diffuse(tokensToVec4(text_data));
+                material->set_diffuse(tokens_to_vec4(text_data));
             } else if (text_data[0] == "Ks") {
-                material->set_specular(tokensToVec4(text_data));
+                material->set_specular(tokens_to_vec4(text_data));
             } else if (text_data[0] == "map_Kd") {
 
                 auto assets = this->registry_->ctx().get<std::shared_ptr<AssetManager>>();
@@ -104,11 +104,11 @@ namespace ce {
             if (text_data[0] == "mtllib")
                 file_math = text_data[1];
             else if (text_data[0] == "v")
-                point.push_back(tokensToVec3(1, 3, text_data));
+                point.push_back(tokens_to_vec3(1, 3, text_data));
             else if (text_data[0] == "vt")
-                uv.push_back(tokensToVec2(1, 2, text_data));
+                uv.push_back(tokens_to_vec2(1, 2, text_data));
             else if (text_data[0] == "vn")
-                normal.push_back(tokensToVec3(1, 3, text_data));
+                normal.push_back(tokens_to_vec3(1, 3, text_data));
             else if (text_data[0] == "f") {
                 int face = 0;
                 for (int indice = 1; indice < text_data.size(); indice++) {

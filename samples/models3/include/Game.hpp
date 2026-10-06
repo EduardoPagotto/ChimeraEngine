@@ -9,7 +9,7 @@
 class Game : public ce::IStateMachine {
   public:
     Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::Scene> scene);
-    virtual ~Game();
+    virtual ~Game() = default;
 
     virtual void on_attach() override;
     virtual void on_deatach() override;

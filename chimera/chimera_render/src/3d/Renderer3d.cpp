@@ -11,8 +11,6 @@ namespace ce {
         texture_queue_.reserve(32);
     }
 
-    Renderer3d::~Renderer3d() {}
-
     void Renderer3d::begin(std::shared_ptr<Camera> camera, std::shared_ptr<ViewProjection> vpo,
                            std::shared_ptr<Octree> octree) {
 

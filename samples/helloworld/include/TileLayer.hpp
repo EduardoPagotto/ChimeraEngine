@@ -4,7 +4,7 @@
 class TileLayer : public ce::Layer {
   public:
     TileLayer(std::shared_ptr<ce::Shader> shader);
-    virtual ~TileLayer();
+    virtual ~TileLayer() = default;
     virtual void on_attach() override {};
     virtual void on_deatach() override {};
     virtual void on_update(const double& ts) override {};

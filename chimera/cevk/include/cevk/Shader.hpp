@@ -32,7 +32,7 @@ namespace ce {
     };
 
     namespace aux {
-        std::vector<char> readFile(const std::filesystem::path& filename);
+        std::vector<char> read_file(const std::filesystem::path& filename);
     } // namespace aux
 
 } // namespace ce

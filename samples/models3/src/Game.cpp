@@ -19,8 +19,6 @@ Game::Game(std::shared_ptr<entt::registry> registry, std::shared_ptr<ce::Scene> 
     this->assets_ = registry->ctx().get<std::shared_ptr<ce::AssetManager>>();
 }
 
-Game::~Game() {}
-
 void Game::on_event(const SDL_Event& event) {
     using namespace ce;
 

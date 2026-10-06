@@ -10,7 +10,7 @@ namespace ce {
     class CameraControllerFPS : public IStateMachine {
       public:
         CameraControllerFPS(std::shared_ptr<entt::registry> registry, Entity entity);
-        virtual ~CameraControllerFPS();
+        virtual ~CameraControllerFPS() = default;
         void on_attach() override;
         void on_deatach() override;
         void on_render() override {}

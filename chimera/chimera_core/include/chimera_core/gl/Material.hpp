@@ -51,7 +51,7 @@ namespace ce {
     class Material {
       public:
         Material();
-        virtual ~Material();
+        virtual ~Material() = default;
         void init();
         void set_default_effect();
         void add_texture(const std::string& uniform_tex_name, std::shared_ptr<Texture> texture) {

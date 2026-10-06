@@ -8,7 +8,7 @@
 class Game : public ce::IStateMachine {
   public:
     explicit Game(std::shared_ptr<entt::registry> registry);
-    virtual ~Game();
+    virtual ~Game() = default;
     // Inherited via IEvents
     virtual void on_attach() override;
     virtual void on_deatach() override;

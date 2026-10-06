@@ -10,7 +10,7 @@ namespace ce {
     class CameraControllerOrbit : public IStateMachine {
       public:
         CameraControllerOrbit(std::shared_ptr<entt::registry> registry, Entity entity);
-        virtual ~CameraControllerOrbit();
+        virtual ~CameraControllerOrbit() = default;
         void on_attach() override;
         void on_deatach() override;
         void on_update(const double& ts) override;

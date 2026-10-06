@@ -3,7 +3,6 @@
 namespace ce {
 
     Material::Material() : valid_(false), tipo_texturas_disponiveis_(-1) {}
-    Material::~Material() {}
 
     void Material::set_default_effect() {
         set_diffuse(glm::vec4(0.6F, 0.6F, 0.6F, 1.0F));

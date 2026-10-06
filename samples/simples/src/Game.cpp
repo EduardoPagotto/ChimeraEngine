@@ -13,8 +13,6 @@ Game::Game(std::shared_ptr<entt::registry> registry) : registry_(registry) {
     this->input_manager_ = registry->ctx().get<std::shared_ptr<ce::InputManager>>();
 }
 
-Game::~Game() {}
-
 void Game::on_attach() {
 
     // glClearColor(0.F, 0.F, 0.F, 1.F); // Initialize clear color

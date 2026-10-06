@@ -38,8 +38,6 @@ Game::Game(std::shared_ptr<entt::registry> registry, ce::Engine* engine) : regis
     shader_ = asset->load_shader("Basic2D", shade_data).handle();
 }
 
-Game::~Game() {}
-
 void Game::on_attach() {
 
     // ApplicationGL::onAttach();

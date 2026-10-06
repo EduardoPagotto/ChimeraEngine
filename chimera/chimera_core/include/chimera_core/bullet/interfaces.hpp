@@ -12,7 +12,7 @@ namespace ce {
         virtual void remove_all_objs(void) = 0;
         virtual void step_sim(const double& ts) = 0;
         virtual void check_collisions() = 0;
-        virtual void set_gravity(const btVector3& _vet) = 0;
+        virtual void set_gravity(const btVector3& vet) = 0;
         virtual btDiscreteDynamicsWorld* get_world() = 0;
     };
 } // namespace ce

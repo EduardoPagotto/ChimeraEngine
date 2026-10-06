@@ -11,7 +11,7 @@ namespace ce {
       public:
         Renderer3d(const bool& log_data);
 
-        virtual ~Renderer3d();
+        virtual ~Renderer3d() = default;
 
         virtual void begin(std::shared_ptr<Camera> camera, std::shared_ptr<ViewProjection> vpo,
                            std::shared_ptr<Octree> octree) override;

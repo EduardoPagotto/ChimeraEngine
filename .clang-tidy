@@ -12,6 +12,9 @@ Checks: '-*,
 ExtraArgsBefore:
   - -std=c++20
 
+HeaderFilterRegex: '^(src|include)/.*'
+SystemHeaders: false
+
 # Trata avisos específicos como erros
 # WarningsAsErrors: 'bugprone-*,performance-*'
 WarningsAsErrors: 'performance-*, -readability-*'

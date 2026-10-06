@@ -12,8 +12,6 @@ TileLayer::TileLayer(std::shared_ptr<ce::Shader> shader)
     glUseProgram(0);
 }
 
-TileLayer::~TileLayer() {}
-
 void TileLayer::on_event(const SDL_Event& event) {
     using namespace ce;
     switch (event.type) {

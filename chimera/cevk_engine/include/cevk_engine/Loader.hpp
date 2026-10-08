@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AssetManager.hpp"
+#include "chimera_space/Vertex.hpp"
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_init.h>
 #include <SDL3/SDL_log.h>
@@ -19,24 +20,6 @@
 #include <variant>
 
 namespace ce {
-
-    struct Vertex3D {
-        glm::vec3 pos{0.0};
-        glm::vec3 nor{0.0};
-        glm::vec2 tex{0.0};
-    };
-
-    struct MeshPart {
-        // AABB aabb;
-        std::vector<uint32_t> indices;
-        std::optional<size_t> materialIndex;
-    };
-
-    struct CompleteMesh {
-        std::string name;
-        std::vector<Vertex3D> vertices;
-        std::vector<MeshPart> parts; // Each part represents a glTF primitive
-    };
 
     class Loader {
       public:
@@ -111,15 +94,15 @@ namespace ce {
             }
         }
 
-        std::vector<CompleteMesh> getMeshs(std::shared_ptr<VulkanContext> ctx) { // NOLINT
+        std::vector<Mesh3D> getMeshs(std::shared_ptr<VulkanContext> ctx) { // NOLINT
             // auto& assetManager = registry->ctx().get<AssetManager>();
 
-            std::vector<CompleteMesh> out_meshes;
+            std::vector<Mesh3D> out_meshes;
 
             // 2. Iterate through all meshes within the asset
             for (const auto& mesh : asset_.meshes) {
 
-                CompleteMesh complete_mesh;
+                Mesh3D complete_mesh;
                 complete_mesh.name = mesh.name;
 
                 uint32_t count_primitive = 0;
@@ -163,14 +146,14 @@ namespace ce {
                         // Fetch and map the POSITION attribute into GLM vec3
                         fastgltf::iterateAccessorWithIndex<glm::vec3>(
                             asset_, pos_accessor,
-                            [&](glm::vec3 pos, size_t idx) { complete_mesh.vertices[idx].pos = pos; });
+                            [&](glm::vec3 pos, size_t idx) { complete_mesh.vertices[idx].point = pos; });
 
                         // Fetch and map the NORMAL attribute if present
                         if (norm_attribute != primitive.attributes.end()) {
                             const auto& norm_accessor = asset_.accessors[norm_attribute->accessorIndex];
                             fastgltf::iterateAccessorWithIndex<glm::vec3>(
                                 asset_, norm_accessor,
-                                [&](glm::vec3 norm, size_t idx) { complete_mesh.vertices[idx].nor = norm; });
+                                [&](glm::vec3 norm, size_t idx) { complete_mesh.vertices[idx].normal = norm; });
                         }
 
                         // Fetch and map the TEXCOORD_0 (Texture Coordinates) attribute if present
@@ -178,7 +161,7 @@ namespace ce {
                             const auto& uv_accessor = asset_.accessors[uv_attribute->accessorIndex];
                             fastgltf::iterateAccessorWithIndex<glm::vec2>(
                                 asset_, uv_accessor,
-                                [&](glm::vec2 uv, size_t idx) { complete_mesh.vertices[idx].tex = uv; });
+                                [&](glm::vec2 uv, size_t idx) { complete_mesh.vertices[idx].uv = uv; });
                         }
 
                         // Fetch and map the COLOR_0 attribute if present
@@ -194,10 +177,10 @@ namespace ce {
 
                     count_primitive++;
 
-                    MeshPart mesh_part;
+                    SubMesh3D mesh_part;
 
                     if (primitive.materialIndex.has_value()) {
-                        mesh_part.materialIndex = primitive.materialIndex.value();
+                        mesh_part.mat_indice = primitive.materialIndex.value();
                     }
 
                     // --- PROCESS INDICES ---
@@ -213,7 +196,7 @@ namespace ce {
                             [&](uint32_t index, size_t idx) { mesh_part.indices[idx] = index; });
                     }
 
-                    complete_mesh.parts.push_back(std::move(mesh_part));
+                    complete_mesh.subs.push_back(std::move(mesh_part));
                 }
 
                 out_meshes.push_back(std::move(complete_mesh));

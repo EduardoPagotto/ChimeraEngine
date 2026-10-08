@@ -11,7 +11,8 @@ message(STATUS "Current: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 set (IncludeDirs ${CMAKE_CURRENT_SOURCE_DIR}/include
                  ${CMAKE_SOURCE_DIR}/chimera/cevk/include
-                 ${CMAKE_SOURCE_DIR}/chimera/chimera_base/include)
+                 ${CMAKE_SOURCE_DIR}/chimera/chimera_base/include
+                  ${CMAKE_SOURCE_DIR}/chimera/chimera_space/include)
 
 set(SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/src/CanvaVK.cpp)
 

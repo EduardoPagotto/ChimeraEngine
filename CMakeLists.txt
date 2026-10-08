@@ -82,11 +82,10 @@ add_subdirectory(chimera/chimera_render/)
 
 add_subdirectory(samples/sdl31)
 
-#add_subdirectory(samples/test/sdl32)
+add_subdirectory(samples/test/loader)
 # add_subdirectory(samples/test/loader_asset)
 # #add_subdirectory(samples/test/glft_load)
 
-#add_subdirectory(samples/loader)
 
 add_subdirectory(samples/raycasting)
 add_subdirectory(samples/helloworld)
